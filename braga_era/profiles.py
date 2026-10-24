@@ -16,6 +16,13 @@ def load_046c_plan():
     return json.loads(files("braga_era").joinpath("profiles/save046c_plan.json").read_text(encoding="utf-8"))
 
 
+def revision_for(c):
+    row=c.execute("SELECT profile FROM checkpoint_info").fetchone()
+    if row is None or row[0] not in ("046_to_046C_admin_v1","046_to_046C_admin_v2"):
+        raise ValueError("Unsupported administrative candidate profile")
+    return "v2" if row[0].endswith("_v2") else "v1"
+
+
 def authenticate_parent(path: Path):
     path = Path(path).resolve()
     if file_sha256(path) != load_baseline()["database_sha256"]:
@@ -100,4 +107,7 @@ def verify_database(path: Path, version: str, parent_path: Path | None = None):
             return audit(c, path)
         if parent_path is None:
             raise ValueError("046C validation requires its authenticated parent database")
+        if revision_for(c) == "v2":
+            from .profile_v2 import audit as audit_v2
+            return audit_v2(c,path,parent_path)
         return audit_046c(c, path, parent_path)

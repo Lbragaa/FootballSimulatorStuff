@@ -6,7 +6,9 @@ Authenticated extraction, preserved original backups, read-only SQL access, pack
 
 ## Phase 1 — administrative Save 046C (candidate implemented, not accepted)
 
-Candidate creation, transactional reconciliation, explicit 046C replay validation, manifest-backed export/restore and a separate guarded acceptance API are implemented. The candidate has no automatic canonical promotion. It requires commissioner decisions on the 72h including-travel policy and unchanged league exceptions, long inter-leg/year-end holiday scheduling and actual-day/month-end incremental payroll. No game or fictional date has advanced. The implementation scope below is now delivered as a reviewable candidate; acceptance remains separate.
+Task 02B supersedes the rejected holiday calendar with candidate v2: controlled future league adjustment, all cups finished by December 21, a hard holiday blackout, bounded return legs and no newly introduced rest violations. The old proposal remains immutable and unpromotable. Stacked engineering PRs preserve the commit chain; acceptance of the revised save remains separate. [Task 02B report](task02b_report.md) and [next engine design](phase2_engine_design.md) define the current review boundary.
+
+Candidate creation, transactional reconciliation, explicit revision-aware 046C replay validation, verified export/restore and a separate acceptance API are implemented. Revised v2 needs acceptance of the exact future kickoff inventory and rest/travel scope; its accounting directions are provisionally supported for preparation. No holiday scheduling exception or 2028 extension is part of the recommendation. No game or fictional date has advanced. The implementation scope below is delivered as an unaccepted candidate.
 
 Start from an authenticated **copy** of Save 046 and produce a separately versioned candidate. Keep parent SHA256, schema/profile version, operation log and output hash; validate candidate and retain parent before promoting any new canonical pointer.
 

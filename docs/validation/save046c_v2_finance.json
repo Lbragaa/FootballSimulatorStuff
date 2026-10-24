@@ -1,0 +1,261 @@
+{
+  "accrued_unpaid_cents": 155900001,
+  "annual_incremental_commitments_cents": 2166000000,
+  "budgets": [
+    {
+      "amount_brl": 68000000.0,
+      "approved_on": "2026-12-20",
+      "category": "Transfer fees",
+      "funding_source": "2027 football injection + R$13m extraordinary SAF capital 2027-08-30",
+      "id": 1,
+      "remaining_cents": 140000000,
+      "restriction": "Hard cap on total contracted acquisition fees; August 30 SAF approval added R$13m to original cap; installments do not bypass cap",
+      "season": 2027,
+      "spent_brl": 66600000.0
+    },
+    {
+      "amount_brl": 22000000.0,
+      "approved_on": "2026-12-20",
+      "category": "Incremental wages",
+      "funding_source": "2027 football injection",
+      "id": 2,
+      "remaining_cents": 34000000,
+      "restriction": "Annual incremental wage room above current payroll; approval required for future-year commitments",
+      "season": 2027,
+      "spent_brl": 21660000.0
+    },
+    {
+      "amount_brl": 7000000.0,
+      "approved_on": "2026-12-20",
+      "category": "Scouting and agents",
+      "funding_source": "2027 football injection",
+      "id": 3,
+      "remaining_cents": 219000000,
+      "restriction": "Recruiting travel, scouting, agent fees, signing bonuses",
+      "season": 2027,
+      "spent_brl": 4810000.0
+    },
+    {
+      "amount_brl": 16000000.0,
+      "approved_on": "2026-12-20",
+      "category": "Emergency reserve",
+      "funding_source": "2027 football injection",
+      "id": 4,
+      "remaining_cents": 1600000000,
+      "restriction": "Board-held buffer; manager cannot spend without permission",
+      "season": 2027,
+      "spent_brl": 0.0
+    },
+    {
+      "amount_brl": 10000000.0,
+      "approved_on": "2026-12-20",
+      "category": "Training-centre works",
+      "funding_source": "Separate 2027 infrastructure commitment",
+      "id": 5,
+      "remaining_cents": 1000000000,
+      "restriction": "Construction capex ONLY; not usable on transfer fees",
+      "season": 2027,
+      "spent_brl": 0.0
+    },
+    {
+      "amount_brl": 6000000.0,
+      "approved_on": "2026-12-20",
+      "category": "Academy facilities",
+      "funding_source": "Separate 2027 infrastructure commitment",
+      "id": 6,
+      "remaining_cents": 600000000,
+      "restriction": "Youth construction capex ONLY; not usable on transfer fees",
+      "season": 2027,
+      "spent_brl": 0.0
+    },
+    {
+      "amount_brl": 110000000.0,
+      "approved_on": "2026-12-20",
+      "category": "Legacy debt service",
+      "funding_source": "Separately earmarked owner funding",
+      "id": 7,
+      "remaining_cents": 11000000000,
+      "restriction": "FICTIONAL planned payment; never available for player acquisitions",
+      "season": 2027,
+      "spent_brl": 0.0
+    }
+  ],
+  "cash_less_recorded_incremental_liability_cents": 2899099999,
+  "periods": [
+    {
+      "account": "2027 football restricted account",
+      "accrued_cents": 138000000,
+      "amount_due_cents": 138000000,
+      "cash_cents": 138000000,
+      "ledger_id": 10,
+      "period": "2027-01",
+      "policy_id": "incremental_actual_days_month_end_v1",
+      "status": "legacy_paid"
+    },
+    {
+      "account": "2027 football restricted account",
+      "accrued_cents": 138000000,
+      "amount_due_cents": 138000000,
+      "cash_cents": 138000000,
+      "ledger_id": 11,
+      "period": "2027-02",
+      "policy_id": "incremental_actual_days_month_end_v1",
+      "status": "legacy_paid"
+    },
+    {
+      "account": "2027 football restricted account",
+      "accrued_cents": 138000000,
+      "amount_due_cents": 138000000,
+      "cash_cents": 138000000,
+      "ledger_id": 12,
+      "period": "2027-03",
+      "policy_id": "incremental_actual_days_month_end_v1",
+      "status": "legacy_paid"
+    },
+    {
+      "account": "2027 football restricted account",
+      "accrued_cents": 138000000,
+      "amount_due_cents": 138000000,
+      "cash_cents": 138000000,
+      "ledger_id": 13,
+      "period": "2027-04",
+      "policy_id": "incremental_actual_days_month_end_v1",
+      "status": "legacy_paid"
+    },
+    {
+      "account": "2027 football restricted account",
+      "accrued_cents": 138000000,
+      "amount_due_cents": 138000000,
+      "cash_cents": 138000000,
+      "ledger_id": 14,
+      "period": "2027-05",
+      "policy_id": "incremental_actual_days_month_end_v1",
+      "status": "legacy_paid"
+    },
+    {
+      "account": "2027 football restricted account",
+      "accrued_cents": 138000000,
+      "amount_due_cents": 138000000,
+      "cash_cents": 138000000,
+      "ledger_id": 15,
+      "period": "2027-06",
+      "policy_id": "incremental_actual_days_month_end_v1",
+      "status": "legacy_paid"
+    },
+    {
+      "account": "2027 football restricted account",
+      "accrued_cents": 138000000,
+      "amount_due_cents": 138000000,
+      "cash_cents": 138000000,
+      "ledger_id": 16,
+      "period": "2027-07",
+      "policy_id": "incremental_actual_days_month_end_v1",
+      "status": "legacy_paid"
+    },
+    {
+      "account": "2027 football restricted account",
+      "accrued_cents": 138000000,
+      "amount_due_cents": 138000000,
+      "cash_cents": 138000000,
+      "ledger_id": 22,
+      "period": "2027-08",
+      "policy_id": "incremental_actual_days_month_end_v1",
+      "status": "paid"
+    },
+    {
+      "account": "2027 football restricted account",
+      "accrued_cents": 155900001,
+      "amount_due_cents": 179966667,
+      "cash_cents": 0,
+      "ledger_id": null,
+      "period": "2027-09",
+      "policy_id": "incremental_actual_days_month_end_v1",
+      "status": "accrued"
+    }
+  ],
+  "player_obligations": [
+    {
+      "accrued_cents": 43000000,
+      "covered_from": "2027-08-01",
+      "covered_to": "2027-08-31",
+      "due_cents": 43000000,
+      "monthly_cents": 43000000,
+      "period": "2027-08",
+      "player_id": 163
+    },
+    {
+      "accrued_cents": 31000000,
+      "covered_from": "2027-08-01",
+      "covered_to": "2027-08-31",
+      "due_cents": 31000000,
+      "monthly_cents": 31000000,
+      "period": "2027-08",
+      "player_id": 384
+    },
+    {
+      "accrued_cents": 64000000,
+      "covered_from": "2027-08-01",
+      "covered_to": "2027-08-31",
+      "due_cents": 64000000,
+      "monthly_cents": 64000000,
+      "period": "2027-08",
+      "player_id": 401
+    },
+    {
+      "accrued_cents": 37266667,
+      "covered_from": "2027-09-01",
+      "covered_to": "2027-09-30",
+      "due_cents": 43000000,
+      "monthly_cents": 43000000,
+      "period": "2027-09",
+      "player_id": 163
+    },
+    {
+      "accrued_cents": 22966667,
+      "covered_from": "2027-09-01",
+      "covered_to": "2027-09-30",
+      "due_cents": 26500000,
+      "monthly_cents": 26500000,
+      "period": "2027-09",
+      "player_id": 227
+    },
+    {
+      "accrued_cents": 13333333,
+      "covered_from": "2027-09-02",
+      "covered_to": "2027-09-30",
+      "due_cents": 15466667,
+      "monthly_cents": 16000000,
+      "period": "2027-09",
+      "player_id": 304
+    },
+    {
+      "accrued_cents": 26866667,
+      "covered_from": "2027-09-01",
+      "covered_to": "2027-09-30",
+      "due_cents": 31000000,
+      "monthly_cents": 31000000,
+      "period": "2027-09",
+      "player_id": 384
+    },
+    {
+      "accrued_cents": 55466667,
+      "covered_from": "2027-09-01",
+      "covered_to": "2027-09-30",
+      "due_cents": 64000000,
+      "monthly_cents": 64000000,
+      "period": "2027-09",
+      "player_id": 401
+    }
+  ],
+  "policy": {
+    "accrual": "Through September 26 inclusive; no September cash before September 30",
+    "authority": "Annual commitments and approved transfer/wage budgets unchanged; emergency reserve untouched",
+    "cash_timing": "Month-end due; August arrears paid at unchanged checkpoint date 2027-09-26",
+    "coverage": "Only the five recorded Vasco signing contracts; untracked base-roster wages excluded",
+    "id": "incremental_actual_days_month_end_v1",
+    "legacy": "Preserve January-July aggregate cash debits, including simplified January; no retrospective reproration",
+    "proration": "Actual calendar days, inclusive contract start/end; round each obligation half-up to cents",
+    "status": "proposed candidate policy, subject to commissioner acceptance"
+  },
+  "restricted_cash_cents": 3055000000
+}

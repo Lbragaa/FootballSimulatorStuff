@@ -52,8 +52,8 @@ def rows_by_key(c, table):
     return rows
 
 
-def capture(c):
-    return {t: rows_by_key(c, t) for t in sorted(CHANGED_LEGACY_TABLES | (ADDED_TABLES-{"admin_operations"}))
+def capture(c, extra_tables=()):
+    return {t: rows_by_key(c, t) for t in sorted(CHANGED_LEGACY_TABLES | set(extra_tables) | (ADDED_TABLES-{"admin_operations"}))
             if c.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (t,)).fetchone()}
 
 
@@ -63,7 +63,8 @@ def diff(before, after):
         previous, current = before.get(table, {}), after.get(table, {})
         for key in sorted(set(previous) | set(current)):
             if previous.get(key) != current.get(key):
-                reason = ("Deterministic calendar reconciliation / conditional downstream capacity" if table in {
+                reason = ("Controlled future league kickoff adjustment; completed history and Mirassol-Vasco protected" if table == "fixtures"
+                    else "Deterministic calendar reconciliation / conditional downstream capacity" if table in {
                     "calendar_events", "cdb_2027_bracket", "libertadores_2027_round_of_16", "sudamericana_2027_playoffs"}
                     else "Contract-backed incremental payroll policy / arrears and accrued liability" if table.startswith("payroll_") or table == "finance_ledger"
                     else "Evidence-backed administrative checkpoint reconciliation")
@@ -72,22 +73,26 @@ def diff(before, after):
     return operations
 
 
-def apply(c, plan, parent_sha256: str, fail_after: str | None = None) -> list[dict]:
+def apply(c, plan, parent_sha256: str, fail_after: str | None = None, *, revision="v1") -> list[dict]:
     """One transaction including DDL and logs; caller supplies only a scratch DB."""
     if c.in_transaction:
         raise ValueError("Migration requires an idle scratch connection")
     if dict(c.execute("SELECT key,value FROM meta")).get("saved_state_version") != "046":
         raise ValueError("Migration accepts only Save 046")
-    before = capture(c)
+    if revision not in ("v1","v2"):
+        raise ValueError("Unknown administrative revision")
+    extra = ("fixtures",) if revision == "v2" else ()
+    profile = "046_to_046C_admin_v2" if revision == "v2" else MIGRATION_ID
+    before = capture(c, extra)
     c.execute("PRAGMA foreign_keys=ON")
     c.execute("BEGIN IMMEDIATE")
     try:
         for statement in DDL:
             c.execute(statement)
-        c.execute("INSERT INTO schema_migrations VALUES(?,?,?)", (SCHEMA_VERSION, MIGRATION_ID, digest(DDL)))
+        c.execute("INSERT INTO schema_migrations VALUES(?,?,?)", (SCHEMA_VERSION, profile, digest(DDL)))
         c.execute("INSERT INTO checkpoint_info VALUES(?,?,?,?,?,?,?)",
-                  ("046C", "046", parent_sha256, SCHEMA_VERSION, "candidate", MIGRATION_ID, digest(plan)))
-        c.execute("INSERT INTO admin_policies VALUES(?,?)", ("calendar_v1", canonical_json(plan["policy"])))
+                  ("046C", "046", parent_sha256, SCHEMA_VERSION, "candidate", profile, digest(plan)))
+        c.execute("INSERT INTO admin_policies VALUES(?,?)", ("calendar_"+revision, canonical_json(plan["policy"])))
         c.execute("INSERT INTO admin_policies VALUES(?,?)", (POLICY_ID, canonical_json(POLICY)))
         for event in plan["events"]:
             if event["source_table"]:
@@ -103,6 +108,15 @@ def apply(c, plan, parent_sha256: str, fail_after: str | None = None) -> list[di
                 canonical_json(event["depends"]), event["kickoff"], int(event["international"]), event["source_table"],
                 event["source_key"], event["source_column"], event["previous_date"], event["home"], event["away"],
                 "scheduled" if event["home"] and event["away"] else "reserved"))
+        if revision == "v2":
+            for move in plan.get("league_adjustments",[]):
+                row = c.execute("""SELECT f.*,h.name home,a.name away FROM fixtures f JOIN clubs h ON h.id=f.home_id
+                    JOIN clubs a ON a.id=f.away_id WHERE f.id=?""", (move["fixture_id"],)).fetchone()
+                if (not row or row["competition"] != "Brasileirão 2027" or row["status"] != "scheduled"
+                        or row["datetime_local"] != move["before"] or
+                        (row["round"] == "R26" and row["home"] == "Mirassol" and row["away"] == "Vasco")):
+                    raise ValueError("League adjustment conflicts with protected parent fixture")
+                c.execute("UPDATE fixtures SET datetime_local=? WHERE id=?",(move["after"],move["fixture_id"]))
         if fail_after == "calendar":
             raise RuntimeError("Injected failure after calendar")
         for row in c.execute("SELECT * FROM finance_ledger WHERE account=? AND category='incremental wage payroll' ORDER BY id", (ACCOUNT,)).fetchall():
@@ -138,6 +152,12 @@ def apply(c, plan, parent_sha256: str, fail_after: str | None = None) -> list[di
             "sudamericana_knockout_state": "Eight group winners await R16; eight playoffs scheduled on reconciled dates, unplayed; downstream capacity reserved",
             "libertadores_2027_status": "96 group fixtures final; eight R16 ties unplayed with reconciled dates; downstream capacity reserved",
         }
+        if revision == "v2":
+            updates.update({
+                "continental_schedule_note": "046C v2 candidate: known ties rescheduled; undrawn rounds reserve potential qualifiers; all cups finish by 2027-12-21, December 22-January 5 blackout",
+                "brasileirao_calendar_status": "R01-R25 complete (250); R26-R38 unplayed (130); 70 controlled kickoff adjustments (36 date, 34 time only); Mirassol-Vasco October 3 16:00 unchanged",
+                "calendar_2027_repair": "046C v2 candidate: holidays and return-leg limits enforced, 70 future league kickoff changes individually logged; no new rest violations, one inherited exception retained",
+            })
         for key, value in sorted(updates.items()):
             c.execute("UPDATE meta SET value=? WHERE key=?", (value, key))
         for table, key, value in [
@@ -146,7 +166,7 @@ def apply(c, plan, parent_sha256: str, fail_after: str | None = None) -> list[di
             ("libertadores_2027_meta", "schedule_caution", "046C candidate replaces provisional knockout dates; conditional later-round capacity reserved, original results preserved"),
         ]:
             c.execute(f"UPDATE {table} SET value=? WHERE key=?", (value, key))
-        operations = diff(before, capture(c))
+        operations = diff(before, capture(c, extra))
         for n, op in enumerate(operations, 1):
             c.execute("INSERT INTO admin_operations VALUES(?,?,?,?,?,?,?)", (n, op["operation_id"], op["table"],
                 canonical_json(op["key"]), canonical_json(op["before"]) if op["before"] is not None else None,

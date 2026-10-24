@@ -1,5 +1,7 @@
 # Phase 1 implementation and candidate delivery
 
+Historical delivery record: Task 02B rejected this v1 calendar. Its database, ZIP and original profile remain unchanged for archival verification. See [revised Task 02B report](task02b_report.md) for candidate v2; neither proposal is accepted canonical state.
+
 Branch: `codex/phase-1-admin-046c`. Save **046 remains the accepted canonical state**. Candidate 046C has not been promoted; the fictional date remains 2027-09-26 23:30 and Mirassol-Vasco R26 remains scheduled/unplayed. No replacement engine or dashboard was implemented.
 
 The delivery includes working candidate lifecycle/restore infrastructure, centralized deterministic calendar reconciliation, contract-backed incremental payroll and separate accrued liabilities, objective/metadata cleanup, the explicit 046C replay audit, regression tests and updated documentation. The frozen 046 baseline is unchanged. The original ZIP and database retain their original hashes.

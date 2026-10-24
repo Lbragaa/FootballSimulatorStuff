@@ -17,11 +17,28 @@ from .db import connect_read_only, file_sha256
 from .history import canonical_json, load_baseline
 from .migrations import SCHEMA_VERSION, apply, diff, rows_by_key
 from .payroll import financial_statement
-from .profiles import authenticate_parent, load_046c_plan, verify_database
+from .profiles import authenticate_parent, load_046c_plan, verify_database, revision_for
 
 FORMAT_VERSION = 1
 REQUIRED_APPROVALS = ["calendar_72h_including_travel_and_fixed_league_exceptions",
                       "year_end_dates_and_long_interleg_gaps", "actual_day_incremental_payroll_policy"]
+
+
+def plan_and_calendar(parent,revision):
+    if revision == "v2":
+        from .profile_v2 import load_plan
+        from .calendar_v2 import validate
+        plan=load_plan()
+        return plan,validate(parent,plan)
+    plan=load_046c_plan()
+    return plan,validate_plan(parent,plan)
+
+
+def finance_document(c,revision):
+    value=financial_statement(c)
+    if revision == "v2":
+        value['player_obligations']=[dict(r) for r in c.execute("SELECT * FROM payroll_obligations ORDER BY period,player_id")]
+    return value
 
 
 def write_json(path, value):
@@ -95,7 +112,7 @@ def metadata_for(c, db_path: Path, version: str):
     meta = dict(c.execute("SELECT key,value FROM meta"))
     candidate = version == "046C"
     operations = operations_from_database(c) if candidate else []
-    return {"format_version": FORMAT_VERSION, "save_version": version,
+    result = {"format_version": FORMAT_VERSION, "save_version": version,
             "schema_version": SCHEMA_VERSION if candidate else 0,
             "parent_save_version": "046" if candidate else None,
             "parent_sha256": load_baseline()["database_sha256"] if candidate else None,
@@ -105,9 +122,16 @@ def metadata_for(c, db_path: Path, version: str):
             "operation_count": len(operations), "validation_profile": version,
             "required_approvals": REQUIRED_APPROVALS if candidate else [],
             "canonical_promoted": False}
+    if candidate and revision_for(c)=="v2":
+        from .profile_v2 import APPROVALS
+        result.update({"proposal_revision":"v2","supersedes_unaccepted_revision":"v1","required_approvals":APPROVALS})
+    return result
 
 
 def render_report(metadata, validation, calendar=None, finance=None, operations=None):
+    if metadata.get('proposal_revision')=='v2':
+        from .profile_v2 import report
+        return report(metadata,validation,calendar,finance,operations)
     lines = [f"# Save {metadata['save_version']} — {metadata['status']}", "",
              f"Fictional date: {metadata['fictional_date']}. No matches simulated or clock advancement.",
              f"Database SHA256: `{metadata['database_sha256']}`.",
@@ -167,19 +191,20 @@ def _materialize_reports(directory: Path, version: str):
     if not validation["ok"]:
         raise ValueError(f"Candidate validation failed: {validation}")
     with connect_read_only(db) as c:
+        revision=revision_for(c) if version=="046C" else "v1"
         metadata = metadata_for(c, db, version)
         operations = operations_from_database(c) if version == "046C" else None
-        finance = financial_statement(c) if version == "046C" else None
+        finance = finance_document(c,revision) if version == "046C" else None
     calendar = None
     if version == "046C":
         with connect_read_only(parent_path) as parent:
-            calendar = validate_plan(parent, load_046c_plan())
+            plan,calendar = plan_and_calendar(parent,revision)
             with connect_read_only(db) as candidate:
                 write_json(directory / "changes.json", complete_changes(candidate, parent))
         write_json(directory / "operations.json", operations)
         write_json(directory / "calendar.json", calendar)
         write_json(directory / "finance.json", finance)
-        write_json(directory / "calendar_plan.json", load_046c_plan())
+        write_json(directory / "calendar_plan.json", plan)
     write_json(directory / "checkpoint.json", metadata)
     write_json(directory / "validation.json", validation)
     write_json(directory / "save046_baseline.json", load_baseline())
@@ -188,9 +213,11 @@ def _materialize_reports(directory: Path, version: str):
     return metadata
 
 
-def create_candidate(parent_path: Path, destination: Path, *, version="046C", fail_after=None):
+def create_candidate(parent_path: Path, destination: Path, *, version="046C", fail_after=None,revision="v2"):
     if version != "046C":
         raise ValueError("Only explicit 046 -> 046C administrative migration is registered; future profiles must be implemented")
+    if revision not in ("v1","v2"):
+        raise ValueError("Unknown proposal revision")
     destination = _check_destination(Path(destination))
     parent_path = Path(parent_path).resolve()
     authenticate_parent(parent_path)
@@ -200,7 +227,12 @@ def create_candidate(parent_path: Path, destination: Path, *, version="046C", fa
         # All writes target an unpublished disposable copy. No inherited scripts.
         with closing(sqlite3.connect(stage / "database.sqlite")) as scratch:
             scratch.row_factory = sqlite3.Row
-            apply(scratch, load_046c_plan(), file_sha256(parent_path), fail_after=fail_after)
+            if revision=='v2':
+                from .profile_v2 import load_plan
+                plan=load_plan()
+            else:
+                plan=load_046c_plan()
+            apply(scratch,plan,file_sha256(parent_path),fail_after=fail_after,revision=revision)
         metadata = _materialize_reports(stage, version)
         verify_checkpoint(stage)
         authenticate_parent(parent_path)
@@ -228,27 +260,30 @@ def verify_checkpoint(directory: Path):
     if not report.ok:
         raise ValueError(f"Checkpoint fails registered validation profile: {report.to_dict()}")
     with connect_read_only(directory / "database.sqlite") as c:
+        revision=revision_for(c) if version=="046C" else "v1"
         if metadata != metadata_for(c, directory / "database.sqlite", version):
             raise ValueError("Checkpoint metadata/provenance mismatch")
         operations = operations_from_database(c) if version == "046C" else None
-        finance = financial_statement(c) if version == "046C" else None
+        finance = finance_document(c,revision) if version == "046C" else None
     calendar = None
     if version == "046C":
         with connect_read_only(parent_path) as parent:
-            calendar = validate_plan(parent, load_046c_plan())
+            plan,calendar = plan_and_calendar(parent,revision)
             with connect_read_only(directory / "database.sqlite") as candidate:
                 changes = complete_changes(candidate, parent)
         if read_json(directory / "changes.json") != changes:
             raise ValueError("Complete row change inventory differs from validated delta")
         for filename, expected in [("operations.json", operations), ("finance.json", finance),
-                                   ("calendar.json", calendar), ("calendar_plan.json", load_046c_plan())]:
+                                   ("calendar.json", calendar), ("calendar_plan.json", plan)]:
             if read_json(directory / filename) != expected:
                 raise ValueError(f"Reconciliation report does not match validated database: {filename}")
     if read_json(directory / "validation.json") != report.to_dict():
         raise ValueError("Stored validation differs from current registered profile")
     if (directory / "report.md").read_text(encoding="utf-8") != render_report(metadata, report.to_dict(), calendar, finance, operations):
         raise ValueError("Narrative report differs from verified reconciliation")
-    return {"ok": True, "metadata": metadata, "validation": report.to_dict()}
+    return {"ok": True, "metadata": metadata, "validation": report.to_dict(),
+            "acceptance_eligible":version=="046C" and revision=="v2",
+            "proposal_assessment":"v1 calendar rejected by Task 02B; preserved for archival verification" if version=="046C" and revision=="v1" else "No automatic acceptance"}
 
 
 def export_checkpoint(directory: Path, archive: Path):
@@ -324,8 +359,10 @@ def promote_candidate(directory: Path, registry: Path, *, expected_parent_sha256
     """
     verified = verify_checkpoint(directory)
     metadata = verified["metadata"]
+    if not verified['acceptance_eligible']:
+        raise ValueError("Rejected or noncandidate proposal cannot be promoted")
     if (metadata["status"] != "candidate" or approved_candidate_sha256 != metadata["database_sha256"]
-            or expected_parent_sha256 != metadata["parent_sha256"] or set(approvals) != set(REQUIRED_APPROVALS)):
+            or expected_parent_sha256 != metadata["parent_sha256"] or set(approvals) != set(metadata['required_approvals'])):
         raise ValueError("Explicit candidate hash, parent and all commissioner approvals are required")
     registry = Path(registry).resolve()
     if registry.suffix != ".json" or registry.is_relative_to(Path(__file__).resolve().parents[1] / "data/handoff"):

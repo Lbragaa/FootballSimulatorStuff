@@ -12,7 +12,7 @@ import zipfile
 import pytest
 
 from braga_era.calendar import CalendarError, CalendarPolicy, Event, inventory, propose, solve, validate_plan
-from braga_era.checkpoints import (REQUIRED_APPROVALS, create_candidate, export_checkpoint, export_parent,
+from braga_era.checkpoints import (REQUIRED_APPROVALS, create_candidate as _create_candidate, export_checkpoint, export_parent,
     manifest_for, promote_candidate, read_json, restore_checkpoint, verify_checkpoint, write_json)
 from braga_era.config import database_path
 from braga_era.db import connect_read_only, file_sha256
@@ -20,6 +20,12 @@ from braga_era.history import load_baseline, table_fingerprint
 from braga_era.migrations import apply
 from braga_era.payroll import book_payroll, financial_statement, obligations
 from braga_era.profiles import audit_046c, load_046c_plan, verify_database
+
+
+def create_candidate(*args,**kwargs):
+    """Retain the original Phase 1 regression suite against archived proposal v1."""
+    kwargs.setdefault("revision","v1")
+    return _create_candidate(*args,**kwargs)
 
 
 @pytest.fixture(scope="session")
@@ -275,14 +281,13 @@ def test_explicit_promotion_gate_only_touches_scratch_pointer(candidate, tmp_pat
     registry = tmp_path / "canonical.json"
     args = {"expected_parent_sha256": metadata["parent_sha256"],
             "approved_candidate_sha256": metadata["database_sha256"], "approvals": []}
-    with pytest.raises(ValueError, match="approvals"):
+    with pytest.raises(ValueError, match="Rejected"):
         promote_candidate(candidate, registry, **args)
     assert not registry.exists()
     args["approvals"] = REQUIRED_APPROVALS
-    promoted = promote_candidate(candidate, registry, **args)
-    assert promoted["save_version"] == "046C"
-    with pytest.raises(ValueError, match="parent conflict"):
+    with pytest.raises(ValueError, match="Rejected"):
         promote_candidate(candidate, registry, **args)
+    assert not registry.exists()
     assert read_json(candidate / "checkpoint.json")["status"] == "candidate"
 
 

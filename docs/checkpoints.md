@@ -2,6 +2,10 @@
 
 The permanent parent is authenticated against the original 046 SHA256 and complete Phase 0 audit. Only the explicit **046 → candidate 046C** migration is registered. The archive format, lineage metadata, atomic publisher, restore verifier and separate acceptance gate are reusable; future 047/048/2028 migrations need new registered validation profiles. Unknown versions and parent hashes fail closed. A future profile must retain the 046 baseline and protect settled sporting records across its allowed deltas.
 
+Task 02B registers two explicit administrative revisions: immutable **v1** (calendar rejected, archival verification only) and default **v2** (`046_to_046C_admin_v2`, awaiting acceptance). V2 metadata names its revision and superseded proposal. The original DB/ZIP/profile are not overwritten. V1 promotion is blocked even when it passes archival integrity checks. The same schema version is sufficient because table definitions do not change; profile and plan identities distinguish authorized row deltas.
+
+V2 adds 70 controlled future league kickoff adjustments, pins Mirassol–Vasco, preserves all 331 completed fixture rows and independently protects 55 entire original tables. It has 189 operation records and 378 complete keyed row changes including log rows. `finance.json` also contains player-level obligation evidence. All dates, manifests, hashes and reports are regenerated in a fresh output directory; no canonical promotion occurs.
+
 ## Lifecycle
 
 1. `save create` authenticates the parent; reserves a sibling writer lock and creates a private staging directory. Both parent and working DB copies are isolated from the handoff.
@@ -21,13 +25,13 @@ The permanent parent is authenticated against the original 046 SHA256 and comple
 | `manifest.json` | Sorted file names and SHA256 for every payload file except the manifest itself |
 | `validation.json` | Actual validation findings; recomputed on verify/restore |
 | `save046_baseline.json` | Permanent original historical baseline; equality with the installed baseline is verified |
-| `operations.json` | 119 deterministic migration-log records with stable keyed before/after values, IDs and reasons |
-| `changes.json` | All 238 changed/inserted keyed rows, including the 119 operation-log rows themselves |
+| `operations.json` | Deterministic keyed before/after log: 119 records for v1, 189 for v2 |
+| `changes.json` | Complete keyed row inventory including log rows: 238 for v1, 378 for v2 |
 | `calendar_plan.json`, `calendar.json` | 57 actual-leg/reservation entries and independently checked feasibility/rest distribution |
 | `finance.json` | Contract-based obligations, unique period payments, accrued liabilities and unchanged authority budgets |
 | `report.md` | Full human-readable reconciliation, dates, finances, limitations and review decisions |
 
-Original parent-only packages omit candidate-only files. Seven new tables are added only to the candidate: `checkpoint_info`, `schema_migrations`, `admin_operations`, `calendar_events`, `admin_policies`, `payroll_periods`, `payroll_obligations`. Eight existing administrative tables change; the other **56 original user tables**, including every sporting result/associated record/player/transfer and all league fixture dates, stay unchanged.
+Original parent-only packages omit candidate-only files. Both revisions add the same seven administrative tables. V1 changes eight original administrative tables and retains the other 56 original table hashes. V2 additionally permits precisely 70 future fixture kickoff fields, retains 55 full original table hashes and separately proves that all 331 completed fixture rows remain unchanged. Player identities, transfers and associated historical records remain protected in both profiles.
 
 Every operation ID hashes its table, primary key, complete before/after image and reason using the existing canonical JSON algorithm. The migration row hashes exact DDL. An operation log cannot recursively log itself; the complete `changes.json` inventory includes those own rows, while independent replay validates them. Calendar reservation rows identify potential qualifier sets without inventing winners, pairings or official undrawn match results.
 

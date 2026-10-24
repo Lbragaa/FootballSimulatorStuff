@@ -67,6 +67,7 @@ def main(argv=None) -> int:
     create.add_argument("--parent", type=Path, default=database_path())
     create.add_argument("--output", type=Path, required=True)
     create.add_argument("--version", default="046C")
+    create.add_argument("--revision",choices=["v1","v2"],default="v2",help="v1 is rejected and retained only for archival reproduction")
     verify = save_commands.add_parser("verify")
     verify.add_argument("source", type=Path, help="Checkpoint directory or ZIP")
     export = save_commands.add_parser("export")
@@ -77,14 +78,18 @@ def main(argv=None) -> int:
     restore.add_argument("--output", type=Path, required=True)
     cal = commands.add_parser("calendar", help="Read-only deterministic feasibility proposal")
     cal.add_argument("--db")
+    cal.add_argument("--strategy",choices=["A","B","C","compare"],default="B")
     cal.add_argument("--minimum-rest-hours", type=int, default=72)
     cal.add_argument("--travel-buffer-hours", type=int, default=0)
-    cal.add_argument("--deadline", default="2027-12-31 21:00")
+    cal.add_argument("--deadline")
+    cal.add_argument("--maximum-leg-interval-days",type=int,default=14)
+    cal.add_argument("--blackout-start",default="12-22")
+    cal.add_argument("--blackout-end",default="01-05")
     args = parser.parse_args(argv)
     try:
         if args.command == "save":
             if args.save_command == "create":
-                result = create_candidate(args.parent, args.output, version=args.version)
+                result = create_candidate(args.parent,args.output,version=args.version,revision=args.revision)
             elif args.save_command == "verify":
                 result = verify_checkpoint(args.source) if args.source.is_dir() else verify_archive(args.source)
             elif args.save_command == "export":
@@ -95,12 +100,22 @@ def main(argv=None) -> int:
             return 0
         path = database_path(args.db)
         if args.command == "calendar":
+            from .calendar_v2 import Policy,propose as propose_v2,validate as validate_v2,explore
             with connect_read_only(path) as connection:
-                plan = propose(connection, CalendarPolicy(minimum_rest_hours=args.minimum_rest_hours,
-                    international_buffer_hours=args.travel_buffer_hours, deadline=args.deadline))
-                result = {"plan": plan, "feasibility": validate_plan(connection, plan)}
+                if args.strategy=='compare':
+                    if (args.deadline or args.minimum_rest_hours!=72 or args.travel_buffer_hours or
+                            args.maximum_leg_interval_days!=14 or args.blackout_start!='12-22' or args.blackout_end!='01-05'):
+                        raise ValueError("Comparison uses disclosed fixed presets; choose an individual strategy for custom constraints")
+                    result=explore(connection)
+                else:
+                    policy=Policy(minimum_rest_hours=args.minimum_rest_hours,international_buffer_hours=args.travel_buffer_hours,
+                        deadline=args.deadline or ('2028-01-15 22:00' if args.strategy=='C' else '2027-12-21 22:00'),
+                        maximum_leg_interval_days=args.maximum_leg_interval_days,
+                        blackout_start_month_day=args.blackout_start,blackout_end_month_day=args.blackout_end)
+                    plan=propose_v2(connection,args.strategy,policy)
+                    result={'plan':plan,'feasibility':validate_v2(connection,plan)}
             print(json.dumps(result, ensure_ascii=False, indent=2))
-            return 0 if result["feasibility"]["feasible"] else 1
+            return 0 if result.get('recommendation') or result.get('feasibility',{}).get('feasible') else 1
         if args.command == "audit":
             report = verify_database(path, args.profile, args.parent)
             result = report.to_dict()
