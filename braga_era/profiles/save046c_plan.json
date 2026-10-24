@@ -1,0 +1,1425 @@
+{
+  "policy": {
+    "minimum_rest_hours": 72,
+    "international_buffer_hours": 0,
+    "workload_window_days": 8,
+    "maximum_matches_in_window": 3,
+    "deadline": "2027-12-31 21:00",
+    "search_limit": 100000
+  },
+  "nodes_searched": 1088,
+  "events": [
+    {
+      "event_id": "CDB:FINAL-01:L1",
+      "competition": "CDB",
+      "stage": "Final única",
+      "leg": 1,
+      "clubs": [
+        "Athletico-PR",
+        "Bahia",
+        "Botafogo",
+        "Cruzeiro",
+        "Flamengo",
+        "Fluminense",
+        "Fortaleza",
+        "Palmeiras"
+      ],
+      "depends": [
+        "CDB:SF-01:L2",
+        "CDB:SF-02:L2"
+      ],
+      "international": false,
+      "source_table": "cdb_2027_bracket",
+      "source_key": "FINAL-01",
+      "source_column": "leg1_date",
+      "previous_date": "2027-12-05",
+      "home": null,
+      "away": null,
+      "kickoff": "2027-12-31 21:00"
+    },
+    {
+      "event_id": "CDB:QF-01:L1",
+      "competition": "CDB",
+      "stage": "Quartas",
+      "leg": 1,
+      "clubs": [
+        "Cruzeiro",
+        "Fluminense"
+      ],
+      "depends": [],
+      "international": false,
+      "source_table": "cdb_2027_bracket",
+      "source_key": "QF-01",
+      "source_column": "leg1_date",
+      "previous_date": "2027-09-15",
+      "home": "Fluminense",
+      "away": "Cruzeiro",
+      "kickoff": "2027-11-10 20:00"
+    },
+    {
+      "event_id": "CDB:QF-01:L2",
+      "competition": "CDB",
+      "stage": "Quartas",
+      "leg": 2,
+      "clubs": [
+        "Cruzeiro",
+        "Fluminense"
+      ],
+      "depends": [
+        "CDB:QF-01:L1"
+      ],
+      "international": false,
+      "source_table": "cdb_2027_bracket",
+      "source_key": "QF-01",
+      "source_column": "leg2_date",
+      "previous_date": "2027-09-22",
+      "home": "Cruzeiro",
+      "away": "Fluminense",
+      "kickoff": "2027-11-25 16:00"
+    },
+    {
+      "event_id": "CDB:QF-02:L1",
+      "competition": "CDB",
+      "stage": "Quartas",
+      "leg": 1,
+      "clubs": [
+        "Fortaleza",
+        "Palmeiras"
+      ],
+      "depends": [],
+      "international": false,
+      "source_table": "cdb_2027_bracket",
+      "source_key": "QF-02",
+      "source_column": "leg1_date",
+      "previous_date": "2027-09-15",
+      "home": "Fortaleza",
+      "away": "Palmeiras",
+      "kickoff": "2027-11-11 16:00"
+    },
+    {
+      "event_id": "CDB:QF-02:L2",
+      "competition": "CDB",
+      "stage": "Quartas",
+      "leg": 2,
+      "clubs": [
+        "Fortaleza",
+        "Palmeiras"
+      ],
+      "depends": [
+        "CDB:QF-02:L1"
+      ],
+      "international": false,
+      "source_table": "cdb_2027_bracket",
+      "source_key": "QF-02",
+      "source_column": "leg2_date",
+      "previous_date": "2027-09-22",
+      "home": "Palmeiras",
+      "away": "Fortaleza",
+      "kickoff": "2027-11-24 20:00"
+    },
+    {
+      "event_id": "CDB:QF-03:L1",
+      "competition": "CDB",
+      "stage": "Quartas",
+      "leg": 1,
+      "clubs": [
+        "Botafogo",
+        "Flamengo"
+      ],
+      "depends": [],
+      "international": false,
+      "source_table": "cdb_2027_bracket",
+      "source_key": "QF-03",
+      "source_column": "leg1_date",
+      "previous_date": "2027-09-15",
+      "home": "Flamengo",
+      "away": "Botafogo",
+      "kickoff": "2027-10-14 17:00"
+    },
+    {
+      "event_id": "CDB:QF-03:L2",
+      "competition": "CDB",
+      "stage": "Quartas",
+      "leg": 2,
+      "clubs": [
+        "Botafogo",
+        "Flamengo"
+      ],
+      "depends": [
+        "CDB:QF-03:L1"
+      ],
+      "international": false,
+      "source_table": "cdb_2027_bracket",
+      "source_key": "QF-03",
+      "source_column": "leg2_date",
+      "previous_date": "2027-09-22",
+      "home": "Botafogo",
+      "away": "Flamengo",
+      "kickoff": "2027-11-10 18:00"
+    },
+    {
+      "event_id": "CDB:QF-04:L1",
+      "competition": "CDB",
+      "stage": "Quartas",
+      "leg": 1,
+      "clubs": [
+        "Athletico-PR",
+        "Bahia"
+      ],
+      "depends": [],
+      "international": false,
+      "source_table": "cdb_2027_bracket",
+      "source_key": "QF-04",
+      "source_column": "leg1_date",
+      "previous_date": "2027-09-15",
+      "home": "Athletico-PR",
+      "away": "Bahia",
+      "kickoff": "2027-11-10 20:00"
+    },
+    {
+      "event_id": "CDB:QF-04:L2",
+      "competition": "CDB",
+      "stage": "Quartas",
+      "leg": 2,
+      "clubs": [
+        "Athletico-PR",
+        "Bahia"
+      ],
+      "depends": [
+        "CDB:QF-04:L1"
+      ],
+      "international": false,
+      "source_table": "cdb_2027_bracket",
+      "source_key": "QF-04",
+      "source_column": "leg2_date",
+      "previous_date": "2027-09-22",
+      "home": "Bahia",
+      "away": "Athletico-PR",
+      "kickoff": "2027-11-24 18:00"
+    },
+    {
+      "event_id": "CDB:SF-01:L1",
+      "competition": "CDB",
+      "stage": "Semifinais",
+      "leg": 1,
+      "clubs": [
+        "Cruzeiro",
+        "Fluminense",
+        "Fortaleza",
+        "Palmeiras"
+      ],
+      "depends": [
+        "CDB:QF-01:L2",
+        "CDB:QF-02:L2"
+      ],
+      "international": false,
+      "source_table": "cdb_2027_bracket",
+      "source_key": "SF-01",
+      "source_column": "leg1_date",
+      "previous_date": "2027-10-13",
+      "home": null,
+      "away": null,
+      "kickoff": "2027-12-02 16:00"
+    },
+    {
+      "event_id": "CDB:SF-01:L2",
+      "competition": "CDB",
+      "stage": "Semifinais",
+      "leg": 2,
+      "clubs": [
+        "Cruzeiro",
+        "Fluminense",
+        "Fortaleza",
+        "Palmeiras"
+      ],
+      "depends": [
+        "CDB:SF-01:L1"
+      ],
+      "international": false,
+      "source_table": "cdb_2027_bracket",
+      "source_key": "SF-01",
+      "source_column": "leg2_date",
+      "previous_date": "2027-10-20",
+      "home": null,
+      "away": null,
+      "kickoff": "2027-12-08 18:00"
+    },
+    {
+      "event_id": "CDB:SF-02:L1",
+      "competition": "CDB",
+      "stage": "Semifinais",
+      "leg": 1,
+      "clubs": [
+        "Athletico-PR",
+        "Bahia",
+        "Botafogo",
+        "Flamengo"
+      ],
+      "depends": [
+        "CDB:QF-03:L2",
+        "CDB:QF-04:L2"
+      ],
+      "international": false,
+      "source_table": "cdb_2027_bracket",
+      "source_key": "SF-02",
+      "source_column": "leg1_date",
+      "previous_date": "2027-10-13",
+      "home": null,
+      "away": null,
+      "kickoff": "2027-12-02 16:00"
+    },
+    {
+      "event_id": "CDB:SF-02:L2",
+      "competition": "CDB",
+      "stage": "Semifinais",
+      "leg": 2,
+      "clubs": [
+        "Athletico-PR",
+        "Bahia",
+        "Botafogo",
+        "Flamengo"
+      ],
+      "depends": [
+        "CDB:SF-02:L1"
+      ],
+      "international": false,
+      "source_table": "cdb_2027_bracket",
+      "source_key": "SF-02",
+      "source_column": "leg2_date",
+      "previous_date": "2027-10-20",
+      "home": null,
+      "away": null,
+      "kickoff": "2027-12-08 16:00"
+    },
+    {
+      "event_id": "LIB-R16-01:L1",
+      "competition": "LIB",
+      "stage": "R16",
+      "leg": 1,
+      "clubs": [
+        "Bolívar",
+        "Palmeiras"
+      ],
+      "depends": [],
+      "international": true,
+      "source_table": "libertadores_2027_round_of_16",
+      "source_key": "LIB-R16-01",
+      "source_column": "first_leg_date",
+      "previous_date": "2027-08-31",
+      "home": "Bolívar",
+      "away": "Palmeiras",
+      "kickoff": "2027-10-06 18:00"
+    },
+    {
+      "event_id": "LIB-R16-01:L2",
+      "competition": "LIB",
+      "stage": "R16",
+      "leg": 2,
+      "clubs": [
+        "Bolívar",
+        "Palmeiras"
+      ],
+      "depends": [
+        "LIB-R16-01:L1"
+      ],
+      "international": true,
+      "source_table": "libertadores_2027_round_of_16",
+      "source_key": "LIB-R16-01",
+      "source_column": "second_leg_date",
+      "previous_date": "2027-09-07",
+      "home": "Palmeiras",
+      "away": "Bolívar",
+      "kickoff": "2027-10-14 19:00"
+    },
+    {
+      "event_id": "LIB-R16-02:L1",
+      "competition": "LIB",
+      "stage": "R16",
+      "leg": 1,
+      "clubs": [
+        "Fluminense",
+        "Junior de Barranquilla"
+      ],
+      "depends": [],
+      "international": true,
+      "source_table": "libertadores_2027_round_of_16",
+      "source_key": "LIB-R16-02",
+      "source_column": "first_leg_date",
+      "previous_date": "2027-08-31",
+      "home": "Junior de Barranquilla",
+      "away": "Fluminense",
+      "kickoff": "2027-10-06 16:00"
+    },
+    {
+      "event_id": "LIB-R16-02:L2",
+      "competition": "LIB",
+      "stage": "R16",
+      "leg": 2,
+      "clubs": [
+        "Fluminense",
+        "Junior de Barranquilla"
+      ],
+      "depends": [
+        "LIB-R16-02:L1"
+      ],
+      "international": true,
+      "source_table": "libertadores_2027_round_of_16",
+      "source_key": "LIB-R16-02",
+      "source_column": "second_leg_date",
+      "previous_date": "2027-09-07",
+      "home": "Fluminense",
+      "away": "Junior de Barranquilla",
+      "kickoff": "2027-10-14 16:00"
+    },
+    {
+      "event_id": "LIB-R16-03:L1",
+      "competition": "LIB",
+      "stage": "R16",
+      "leg": 1,
+      "clubs": [
+        "O'Higgins",
+        "Vélez Sarsfield"
+      ],
+      "depends": [],
+      "international": true,
+      "source_table": "libertadores_2027_round_of_16",
+      "source_key": "LIB-R16-03",
+      "source_column": "first_leg_date",
+      "previous_date": "2027-08-31",
+      "home": "O'Higgins",
+      "away": "Vélez Sarsfield",
+      "kickoff": "2027-10-15 16:00"
+    },
+    {
+      "event_id": "LIB-R16-03:L2",
+      "competition": "LIB",
+      "stage": "R16",
+      "leg": 2,
+      "clubs": [
+        "O'Higgins",
+        "Vélez Sarsfield"
+      ],
+      "depends": [
+        "LIB-R16-03:L1"
+      ],
+      "international": true,
+      "source_table": "libertadores_2027_round_of_16",
+      "source_key": "LIB-R16-03",
+      "source_column": "second_leg_date",
+      "previous_date": "2027-09-07",
+      "home": "Vélez Sarsfield",
+      "away": "O'Higgins",
+      "kickoff": "2027-10-18 16:00"
+    },
+    {
+      "event_id": "LIB-R16-04:L1",
+      "competition": "LIB",
+      "stage": "R16",
+      "leg": 1,
+      "clubs": [
+        "Atlético-MG",
+        "River Plate"
+      ],
+      "depends": [],
+      "international": true,
+      "source_table": "libertadores_2027_round_of_16",
+      "source_key": "LIB-R16-04",
+      "source_column": "first_leg_date",
+      "previous_date": "2027-08-31",
+      "home": "Atlético-MG",
+      "away": "River Plate",
+      "kickoff": "2027-10-07 17:00"
+    },
+    {
+      "event_id": "LIB-R16-04:L2",
+      "competition": "LIB",
+      "stage": "R16",
+      "leg": 2,
+      "clubs": [
+        "Atlético-MG",
+        "River Plate"
+      ],
+      "depends": [
+        "LIB-R16-04:L1"
+      ],
+      "international": true,
+      "source_table": "libertadores_2027_round_of_16",
+      "source_key": "LIB-R16-04",
+      "source_column": "second_leg_date",
+      "previous_date": "2027-09-07",
+      "home": "River Plate",
+      "away": "Atlético-MG",
+      "kickoff": "2027-10-14 20:00"
+    },
+    {
+      "event_id": "LIB-R16-05:L1",
+      "competition": "LIB",
+      "stage": "R16",
+      "leg": 1,
+      "clubs": [
+        "Estudiantes",
+        "Santos"
+      ],
+      "depends": [],
+      "international": true,
+      "source_table": "libertadores_2027_round_of_16",
+      "source_key": "LIB-R16-05",
+      "source_column": "first_leg_date",
+      "previous_date": "2027-08-31",
+      "home": "Estudiantes",
+      "away": "Santos",
+      "kickoff": "2027-10-06 20:00"
+    },
+    {
+      "event_id": "LIB-R16-05:L2",
+      "competition": "LIB",
+      "stage": "R16",
+      "leg": 2,
+      "clubs": [
+        "Estudiantes",
+        "Santos"
+      ],
+      "depends": [
+        "LIB-R16-05:L1"
+      ],
+      "international": true,
+      "source_table": "libertadores_2027_round_of_16",
+      "source_key": "LIB-R16-05",
+      "source_column": "second_leg_date",
+      "previous_date": "2027-09-07",
+      "home": "Santos",
+      "away": "Estudiantes",
+      "kickoff": "2027-10-14 20:00"
+    },
+    {
+      "event_id": "LIB-R16-06:L1",
+      "competition": "LIB",
+      "stage": "R16",
+      "leg": 1,
+      "clubs": [
+        "Flamengo",
+        "Huachipato"
+      ],
+      "depends": [],
+      "international": true,
+      "source_table": "libertadores_2027_round_of_16",
+      "source_key": "LIB-R16-06",
+      "source_column": "first_leg_date",
+      "previous_date": "2027-08-31",
+      "home": "Huachipato",
+      "away": "Flamengo",
+      "kickoff": "2027-09-29 20:00"
+    },
+    {
+      "event_id": "LIB-R16-06:L2",
+      "competition": "LIB",
+      "stage": "R16",
+      "leg": 2,
+      "clubs": [
+        "Flamengo",
+        "Huachipato"
+      ],
+      "depends": [
+        "LIB-R16-06:L1"
+      ],
+      "international": true,
+      "source_table": "libertadores_2027_round_of_16",
+      "source_key": "LIB-R16-06",
+      "source_column": "second_leg_date",
+      "previous_date": "2027-09-07",
+      "home": "Flamengo",
+      "away": "Huachipato",
+      "kickoff": "2027-10-06 18:00"
+    },
+    {
+      "event_id": "LIB-R16-07:L1",
+      "competition": "LIB",
+      "stage": "R16",
+      "leg": 1,
+      "clubs": [
+        "Liverpool (URU)",
+        "The Strongest"
+      ],
+      "depends": [],
+      "international": true,
+      "source_table": "libertadores_2027_round_of_16",
+      "source_key": "LIB-R16-07",
+      "source_column": "first_leg_date",
+      "previous_date": "2027-08-31",
+      "home": "The Strongest",
+      "away": "Liverpool (URU)",
+      "kickoff": "2027-10-15 16:00"
+    },
+    {
+      "event_id": "LIB-R16-07:L2",
+      "competition": "LIB",
+      "stage": "R16",
+      "leg": 2,
+      "clubs": [
+        "Liverpool (URU)",
+        "The Strongest"
+      ],
+      "depends": [
+        "LIB-R16-07:L1"
+      ],
+      "international": true,
+      "source_table": "libertadores_2027_round_of_16",
+      "source_key": "LIB-R16-07",
+      "source_column": "second_leg_date",
+      "previous_date": "2027-09-07",
+      "home": "Liverpool (URU)",
+      "away": "The Strongest",
+      "kickoff": "2027-10-18 16:00"
+    },
+    {
+      "event_id": "LIB-R16-08:L1",
+      "competition": "LIB",
+      "stage": "R16",
+      "leg": 1,
+      "clubs": [
+        "Atlético Nacional",
+        "Sportivo Luqueño"
+      ],
+      "depends": [],
+      "international": true,
+      "source_table": "libertadores_2027_round_of_16",
+      "source_key": "LIB-R16-08",
+      "source_column": "first_leg_date",
+      "previous_date": "2027-08-31",
+      "home": "Atlético Nacional",
+      "away": "Sportivo Luqueño",
+      "kickoff": "2027-10-15 16:00"
+    },
+    {
+      "event_id": "LIB-R16-08:L2",
+      "competition": "LIB",
+      "stage": "R16",
+      "leg": 2,
+      "clubs": [
+        "Atlético Nacional",
+        "Sportivo Luqueño"
+      ],
+      "depends": [
+        "LIB-R16-08:L1"
+      ],
+      "international": true,
+      "source_table": "libertadores_2027_round_of_16",
+      "source_key": "LIB-R16-08",
+      "source_column": "second_leg_date",
+      "previous_date": "2027-09-07",
+      "home": "Sportivo Luqueño",
+      "away": "Atlético Nacional",
+      "kickoff": "2027-10-18 16:00"
+    },
+    {
+      "event_id": "SULA-PO-01:L1",
+      "competition": "SULA",
+      "stage": "PO",
+      "leg": 1,
+      "clubs": [
+        "Caracas FC",
+        "San Lorenzo"
+      ],
+      "depends": [],
+      "international": true,
+      "source_table": "sudamericana_2027_playoffs",
+      "source_key": "SULA-PO-01",
+      "source_column": "first_leg_date",
+      "previous_date": "2027-08-26",
+      "home": "Caracas FC",
+      "away": "San Lorenzo",
+      "kickoff": "2027-10-15 16:00"
+    },
+    {
+      "event_id": "SULA-PO-01:L2",
+      "competition": "SULA",
+      "stage": "PO",
+      "leg": 2,
+      "clubs": [
+        "Caracas FC",
+        "San Lorenzo"
+      ],
+      "depends": [
+        "SULA-PO-01:L1"
+      ],
+      "international": true,
+      "source_table": "sudamericana_2027_playoffs",
+      "source_key": "SULA-PO-01",
+      "source_column": "second_leg_date",
+      "previous_date": "2027-09-02",
+      "home": "San Lorenzo",
+      "away": "Caracas FC",
+      "kickoff": "2027-10-18 16:00"
+    },
+    {
+      "event_id": "SULA-PO-02:L1",
+      "competition": "SULA",
+      "stage": "PO",
+      "leg": 1,
+      "clubs": [
+        "Emelec",
+        "Platense"
+      ],
+      "depends": [],
+      "international": true,
+      "source_table": "sudamericana_2027_playoffs",
+      "source_key": "SULA-PO-02",
+      "source_column": "first_leg_date",
+      "previous_date": "2027-08-26",
+      "home": "Platense",
+      "away": "Emelec",
+      "kickoff": "2027-10-15 16:00"
+    },
+    {
+      "event_id": "SULA-PO-02:L2",
+      "competition": "SULA",
+      "stage": "PO",
+      "leg": 2,
+      "clubs": [
+        "Emelec",
+        "Platense"
+      ],
+      "depends": [
+        "SULA-PO-02:L1"
+      ],
+      "international": true,
+      "source_table": "sudamericana_2027_playoffs",
+      "source_key": "SULA-PO-02",
+      "source_column": "second_leg_date",
+      "previous_date": "2027-09-02",
+      "home": "Emelec",
+      "away": "Platense",
+      "kickoff": "2027-10-18 16:00"
+    },
+    {
+      "event_id": "SULA-PO-03:L1",
+      "competition": "SULA",
+      "stage": "PO",
+      "leg": 1,
+      "clubs": [
+        "Sporting Cristal",
+        "São Paulo"
+      ],
+      "depends": [],
+      "international": true,
+      "source_table": "sudamericana_2027_playoffs",
+      "source_key": "SULA-PO-03",
+      "source_column": "first_leg_date",
+      "previous_date": "2027-08-26",
+      "home": "Sporting Cristal",
+      "away": "São Paulo",
+      "kickoff": "2027-10-07 18:00"
+    },
+    {
+      "event_id": "SULA-PO-03:L2",
+      "competition": "SULA",
+      "stage": "PO",
+      "leg": 2,
+      "clubs": [
+        "Sporting Cristal",
+        "São Paulo"
+      ],
+      "depends": [
+        "SULA-PO-03:L1"
+      ],
+      "international": true,
+      "source_table": "sudamericana_2027_playoffs",
+      "source_key": "SULA-PO-03",
+      "source_column": "second_leg_date",
+      "previous_date": "2027-09-02",
+      "home": "São Paulo",
+      "away": "Sporting Cristal",
+      "kickoff": "2027-10-14 17:00"
+    },
+    {
+      "event_id": "SULA-PO-04:L1",
+      "competition": "SULA",
+      "stage": "PO",
+      "leg": 1,
+      "clubs": [
+        "Athletico-PR",
+        "Peñarol"
+      ],
+      "depends": [],
+      "international": true,
+      "source_table": "sudamericana_2027_playoffs",
+      "source_key": "SULA-PO-04",
+      "source_column": "first_leg_date",
+      "previous_date": "2027-08-26",
+      "home": "Athletico-PR",
+      "away": "Peñarol",
+      "kickoff": "2027-10-07 16:00"
+    },
+    {
+      "event_id": "SULA-PO-04:L2",
+      "competition": "SULA",
+      "stage": "PO",
+      "leg": 2,
+      "clubs": [
+        "Athletico-PR",
+        "Peñarol"
+      ],
+      "depends": [
+        "SULA-PO-04:L1"
+      ],
+      "international": true,
+      "source_table": "sudamericana_2027_playoffs",
+      "source_key": "SULA-PO-04",
+      "source_column": "second_leg_date",
+      "previous_date": "2027-09-02",
+      "home": "Peñarol",
+      "away": "Athletico-PR",
+      "kickoff": "2027-10-14 20:00"
+    },
+    {
+      "event_id": "SULA-PO-05:L1",
+      "competition": "SULA",
+      "stage": "PO",
+      "leg": 1,
+      "clubs": [
+        "Libertad",
+        "Rosario Central"
+      ],
+      "depends": [],
+      "international": true,
+      "source_table": "sudamericana_2027_playoffs",
+      "source_key": "SULA-PO-05",
+      "source_column": "first_leg_date",
+      "previous_date": "2027-08-26",
+      "home": "Rosario Central",
+      "away": "Libertad",
+      "kickoff": "2027-10-15 16:00"
+    },
+    {
+      "event_id": "SULA-PO-05:L2",
+      "competition": "SULA",
+      "stage": "PO",
+      "leg": 2,
+      "clubs": [
+        "Libertad",
+        "Rosario Central"
+      ],
+      "depends": [
+        "SULA-PO-05:L1"
+      ],
+      "international": true,
+      "source_table": "sudamericana_2027_playoffs",
+      "source_key": "SULA-PO-05",
+      "source_column": "second_leg_date",
+      "previous_date": "2027-09-02",
+      "home": "Libertad",
+      "away": "Rosario Central",
+      "kickoff": "2027-10-18 16:00"
+    },
+    {
+      "event_id": "SULA-PO-06:L1",
+      "competition": "SULA",
+      "stage": "PO",
+      "leg": 1,
+      "clubs": [
+        "Universidad Católica",
+        "Universitario"
+      ],
+      "depends": [],
+      "international": true,
+      "source_table": "sudamericana_2027_playoffs",
+      "source_key": "SULA-PO-06",
+      "source_column": "first_leg_date",
+      "previous_date": "2027-08-26",
+      "home": "Universitario",
+      "away": "Universidad Católica",
+      "kickoff": "2027-10-15 16:00"
+    },
+    {
+      "event_id": "SULA-PO-06:L2",
+      "competition": "SULA",
+      "stage": "PO",
+      "leg": 2,
+      "clubs": [
+        "Universidad Católica",
+        "Universitario"
+      ],
+      "depends": [
+        "SULA-PO-06:L1"
+      ],
+      "international": true,
+      "source_table": "sudamericana_2027_playoffs",
+      "source_key": "SULA-PO-06",
+      "source_column": "second_leg_date",
+      "previous_date": "2027-09-02",
+      "home": "Universidad Católica",
+      "away": "Universitario",
+      "kickoff": "2027-10-18 16:00"
+    },
+    {
+      "event_id": "SULA-PO-07:L1",
+      "competition": "SULA",
+      "stage": "PO",
+      "leg": 1,
+      "clubs": [
+        "Bragantino",
+        "Independiente"
+      ],
+      "depends": [],
+      "international": true,
+      "source_table": "sudamericana_2027_playoffs",
+      "source_key": "SULA-PO-07",
+      "source_column": "first_leg_date",
+      "previous_date": "2027-08-26",
+      "home": "Bragantino",
+      "away": "Independiente",
+      "kickoff": "2027-10-07 20:00"
+    },
+    {
+      "event_id": "SULA-PO-07:L2",
+      "competition": "SULA",
+      "stage": "PO",
+      "leg": 2,
+      "clubs": [
+        "Bragantino",
+        "Independiente"
+      ],
+      "depends": [
+        "SULA-PO-07:L1"
+      ],
+      "international": true,
+      "source_table": "sudamericana_2027_playoffs",
+      "source_key": "SULA-PO-07",
+      "source_column": "second_leg_date",
+      "previous_date": "2027-09-02",
+      "home": "Independiente",
+      "away": "Bragantino",
+      "kickoff": "2027-10-14 17:00"
+    },
+    {
+      "event_id": "SULA-PO-08:L1",
+      "competition": "SULA",
+      "stage": "PO",
+      "leg": 1,
+      "clubs": [
+        "Botafogo",
+        "Newell's Old Boys"
+      ],
+      "depends": [],
+      "international": true,
+      "source_table": "sudamericana_2027_playoffs",
+      "source_key": "SULA-PO-08",
+      "source_column": "first_leg_date",
+      "previous_date": "2027-08-26",
+      "home": "Newell's Old Boys",
+      "away": "Botafogo",
+      "kickoff": "2027-09-30 17:00"
+    },
+    {
+      "event_id": "SULA-PO-08:L2",
+      "competition": "SULA",
+      "stage": "PO",
+      "leg": 2,
+      "clubs": [
+        "Botafogo",
+        "Newell's Old Boys"
+      ],
+      "depends": [
+        "SULA-PO-08:L1"
+      ],
+      "international": true,
+      "source_table": "sudamericana_2027_playoffs",
+      "source_key": "SULA-PO-08",
+      "source_column": "second_leg_date",
+      "previous_date": "2027-09-02",
+      "home": "Botafogo",
+      "away": "Newell's Old Boys",
+      "kickoff": "2027-10-07 16:00"
+    },
+    {
+      "event_id": "reserve:LIB:FINAL:L1",
+      "competition": "LIB",
+      "stage": "FINAL",
+      "leg": 1,
+      "clubs": [
+        "Atlético Nacional",
+        "Atlético-MG",
+        "Bolívar",
+        "Estudiantes",
+        "Flamengo",
+        "Fluminense",
+        "Huachipato",
+        "Junior de Barranquilla",
+        "Liverpool (URU)",
+        "O'Higgins",
+        "Palmeiras",
+        "River Plate",
+        "Santos",
+        "Sportivo Luqueño",
+        "The Strongest",
+        "Vélez Sarsfield"
+      ],
+      "depends": [
+        "reserve:LIB:SF:L2"
+      ],
+      "international": true,
+      "source_table": null,
+      "source_key": null,
+      "source_column": null,
+      "previous_date": null,
+      "home": null,
+      "away": null,
+      "kickoff": "2027-12-28 21:00"
+    },
+    {
+      "event_id": "reserve:LIB:QF:L1",
+      "competition": "LIB",
+      "stage": "QF",
+      "leg": 1,
+      "clubs": [
+        "Atlético Nacional",
+        "Atlético-MG",
+        "Bolívar",
+        "Estudiantes",
+        "Flamengo",
+        "Fluminense",
+        "Huachipato",
+        "Junior de Barranquilla",
+        "Liverpool (URU)",
+        "O'Higgins",
+        "Palmeiras",
+        "River Plate",
+        "Santos",
+        "Sportivo Luqueño",
+        "The Strongest",
+        "Vélez Sarsfield"
+      ],
+      "depends": [
+        "LIB-R16-01:L2",
+        "LIB-R16-02:L2",
+        "LIB-R16-03:L2",
+        "LIB-R16-04:L2",
+        "LIB-R16-05:L2",
+        "LIB-R16-06:L2",
+        "LIB-R16-07:L2",
+        "LIB-R16-08:L2"
+      ],
+      "international": true,
+      "source_table": null,
+      "source_key": null,
+      "source_column": null,
+      "previous_date": null,
+      "home": null,
+      "away": null,
+      "kickoff": "2027-10-21 16:00"
+    },
+    {
+      "event_id": "reserve:LIB:QF:L2",
+      "competition": "LIB",
+      "stage": "QF",
+      "leg": 2,
+      "clubs": [
+        "Atlético Nacional",
+        "Atlético-MG",
+        "Bolívar",
+        "Estudiantes",
+        "Flamengo",
+        "Fluminense",
+        "Huachipato",
+        "Junior de Barranquilla",
+        "Liverpool (URU)",
+        "O'Higgins",
+        "Palmeiras",
+        "River Plate",
+        "Santos",
+        "Sportivo Luqueño",
+        "The Strongest",
+        "Vélez Sarsfield"
+      ],
+      "depends": [
+        "reserve:LIB:QF:L1"
+      ],
+      "international": true,
+      "source_table": null,
+      "source_key": null,
+      "source_column": null,
+      "previous_date": null,
+      "home": null,
+      "away": null,
+      "kickoff": "2027-12-05 16:00"
+    },
+    {
+      "event_id": "reserve:LIB:SF:L1",
+      "competition": "LIB",
+      "stage": "SF",
+      "leg": 1,
+      "clubs": [
+        "Atlético Nacional",
+        "Atlético-MG",
+        "Bolívar",
+        "Estudiantes",
+        "Flamengo",
+        "Fluminense",
+        "Huachipato",
+        "Junior de Barranquilla",
+        "Liverpool (URU)",
+        "O'Higgins",
+        "Palmeiras",
+        "River Plate",
+        "Santos",
+        "Sportivo Luqueño",
+        "The Strongest",
+        "Vélez Sarsfield"
+      ],
+      "depends": [
+        "reserve:LIB:QF:L2"
+      ],
+      "international": true,
+      "source_table": null,
+      "source_key": null,
+      "source_column": null,
+      "previous_date": null,
+      "home": null,
+      "away": null,
+      "kickoff": "2027-12-22 21:00"
+    },
+    {
+      "event_id": "reserve:LIB:SF:L2",
+      "competition": "LIB",
+      "stage": "SF",
+      "leg": 2,
+      "clubs": [
+        "Atlético Nacional",
+        "Atlético-MG",
+        "Bolívar",
+        "Estudiantes",
+        "Flamengo",
+        "Fluminense",
+        "Huachipato",
+        "Junior de Barranquilla",
+        "Liverpool (URU)",
+        "O'Higgins",
+        "Palmeiras",
+        "River Plate",
+        "Santos",
+        "Sportivo Luqueño",
+        "The Strongest",
+        "Vélez Sarsfield"
+      ],
+      "depends": [
+        "reserve:LIB:SF:L1"
+      ],
+      "international": true,
+      "source_table": null,
+      "source_key": null,
+      "source_column": null,
+      "previous_date": null,
+      "home": null,
+      "away": null,
+      "kickoff": "2027-12-25 21:00"
+    },
+    {
+      "event_id": "reserve:SULA:FINAL:L1",
+      "competition": "SULA",
+      "stage": "FINAL",
+      "leg": 1,
+      "clubs": [
+        "Argentinos Juniors",
+        "Athletico-PR",
+        "Barcelona SC",
+        "Botafogo",
+        "Bragantino",
+        "Caracas FC",
+        "Cerro Porteño",
+        "Emelec",
+        "Independiente",
+        "Lanús",
+        "Libertad",
+        "Millonarios",
+        "Nacional (URU)",
+        "Newell's Old Boys",
+        "Palestino",
+        "Peñarol",
+        "Platense",
+        "Racing Club",
+        "Rosario Central",
+        "San Lorenzo",
+        "Sporting Cristal",
+        "São Paulo",
+        "Universidad Católica",
+        "Universitario"
+      ],
+      "depends": [
+        "reserve:SULA:SF:L2"
+      ],
+      "international": true,
+      "source_table": null,
+      "source_key": null,
+      "source_column": null,
+      "previous_date": null,
+      "home": null,
+      "away": null,
+      "kickoff": "2027-12-28 21:00"
+    },
+    {
+      "event_id": "reserve:SULA:QF:L1",
+      "competition": "SULA",
+      "stage": "QF",
+      "leg": 1,
+      "clubs": [
+        "Argentinos Juniors",
+        "Athletico-PR",
+        "Barcelona SC",
+        "Botafogo",
+        "Bragantino",
+        "Caracas FC",
+        "Cerro Porteño",
+        "Emelec",
+        "Independiente",
+        "Lanús",
+        "Libertad",
+        "Millonarios",
+        "Nacional (URU)",
+        "Newell's Old Boys",
+        "Palestino",
+        "Peñarol",
+        "Platense",
+        "Racing Club",
+        "Rosario Central",
+        "San Lorenzo",
+        "Sporting Cristal",
+        "São Paulo",
+        "Universidad Católica",
+        "Universitario"
+      ],
+      "depends": [
+        "reserve:SULA:R16:L2"
+      ],
+      "international": true,
+      "source_table": null,
+      "source_key": null,
+      "source_column": null,
+      "previous_date": null,
+      "home": null,
+      "away": null,
+      "kickoff": "2027-12-05 16:00"
+    },
+    {
+      "event_id": "reserve:SULA:QF:L2",
+      "competition": "SULA",
+      "stage": "QF",
+      "leg": 2,
+      "clubs": [
+        "Argentinos Juniors",
+        "Athletico-PR",
+        "Barcelona SC",
+        "Botafogo",
+        "Bragantino",
+        "Caracas FC",
+        "Cerro Porteño",
+        "Emelec",
+        "Independiente",
+        "Lanús",
+        "Libertad",
+        "Millonarios",
+        "Nacional (URU)",
+        "Newell's Old Boys",
+        "Palestino",
+        "Peñarol",
+        "Platense",
+        "Racing Club",
+        "Rosario Central",
+        "San Lorenzo",
+        "Sporting Cristal",
+        "São Paulo",
+        "Universidad Católica",
+        "Universitario"
+      ],
+      "depends": [
+        "reserve:SULA:QF:L1"
+      ],
+      "international": true,
+      "source_table": null,
+      "source_key": null,
+      "source_column": null,
+      "previous_date": null,
+      "home": null,
+      "away": null,
+      "kickoff": "2027-12-15 20:00"
+    },
+    {
+      "event_id": "reserve:SULA:R16:L1",
+      "competition": "SULA",
+      "stage": "R16",
+      "leg": 1,
+      "clubs": [
+        "Argentinos Juniors",
+        "Athletico-PR",
+        "Barcelona SC",
+        "Botafogo",
+        "Bragantino",
+        "Caracas FC",
+        "Cerro Porteño",
+        "Emelec",
+        "Independiente",
+        "Lanús",
+        "Libertad",
+        "Millonarios",
+        "Nacional (URU)",
+        "Newell's Old Boys",
+        "Palestino",
+        "Peñarol",
+        "Platense",
+        "Racing Club",
+        "Rosario Central",
+        "San Lorenzo",
+        "Sporting Cristal",
+        "São Paulo",
+        "Universidad Católica",
+        "Universitario"
+      ],
+      "depends": [
+        "SULA-PO-01:L2",
+        "SULA-PO-02:L2",
+        "SULA-PO-03:L2",
+        "SULA-PO-04:L2",
+        "SULA-PO-05:L2",
+        "SULA-PO-06:L2",
+        "SULA-PO-07:L2",
+        "SULA-PO-08:L2"
+      ],
+      "international": true,
+      "source_table": null,
+      "source_key": null,
+      "source_column": null,
+      "previous_date": null,
+      "home": null,
+      "away": null,
+      "kickoff": "2027-10-21 16:00"
+    },
+    {
+      "event_id": "reserve:SULA:R16:L2",
+      "competition": "SULA",
+      "stage": "R16",
+      "leg": 2,
+      "clubs": [
+        "Argentinos Juniors",
+        "Athletico-PR",
+        "Barcelona SC",
+        "Botafogo",
+        "Bragantino",
+        "Caracas FC",
+        "Cerro Porteño",
+        "Emelec",
+        "Independiente",
+        "Lanús",
+        "Libertad",
+        "Millonarios",
+        "Nacional (URU)",
+        "Newell's Old Boys",
+        "Palestino",
+        "Peñarol",
+        "Platense",
+        "Racing Club",
+        "Rosario Central",
+        "San Lorenzo",
+        "Sporting Cristal",
+        "São Paulo",
+        "Universidad Católica",
+        "Universitario"
+      ],
+      "depends": [
+        "reserve:SULA:R16:L1"
+      ],
+      "international": true,
+      "source_table": null,
+      "source_key": null,
+      "source_column": null,
+      "previous_date": null,
+      "home": null,
+      "away": null,
+      "kickoff": "2027-10-28 16:00"
+    },
+    {
+      "event_id": "reserve:SULA:SF:L1",
+      "competition": "SULA",
+      "stage": "SF",
+      "leg": 1,
+      "clubs": [
+        "Argentinos Juniors",
+        "Athletico-PR",
+        "Barcelona SC",
+        "Botafogo",
+        "Bragantino",
+        "Caracas FC",
+        "Cerro Porteño",
+        "Emelec",
+        "Independiente",
+        "Lanús",
+        "Libertad",
+        "Millonarios",
+        "Nacional (URU)",
+        "Newell's Old Boys",
+        "Palestino",
+        "Peñarol",
+        "Platense",
+        "Racing Club",
+        "Rosario Central",
+        "San Lorenzo",
+        "Sporting Cristal",
+        "São Paulo",
+        "Universidad Católica",
+        "Universitario"
+      ],
+      "depends": [
+        "reserve:SULA:QF:L2"
+      ],
+      "international": true,
+      "source_table": null,
+      "source_key": null,
+      "source_column": null,
+      "previous_date": null,
+      "home": null,
+      "away": null,
+      "kickoff": "2027-12-22 21:00"
+    },
+    {
+      "event_id": "reserve:SULA:SF:L2",
+      "competition": "SULA",
+      "stage": "SF",
+      "leg": 2,
+      "clubs": [
+        "Argentinos Juniors",
+        "Athletico-PR",
+        "Barcelona SC",
+        "Botafogo",
+        "Bragantino",
+        "Caracas FC",
+        "Cerro Porteño",
+        "Emelec",
+        "Independiente",
+        "Lanús",
+        "Libertad",
+        "Millonarios",
+        "Nacional (URU)",
+        "Newell's Old Boys",
+        "Palestino",
+        "Peñarol",
+        "Platense",
+        "Racing Club",
+        "Rosario Central",
+        "San Lorenzo",
+        "Sporting Cristal",
+        "São Paulo",
+        "Universidad Católica",
+        "Universitario"
+      ],
+      "depends": [
+        "reserve:SULA:SF:L1"
+      ],
+      "international": true,
+      "source_table": null,
+      "source_key": null,
+      "source_column": null,
+      "previous_date": null,
+      "home": null,
+      "away": null,
+      "kickoff": "2027-12-25 21:00"
+    }
+  ]
+}

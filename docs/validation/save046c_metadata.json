@@ -1,0 +1,35 @@
+{
+  "canonical_promoted": false,
+  "changed_tables": [
+    "admin_operations",
+    "admin_policies",
+    "board_objectives",
+    "calendar_events",
+    "cdb_2027_bracket",
+    "cdb_2027_plan_meta",
+    "checkpoint_info",
+    "finance_ledger",
+    "libertadores_2027_meta",
+    "libertadores_2027_round_of_16",
+    "meta",
+    "payroll_obligations",
+    "payroll_periods",
+    "schema_migrations",
+    "sudamericana_2027_playoffs"
+  ],
+  "database_sha256": "b87e672369e77879394c8ba373253cd12626ae2aad55fbe44862189ae0c0313a",
+  "fictional_date": "2027-09-26 23:30",
+  "format_version": 1,
+  "operation_count": 119,
+  "parent_save_version": "046",
+  "parent_sha256": "de58ac7f7942ef6048f002312cdc90314b26dc06a9853a59acaab1d5f88f4b28",
+  "required_approvals": [
+    "calendar_72h_including_travel_and_fixed_league_exceptions",
+    "year_end_dates_and_long_interleg_gaps",
+    "actual_day_incremental_payroll_policy"
+  ],
+  "save_version": "046C",
+  "schema_version": 1,
+  "status": "candidate",
+  "validation_profile": "046C"
+}

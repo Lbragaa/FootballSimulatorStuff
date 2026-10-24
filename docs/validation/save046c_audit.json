@@ -1,0 +1,218 @@
+{
+  "checks": 32,
+  "failures": 0,
+  "findings": [
+    {
+      "code": "046c.parent",
+      "message": "Parent independently passes frozen Save 046 checks and SHA256",
+      "status": "PASS"
+    },
+    {
+      "code": "sqlite.integrity",
+      "message": "['ok']",
+      "status": "PASS"
+    },
+    {
+      "code": "sqlite.foreign_keys",
+      "message": "Declared foreign keys remain valid",
+      "status": "PASS"
+    },
+    {
+      "code": "046c.calendar_model",
+      "message": "Stage order, fixed league dates, potential qualifiers, rest and workload validated",
+      "status": "PASS"
+    },
+    {
+      "code": "046c.schema",
+      "message": "Exact authorized migration schema; no unexpected objects",
+      "status": "PASS"
+    },
+    {
+      "code": "046c.table_inventory",
+      "message": "Original tables retained; seven explicit administrative tables added",
+      "status": "PASS"
+    },
+    {
+      "code": "046c.historical_records",
+      "message": "All 56 protected tables including every fixture, event, player and transfer unchanged; drift: []",
+      "status": "PASS"
+    },
+    {
+      "code": "046c.authorized_delta",
+      "message": "Every table equals independently replayed authorized migration; unexpected: []",
+      "status": "PASS"
+    },
+    {
+      "code": "046c.provenance",
+      "message": "Version, parent, schema, plan hash and candidate status retained",
+      "status": "PASS"
+    },
+    {
+      "code": "046c.finance",
+      "message": "Cash R$30,550,000; accrued unpaid September incremental wages R$1,559,000.01",
+      "status": "PASS"
+    },
+    {
+      "code": "046c.payroll_unique",
+      "message": "Nine unique periods, eight unique cash postings; no September cash debit",
+      "status": "PASS"
+    },
+    {
+      "code": "save046c.meta",
+      "message": "Save 046C date, next fixture, confidence and manager counter match",
+      "status": "PASS"
+    },
+    {
+      "code": "league.participants",
+      "message": "20 distinct 2027 league clubs",
+      "status": "PASS"
+    },
+    {
+      "code": "league.inventory",
+      "message": "380 league fixtures: 250 final, 130 scheduled",
+      "status": "PASS"
+    },
+    {
+      "code": "league.rounds",
+      "message": "38 ten-game rounds; each club appears once per round",
+      "status": "PASS"
+    },
+    {
+      "code": "league.pairings",
+      "message": "Every ordered home-away pairing occurs once",
+      "status": "PASS"
+    },
+    {
+      "code": "league.future_unplayed",
+      "message": "Scheduled league matches have no scores",
+      "status": "PASS"
+    },
+    {
+      "code": "league.standings",
+      "message": "All 20 standings recomputed from results",
+      "status": "PASS"
+    },
+    {
+      "code": "vasco.standings",
+      "message": "Vasco ninth: 38 pts, 25 played, 11W 5D 9L, 36-37",
+      "status": "PASS"
+    },
+    {
+      "code": "vasco.palmeiras",
+      "message": "Vasco 3-2 Palmeiras is final, once",
+      "status": "PASS"
+    },
+    {
+      "code": "vasco.next",
+      "message": "Mirassol-Vasco, October 3 at 16:00, R26 remains unplayed",
+      "status": "PASS"
+    },
+    {
+      "code": "r25.events",
+      "message": "R25 goals, shots, xG and 22 starters reconcile; mismatches: []",
+      "status": "PASS"
+    },
+    {
+      "code": "r25.rojas_order",
+      "message": "Johan Rojas enters before his 82nd-minute winner in database event order",
+      "status": "PASS"
+    },
+    {
+      "code": "players.identities",
+      "message": "Archived Savarino #196 and active #354 retained as separate identities",
+      "status": "PASS"
+    },
+    {
+      "code": "inventory.players",
+      "message": "players: 547 records",
+      "status": "PASS"
+    },
+    {
+      "code": "inventory.transfers",
+      "message": "transfers: 9 records",
+      "status": "PASS"
+    },
+    {
+      "code": "inventory.archive2026",
+      "message": "archive2026: 20 records",
+      "status": "PASS"
+    },
+    {
+      "code": "inventory.libertadores.groups",
+      "message": "libertadores.groups: 96 records",
+      "status": "PASS"
+    },
+    {
+      "code": "inventory.sudamericana.groups",
+      "message": "sudamericana.groups: 96 records",
+      "status": "PASS"
+    },
+    {
+      "code": "inventory.cdb.legs",
+      "message": "cdb.legs: 48 records",
+      "status": "PASS"
+    },
+    {
+      "code": "finance.cash",
+      "message": "Restricted ledger cash R$30,550,000",
+      "status": "PASS"
+    },
+    {
+      "code": "finance.authority",
+      "message": "Acquisition, annual wage, agent headroom and reserved funds match approved budgets",
+      "status": "PASS"
+    },
+    {
+      "code": "known.2026",
+      "message": "2026 final standings archived, granular fixtures partial (71 league records); do not reconstruct missing results",
+      "status": "WARN"
+    },
+    {
+      "code": "known.dates",
+      "message": "39 completed fixtures lack an ISO calendar date; preserve unknowns",
+      "status": "WARN"
+    },
+    {
+      "code": "known.cards",
+      "message": "22 historical cards occur after the starter's recorded exit minute; no retrospective event edits",
+      "status": "WARN"
+    },
+    {
+      "code": "known.engine_metrics",
+      "message": "169 engine-audit rows have both prematch xG fields empty/zero; historical reproducibility limited",
+      "status": "WARN"
+    },
+    {
+      "code": "known.identity",
+      "message": "Savarino #196 archive and active #354 both currently reference Fluminense club_id=5; use identity resolution for eligibility",
+      "status": "WARN"
+    },
+    {
+      "code": "known.legacy_code",
+      "message": "Reference engine and episode scripts contain top-level writes, absolute paths, text replacement and exec; inspected only, never imported or executed",
+      "status": "WARN"
+    },
+    {
+      "code": "known.json_order",
+      "message": "results046.json sorts Rojas GOAL before SUBSTITUTION at minute 82; database IDs and episode correctly place substitution first",
+      "status": "WARN"
+    },
+    {
+      "code": "046c.calendar_exceptions",
+      "message": "12 inherited fixed league turnarounds under 72h retained; added cup/rest reservations comply",
+      "status": "WARN"
+    },
+    {
+      "code": "046c.commissioner_calendar",
+      "message": "72h includes travel; extra 6h model infeasible; Christmas semifinals, Dec28/31 finals, long inter-leg gaps and foreign calendars require review",
+      "status": "WARN"
+    },
+    {
+      "code": "046c.commissioner_finance",
+      "message": "Actual-day/month-end payroll policy is proposed; untracked base salaries excluded; no canonical promotion",
+      "status": "WARN"
+    }
+  ],
+  "ok": true,
+  "warnings": 10
+}

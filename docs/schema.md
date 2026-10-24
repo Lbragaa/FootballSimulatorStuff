@@ -2,6 +2,18 @@
 
 The original database has 64 user tables and one SQLite internal table. See [exact DDL inventory](schema_inventory.md); Phase 0 adds no tables, indexes, triggers or migrations.
 
+Candidate 046C preserves that original schema and adds seven administrative tables, for 71 user tables. The DDL and its hash are explicit in `braga_era/migrations.py`; candidate DDL is also listed in [046C schema inventory](schema046c_inventory.md). New tables never replace historical sporting tables:
+
+| Candidate table | Purpose / key |
+|---|---|
+| `checkpoint_info` | Version, immutable parent SHA256, schema/profile/plan hash, candidate status |
+| `schema_migrations` | Schema version, unique migration identifier, DDL SHA256 |
+| `admin_operations` | Stable operation IDs and sequenced keyed before/after records |
+| `calendar_events` | Known scheduled cup legs and conditional later-round reservations; exact kickoffs and potential qualifier pools |
+| `admin_policies` | Explicit proposed calendar and incremental payroll conventions |
+| `payroll_periods` | Unique monthly obligation registration and unique link to a cash ledger row |
+| `payroll_obligations` | Contract/player-level covered dates and integer-cent due/accrued amounts |
+
 | Domain | Principal tables and cautions |
 |---|---|
 | Save metadata | `meta(key,value)`; version/date/next fixture are current, several old descriptive notes stale |

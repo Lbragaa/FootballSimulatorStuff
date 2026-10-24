@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "braga-era"
-version = "0.1.0"
-description = "Read-only preservation and auditing of The Braga Era canonical universe"
+version = "0.2.0"
+description = "Preservation, audited administrative candidates and portable checkpoints for The Braga Era"
 requires-python = ">=3.11"
 dependencies = []
 
@@ -19,7 +19,7 @@ braga-era = "braga_era.cli:main"
 include = ["braga_era*"]
 
 [tool.setuptools.package-data]
-braga_era = ["baselines/*.json"]
+braga_era = ["baselines/*.json", "profiles/*.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
