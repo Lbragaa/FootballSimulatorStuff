@@ -1,0 +1,169 @@
+{
+  "save_version": "046",
+  "current_date": "2027-09-26 23:30",
+  "board_confidence": 61,
+  "manager_matches": 45,
+  "vasco": {
+    "id": 15,
+    "name": "Vasco",
+    "code": "VAS",
+    "points": 38,
+    "played": 25,
+    "wins": 11,
+    "draws": 5,
+    "losses": 9,
+    "gf": 36,
+    "ga": 37,
+    "strength": 74.8,
+    "form": 2.246216558243799,
+    "position": 9
+  },
+  "next_fixture": {
+    "id": 332,
+    "datetime_local": "2027-10-03 16:00",
+    "home_id": 14,
+    "away_id": 15,
+    "competition": "Brasileirão 2027",
+    "round": "R26",
+    "status": "scheduled",
+    "home_goals": null,
+    "away_goals": null,
+    "home_xg": null,
+    "away_xg": null,
+    "home_shots": null,
+    "away_shots": null,
+    "home_possession": null,
+    "away_possession": null,
+    "home_sot": null,
+    "away_sot": null,
+    "attendance": null,
+    "report": null,
+    "home": "Mirassol",
+    "away": "Vasco"
+  },
+  "league": {
+    "clubs": 20,
+    "final": 250,
+    "scheduled": 130
+  },
+  "competitions": {
+    "Carioca": {
+      "vasco_stage": "semifinal",
+      "vasco_status": "eliminated",
+      "champion": "Botafogo"
+    },
+    "Sudamericana": {
+      "vasco_status": "eliminated",
+      "group": "A",
+      "position": 3,
+      "points": 6,
+      "group_matches": 96
+    },
+    "Copa do Brasil": {
+      "vasco_stage": "Oitavas",
+      "vasco_status": "eliminated",
+      "tie_status": "complete",
+      "winner": "Fluminense",
+      "completed_legs": 48
+    },
+    "Libertadores": {
+      "group_matches": 96
+    }
+  },
+  "overdue_ties": {
+    "Libertadores R16": 8,
+    "Sudamericana playoffs": 8,
+    "Copa do Brasil QF": 4
+  },
+  "finance": {
+    "restricted_cash_brl": 31930000.0,
+    "budgets": [
+      {
+        "id": 1,
+        "season": 2027,
+        "category": "Transfer fees",
+        "amount_brl": 68000000.0,
+        "funding_source": "2027 football injection + R$13m extraordinary SAF capital 2027-08-30",
+        "restriction": "Hard cap on total contracted acquisition fees; August 30 SAF approval added R$13m to original cap; installments do not bypass cap",
+        "approved_on": "2026-12-20",
+        "spent_brl": 66600000.0,
+        "remaining_brl": 1400000.0
+      },
+      {
+        "id": 2,
+        "season": 2027,
+        "category": "Incremental wages",
+        "amount_brl": 22000000.0,
+        "funding_source": "2027 football injection",
+        "restriction": "Annual incremental wage room above current payroll; approval required for future-year commitments",
+        "approved_on": "2026-12-20",
+        "spent_brl": 21660000.0,
+        "remaining_brl": 340000.0
+      },
+      {
+        "id": 3,
+        "season": 2027,
+        "category": "Scouting and agents",
+        "amount_brl": 7000000.0,
+        "funding_source": "2027 football injection",
+        "restriction": "Recruiting travel, scouting, agent fees, signing bonuses",
+        "approved_on": "2026-12-20",
+        "spent_brl": 4810000.0,
+        "remaining_brl": 2190000.0
+      },
+      {
+        "id": 4,
+        "season": 2027,
+        "category": "Emergency reserve",
+        "amount_brl": 16000000.0,
+        "funding_source": "2027 football injection",
+        "restriction": "Board-held buffer; manager cannot spend without permission",
+        "approved_on": "2026-12-20",
+        "spent_brl": 0.0,
+        "remaining_brl": 16000000.0
+      },
+      {
+        "id": 5,
+        "season": 2027,
+        "category": "Training-centre works",
+        "amount_brl": 10000000.0,
+        "funding_source": "Separate 2027 infrastructure commitment",
+        "restriction": "Construction capex ONLY; not usable on transfer fees",
+        "approved_on": "2026-12-20",
+        "spent_brl": 0.0,
+        "remaining_brl": 10000000.0
+      },
+      {
+        "id": 6,
+        "season": 2027,
+        "category": "Academy facilities",
+        "amount_brl": 6000000.0,
+        "funding_source": "Separate 2027 infrastructure commitment",
+        "restriction": "Youth construction capex ONLY; not usable on transfer fees",
+        "approved_on": "2026-12-20",
+        "spent_brl": 0.0,
+        "remaining_brl": 6000000.0
+      },
+      {
+        "id": 7,
+        "season": 2027,
+        "category": "Legacy debt service",
+        "amount_brl": 110000000.0,
+        "funding_source": "Separately earmarked owner funding",
+        "restriction": "FICTIONAL planned payment; never available for player acquisitions",
+        "approved_on": "2026-12-20",
+        "spent_brl": 0.0,
+        "remaining_brl": 110000000.0
+      }
+    ],
+    "payroll_months": [
+      "2027-01",
+      "2027-02",
+      "2027-03",
+      "2027-04",
+      "2027-05",
+      "2027-06",
+      "2027-07"
+    ]
+  }
+}
