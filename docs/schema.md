@@ -1,0 +1,25 @@
+# Canonical schema guide
+
+The original database has 64 user tables and one SQLite internal table. See [exact DDL inventory](schema_inventory.md); Phase 0 adds no tables, indexes, triggers or migrations.
+
+| Domain | Principal tables and cautions |
+|---|---|
+| Save metadata | `meta(key,value)`; version/date/next fixture are current, several old descriptive notes stale |
+| Domestic league | `clubs` running standings; `league_participants(season,club_id)` defines the season's 20 clubs; `fixtures` carries historical and 2027 matches |
+| Match detail | `events`, `shots`, `player_matches` join via `fixtures.id`; events' integer IDs preserve tied-minute insertion order |
+| Players | `players.id` is identity, not name; `player_season_totals` keys season/competition/player; aggregate player counters may mix years/competitions |
+| Identity and eligibility | `player_identity_resolution(archived_id,canonical_id)`; archive name signals historical identity; no universal active boolean |
+| Form / coaching | `match_form_profile`, `player_form_snapshot`, `player_postmatch_impact`, `tactical_match_log`, `training_microcycles_2027` |
+| Auditing | `match_engine_audit`, `match_shot_detail`, scouting/rating audits; historical zeros are not observed metrics |
+| Copa do Brasil 2027 | `cdb_2027_bracket`, `cdb_2027_legs`, events, shots and performance are separate from `fixtures`; leg key is `(tie_code,leg)`; mixed `complete` / `completed` status vocabulary |
+| Libertadores | `libertadores_2027_*` participant, group, fixture, outcome and R16 tables; group fixture scores use `home_goals/away_goals` |
+| Sudamericana | `sudamericana_2027_*`; group fixture scores use `hg/ag`; playoffs have no results yet |
+| Continental detail | `continental_match_*`, `continental_player_matches`, calendar actions and qualifications; do not assume all competitions share ID namespaces |
+| Finance | `finance_ledger` cash by account; `finance_budget` authorization/commitment by category; assumptions, ownership and capital decisions document approved sources |
+| Market | `transfers`, `transfer_contracts`, `market_negotiations_2027`; contract annual obligation differs from cash payroll expense |
+| Archives / cups | `league_standings_archive`, `competition_history`, `world_finals`, `world_final_events`, `cup_summary`, `cup_ties`; 2026 game coverage remains partial |
+| Decisions / narrative | `decisions`, `news`, `board_objectives`, `season_rules`; prose is contextual, not authority to override settled outcomes |
+
+Ranking convention in the inherited scripts: points, wins, goal difference, goals scored (descending), club name as a deterministic final fallback. The project preserves that convention; it does not import a contemporary competition rulebook.
+
+`fixtures.competition='Brasileirão'` identifies recorded 2026 league history; `Brasileirão 2027` identifies the 380-fixture 2027 season. Filtering solely by `clubs` or a round label can mix unrelated seasons. Separate continental/CDB tables must be included when reporting universe-wide coverage.
