@@ -1,0 +1,147 @@
+{
+  "repository": "Lbragaa/FootballSimulatorStuff",
+  "runs": [
+    {
+      "phase": "phase0",
+      "commit": "732c3ef2a8356de8f7a2fb35d61fc63b78fce6d8",
+      "run_id": 40100351558,
+      "pr": 1,
+      "url": "https://github.com/Lbragaa/FootballSimulatorStuff/actions/runs/40100351558",
+      "status": "completed",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "id": 120891049384,
+          "name": "test (ubuntu-latest, 3.13)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 120891049565,
+          "name": "test (ubuntu-latest, 3.11)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 120891049599,
+          "name": "test (windows-latest, 3.12)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 120891049608,
+          "name": "test (windows-latest, 3.11)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 120891049628,
+          "name": "test (windows-latest, 3.13)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 120891049689,
+          "name": "test (ubuntu-latest, 3.12)",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "phase": "phase1",
+      "commit": "abbf7f86fcf1a0e0ec84ffa6223136758814d9e6",
+      "run_id": 40100367611,
+      "pr": 2,
+      "url": "https://github.com/Lbragaa/FootballSimulatorStuff/actions/runs/40100367611",
+      "status": "completed",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "id": 120891097514,
+          "name": "test (ubuntu-latest, 3.12)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 120891097563,
+          "name": "test (windows-latest, 3.12)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 120891097575,
+          "name": "test (ubuntu-latest, 3.11)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 120891097579,
+          "name": "test (ubuntu-latest, 3.13)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 120891097620,
+          "name": "test (windows-latest, 3.11)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 120891097626,
+          "name": "test (windows-latest, 3.13)",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "phase": "task02b_implementation",
+      "commit": "94a1b7c314fcf264cabc778829f5973f1f54c6d6",
+      "run_id": 40103381323,
+      "pr": 3,
+      "url": "https://github.com/Lbragaa/FootballSimulatorStuff/actions/runs/40103381323",
+      "status": "completed",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "id": 120899927263,
+          "name": "test (windows-latest, 3.13)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 120899927319,
+          "name": "test (ubuntu-latest, 3.11)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 120899927338,
+          "name": "test (ubuntu-latest, 3.13)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 120899927387,
+          "name": "test (windows-latest, 3.11)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 120899927412,
+          "name": "test (windows-latest, 3.12)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 120899927437,
+          "name": "test (ubuntu-latest, 3.12)",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "scope": "Actual GitHub pull-request CI; no canonical promotion or match simulation"
+}

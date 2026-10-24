@@ -8,9 +8,9 @@ The requested original Phase 1 commit [abbf7f8](https://github.com/Lbragaa/Footb
 
 - [PR #1: Phase 0 → main](https://github.com/Lbragaa/FootballSimulatorStuff/pull/1).
 - [PR #2: Phase 1 → Phase 0](https://github.com/Lbragaa/FootballSimulatorStuff/pull/2).
-- Task 02B is isolated on `codex/phase-1-calendar-finalize`, stacked on Phase 1. Its PR and CI outcome are recorded in the follow-up CI evidence file once published. Nothing is merged automatically.
+- [PR #3: Task 02B → Phase 1](https://github.com/Lbragaa/FootballSimulatorStuff/pull/3), branch `codex/phase-1-calendar-finalize`, implementation commit [94a1b7c](https://github.com/Lbragaa/FootballSimulatorStuff/commit/94a1b7c314fcf264cabc778829f5973f1f54c6d6). Nothing is merged automatically.
 
-Original PR CI passed: [Phase 0 run 40100351558](https://github.com/Lbragaa/FootballSimulatorStuff/actions/runs/40100351558) and [Phase 1 run 40100367611](https://github.com/Lbragaa/FootballSimulatorStuff/actions/runs/40100367611), Linux/Windows with Python 3.11–3.13. Revised-branch CI is pending publication at this report checkpoint; no pending result is claimed as a pass.
+All three implementation PRs passed their complete six-job Linux/Windows Python 3.11–3.13 matrices: [Phase 0 run 40100351558](https://github.com/Lbragaa/FootballSimulatorStuff/actions/runs/40100351558), [Phase 1 run 40100367611](https://github.com/Lbragaa/FootballSimulatorStuff/actions/runs/40100367611), and [Task 02B run 40103381323](https://github.com/Lbragaa/FootballSimulatorStuff/actions/runs/40103381323). Each revised job also completed candidate creation, explicit audit, export, independent restoration and verification. Exact tested commits, run IDs and job conclusions are in [CI evidence](validation/task02b_ci.json). Documentation follow-ups leave the tested runtime code and candidate hashes unchanged.
 
 ## Calendar comparison and recommendation
 
@@ -33,6 +33,8 @@ An additional A sensitivity removed the 35-day opening-urgency bound (90-day all
 Travel is explicitly scoped: 72h includes travel, matching the established kickoff-turnaround rule; it is never reduced below 72h. The default comparison adds no fabricated itinerary time. The same balanced family fails if six extra hours are imposed around continental events; that sensitivity is rejected rather than silently weakening the requested buffer. Foreign domestic calendars and actual routes/venues remain unavailable. Stronger recovery-after-travel requirements need a new proposal.
 
 Inherited violations are distinguished by the exact original club/event pair and unchanged kickoffs. The recommendation removes 11 of the 12 inherited shortfalls, leaves **one** unchanged and introduces **zero** new shortfalls. Full interval/workload evidence is in [calendar validation](validation/save046c_v2_calendar.json).
+
+The retained exception is Coritiba: Vasco–Coritiba on November 3 at 19:00 → Coritiba–Ceará on November 6 at 16:00, **69 hours**, with both original kickoffs preserved. It is disclosed rather than counted as a compliant new interval.
 
 ## Revised candidate and checksums
 
