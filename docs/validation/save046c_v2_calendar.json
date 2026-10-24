@@ -1,0 +1,4487 @@
+{
+  "calendar_completion": "2027-12-21 16:00",
+  "completion": "2027-12-21 16:00",
+  "extension_days": 0,
+  "feasible": true,
+  "holiday_conflicts": 0,
+  "inherited_league_rest_exceptions": [
+    {
+      "club": "Coritiba",
+      "from": "league:382",
+      "hours": 69.0,
+      "involves_change": false,
+      "to": "league:393"
+    }
+  ],
+  "international_buffer_hours": 0,
+  "league_fixtures_moved": 70,
+  "leg_intervals": [
+    {
+      "days": 3.0,
+      "tie": "CDB:QF-01"
+    },
+    {
+      "days": 3.0,
+      "tie": "CDB:QF-02"
+    },
+    {
+      "days": 3.0,
+      "tie": "CDB:QF-03"
+    },
+    {
+      "days": 3.0,
+      "tie": "CDB:QF-04"
+    },
+    {
+      "days": 3.0,
+      "tie": "CDB:SF-01"
+    },
+    {
+      "days": 3.0,
+      "tie": "CDB:SF-02"
+    },
+    {
+      "days": 6.0,
+      "tie": "LIB-R16-01"
+    },
+    {
+      "days": 6.0,
+      "tie": "LIB-R16-02"
+    },
+    {
+      "days": 6.0,
+      "tie": "LIB-R16-03"
+    },
+    {
+      "days": 6.0,
+      "tie": "LIB-R16-04"
+    },
+    {
+      "days": 6.0,
+      "tie": "LIB-R16-05"
+    },
+    {
+      "days": 6.0,
+      "tie": "LIB-R16-06"
+    },
+    {
+      "days": 6.0,
+      "tie": "LIB-R16-07"
+    },
+    {
+      "days": 6.0,
+      "tie": "LIB-R16-08"
+    },
+    {
+      "days": 6.0,
+      "tie": "SULA-PO-01"
+    },
+    {
+      "days": 6.0,
+      "tie": "SULA-PO-02"
+    },
+    {
+      "days": 6.0,
+      "tie": "SULA-PO-03"
+    },
+    {
+      "days": 6.0,
+      "tie": "SULA-PO-04"
+    },
+    {
+      "days": 6.0,
+      "tie": "SULA-PO-05"
+    },
+    {
+      "days": 6.0,
+      "tie": "SULA-PO-06"
+    },
+    {
+      "days": 6.0,
+      "tie": "SULA-PO-07"
+    },
+    {
+      "days": 6.0,
+      "tie": "SULA-PO-08"
+    },
+    {
+      "days": 6.0,
+      "tie": "reserve:LIB:QF"
+    },
+    {
+      "days": 7.0,
+      "tie": "reserve:LIB:SF"
+    },
+    {
+      "days": 7.0,
+      "tie": "reserve:SULA:QF"
+    },
+    {
+      "days": 6.0,
+      "tie": "reserve:SULA:R16"
+    },
+    {
+      "days": 7.0,
+      "tie": "reserve:SULA:SF"
+    }
+  ],
+  "maximum_leg_interval_days": 7.0,
+  "maximum_matches_in_rolling_window": 3,
+  "maximum_stage_wait_days": 28.0,
+  "minimum_new_turnaround_hours": 72.0,
+  "new_rest_shortfalls": [],
+  "problems": [],
+  "reservations_are_conditional": true,
+  "rest_intervals": [
+    {
+      "club": "Argentinos Juniors",
+      "from": "reserve:SULA:R16:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:R16:L2"
+    },
+    {
+      "club": "Argentinos Juniors",
+      "from": "reserve:SULA:R16:L2",
+      "hours": 672.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L1"
+    },
+    {
+      "club": "Argentinos Juniors",
+      "from": "reserve:SULA:QF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L2"
+    },
+    {
+      "club": "Argentinos Juniors",
+      "from": "reserve:SULA:QF:L2",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L1"
+    },
+    {
+      "club": "Argentinos Juniors",
+      "from": "reserve:SULA:SF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L2"
+    },
+    {
+      "club": "Argentinos Juniors",
+      "from": "reserve:SULA:SF:L2",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:FINAL:L1"
+    },
+    {
+      "club": "Athletico-PR",
+      "from": "league:317",
+      "hours": 168.0,
+      "involves_change": false,
+      "to": "league:328"
+    },
+    {
+      "club": "Athletico-PR",
+      "from": "league:328",
+      "hours": 92.0,
+      "involves_change": true,
+      "to": "SULA-PO-04:L1"
+    },
+    {
+      "club": "Athletico-PR",
+      "from": "SULA-PO-04:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:339"
+    },
+    {
+      "club": "Athletico-PR",
+      "from": "league:339",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "SULA-PO-04:L2"
+    },
+    {
+      "club": "Athletico-PR",
+      "from": "SULA-PO-04:L2",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:350"
+    },
+    {
+      "club": "Athletico-PR",
+      "from": "league:350",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "CDB:QF-04:L1"
+    },
+    {
+      "club": "Athletico-PR",
+      "from": "CDB:QF-04:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "CDB:QF-04:L2"
+    },
+    {
+      "club": "Athletico-PR",
+      "from": "CDB:QF-04:L2",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:361"
+    },
+    {
+      "club": "Athletico-PR",
+      "from": "league:361",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:SULA:R16:L1"
+    },
+    {
+      "club": "Athletico-PR",
+      "from": "reserve:SULA:R16:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:371"
+    },
+    {
+      "club": "Athletico-PR",
+      "from": "league:371",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:SULA:R16:L2"
+    },
+    {
+      "club": "Athletico-PR",
+      "from": "reserve:SULA:R16:L2",
+      "hours": 96.0,
+      "involves_change": true,
+      "to": "league:380"
+    },
+    {
+      "club": "Athletico-PR",
+      "from": "league:380",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:389"
+    },
+    {
+      "club": "Athletico-PR",
+      "from": "league:389",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:398"
+    },
+    {
+      "club": "Athletico-PR",
+      "from": "league:398",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "CDB:SF-02:L1"
+    },
+    {
+      "club": "Athletico-PR",
+      "from": "CDB:SF-02:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "CDB:SF-02:L2"
+    },
+    {
+      "club": "Athletico-PR",
+      "from": "CDB:SF-02:L2",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:407"
+    },
+    {
+      "club": "Athletico-PR",
+      "from": "league:407",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:416"
+    },
+    {
+      "club": "Athletico-PR",
+      "from": "league:416",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:425"
+    },
+    {
+      "club": "Athletico-PR",
+      "from": "league:425",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L1"
+    },
+    {
+      "club": "Athletico-PR",
+      "from": "reserve:SULA:QF:L1",
+      "hours": 74.0,
+      "involves_change": true,
+      "to": "league:434"
+    },
+    {
+      "club": "Athletico-PR",
+      "from": "league:434",
+      "hours": 94.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L2"
+    },
+    {
+      "club": "Athletico-PR",
+      "from": "reserve:SULA:QF:L2",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "CDB:FINAL-01:L1"
+    },
+    {
+      "club": "Athletico-PR",
+      "from": "CDB:FINAL-01:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L1"
+    },
+    {
+      "club": "Athletico-PR",
+      "from": "reserve:SULA:SF:L1",
+      "hours": 96.0,
+      "involves_change": true,
+      "to": "league:443"
+    },
+    {
+      "club": "Athletico-PR",
+      "from": "league:443",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L2"
+    },
+    {
+      "club": "Athletico-PR",
+      "from": "reserve:SULA:SF:L2",
+      "hours": 96.0,
+      "involves_change": true,
+      "to": "league:452"
+    },
+    {
+      "club": "Athletico-PR",
+      "from": "league:452",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:SULA:FINAL:L1"
+    },
+    {
+      "club": "Atlético Nacional",
+      "from": "LIB-R16-08:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "LIB-R16-08:L2"
+    },
+    {
+      "club": "Atlético Nacional",
+      "from": "LIB-R16-08:L2",
+      "hours": 360.0,
+      "involves_change": true,
+      "to": "reserve:LIB:QF:L1"
+    },
+    {
+      "club": "Atlético Nacional",
+      "from": "reserve:LIB:QF:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:LIB:QF:L2"
+    },
+    {
+      "club": "Atlético Nacional",
+      "from": "reserve:LIB:QF:L2",
+      "hours": 672.0,
+      "involves_change": true,
+      "to": "reserve:LIB:SF:L1"
+    },
+    {
+      "club": "Atlético Nacional",
+      "from": "reserve:LIB:SF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:LIB:SF:L2"
+    },
+    {
+      "club": "Atlético Nacional",
+      "from": "reserve:LIB:SF:L2",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:LIB:FINAL:L1"
+    },
+    {
+      "club": "Atlético-MG",
+      "from": "league:318",
+      "hours": 168.0,
+      "involves_change": false,
+      "to": "league:329"
+    },
+    {
+      "club": "Atlético-MG",
+      "from": "league:329",
+      "hours": 96.0,
+      "involves_change": true,
+      "to": "LIB-R16-04:L1"
+    },
+    {
+      "club": "Atlético-MG",
+      "from": "LIB-R16-04:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:340"
+    },
+    {
+      "club": "Atlético-MG",
+      "from": "league:340",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "LIB-R16-04:L2"
+    },
+    {
+      "club": "Atlético-MG",
+      "from": "LIB-R16-04:L2",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:351"
+    },
+    {
+      "club": "Atlético-MG",
+      "from": "league:351",
+      "hours": 216.0,
+      "involves_change": true,
+      "to": "league:361"
+    },
+    {
+      "club": "Atlético-MG",
+      "from": "league:361",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:LIB:QF:L1"
+    },
+    {
+      "club": "Atlético-MG",
+      "from": "reserve:LIB:QF:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:370"
+    },
+    {
+      "club": "Atlético-MG",
+      "from": "league:370",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:LIB:QF:L2"
+    },
+    {
+      "club": "Atlético-MG",
+      "from": "reserve:LIB:QF:L2",
+      "hours": 96.0,
+      "involves_change": true,
+      "to": "league:379"
+    },
+    {
+      "club": "Atlético-MG",
+      "from": "league:379",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:388"
+    },
+    {
+      "club": "Atlético-MG",
+      "from": "league:388",
+      "hours": 98.0,
+      "involves_change": true,
+      "to": "league:397"
+    },
+    {
+      "club": "Atlético-MG",
+      "from": "league:397",
+      "hours": 190.0,
+      "involves_change": true,
+      "to": "league:406"
+    },
+    {
+      "club": "Atlético-MG",
+      "from": "league:406",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:415"
+    },
+    {
+      "club": "Atlético-MG",
+      "from": "league:415",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:424"
+    },
+    {
+      "club": "Atlético-MG",
+      "from": "league:424",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:LIB:SF:L1"
+    },
+    {
+      "club": "Atlético-MG",
+      "from": "reserve:LIB:SF:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:433"
+    },
+    {
+      "club": "Atlético-MG",
+      "from": "league:433",
+      "hours": 96.0,
+      "involves_change": true,
+      "to": "reserve:LIB:SF:L2"
+    },
+    {
+      "club": "Atlético-MG",
+      "from": "reserve:LIB:SF:L2",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:LIB:FINAL:L1"
+    },
+    {
+      "club": "Atlético-MG",
+      "from": "reserve:LIB:FINAL:L1",
+      "hours": 120.0,
+      "involves_change": true,
+      "to": "league:442"
+    },
+    {
+      "club": "Atlético-MG",
+      "from": "league:442",
+      "hours": 144.0,
+      "involves_change": false,
+      "to": "league:453"
+    },
+    {
+      "club": "Bahia",
+      "from": "league:319",
+      "hours": 168.0,
+      "involves_change": false,
+      "to": "league:330"
+    },
+    {
+      "club": "Bahia",
+      "from": "league:330",
+      "hours": 167.0,
+      "involves_change": true,
+      "to": "league:341"
+    },
+    {
+      "club": "Bahia",
+      "from": "league:341",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "league:351"
+    },
+    {
+      "club": "Bahia",
+      "from": "league:351",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "CDB:QF-04:L1"
+    },
+    {
+      "club": "Bahia",
+      "from": "CDB:QF-04:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "CDB:QF-04:L2"
+    },
+    {
+      "club": "Bahia",
+      "from": "CDB:QF-04:L2",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:360"
+    },
+    {
+      "club": "Bahia",
+      "from": "league:360",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "league:369"
+    },
+    {
+      "club": "Bahia",
+      "from": "league:369",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "league:378"
+    },
+    {
+      "club": "Bahia",
+      "from": "league:378",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:387"
+    },
+    {
+      "club": "Bahia",
+      "from": "league:387",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:396"
+    },
+    {
+      "club": "Bahia",
+      "from": "league:396",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "CDB:SF-02:L1"
+    },
+    {
+      "club": "Bahia",
+      "from": "CDB:SF-02:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "CDB:SF-02:L2"
+    },
+    {
+      "club": "Bahia",
+      "from": "CDB:SF-02:L2",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:405"
+    },
+    {
+      "club": "Bahia",
+      "from": "league:405",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:414"
+    },
+    {
+      "club": "Bahia",
+      "from": "league:414",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:423"
+    },
+    {
+      "club": "Bahia",
+      "from": "league:423",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "league:432"
+    },
+    {
+      "club": "Bahia",
+      "from": "league:432",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "CDB:FINAL-01:L1"
+    },
+    {
+      "club": "Bahia",
+      "from": "CDB:FINAL-01:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "league:443"
+    },
+    {
+      "club": "Bahia",
+      "from": "league:443",
+      "hours": 170.0,
+      "involves_change": false,
+      "to": "league:454"
+    },
+    {
+      "club": "Barcelona SC",
+      "from": "reserve:SULA:R16:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:R16:L2"
+    },
+    {
+      "club": "Barcelona SC",
+      "from": "reserve:SULA:R16:L2",
+      "hours": 672.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L1"
+    },
+    {
+      "club": "Barcelona SC",
+      "from": "reserve:SULA:QF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L2"
+    },
+    {
+      "club": "Barcelona SC",
+      "from": "reserve:SULA:QF:L2",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L1"
+    },
+    {
+      "club": "Barcelona SC",
+      "from": "reserve:SULA:SF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L2"
+    },
+    {
+      "club": "Barcelona SC",
+      "from": "reserve:SULA:SF:L2",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:FINAL:L1"
+    },
+    {
+      "club": "Bolívar",
+      "from": "LIB-R16-01:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "LIB-R16-01:L2"
+    },
+    {
+      "club": "Bolívar",
+      "from": "LIB-R16-01:L2",
+      "hours": 360.0,
+      "involves_change": true,
+      "to": "reserve:LIB:QF:L1"
+    },
+    {
+      "club": "Bolívar",
+      "from": "reserve:LIB:QF:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:LIB:QF:L2"
+    },
+    {
+      "club": "Bolívar",
+      "from": "reserve:LIB:QF:L2",
+      "hours": 672.0,
+      "involves_change": true,
+      "to": "reserve:LIB:SF:L1"
+    },
+    {
+      "club": "Bolívar",
+      "from": "reserve:LIB:SF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:LIB:SF:L2"
+    },
+    {
+      "club": "Bolívar",
+      "from": "reserve:LIB:SF:L2",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:LIB:FINAL:L1"
+    },
+    {
+      "club": "Botafogo",
+      "from": "league:320",
+      "hours": 168.0,
+      "involves_change": false,
+      "to": "league:331"
+    },
+    {
+      "club": "Botafogo",
+      "from": "league:331",
+      "hours": 94.0,
+      "involves_change": true,
+      "to": "SULA-PO-08:L1"
+    },
+    {
+      "club": "Botafogo",
+      "from": "SULA-PO-08:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:341"
+    },
+    {
+      "club": "Botafogo",
+      "from": "league:341",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "SULA-PO-08:L2"
+    },
+    {
+      "club": "Botafogo",
+      "from": "SULA-PO-08:L2",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:350"
+    },
+    {
+      "club": "Botafogo",
+      "from": "league:350",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "CDB:QF-03:L1"
+    },
+    {
+      "club": "Botafogo",
+      "from": "CDB:QF-03:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "CDB:QF-03:L2"
+    },
+    {
+      "club": "Botafogo",
+      "from": "CDB:QF-03:L2",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:359"
+    },
+    {
+      "club": "Botafogo",
+      "from": "league:359",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:SULA:R16:L1"
+    },
+    {
+      "club": "Botafogo",
+      "from": "reserve:SULA:R16:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:368"
+    },
+    {
+      "club": "Botafogo",
+      "from": "league:368",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:SULA:R16:L2"
+    },
+    {
+      "club": "Botafogo",
+      "from": "reserve:SULA:R16:L2",
+      "hours": 96.0,
+      "involves_change": true,
+      "to": "league:377"
+    },
+    {
+      "club": "Botafogo",
+      "from": "league:377",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:386"
+    },
+    {
+      "club": "Botafogo",
+      "from": "league:386",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:395"
+    },
+    {
+      "club": "Botafogo",
+      "from": "league:395",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "CDB:SF-02:L1"
+    },
+    {
+      "club": "Botafogo",
+      "from": "CDB:SF-02:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "CDB:SF-02:L2"
+    },
+    {
+      "club": "Botafogo",
+      "from": "CDB:SF-02:L2",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:404"
+    },
+    {
+      "club": "Botafogo",
+      "from": "league:404",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:413"
+    },
+    {
+      "club": "Botafogo",
+      "from": "league:413",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:422"
+    },
+    {
+      "club": "Botafogo",
+      "from": "league:422",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L1"
+    },
+    {
+      "club": "Botafogo",
+      "from": "reserve:SULA:QF:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:433"
+    },
+    {
+      "club": "Botafogo",
+      "from": "league:433",
+      "hours": 96.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L2"
+    },
+    {
+      "club": "Botafogo",
+      "from": "reserve:SULA:QF:L2",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "CDB:FINAL-01:L1"
+    },
+    {
+      "club": "Botafogo",
+      "from": "CDB:FINAL-01:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L1"
+    },
+    {
+      "club": "Botafogo",
+      "from": "reserve:SULA:SF:L1",
+      "hours": 96.0,
+      "involves_change": true,
+      "to": "league:444"
+    },
+    {
+      "club": "Botafogo",
+      "from": "league:444",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L2"
+    },
+    {
+      "club": "Botafogo",
+      "from": "reserve:SULA:SF:L2",
+      "hours": 96.0,
+      "involves_change": true,
+      "to": "league:455"
+    },
+    {
+      "club": "Botafogo",
+      "from": "league:455",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:SULA:FINAL:L1"
+    },
+    {
+      "club": "Bragantino",
+      "from": "league:321",
+      "hours": 167.0,
+      "involves_change": false,
+      "to": "league:331"
+    },
+    {
+      "club": "Bragantino",
+      "from": "league:331",
+      "hours": 94.0,
+      "involves_change": true,
+      "to": "SULA-PO-07:L1"
+    },
+    {
+      "club": "Bragantino",
+      "from": "SULA-PO-07:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:340"
+    },
+    {
+      "club": "Bragantino",
+      "from": "league:340",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "SULA-PO-07:L2"
+    },
+    {
+      "club": "Bragantino",
+      "from": "SULA-PO-07:L2",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:349"
+    },
+    {
+      "club": "Bragantino",
+      "from": "league:349",
+      "hours": 193.0,
+      "involves_change": true,
+      "to": "league:358"
+    },
+    {
+      "club": "Bragantino",
+      "from": "league:358",
+      "hours": 95.0,
+      "involves_change": true,
+      "to": "reserve:SULA:R16:L1"
+    },
+    {
+      "club": "Bragantino",
+      "from": "reserve:SULA:R16:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:367"
+    },
+    {
+      "club": "Bragantino",
+      "from": "league:367",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:SULA:R16:L2"
+    },
+    {
+      "club": "Bragantino",
+      "from": "reserve:SULA:R16:L2",
+      "hours": 96.0,
+      "involves_change": true,
+      "to": "league:376"
+    },
+    {
+      "club": "Bragantino",
+      "from": "league:376",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:385"
+    },
+    {
+      "club": "Bragantino",
+      "from": "league:385",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:394"
+    },
+    {
+      "club": "Bragantino",
+      "from": "league:394",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "league:403"
+    },
+    {
+      "club": "Bragantino",
+      "from": "league:403",
+      "hours": 99.0,
+      "involves_change": false,
+      "to": "league:412"
+    },
+    {
+      "club": "Bragantino",
+      "from": "league:412",
+      "hours": 93.0,
+      "involves_change": true,
+      "to": "league:423"
+    },
+    {
+      "club": "Bragantino",
+      "from": "league:423",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L1"
+    },
+    {
+      "club": "Bragantino",
+      "from": "reserve:SULA:QF:L1",
+      "hours": 74.0,
+      "involves_change": true,
+      "to": "league:434"
+    },
+    {
+      "club": "Bragantino",
+      "from": "league:434",
+      "hours": 94.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L2"
+    },
+    {
+      "club": "Bragantino",
+      "from": "reserve:SULA:QF:L2",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L1"
+    },
+    {
+      "club": "Bragantino",
+      "from": "reserve:SULA:SF:L1",
+      "hours": 96.0,
+      "involves_change": true,
+      "to": "league:445"
+    },
+    {
+      "club": "Bragantino",
+      "from": "league:445",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L2"
+    },
+    {
+      "club": "Bragantino",
+      "from": "reserve:SULA:SF:L2",
+      "hours": 96.0,
+      "involves_change": true,
+      "to": "league:456"
+    },
+    {
+      "club": "Bragantino",
+      "from": "league:456",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:SULA:FINAL:L1"
+    },
+    {
+      "club": "Caracas FC",
+      "from": "SULA-PO-01:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "SULA-PO-01:L2"
+    },
+    {
+      "club": "Caracas FC",
+      "from": "SULA-PO-01:L2",
+      "hours": 360.0,
+      "involves_change": true,
+      "to": "reserve:SULA:R16:L1"
+    },
+    {
+      "club": "Caracas FC",
+      "from": "reserve:SULA:R16:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:R16:L2"
+    },
+    {
+      "club": "Caracas FC",
+      "from": "reserve:SULA:R16:L2",
+      "hours": 672.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L1"
+    },
+    {
+      "club": "Caracas FC",
+      "from": "reserve:SULA:QF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L2"
+    },
+    {
+      "club": "Caracas FC",
+      "from": "reserve:SULA:QF:L2",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L1"
+    },
+    {
+      "club": "Caracas FC",
+      "from": "reserve:SULA:SF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L2"
+    },
+    {
+      "club": "Caracas FC",
+      "from": "reserve:SULA:SF:L2",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:FINAL:L1"
+    },
+    {
+      "club": "Ceará",
+      "from": "league:321",
+      "hours": 166.0,
+      "involves_change": false,
+      "to": "league:330"
+    },
+    {
+      "club": "Ceará",
+      "from": "league:330",
+      "hours": 167.0,
+      "involves_change": true,
+      "to": "league:339"
+    },
+    {
+      "club": "Ceará",
+      "from": "league:339",
+      "hours": 171.0,
+      "involves_change": true,
+      "to": "league:348"
+    },
+    {
+      "club": "Ceará",
+      "from": "league:348",
+      "hours": 165.0,
+      "involves_change": false,
+      "to": "league:357"
+    },
+    {
+      "club": "Ceará",
+      "from": "league:357",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "league:366"
+    },
+    {
+      "club": "Ceará",
+      "from": "league:366",
+      "hours": 148.0,
+      "involves_change": true,
+      "to": "league:375"
+    },
+    {
+      "club": "Ceará",
+      "from": "league:375",
+      "hours": 92.0,
+      "involves_change": true,
+      "to": "league:384"
+    },
+    {
+      "club": "Ceará",
+      "from": "league:384",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:393"
+    },
+    {
+      "club": "Ceará",
+      "from": "league:393",
+      "hours": 192.0,
+      "involves_change": false,
+      "to": "league:402"
+    },
+    {
+      "club": "Ceará",
+      "from": "league:402",
+      "hours": 96.0,
+      "involves_change": true,
+      "to": "league:413"
+    },
+    {
+      "club": "Ceará",
+      "from": "league:413",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:424"
+    },
+    {
+      "club": "Ceará",
+      "from": "league:424",
+      "hours": 148.0,
+      "involves_change": true,
+      "to": "league:435"
+    },
+    {
+      "club": "Ceará",
+      "from": "league:435",
+      "hours": 332.0,
+      "involves_change": true,
+      "to": "league:446"
+    },
+    {
+      "club": "Ceará",
+      "from": "league:446",
+      "hours": 194.0,
+      "involves_change": true,
+      "to": "league:457"
+    },
+    {
+      "club": "Cerro Porteño",
+      "from": "reserve:SULA:R16:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:R16:L2"
+    },
+    {
+      "club": "Cerro Porteño",
+      "from": "reserve:SULA:R16:L2",
+      "hours": 672.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L1"
+    },
+    {
+      "club": "Cerro Porteño",
+      "from": "reserve:SULA:QF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L2"
+    },
+    {
+      "club": "Cerro Porteño",
+      "from": "reserve:SULA:QF:L2",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L1"
+    },
+    {
+      "club": "Cerro Porteño",
+      "from": "reserve:SULA:SF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L2"
+    },
+    {
+      "club": "Cerro Porteño",
+      "from": "reserve:SULA:SF:L2",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:FINAL:L1"
+    },
+    {
+      "club": "Corinthians",
+      "from": "league:320",
+      "hours": 166.0,
+      "involves_change": false,
+      "to": "league:329"
+    },
+    {
+      "club": "Corinthians",
+      "from": "league:329",
+      "hours": 171.0,
+      "involves_change": false,
+      "to": "league:338"
+    },
+    {
+      "club": "Corinthians",
+      "from": "league:338",
+      "hours": 167.0,
+      "involves_change": false,
+      "to": "league:347"
+    },
+    {
+      "club": "Corinthians",
+      "from": "league:347",
+      "hours": 170.0,
+      "involves_change": false,
+      "to": "league:356"
+    },
+    {
+      "club": "Corinthians",
+      "from": "league:356",
+      "hours": 166.0,
+      "involves_change": false,
+      "to": "league:365"
+    },
+    {
+      "club": "Corinthians",
+      "from": "league:365",
+      "hours": 144.0,
+      "involves_change": false,
+      "to": "league:374"
+    },
+    {
+      "club": "Corinthians",
+      "from": "league:374",
+      "hours": 94.0,
+      "involves_change": true,
+      "to": "league:383"
+    },
+    {
+      "club": "Corinthians",
+      "from": "league:383",
+      "hours": 96.0,
+      "involves_change": true,
+      "to": "league:392"
+    },
+    {
+      "club": "Corinthians",
+      "from": "league:392",
+      "hours": 144.0,
+      "involves_change": false,
+      "to": "league:403"
+    },
+    {
+      "club": "Corinthians",
+      "from": "league:403",
+      "hours": 120.0,
+      "involves_change": true,
+      "to": "league:414"
+    },
+    {
+      "club": "Corinthians",
+      "from": "league:414",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:425"
+    },
+    {
+      "club": "Corinthians",
+      "from": "league:425",
+      "hours": 169.0,
+      "involves_change": true,
+      "to": "league:436"
+    },
+    {
+      "club": "Corinthians",
+      "from": "league:436",
+      "hours": 337.0,
+      "involves_change": false,
+      "to": "league:447"
+    },
+    {
+      "club": "Corinthians",
+      "from": "league:447",
+      "hours": 169.0,
+      "involves_change": false,
+      "to": "league:458"
+    },
+    {
+      "club": "Coritiba",
+      "from": "league:319",
+      "hours": 171.0,
+      "involves_change": false,
+      "to": "league:328"
+    },
+    {
+      "club": "Coritiba",
+      "from": "league:328",
+      "hours": 166.0,
+      "involves_change": false,
+      "to": "league:337"
+    },
+    {
+      "club": "Coritiba",
+      "from": "league:337",
+      "hours": 167.0,
+      "involves_change": false,
+      "to": "league:346"
+    },
+    {
+      "club": "Coritiba",
+      "from": "league:346",
+      "hours": 191.0,
+      "involves_change": true,
+      "to": "league:355"
+    },
+    {
+      "club": "Coritiba",
+      "from": "league:355",
+      "hours": 120.0,
+      "involves_change": true,
+      "to": "league:364"
+    },
+    {
+      "club": "Coritiba",
+      "from": "league:364",
+      "hours": 168.0,
+      "involves_change": false,
+      "to": "league:373"
+    },
+    {
+      "club": "Coritiba",
+      "from": "league:373",
+      "hours": 99.0,
+      "involves_change": false,
+      "to": "league:382"
+    },
+    {
+      "club": "Coritiba",
+      "from": "league:382",
+      "hours": 69.0,
+      "involves_change": false,
+      "to": "league:393"
+    },
+    {
+      "club": "Coritiba",
+      "from": "league:393",
+      "hours": 216.0,
+      "involves_change": true,
+      "to": "league:404"
+    },
+    {
+      "club": "Coritiba",
+      "from": "league:404",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:415"
+    },
+    {
+      "club": "Coritiba",
+      "from": "league:415",
+      "hours": 73.0,
+      "involves_change": true,
+      "to": "league:426"
+    },
+    {
+      "club": "Coritiba",
+      "from": "league:426",
+      "hours": 167.0,
+      "involves_change": true,
+      "to": "league:437"
+    },
+    {
+      "club": "Coritiba",
+      "from": "league:437",
+      "hours": 339.0,
+      "involves_change": true,
+      "to": "league:448"
+    },
+    {
+      "club": "Coritiba",
+      "from": "league:448",
+      "hours": 169.0,
+      "involves_change": false,
+      "to": "league:459"
+    },
+    {
+      "club": "Cruzeiro",
+      "from": "league:318",
+      "hours": 171.0,
+      "involves_change": false,
+      "to": "league:327"
+    },
+    {
+      "club": "Cruzeiro",
+      "from": "league:327",
+      "hours": 165.0,
+      "involves_change": true,
+      "to": "league:336"
+    },
+    {
+      "club": "Cruzeiro",
+      "from": "league:336",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "league:345"
+    },
+    {
+      "club": "Cruzeiro",
+      "from": "league:345",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "CDB:QF-01:L1"
+    },
+    {
+      "club": "Cruzeiro",
+      "from": "CDB:QF-01:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "CDB:QF-01:L2"
+    },
+    {
+      "club": "Cruzeiro",
+      "from": "CDB:QF-01:L2",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:354"
+    },
+    {
+      "club": "Cruzeiro",
+      "from": "league:354",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "league:363"
+    },
+    {
+      "club": "Cruzeiro",
+      "from": "league:363",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "league:372"
+    },
+    {
+      "club": "Cruzeiro",
+      "from": "league:372",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:383"
+    },
+    {
+      "club": "Cruzeiro",
+      "from": "league:383",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:394"
+    },
+    {
+      "club": "Cruzeiro",
+      "from": "league:394",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "CDB:SF-01:L1"
+    },
+    {
+      "club": "Cruzeiro",
+      "from": "CDB:SF-01:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "CDB:SF-01:L2"
+    },
+    {
+      "club": "Cruzeiro",
+      "from": "CDB:SF-01:L2",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:405"
+    },
+    {
+      "club": "Cruzeiro",
+      "from": "league:405",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:416"
+    },
+    {
+      "club": "Cruzeiro",
+      "from": "league:416",
+      "hours": 74.0,
+      "involves_change": true,
+      "to": "league:427"
+    },
+    {
+      "club": "Cruzeiro",
+      "from": "league:427",
+      "hours": 169.0,
+      "involves_change": false,
+      "to": "league:438"
+    },
+    {
+      "club": "Cruzeiro",
+      "from": "league:438",
+      "hours": 141.0,
+      "involves_change": true,
+      "to": "CDB:FINAL-01:L1"
+    },
+    {
+      "club": "Cruzeiro",
+      "from": "CDB:FINAL-01:L1",
+      "hours": 196.0,
+      "involves_change": true,
+      "to": "league:449"
+    },
+    {
+      "club": "Cruzeiro",
+      "from": "league:449",
+      "hours": 164.0,
+      "involves_change": false,
+      "to": "league:460"
+    },
+    {
+      "club": "Emelec",
+      "from": "SULA-PO-02:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "SULA-PO-02:L2"
+    },
+    {
+      "club": "Emelec",
+      "from": "SULA-PO-02:L2",
+      "hours": 360.0,
+      "involves_change": true,
+      "to": "reserve:SULA:R16:L1"
+    },
+    {
+      "club": "Emelec",
+      "from": "reserve:SULA:R16:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:R16:L2"
+    },
+    {
+      "club": "Emelec",
+      "from": "reserve:SULA:R16:L2",
+      "hours": 672.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L1"
+    },
+    {
+      "club": "Emelec",
+      "from": "reserve:SULA:QF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L2"
+    },
+    {
+      "club": "Emelec",
+      "from": "reserve:SULA:QF:L2",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L1"
+    },
+    {
+      "club": "Emelec",
+      "from": "reserve:SULA:SF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L2"
+    },
+    {
+      "club": "Emelec",
+      "from": "reserve:SULA:SF:L2",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:FINAL:L1"
+    },
+    {
+      "club": "Estudiantes",
+      "from": "LIB-R16-05:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "LIB-R16-05:L2"
+    },
+    {
+      "club": "Estudiantes",
+      "from": "LIB-R16-05:L2",
+      "hours": 360.0,
+      "involves_change": true,
+      "to": "reserve:LIB:QF:L1"
+    },
+    {
+      "club": "Estudiantes",
+      "from": "reserve:LIB:QF:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:LIB:QF:L2"
+    },
+    {
+      "club": "Estudiantes",
+      "from": "reserve:LIB:QF:L2",
+      "hours": 672.0,
+      "involves_change": true,
+      "to": "reserve:LIB:SF:L1"
+    },
+    {
+      "club": "Estudiantes",
+      "from": "reserve:LIB:SF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:LIB:SF:L2"
+    },
+    {
+      "club": "Estudiantes",
+      "from": "reserve:LIB:SF:L2",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:LIB:FINAL:L1"
+    },
+    {
+      "club": "Flamengo",
+      "from": "league:317",
+      "hours": 166.0,
+      "involves_change": false,
+      "to": "league:326"
+    },
+    {
+      "club": "Flamengo",
+      "from": "league:326",
+      "hours": 94.0,
+      "involves_change": true,
+      "to": "LIB-R16-06:L1"
+    },
+    {
+      "club": "Flamengo",
+      "from": "LIB-R16-06:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:335"
+    },
+    {
+      "club": "Flamengo",
+      "from": "league:335",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "LIB-R16-06:L2"
+    },
+    {
+      "club": "Flamengo",
+      "from": "LIB-R16-06:L2",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:344"
+    },
+    {
+      "club": "Flamengo",
+      "from": "league:344",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "CDB:QF-03:L1"
+    },
+    {
+      "club": "Flamengo",
+      "from": "CDB:QF-03:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "CDB:QF-03:L2"
+    },
+    {
+      "club": "Flamengo",
+      "from": "CDB:QF-03:L2",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:353"
+    },
+    {
+      "club": "Flamengo",
+      "from": "league:353",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:LIB:QF:L1"
+    },
+    {
+      "club": "Flamengo",
+      "from": "reserve:LIB:QF:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:362"
+    },
+    {
+      "club": "Flamengo",
+      "from": "league:362",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:LIB:QF:L2"
+    },
+    {
+      "club": "Flamengo",
+      "from": "reserve:LIB:QF:L2",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:373"
+    },
+    {
+      "club": "Flamengo",
+      "from": "league:373",
+      "hours": 96.0,
+      "involves_change": true,
+      "to": "league:384"
+    },
+    {
+      "club": "Flamengo",
+      "from": "league:384",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:395"
+    },
+    {
+      "club": "Flamengo",
+      "from": "league:395",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "CDB:SF-02:L1"
+    },
+    {
+      "club": "Flamengo",
+      "from": "CDB:SF-02:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "CDB:SF-02:L2"
+    },
+    {
+      "club": "Flamengo",
+      "from": "CDB:SF-02:L2",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:406"
+    },
+    {
+      "club": "Flamengo",
+      "from": "league:406",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:417"
+    },
+    {
+      "club": "Flamengo",
+      "from": "league:417",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:428"
+    },
+    {
+      "club": "Flamengo",
+      "from": "league:428",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:LIB:SF:L1"
+    },
+    {
+      "club": "Flamengo",
+      "from": "reserve:LIB:SF:L1",
+      "hours": 96.0,
+      "involves_change": true,
+      "to": "league:439"
+    },
+    {
+      "club": "Flamengo",
+      "from": "league:439",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:LIB:SF:L2"
+    },
+    {
+      "club": "Flamengo",
+      "from": "reserve:LIB:SF:L2",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "CDB:FINAL-01:L1"
+    },
+    {
+      "club": "Flamengo",
+      "from": "CDB:FINAL-01:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:LIB:FINAL:L1"
+    },
+    {
+      "club": "Flamengo",
+      "from": "reserve:LIB:FINAL:L1",
+      "hours": 120.0,
+      "involves_change": true,
+      "to": "league:450"
+    },
+    {
+      "club": "Flamengo",
+      "from": "league:450",
+      "hours": 169.0,
+      "involves_change": false,
+      "to": "league:461"
+    },
+    {
+      "club": "Fluminense",
+      "from": "league:316",
+      "hours": 166.0,
+      "involves_change": false,
+      "to": "league:325"
+    },
+    {
+      "club": "Fluminense",
+      "from": "league:325",
+      "hours": 95.0,
+      "involves_change": true,
+      "to": "LIB-R16-02:L1"
+    },
+    {
+      "club": "Fluminense",
+      "from": "LIB-R16-02:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:334"
+    },
+    {
+      "club": "Fluminense",
+      "from": "league:334",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "LIB-R16-02:L2"
+    },
+    {
+      "club": "Fluminense",
+      "from": "LIB-R16-02:L2",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:343"
+    },
+    {
+      "club": "Fluminense",
+      "from": "league:343",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "CDB:QF-01:L1"
+    },
+    {
+      "club": "Fluminense",
+      "from": "CDB:QF-01:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "CDB:QF-01:L2"
+    },
+    {
+      "club": "Fluminense",
+      "from": "CDB:QF-01:L2",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:352"
+    },
+    {
+      "club": "Fluminense",
+      "from": "league:352",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:LIB:QF:L1"
+    },
+    {
+      "club": "Fluminense",
+      "from": "reserve:LIB:QF:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:363"
+    },
+    {
+      "club": "Fluminense",
+      "from": "league:363",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:LIB:QF:L2"
+    },
+    {
+      "club": "Fluminense",
+      "from": "reserve:LIB:QF:L2",
+      "hours": 74.0,
+      "involves_change": true,
+      "to": "league:374"
+    },
+    {
+      "club": "Fluminense",
+      "from": "league:374",
+      "hours": 94.0,
+      "involves_change": true,
+      "to": "league:385"
+    },
+    {
+      "club": "Fluminense",
+      "from": "league:385",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:396"
+    },
+    {
+      "club": "Fluminense",
+      "from": "league:396",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "CDB:SF-01:L1"
+    },
+    {
+      "club": "Fluminense",
+      "from": "CDB:SF-01:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "CDB:SF-01:L2"
+    },
+    {
+      "club": "Fluminense",
+      "from": "CDB:SF-01:L2",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:407"
+    },
+    {
+      "club": "Fluminense",
+      "from": "league:407",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:418"
+    },
+    {
+      "club": "Fluminense",
+      "from": "league:418",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:429"
+    },
+    {
+      "club": "Fluminense",
+      "from": "league:429",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:LIB:SF:L1"
+    },
+    {
+      "club": "Fluminense",
+      "from": "reserve:LIB:SF:L1",
+      "hours": 96.0,
+      "involves_change": true,
+      "to": "league:440"
+    },
+    {
+      "club": "Fluminense",
+      "from": "league:440",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:LIB:SF:L2"
+    },
+    {
+      "club": "Fluminense",
+      "from": "reserve:LIB:SF:L2",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "CDB:FINAL-01:L1"
+    },
+    {
+      "club": "Fluminense",
+      "from": "CDB:FINAL-01:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:LIB:FINAL:L1"
+    },
+    {
+      "club": "Fluminense",
+      "from": "reserve:LIB:FINAL:L1",
+      "hours": 121.0,
+      "involves_change": true,
+      "to": "league:451"
+    },
+    {
+      "club": "Fluminense",
+      "from": "league:451",
+      "hours": 168.0,
+      "involves_change": false,
+      "to": "league:461"
+    },
+    {
+      "club": "Fortaleza",
+      "from": "league:316",
+      "hours": 168.0,
+      "involves_change": false,
+      "to": "league:327"
+    },
+    {
+      "club": "Fortaleza",
+      "from": "league:327",
+      "hours": 168.0,
+      "involves_change": false,
+      "to": "league:338"
+    },
+    {
+      "club": "Fortaleza",
+      "from": "league:338",
+      "hours": 141.0,
+      "involves_change": true,
+      "to": "league:349"
+    },
+    {
+      "club": "Fortaleza",
+      "from": "league:349",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "CDB:QF-02:L1"
+    },
+    {
+      "club": "Fortaleza",
+      "from": "CDB:QF-02:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "CDB:QF-02:L2"
+    },
+    {
+      "club": "Fortaleza",
+      "from": "CDB:QF-02:L2",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:360"
+    },
+    {
+      "club": "Fortaleza",
+      "from": "league:360",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "league:371"
+    },
+    {
+      "club": "Fortaleza",
+      "from": "league:371",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "league:381"
+    },
+    {
+      "club": "Fortaleza",
+      "from": "league:381",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:390"
+    },
+    {
+      "club": "Fortaleza",
+      "from": "league:390",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:399"
+    },
+    {
+      "club": "Fortaleza",
+      "from": "league:399",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "CDB:SF-01:L1"
+    },
+    {
+      "club": "Fortaleza",
+      "from": "CDB:SF-01:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "CDB:SF-01:L2"
+    },
+    {
+      "club": "Fortaleza",
+      "from": "CDB:SF-01:L2",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:408"
+    },
+    {
+      "club": "Fortaleza",
+      "from": "league:408",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:417"
+    },
+    {
+      "club": "Fortaleza",
+      "from": "league:417",
+      "hours": 73.0,
+      "involves_change": true,
+      "to": "league:426"
+    },
+    {
+      "club": "Fortaleza",
+      "from": "league:426",
+      "hours": 147.0,
+      "involves_change": false,
+      "to": "league:435"
+    },
+    {
+      "club": "Fortaleza",
+      "from": "league:435",
+      "hours": 164.0,
+      "involves_change": true,
+      "to": "CDB:FINAL-01:L1"
+    },
+    {
+      "club": "Fortaleza",
+      "from": "CDB:FINAL-01:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "league:444"
+    },
+    {
+      "club": "Fortaleza",
+      "from": "league:444",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "league:453"
+    },
+    {
+      "club": "Goiás",
+      "from": "league:315",
+      "hours": 170.0,
+      "involves_change": false,
+      "to": "league:324"
+    },
+    {
+      "club": "Goiás",
+      "from": "league:324",
+      "hours": 190.0,
+      "involves_change": true,
+      "to": "league:333"
+    },
+    {
+      "club": "Goiás",
+      "from": "league:333",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "league:342"
+    },
+    {
+      "club": "Goiás",
+      "from": "league:342",
+      "hours": 192.0,
+      "involves_change": true,
+      "to": "league:353"
+    },
+    {
+      "club": "Goiás",
+      "from": "league:353",
+      "hours": 120.0,
+      "involves_change": true,
+      "to": "league:364"
+    },
+    {
+      "club": "Goiás",
+      "from": "league:364",
+      "hours": 172.0,
+      "involves_change": false,
+      "to": "league:375"
+    },
+    {
+      "club": "Goiás",
+      "from": "league:375",
+      "hours": 92.0,
+      "involves_change": true,
+      "to": "league:386"
+    },
+    {
+      "club": "Goiás",
+      "from": "league:386",
+      "hours": 98.0,
+      "involves_change": true,
+      "to": "league:397"
+    },
+    {
+      "club": "Goiás",
+      "from": "league:397",
+      "hours": 190.0,
+      "involves_change": true,
+      "to": "league:408"
+    },
+    {
+      "club": "Goiás",
+      "from": "league:408",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:419"
+    },
+    {
+      "club": "Goiás",
+      "from": "league:419",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:430"
+    },
+    {
+      "club": "Goiás",
+      "from": "league:430",
+      "hours": 169.0,
+      "involves_change": false,
+      "to": "league:441"
+    },
+    {
+      "club": "Goiás",
+      "from": "league:441",
+      "hours": 336.0,
+      "involves_change": false,
+      "to": "league:451"
+    },
+    {
+      "club": "Goiás",
+      "from": "league:451",
+      "hours": 167.0,
+      "involves_change": false,
+      "to": "league:460"
+    },
+    {
+      "club": "Huachipato",
+      "from": "LIB-R16-06:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "LIB-R16-06:L2"
+    },
+    {
+      "club": "Huachipato",
+      "from": "LIB-R16-06:L2",
+      "hours": 360.0,
+      "involves_change": true,
+      "to": "reserve:LIB:QF:L1"
+    },
+    {
+      "club": "Huachipato",
+      "from": "reserve:LIB:QF:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:LIB:QF:L2"
+    },
+    {
+      "club": "Huachipato",
+      "from": "reserve:LIB:QF:L2",
+      "hours": 672.0,
+      "involves_change": true,
+      "to": "reserve:LIB:SF:L1"
+    },
+    {
+      "club": "Huachipato",
+      "from": "reserve:LIB:SF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:LIB:SF:L2"
+    },
+    {
+      "club": "Huachipato",
+      "from": "reserve:LIB:SF:L2",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:LIB:FINAL:L1"
+    },
+    {
+      "club": "Independiente",
+      "from": "SULA-PO-07:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "SULA-PO-07:L2"
+    },
+    {
+      "club": "Independiente",
+      "from": "SULA-PO-07:L2",
+      "hours": 360.0,
+      "involves_change": true,
+      "to": "reserve:SULA:R16:L1"
+    },
+    {
+      "club": "Independiente",
+      "from": "reserve:SULA:R16:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:R16:L2"
+    },
+    {
+      "club": "Independiente",
+      "from": "reserve:SULA:R16:L2",
+      "hours": 672.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L1"
+    },
+    {
+      "club": "Independiente",
+      "from": "reserve:SULA:QF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L2"
+    },
+    {
+      "club": "Independiente",
+      "from": "reserve:SULA:QF:L2",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L1"
+    },
+    {
+      "club": "Independiente",
+      "from": "reserve:SULA:SF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L2"
+    },
+    {
+      "club": "Independiente",
+      "from": "reserve:SULA:SF:L2",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:FINAL:L1"
+    },
+    {
+      "club": "Junior de Barranquilla",
+      "from": "LIB-R16-02:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "LIB-R16-02:L2"
+    },
+    {
+      "club": "Junior de Barranquilla",
+      "from": "LIB-R16-02:L2",
+      "hours": 360.0,
+      "involves_change": true,
+      "to": "reserve:LIB:QF:L1"
+    },
+    {
+      "club": "Junior de Barranquilla",
+      "from": "reserve:LIB:QF:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:LIB:QF:L2"
+    },
+    {
+      "club": "Junior de Barranquilla",
+      "from": "reserve:LIB:QF:L2",
+      "hours": 672.0,
+      "involves_change": true,
+      "to": "reserve:LIB:SF:L1"
+    },
+    {
+      "club": "Junior de Barranquilla",
+      "from": "reserve:LIB:SF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:LIB:SF:L2"
+    },
+    {
+      "club": "Junior de Barranquilla",
+      "from": "reserve:LIB:SF:L2",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:LIB:FINAL:L1"
+    },
+    {
+      "club": "Lanús",
+      "from": "reserve:SULA:R16:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:R16:L2"
+    },
+    {
+      "club": "Lanús",
+      "from": "reserve:SULA:R16:L2",
+      "hours": 672.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L1"
+    },
+    {
+      "club": "Lanús",
+      "from": "reserve:SULA:QF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L2"
+    },
+    {
+      "club": "Lanús",
+      "from": "reserve:SULA:QF:L2",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L1"
+    },
+    {
+      "club": "Lanús",
+      "from": "reserve:SULA:SF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L2"
+    },
+    {
+      "club": "Lanús",
+      "from": "reserve:SULA:SF:L2",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:FINAL:L1"
+    },
+    {
+      "club": "Libertad",
+      "from": "SULA-PO-05:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "SULA-PO-05:L2"
+    },
+    {
+      "club": "Libertad",
+      "from": "SULA-PO-05:L2",
+      "hours": 360.0,
+      "involves_change": true,
+      "to": "reserve:SULA:R16:L1"
+    },
+    {
+      "club": "Libertad",
+      "from": "reserve:SULA:R16:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:R16:L2"
+    },
+    {
+      "club": "Libertad",
+      "from": "reserve:SULA:R16:L2",
+      "hours": 672.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L1"
+    },
+    {
+      "club": "Libertad",
+      "from": "reserve:SULA:QF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L2"
+    },
+    {
+      "club": "Libertad",
+      "from": "reserve:SULA:QF:L2",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L1"
+    },
+    {
+      "club": "Libertad",
+      "from": "reserve:SULA:SF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L2"
+    },
+    {
+      "club": "Libertad",
+      "from": "reserve:SULA:SF:L2",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:FINAL:L1"
+    },
+    {
+      "club": "Liverpool (URU)",
+      "from": "LIB-R16-07:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "LIB-R16-07:L2"
+    },
+    {
+      "club": "Liverpool (URU)",
+      "from": "LIB-R16-07:L2",
+      "hours": 360.0,
+      "involves_change": true,
+      "to": "reserve:LIB:QF:L1"
+    },
+    {
+      "club": "Liverpool (URU)",
+      "from": "reserve:LIB:QF:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:LIB:QF:L2"
+    },
+    {
+      "club": "Liverpool (URU)",
+      "from": "reserve:LIB:QF:L2",
+      "hours": 672.0,
+      "involves_change": true,
+      "to": "reserve:LIB:SF:L1"
+    },
+    {
+      "club": "Liverpool (URU)",
+      "from": "reserve:LIB:SF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:LIB:SF:L2"
+    },
+    {
+      "club": "Liverpool (URU)",
+      "from": "reserve:LIB:SF:L2",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:LIB:FINAL:L1"
+    },
+    {
+      "club": "Millonarios",
+      "from": "reserve:SULA:R16:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:R16:L2"
+    },
+    {
+      "club": "Millonarios",
+      "from": "reserve:SULA:R16:L2",
+      "hours": 672.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L1"
+    },
+    {
+      "club": "Millonarios",
+      "from": "reserve:SULA:QF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L2"
+    },
+    {
+      "club": "Millonarios",
+      "from": "reserve:SULA:QF:L2",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L1"
+    },
+    {
+      "club": "Millonarios",
+      "from": "reserve:SULA:SF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L2"
+    },
+    {
+      "club": "Millonarios",
+      "from": "reserve:SULA:SF:L2",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:FINAL:L1"
+    },
+    {
+      "club": "Mirassol",
+      "from": "league:314",
+      "hours": 142.0,
+      "involves_change": false,
+      "to": "league:323"
+    },
+    {
+      "club": "Mirassol",
+      "from": "league:323",
+      "hours": 192.0,
+      "involves_change": false,
+      "to": "league:332"
+    },
+    {
+      "club": "Mirassol",
+      "from": "league:332",
+      "hours": 144.0,
+      "involves_change": false,
+      "to": "league:343"
+    },
+    {
+      "club": "Mirassol",
+      "from": "league:343",
+      "hours": 216.0,
+      "involves_change": true,
+      "to": "league:354"
+    },
+    {
+      "club": "Mirassol",
+      "from": "league:354",
+      "hours": 146.0,
+      "involves_change": true,
+      "to": "league:365"
+    },
+    {
+      "club": "Mirassol",
+      "from": "league:365",
+      "hours": 166.0,
+      "involves_change": true,
+      "to": "league:376"
+    },
+    {
+      "club": "Mirassol",
+      "from": "league:376",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:387"
+    },
+    {
+      "club": "Mirassol",
+      "from": "league:387",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:398"
+    },
+    {
+      "club": "Mirassol",
+      "from": "league:398",
+      "hours": 196.0,
+      "involves_change": true,
+      "to": "league:409"
+    },
+    {
+      "club": "Mirassol",
+      "from": "league:409",
+      "hours": 72.5,
+      "involves_change": false,
+      "to": "league:420"
+    },
+    {
+      "club": "Mirassol",
+      "from": "league:420",
+      "hours": 91.5,
+      "involves_change": true,
+      "to": "league:431"
+    },
+    {
+      "club": "Mirassol",
+      "from": "league:431",
+      "hours": 169.0,
+      "involves_change": true,
+      "to": "league:441"
+    },
+    {
+      "club": "Mirassol",
+      "from": "league:441",
+      "hours": 335.0,
+      "involves_change": false,
+      "to": "league:450"
+    },
+    {
+      "club": "Mirassol",
+      "from": "league:450",
+      "hours": 172.0,
+      "involves_change": false,
+      "to": "league:459"
+    },
+    {
+      "club": "Nacional (URU)",
+      "from": "reserve:SULA:R16:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:R16:L2"
+    },
+    {
+      "club": "Nacional (URU)",
+      "from": "reserve:SULA:R16:L2",
+      "hours": 672.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L1"
+    },
+    {
+      "club": "Nacional (URU)",
+      "from": "reserve:SULA:QF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L2"
+    },
+    {
+      "club": "Nacional (URU)",
+      "from": "reserve:SULA:QF:L2",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L1"
+    },
+    {
+      "club": "Nacional (URU)",
+      "from": "reserve:SULA:SF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L2"
+    },
+    {
+      "club": "Nacional (URU)",
+      "from": "reserve:SULA:SF:L2",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:FINAL:L1"
+    },
+    {
+      "club": "Newell's Old Boys",
+      "from": "SULA-PO-08:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "SULA-PO-08:L2"
+    },
+    {
+      "club": "Newell's Old Boys",
+      "from": "SULA-PO-08:L2",
+      "hours": 360.0,
+      "involves_change": true,
+      "to": "reserve:SULA:R16:L1"
+    },
+    {
+      "club": "Newell's Old Boys",
+      "from": "reserve:SULA:R16:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:R16:L2"
+    },
+    {
+      "club": "Newell's Old Boys",
+      "from": "reserve:SULA:R16:L2",
+      "hours": 672.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L1"
+    },
+    {
+      "club": "Newell's Old Boys",
+      "from": "reserve:SULA:QF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L2"
+    },
+    {
+      "club": "Newell's Old Boys",
+      "from": "reserve:SULA:QF:L2",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L1"
+    },
+    {
+      "club": "Newell's Old Boys",
+      "from": "reserve:SULA:SF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L2"
+    },
+    {
+      "club": "Newell's Old Boys",
+      "from": "reserve:SULA:SF:L2",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:FINAL:L1"
+    },
+    {
+      "club": "O'Higgins",
+      "from": "LIB-R16-03:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "LIB-R16-03:L2"
+    },
+    {
+      "club": "O'Higgins",
+      "from": "LIB-R16-03:L2",
+      "hours": 360.0,
+      "involves_change": true,
+      "to": "reserve:LIB:QF:L1"
+    },
+    {
+      "club": "O'Higgins",
+      "from": "reserve:LIB:QF:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:LIB:QF:L2"
+    },
+    {
+      "club": "O'Higgins",
+      "from": "reserve:LIB:QF:L2",
+      "hours": 672.0,
+      "involves_change": true,
+      "to": "reserve:LIB:SF:L1"
+    },
+    {
+      "club": "O'Higgins",
+      "from": "reserve:LIB:SF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:LIB:SF:L2"
+    },
+    {
+      "club": "O'Higgins",
+      "from": "reserve:LIB:SF:L2",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:LIB:FINAL:L1"
+    },
+    {
+      "club": "Palestino",
+      "from": "reserve:SULA:R16:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:R16:L2"
+    },
+    {
+      "club": "Palestino",
+      "from": "reserve:SULA:R16:L2",
+      "hours": 672.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L1"
+    },
+    {
+      "club": "Palestino",
+      "from": "reserve:SULA:QF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L2"
+    },
+    {
+      "club": "Palestino",
+      "from": "reserve:SULA:QF:L2",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L1"
+    },
+    {
+      "club": "Palestino",
+      "from": "reserve:SULA:SF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L2"
+    },
+    {
+      "club": "Palestino",
+      "from": "reserve:SULA:SF:L2",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:FINAL:L1"
+    },
+    {
+      "club": "Palmeiras",
+      "from": "league:313",
+      "hours": 167.0,
+      "involves_change": false,
+      "to": "league:322"
+    },
+    {
+      "club": "Palmeiras",
+      "from": "league:322",
+      "hours": 96.0,
+      "involves_change": true,
+      "to": "LIB-R16-01:L1"
+    },
+    {
+      "club": "Palmeiras",
+      "from": "LIB-R16-01:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:333"
+    },
+    {
+      "club": "Palmeiras",
+      "from": "league:333",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "LIB-R16-01:L2"
+    },
+    {
+      "club": "Palmeiras",
+      "from": "LIB-R16-01:L2",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:344"
+    },
+    {
+      "club": "Palmeiras",
+      "from": "league:344",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "CDB:QF-02:L1"
+    },
+    {
+      "club": "Palmeiras",
+      "from": "CDB:QF-02:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "CDB:QF-02:L2"
+    },
+    {
+      "club": "Palmeiras",
+      "from": "CDB:QF-02:L2",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:355"
+    },
+    {
+      "club": "Palmeiras",
+      "from": "league:355",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:LIB:QF:L1"
+    },
+    {
+      "club": "Palmeiras",
+      "from": "reserve:LIB:QF:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:366"
+    },
+    {
+      "club": "Palmeiras",
+      "from": "league:366",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:LIB:QF:L2"
+    },
+    {
+      "club": "Palmeiras",
+      "from": "reserve:LIB:QF:L2",
+      "hours": 96.0,
+      "involves_change": true,
+      "to": "league:377"
+    },
+    {
+      "club": "Palmeiras",
+      "from": "league:377",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:388"
+    },
+    {
+      "club": "Palmeiras",
+      "from": "league:388",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:399"
+    },
+    {
+      "club": "Palmeiras",
+      "from": "league:399",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "CDB:SF-01:L1"
+    },
+    {
+      "club": "Palmeiras",
+      "from": "CDB:SF-01:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "CDB:SF-01:L2"
+    },
+    {
+      "club": "Palmeiras",
+      "from": "CDB:SF-01:L2",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:410"
+    },
+    {
+      "club": "Palmeiras",
+      "from": "league:410",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:421"
+    },
+    {
+      "club": "Palmeiras",
+      "from": "league:421",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:431"
+    },
+    {
+      "club": "Palmeiras",
+      "from": "league:431",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:LIB:SF:L1"
+    },
+    {
+      "club": "Palmeiras",
+      "from": "reserve:LIB:SF:L1",
+      "hours": 96.0,
+      "involves_change": true,
+      "to": "league:440"
+    },
+    {
+      "club": "Palmeiras",
+      "from": "league:440",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:LIB:SF:L2"
+    },
+    {
+      "club": "Palmeiras",
+      "from": "reserve:LIB:SF:L2",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "CDB:FINAL-01:L1"
+    },
+    {
+      "club": "Palmeiras",
+      "from": "CDB:FINAL-01:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:LIB:FINAL:L1"
+    },
+    {
+      "club": "Palmeiras",
+      "from": "reserve:LIB:FINAL:L1",
+      "hours": 124.0,
+      "involves_change": true,
+      "to": "league:449"
+    },
+    {
+      "club": "Palmeiras",
+      "from": "league:449",
+      "hours": 167.0,
+      "involves_change": false,
+      "to": "league:458"
+    },
+    {
+      "club": "Peñarol",
+      "from": "SULA-PO-04:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "SULA-PO-04:L2"
+    },
+    {
+      "club": "Peñarol",
+      "from": "SULA-PO-04:L2",
+      "hours": 360.0,
+      "involves_change": true,
+      "to": "reserve:SULA:R16:L1"
+    },
+    {
+      "club": "Peñarol",
+      "from": "reserve:SULA:R16:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:R16:L2"
+    },
+    {
+      "club": "Peñarol",
+      "from": "reserve:SULA:R16:L2",
+      "hours": 672.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L1"
+    },
+    {
+      "club": "Peñarol",
+      "from": "reserve:SULA:QF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L2"
+    },
+    {
+      "club": "Peñarol",
+      "from": "reserve:SULA:QF:L2",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L1"
+    },
+    {
+      "club": "Peñarol",
+      "from": "reserve:SULA:SF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L2"
+    },
+    {
+      "club": "Peñarol",
+      "from": "reserve:SULA:SF:L2",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:FINAL:L1"
+    },
+    {
+      "club": "Platense",
+      "from": "SULA-PO-02:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "SULA-PO-02:L2"
+    },
+    {
+      "club": "Platense",
+      "from": "SULA-PO-02:L2",
+      "hours": 360.0,
+      "involves_change": true,
+      "to": "reserve:SULA:R16:L1"
+    },
+    {
+      "club": "Platense",
+      "from": "reserve:SULA:R16:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:R16:L2"
+    },
+    {
+      "club": "Platense",
+      "from": "reserve:SULA:R16:L2",
+      "hours": 672.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L1"
+    },
+    {
+      "club": "Platense",
+      "from": "reserve:SULA:QF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L2"
+    },
+    {
+      "club": "Platense",
+      "from": "reserve:SULA:QF:L2",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L1"
+    },
+    {
+      "club": "Platense",
+      "from": "reserve:SULA:SF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L2"
+    },
+    {
+      "club": "Platense",
+      "from": "reserve:SULA:SF:L2",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:FINAL:L1"
+    },
+    {
+      "club": "Racing Club",
+      "from": "reserve:SULA:R16:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:R16:L2"
+    },
+    {
+      "club": "Racing Club",
+      "from": "reserve:SULA:R16:L2",
+      "hours": 672.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L1"
+    },
+    {
+      "club": "Racing Club",
+      "from": "reserve:SULA:QF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L2"
+    },
+    {
+      "club": "Racing Club",
+      "from": "reserve:SULA:QF:L2",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L1"
+    },
+    {
+      "club": "Racing Club",
+      "from": "reserve:SULA:SF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L2"
+    },
+    {
+      "club": "Racing Club",
+      "from": "reserve:SULA:SF:L2",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:FINAL:L1"
+    },
+    {
+      "club": "River Plate",
+      "from": "LIB-R16-04:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "LIB-R16-04:L2"
+    },
+    {
+      "club": "River Plate",
+      "from": "LIB-R16-04:L2",
+      "hours": 360.0,
+      "involves_change": true,
+      "to": "reserve:LIB:QF:L1"
+    },
+    {
+      "club": "River Plate",
+      "from": "reserve:LIB:QF:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:LIB:QF:L2"
+    },
+    {
+      "club": "River Plate",
+      "from": "reserve:LIB:QF:L2",
+      "hours": 672.0,
+      "involves_change": true,
+      "to": "reserve:LIB:SF:L1"
+    },
+    {
+      "club": "River Plate",
+      "from": "reserve:LIB:SF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:LIB:SF:L2"
+    },
+    {
+      "club": "River Plate",
+      "from": "reserve:LIB:SF:L2",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:LIB:FINAL:L1"
+    },
+    {
+      "club": "Rosario Central",
+      "from": "SULA-PO-05:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "SULA-PO-05:L2"
+    },
+    {
+      "club": "Rosario Central",
+      "from": "SULA-PO-05:L2",
+      "hours": 360.0,
+      "involves_change": true,
+      "to": "reserve:SULA:R16:L1"
+    },
+    {
+      "club": "Rosario Central",
+      "from": "reserve:SULA:R16:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:R16:L2"
+    },
+    {
+      "club": "Rosario Central",
+      "from": "reserve:SULA:R16:L2",
+      "hours": 672.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L1"
+    },
+    {
+      "club": "Rosario Central",
+      "from": "reserve:SULA:QF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L2"
+    },
+    {
+      "club": "Rosario Central",
+      "from": "reserve:SULA:QF:L2",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L1"
+    },
+    {
+      "club": "Rosario Central",
+      "from": "reserve:SULA:SF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L2"
+    },
+    {
+      "club": "Rosario Central",
+      "from": "reserve:SULA:SF:L2",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:FINAL:L1"
+    },
+    {
+      "club": "San Lorenzo",
+      "from": "SULA-PO-01:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "SULA-PO-01:L2"
+    },
+    {
+      "club": "San Lorenzo",
+      "from": "SULA-PO-01:L2",
+      "hours": 360.0,
+      "involves_change": true,
+      "to": "reserve:SULA:R16:L1"
+    },
+    {
+      "club": "San Lorenzo",
+      "from": "reserve:SULA:R16:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:R16:L2"
+    },
+    {
+      "club": "San Lorenzo",
+      "from": "reserve:SULA:R16:L2",
+      "hours": 672.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L1"
+    },
+    {
+      "club": "San Lorenzo",
+      "from": "reserve:SULA:QF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L2"
+    },
+    {
+      "club": "San Lorenzo",
+      "from": "reserve:SULA:QF:L2",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L1"
+    },
+    {
+      "club": "San Lorenzo",
+      "from": "reserve:SULA:SF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L2"
+    },
+    {
+      "club": "San Lorenzo",
+      "from": "reserve:SULA:SF:L2",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:FINAL:L1"
+    },
+    {
+      "club": "Santos",
+      "from": "league:312",
+      "hours": 144.0,
+      "involves_change": false,
+      "to": "league:323"
+    },
+    {
+      "club": "Santos",
+      "from": "league:323",
+      "hours": 120.0,
+      "involves_change": true,
+      "to": "LIB-R16-05:L1"
+    },
+    {
+      "club": "Santos",
+      "from": "LIB-R16-05:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:334"
+    },
+    {
+      "club": "Santos",
+      "from": "league:334",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "LIB-R16-05:L2"
+    },
+    {
+      "club": "Santos",
+      "from": "LIB-R16-05:L2",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:345"
+    },
+    {
+      "club": "Santos",
+      "from": "league:345",
+      "hours": 196.0,
+      "involves_change": true,
+      "to": "league:356"
+    },
+    {
+      "club": "Santos",
+      "from": "league:356",
+      "hours": 92.0,
+      "involves_change": true,
+      "to": "reserve:LIB:QF:L1"
+    },
+    {
+      "club": "Santos",
+      "from": "reserve:LIB:QF:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:367"
+    },
+    {
+      "club": "Santos",
+      "from": "league:367",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:LIB:QF:L2"
+    },
+    {
+      "club": "Santos",
+      "from": "reserve:LIB:QF:L2",
+      "hours": 96.0,
+      "involves_change": true,
+      "to": "league:378"
+    },
+    {
+      "club": "Santos",
+      "from": "league:378",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:389"
+    },
+    {
+      "club": "Santos",
+      "from": "league:389",
+      "hours": 96.0,
+      "involves_change": true,
+      "to": "league:400"
+    },
+    {
+      "club": "Santos",
+      "from": "league:400",
+      "hours": 169.0,
+      "involves_change": false,
+      "to": "league:411"
+    },
+    {
+      "club": "Santos",
+      "from": "league:411",
+      "hours": 95.0,
+      "involves_change": true,
+      "to": "league:421"
+    },
+    {
+      "club": "Santos",
+      "from": "league:421",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:430"
+    },
+    {
+      "club": "Santos",
+      "from": "league:430",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:LIB:SF:L1"
+    },
+    {
+      "club": "Santos",
+      "from": "reserve:LIB:SF:L1",
+      "hours": 96.0,
+      "involves_change": true,
+      "to": "league:439"
+    },
+    {
+      "club": "Santos",
+      "from": "league:439",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:LIB:SF:L2"
+    },
+    {
+      "club": "Santos",
+      "from": "reserve:LIB:SF:L2",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:LIB:FINAL:L1"
+    },
+    {
+      "club": "Santos",
+      "from": "reserve:LIB:FINAL:L1",
+      "hours": 123.0,
+      "involves_change": true,
+      "to": "league:448"
+    },
+    {
+      "club": "Santos",
+      "from": "league:448",
+      "hours": 167.0,
+      "involves_change": false,
+      "to": "league:457"
+    },
+    {
+      "club": "Sport",
+      "from": "league:313",
+      "hours": 145.0,
+      "involves_change": false,
+      "to": "league:324"
+    },
+    {
+      "club": "Sport",
+      "from": "league:324",
+      "hours": 190.0,
+      "involves_change": true,
+      "to": "league:335"
+    },
+    {
+      "club": "Sport",
+      "from": "league:335",
+      "hours": 169.0,
+      "involves_change": true,
+      "to": "league:346"
+    },
+    {
+      "club": "Sport",
+      "from": "league:346",
+      "hours": 167.0,
+      "involves_change": false,
+      "to": "league:357"
+    },
+    {
+      "club": "Sport",
+      "from": "league:357",
+      "hours": 168.0,
+      "involves_change": false,
+      "to": "league:368"
+    },
+    {
+      "club": "Sport",
+      "from": "league:368",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "league:379"
+    },
+    {
+      "club": "Sport",
+      "from": "league:379",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:390"
+    },
+    {
+      "club": "Sport",
+      "from": "league:390",
+      "hours": 97.0,
+      "involves_change": true,
+      "to": "league:401"
+    },
+    {
+      "club": "Sport",
+      "from": "league:401",
+      "hours": 168.0,
+      "involves_change": false,
+      "to": "league:411"
+    },
+    {
+      "club": "Sport",
+      "from": "league:411",
+      "hours": 75.5,
+      "involves_change": false,
+      "to": "league:420"
+    },
+    {
+      "club": "Sport",
+      "from": "league:420",
+      "hours": 91.5,
+      "involves_change": true,
+      "to": "league:429"
+    },
+    {
+      "club": "Sport",
+      "from": "league:429",
+      "hours": 171.0,
+      "involves_change": true,
+      "to": "league:438"
+    },
+    {
+      "club": "Sport",
+      "from": "league:438",
+      "hours": 335.0,
+      "involves_change": false,
+      "to": "league:447"
+    },
+    {
+      "club": "Sport",
+      "from": "league:447",
+      "hours": 142.0,
+      "involves_change": true,
+      "to": "league:456"
+    },
+    {
+      "club": "Sporting Cristal",
+      "from": "SULA-PO-03:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "SULA-PO-03:L2"
+    },
+    {
+      "club": "Sporting Cristal",
+      "from": "SULA-PO-03:L2",
+      "hours": 360.0,
+      "involves_change": true,
+      "to": "reserve:SULA:R16:L1"
+    },
+    {
+      "club": "Sporting Cristal",
+      "from": "reserve:SULA:R16:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:R16:L2"
+    },
+    {
+      "club": "Sporting Cristal",
+      "from": "reserve:SULA:R16:L2",
+      "hours": 672.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L1"
+    },
+    {
+      "club": "Sporting Cristal",
+      "from": "reserve:SULA:QF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L2"
+    },
+    {
+      "club": "Sporting Cristal",
+      "from": "reserve:SULA:QF:L2",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L1"
+    },
+    {
+      "club": "Sporting Cristal",
+      "from": "reserve:SULA:SF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L2"
+    },
+    {
+      "club": "Sporting Cristal",
+      "from": "reserve:SULA:SF:L2",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:FINAL:L1"
+    },
+    {
+      "club": "Sportivo Luqueño",
+      "from": "LIB-R16-08:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "LIB-R16-08:L2"
+    },
+    {
+      "club": "Sportivo Luqueño",
+      "from": "LIB-R16-08:L2",
+      "hours": 360.0,
+      "involves_change": true,
+      "to": "reserve:LIB:QF:L1"
+    },
+    {
+      "club": "Sportivo Luqueño",
+      "from": "reserve:LIB:QF:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:LIB:QF:L2"
+    },
+    {
+      "club": "Sportivo Luqueño",
+      "from": "reserve:LIB:QF:L2",
+      "hours": 672.0,
+      "involves_change": true,
+      "to": "reserve:LIB:SF:L1"
+    },
+    {
+      "club": "Sportivo Luqueño",
+      "from": "reserve:LIB:SF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:LIB:SF:L2"
+    },
+    {
+      "club": "Sportivo Luqueño",
+      "from": "reserve:LIB:SF:L2",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:LIB:FINAL:L1"
+    },
+    {
+      "club": "São Paulo",
+      "from": "league:314",
+      "hours": 167.0,
+      "involves_change": false,
+      "to": "league:325"
+    },
+    {
+      "club": "São Paulo",
+      "from": "league:325",
+      "hours": 95.0,
+      "involves_change": true,
+      "to": "SULA-PO-03:L1"
+    },
+    {
+      "club": "São Paulo",
+      "from": "SULA-PO-03:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:336"
+    },
+    {
+      "club": "São Paulo",
+      "from": "league:336",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "SULA-PO-03:L2"
+    },
+    {
+      "club": "São Paulo",
+      "from": "SULA-PO-03:L2",
+      "hours": 98.0,
+      "involves_change": true,
+      "to": "league:347"
+    },
+    {
+      "club": "São Paulo",
+      "from": "league:347",
+      "hours": 167.0,
+      "involves_change": false,
+      "to": "league:358"
+    },
+    {
+      "club": "São Paulo",
+      "from": "league:358",
+      "hours": 95.0,
+      "involves_change": true,
+      "to": "reserve:SULA:R16:L1"
+    },
+    {
+      "club": "São Paulo",
+      "from": "reserve:SULA:R16:L1",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:369"
+    },
+    {
+      "club": "São Paulo",
+      "from": "league:369",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:SULA:R16:L2"
+    },
+    {
+      "club": "São Paulo",
+      "from": "reserve:SULA:R16:L2",
+      "hours": 96.0,
+      "involves_change": true,
+      "to": "league:380"
+    },
+    {
+      "club": "São Paulo",
+      "from": "league:380",
+      "hours": 77.0,
+      "involves_change": false,
+      "to": "league:391"
+    },
+    {
+      "club": "São Paulo",
+      "from": "league:391",
+      "hours": 92.0,
+      "involves_change": false,
+      "to": "league:401"
+    },
+    {
+      "club": "São Paulo",
+      "from": "league:401",
+      "hours": 191.0,
+      "involves_change": true,
+      "to": "league:410"
+    },
+    {
+      "club": "São Paulo",
+      "from": "league:410",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:419"
+    },
+    {
+      "club": "São Paulo",
+      "from": "league:419",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "league:428"
+    },
+    {
+      "club": "São Paulo",
+      "from": "league:428",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L1"
+    },
+    {
+      "club": "São Paulo",
+      "from": "reserve:SULA:QF:L1",
+      "hours": 96.0,
+      "involves_change": true,
+      "to": "league:437"
+    },
+    {
+      "club": "São Paulo",
+      "from": "league:437",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L2"
+    },
+    {
+      "club": "São Paulo",
+      "from": "reserve:SULA:QF:L2",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L1"
+    },
+    {
+      "club": "São Paulo",
+      "from": "reserve:SULA:SF:L1",
+      "hours": 96.0,
+      "involves_change": true,
+      "to": "league:446"
+    },
+    {
+      "club": "São Paulo",
+      "from": "league:446",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L2"
+    },
+    {
+      "club": "São Paulo",
+      "from": "reserve:SULA:SF:L2",
+      "hours": 96.0,
+      "involves_change": true,
+      "to": "league:455"
+    },
+    {
+      "club": "São Paulo",
+      "from": "league:455",
+      "hours": 72.0,
+      "involves_change": true,
+      "to": "reserve:SULA:FINAL:L1"
+    },
+    {
+      "club": "The Strongest",
+      "from": "LIB-R16-07:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "LIB-R16-07:L2"
+    },
+    {
+      "club": "The Strongest",
+      "from": "LIB-R16-07:L2",
+      "hours": 360.0,
+      "involves_change": true,
+      "to": "reserve:LIB:QF:L1"
+    },
+    {
+      "club": "The Strongest",
+      "from": "reserve:LIB:QF:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:LIB:QF:L2"
+    },
+    {
+      "club": "The Strongest",
+      "from": "reserve:LIB:QF:L2",
+      "hours": 672.0,
+      "involves_change": true,
+      "to": "reserve:LIB:SF:L1"
+    },
+    {
+      "club": "The Strongest",
+      "from": "reserve:LIB:SF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:LIB:SF:L2"
+    },
+    {
+      "club": "The Strongest",
+      "from": "reserve:LIB:SF:L2",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:LIB:FINAL:L1"
+    },
+    {
+      "club": "Universidad Católica",
+      "from": "SULA-PO-06:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "SULA-PO-06:L2"
+    },
+    {
+      "club": "Universidad Católica",
+      "from": "SULA-PO-06:L2",
+      "hours": 360.0,
+      "involves_change": true,
+      "to": "reserve:SULA:R16:L1"
+    },
+    {
+      "club": "Universidad Católica",
+      "from": "reserve:SULA:R16:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:R16:L2"
+    },
+    {
+      "club": "Universidad Católica",
+      "from": "reserve:SULA:R16:L2",
+      "hours": 672.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L1"
+    },
+    {
+      "club": "Universidad Católica",
+      "from": "reserve:SULA:QF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L2"
+    },
+    {
+      "club": "Universidad Católica",
+      "from": "reserve:SULA:QF:L2",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L1"
+    },
+    {
+      "club": "Universidad Católica",
+      "from": "reserve:SULA:SF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L2"
+    },
+    {
+      "club": "Universidad Católica",
+      "from": "reserve:SULA:SF:L2",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:FINAL:L1"
+    },
+    {
+      "club": "Universitario",
+      "from": "SULA-PO-06:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "SULA-PO-06:L2"
+    },
+    {
+      "club": "Universitario",
+      "from": "SULA-PO-06:L2",
+      "hours": 360.0,
+      "involves_change": true,
+      "to": "reserve:SULA:R16:L1"
+    },
+    {
+      "club": "Universitario",
+      "from": "reserve:SULA:R16:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:R16:L2"
+    },
+    {
+      "club": "Universitario",
+      "from": "reserve:SULA:R16:L2",
+      "hours": 672.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L1"
+    },
+    {
+      "club": "Universitario",
+      "from": "reserve:SULA:QF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:QF:L2"
+    },
+    {
+      "club": "Universitario",
+      "from": "reserve:SULA:QF:L2",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L1"
+    },
+    {
+      "club": "Universitario",
+      "from": "reserve:SULA:SF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:SF:L2"
+    },
+    {
+      "club": "Universitario",
+      "from": "reserve:SULA:SF:L2",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:SULA:FINAL:L1"
+    },
+    {
+      "club": "Vasco",
+      "from": "league:312",
+      "hours": 168.0,
+      "involves_change": false,
+      "to": "league:322"
+    },
+    {
+      "club": "Vasco",
+      "from": "league:322",
+      "hours": 168.0,
+      "involves_change": false,
+      "to": "league:332"
+    },
+    {
+      "club": "Vasco",
+      "from": "league:332",
+      "hours": 168.0,
+      "involves_change": false,
+      "to": "league:342"
+    },
+    {
+      "club": "Vasco",
+      "from": "league:342",
+      "hours": 192.0,
+      "involves_change": true,
+      "to": "league:352"
+    },
+    {
+      "club": "Vasco",
+      "from": "league:352",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "league:362"
+    },
+    {
+      "club": "Vasco",
+      "from": "league:362",
+      "hours": 168.0,
+      "involves_change": false,
+      "to": "league:372"
+    },
+    {
+      "club": "Vasco",
+      "from": "league:372",
+      "hours": 75.0,
+      "involves_change": false,
+      "to": "league:382"
+    },
+    {
+      "club": "Vasco",
+      "from": "league:382",
+      "hours": 93.0,
+      "involves_change": false,
+      "to": "league:392"
+    },
+    {
+      "club": "Vasco",
+      "from": "league:392",
+      "hours": 168.0,
+      "involves_change": false,
+      "to": "league:402"
+    },
+    {
+      "club": "Vasco",
+      "from": "league:402",
+      "hours": 75.0,
+      "involves_change": false,
+      "to": "league:412"
+    },
+    {
+      "club": "Vasco",
+      "from": "league:412",
+      "hours": 93.0,
+      "involves_change": false,
+      "to": "league:422"
+    },
+    {
+      "club": "Vasco",
+      "from": "league:422",
+      "hours": 168.0,
+      "involves_change": false,
+      "to": "league:432"
+    },
+    {
+      "club": "Vasco",
+      "from": "league:432",
+      "hours": 336.0,
+      "involves_change": false,
+      "to": "league:442"
+    },
+    {
+      "club": "Vasco",
+      "from": "league:442",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "league:452"
+    },
+    {
+      "club": "Vitória",
+      "from": "league:315",
+      "hours": 194.0,
+      "involves_change": false,
+      "to": "league:326"
+    },
+    {
+      "club": "Vitória",
+      "from": "league:326",
+      "hours": 168.0,
+      "involves_change": false,
+      "to": "league:337"
+    },
+    {
+      "club": "Vitória",
+      "from": "league:337",
+      "hours": 169.0,
+      "involves_change": false,
+      "to": "league:348"
+    },
+    {
+      "club": "Vitória",
+      "from": "league:348",
+      "hours": 189.0,
+      "involves_change": true,
+      "to": "league:359"
+    },
+    {
+      "club": "Vitória",
+      "from": "league:359",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "league:370"
+    },
+    {
+      "club": "Vitória",
+      "from": "league:370",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "league:381"
+    },
+    {
+      "club": "Vitória",
+      "from": "league:381",
+      "hours": 77.0,
+      "involves_change": true,
+      "to": "league:391"
+    },
+    {
+      "club": "Vitória",
+      "from": "league:391",
+      "hours": 91.0,
+      "involves_change": false,
+      "to": "league:400"
+    },
+    {
+      "club": "Vitória",
+      "from": "league:400",
+      "hours": 172.0,
+      "involves_change": false,
+      "to": "league:409"
+    },
+    {
+      "club": "Vitória",
+      "from": "league:409",
+      "hours": 92.0,
+      "involves_change": true,
+      "to": "league:418"
+    },
+    {
+      "club": "Vitória",
+      "from": "league:418",
+      "hours": 74.0,
+      "involves_change": true,
+      "to": "league:427"
+    },
+    {
+      "club": "Vitória",
+      "from": "league:427",
+      "hours": 167.0,
+      "involves_change": false,
+      "to": "league:436"
+    },
+    {
+      "club": "Vitória",
+      "from": "league:436",
+      "hours": 311.0,
+      "involves_change": true,
+      "to": "league:445"
+    },
+    {
+      "club": "Vitória",
+      "from": "league:445",
+      "hours": 170.0,
+      "involves_change": true,
+      "to": "league:454"
+    },
+    {
+      "club": "Vélez Sarsfield",
+      "from": "LIB-R16-03:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "LIB-R16-03:L2"
+    },
+    {
+      "club": "Vélez Sarsfield",
+      "from": "LIB-R16-03:L2",
+      "hours": 360.0,
+      "involves_change": true,
+      "to": "reserve:LIB:QF:L1"
+    },
+    {
+      "club": "Vélez Sarsfield",
+      "from": "reserve:LIB:QF:L1",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:LIB:QF:L2"
+    },
+    {
+      "club": "Vélez Sarsfield",
+      "from": "reserve:LIB:QF:L2",
+      "hours": 672.0,
+      "involves_change": true,
+      "to": "reserve:LIB:SF:L1"
+    },
+    {
+      "club": "Vélez Sarsfield",
+      "from": "reserve:LIB:SF:L1",
+      "hours": 168.0,
+      "involves_change": true,
+      "to": "reserve:LIB:SF:L2"
+    },
+    {
+      "club": "Vélez Sarsfield",
+      "from": "reserve:LIB:SF:L2",
+      "hours": 144.0,
+      "involves_change": true,
+      "to": "reserve:LIB:FINAL:L1"
+    }
+  ],
+  "stage_waits": [
+    {
+      "days": 22.0,
+      "from": "CDB:SF-01:L2",
+      "to": "CDB:FINAL-01:L1"
+    },
+    {
+      "days": 22.0,
+      "from": "CDB:SF-02:L2",
+      "to": "CDB:FINAL-01:L1"
+    },
+    {
+      "days": 25.0,
+      "from": "CDB:QF-01:L2",
+      "to": "CDB:SF-01:L1"
+    },
+    {
+      "days": 25.0,
+      "from": "CDB:QF-02:L2",
+      "to": "CDB:SF-01:L1"
+    },
+    {
+      "days": 25.0,
+      "from": "CDB:QF-03:L2",
+      "to": "CDB:SF-02:L1"
+    },
+    {
+      "days": 25.0,
+      "from": "CDB:QF-04:L2",
+      "to": "CDB:SF-02:L1"
+    },
+    {
+      "days": 6.0,
+      "from": "reserve:LIB:SF:L2",
+      "to": "reserve:LIB:FINAL:L1"
+    },
+    {
+      "days": 15.0,
+      "from": "LIB-R16-01:L2",
+      "to": "reserve:LIB:QF:L1"
+    },
+    {
+      "days": 15.0,
+      "from": "LIB-R16-02:L2",
+      "to": "reserve:LIB:QF:L1"
+    },
+    {
+      "days": 15.0,
+      "from": "LIB-R16-03:L2",
+      "to": "reserve:LIB:QF:L1"
+    },
+    {
+      "days": 15.0,
+      "from": "LIB-R16-04:L2",
+      "to": "reserve:LIB:QF:L1"
+    },
+    {
+      "days": 15.0,
+      "from": "LIB-R16-05:L2",
+      "to": "reserve:LIB:QF:L1"
+    },
+    {
+      "days": 15.0,
+      "from": "LIB-R16-06:L2",
+      "to": "reserve:LIB:QF:L1"
+    },
+    {
+      "days": 15.0,
+      "from": "LIB-R16-07:L2",
+      "to": "reserve:LIB:QF:L1"
+    },
+    {
+      "days": 15.0,
+      "from": "LIB-R16-08:L2",
+      "to": "reserve:LIB:QF:L1"
+    },
+    {
+      "days": 28.0,
+      "from": "reserve:LIB:QF:L2",
+      "to": "reserve:LIB:SF:L1"
+    },
+    {
+      "days": 7.0,
+      "from": "reserve:SULA:SF:L2",
+      "to": "reserve:SULA:FINAL:L1"
+    },
+    {
+      "days": 28.0,
+      "from": "reserve:SULA:R16:L2",
+      "to": "reserve:SULA:QF:L1"
+    },
+    {
+      "days": 15.0,
+      "from": "SULA-PO-01:L2",
+      "to": "reserve:SULA:R16:L1"
+    },
+    {
+      "days": 15.0,
+      "from": "SULA-PO-02:L2",
+      "to": "reserve:SULA:R16:L1"
+    },
+    {
+      "days": 15.0,
+      "from": "SULA-PO-03:L2",
+      "to": "reserve:SULA:R16:L1"
+    },
+    {
+      "days": 15.0,
+      "from": "SULA-PO-04:L2",
+      "to": "reserve:SULA:R16:L1"
+    },
+    {
+      "days": 15.0,
+      "from": "SULA-PO-05:L2",
+      "to": "reserve:SULA:R16:L1"
+    },
+    {
+      "days": 15.0,
+      "from": "SULA-PO-06:L2",
+      "to": "reserve:SULA:R16:L1"
+    },
+    {
+      "days": 15.0,
+      "from": "SULA-PO-07:L2",
+      "to": "reserve:SULA:R16:L1"
+    },
+    {
+      "days": 15.0,
+      "from": "SULA-PO-08:L2",
+      "to": "reserve:SULA:R16:L1"
+    },
+    {
+      "days": 6.0,
+      "from": "reserve:SULA:QF:L2",
+      "to": "reserve:SULA:SF:L1"
+    }
+  ],
+  "strategy": "B",
+  "unresolved": [
+    "Foreign domestic schedules and actual routes/venues are absent; the travel buffer is a conservative proxy",
+    "Undrawn rounds reserve every possible qualifier; refine capacity only after recorded draws/results",
+    "Controlled future league moves require acceptance of the complete before/after date inventory"
+  ]
+}

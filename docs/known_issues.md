@@ -23,6 +23,8 @@ SQLite foreign-key validation passes for declared keys; many legacy tables have 
 
 ## Unaccepted 046C candidate
 
+This section originally describes v1, whose holiday calendar was rejected in Task 02B. Revised v2 changes 70 future league kickoffs, keeps Mirassol–Vasco unchanged, finishes cups on December 4/7/21, avoids the blackout and leaves one inherited shortfall with no new violations. The same historical quality gaps remain. Its travel scope and exact future date inventory require commissioner acceptance; no 2028 exception is part of the recommendation. See [Task 02B](task02b_report.md).
+
 Phase 1 addresses the first three administrative issues **in a separate candidate only**: cup dates are reconciled with downstream reservations, August incremental cash payroll is paid once and September accrued separately under a proposed policy, and settled cup objective flags plus supported administrative metadata are updated. Original 046 remains untouched and retains all ten warnings.
 
 The candidate retains all seven historical quality warnings above and adds three review warnings. Twelve fixed league turnarounds remain below 72h (minimum 68h); added cup events meet a 72h total kickoff turnaround and three-match/eight-day workload rule. Travel is included within that total, not added as extra recovery. A stricter six-hour international buffer has no solution in the conservative hourly model before year-end. Finals on December 28/31, Christmas semifinals, long inter-leg gaps and unknown foreign domestic commitments require commissioner review. The actual-day/month-end payroll convention is also proposed rather than inherited fact. See [Phase 1 report](phase1_report.md).

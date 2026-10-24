@@ -1,0 +1,38 @@
+{
+  "canonical_promoted": false,
+  "changed_tables": [
+    "admin_operations",
+    "admin_policies",
+    "board_objectives",
+    "calendar_events",
+    "cdb_2027_bracket",
+    "cdb_2027_plan_meta",
+    "checkpoint_info",
+    "finance_ledger",
+    "fixtures",
+    "libertadores_2027_meta",
+    "libertadores_2027_round_of_16",
+    "meta",
+    "payroll_obligations",
+    "payroll_periods",
+    "schema_migrations",
+    "sudamericana_2027_playoffs"
+  ],
+  "database_sha256": "27eb5d94478c2539b28085e669675e184ab2842be3d7ab1549864f2a422b6cf7",
+  "fictional_date": "2027-09-26 23:30",
+  "format_version": 1,
+  "operation_count": 189,
+  "parent_save_version": "046",
+  "parent_sha256": "de58ac7f7942ef6048f002312cdc90314b26dc06a9853a59acaab1d5f88f4b28",
+  "proposal_revision": "v2",
+  "required_approvals": [
+    "controlled_70_future_kickoffs_36_date_changes_pin_mirassol_vasco",
+    "72h_turnaround_including_travel_one_inherited_exception_foreign_calendar_limits",
+    "accept_candidate_hash_and_provisionally_supported_payroll_policy"
+  ],
+  "save_version": "046C",
+  "schema_version": 1,
+  "status": "candidate",
+  "supersedes_unaccepted_revision": "v1",
+  "validation_profile": "046C"
+}

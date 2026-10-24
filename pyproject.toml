@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "braga-era"
-version = "0.2.0"
+version = "0.3.0"
 description = "Preservation, audited administrative candidates and portable checkpoints for The Braga Era"
 requires-python = ">=3.11"
 dependencies = []

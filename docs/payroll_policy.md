@@ -2,6 +2,8 @@
 
 Policy ID: `incremental_actual_days_month_end_v1`. This is an explicit **proposed** administrative convention for 046C, not a claim that the legacy simulation already used it. No tax, benefit, untracked base-roster salary or unapproved capital is invented.
 
+Task 02B provisionally supports these accounting directions for preparing the revised candidate. This does not promote either save proposal. The v2 audit independently recalculates all September player-level due and accrued amounts and retains the evidence in its financial report.
+
 The five recorded Vasco signing contracts establish R$310k/month (Gustavo Martins), R$430k (Villagra), R$640k (Carlos Vinícius), R$265k from September 1 (Arthur Dias), R$160k from September 2 (Barreal). The first three sum to the R$1.38m legacy monthly payroll and their contractual annual commitments reconcile with the unchanged wage budget. Transfers, contracts, ownership decisions, the R$13m supplemental fee authorization and ledger funding were inspected; none is rewritten.
 
 January–July cash debits remain exactly as recorded. January's simplified full monthly charge and March's early posting are registered as `legacy_paid`, without retrospective reproration or date edits. They are historical evidence, not the new policy.
