@@ -41,13 +41,13 @@ def schema_records(connection) -> list[list]:
         "SELECT type,name,tbl_name,sql FROM sqlite_master WHERE sql IS NOT NULL ORDER BY type,name")]
 
 
-def _audit_state(c, report: AuditReport) -> None:
+def _audit_state(c, report: AuditReport, *, version="046", cash_brl=31_930_000) -> None:
     meta = dict(c.execute("SELECT key,value FROM meta"))
-    expected_meta = {"saved_state_version": "046", "current_date": "2027-09-26 23:30",
+    expected_meta = {"saved_state_version": version, "current_date": "2027-09-26 23:30",
                      "next_match_fixture": "2027-10-03 Mirassol vs Vasco, Brasileirão R26",
                      "board_confidence": "61", "braga_matches": "45"}
-    report.check("save046.meta", all(meta.get(k) == v for k, v in expected_meta.items()),
-                 "Save 046 date, next fixture, confidence and manager counter match")
+    report.check(f"save{version.lower()}.meta", all(meta.get(k) == v for k, v in expected_meta.items()),
+                 f"Save {version} date, next fixture, confidence and manager counter match")
     table = standings(c)
     participants = {r["id"] for r in table}
     report.check("league.participants", len(participants) == 20, "20 distinct 2027 league clubs")
@@ -142,7 +142,7 @@ def _audit_state(c, report: AuditReport) -> None:
     ]:
         report.check(f"inventory.{label}", c.execute(query).fetchone()[0] == expected, f"{label}: {expected} records")
     cash = c.execute("SELECT sum(amount_brl) FROM finance_ledger WHERE account=?", (ACCOUNT,)).fetchone()[0]
-    report.check("finance.cash", cash == 31_930_000, "Restricted ledger cash R$31,930,000 (unreconciled payroll)")
+    report.check("finance.cash", cash == cash_brl, f"Restricted ledger cash R${cash_brl:,.0f}")
     budgets = {r[0]: r[1] for r in c.execute("SELECT category,amount_brl-spent_brl FROM finance_budget WHERE season=2027")}
     report.check("finance.authority", all(budgets.get(k) == v for k, v in {
         "Transfer fees": 1_400_000, "Incremental wages": 340_000,
@@ -150,7 +150,7 @@ def _audit_state(c, report: AuditReport) -> None:
         "Acquisition, annual wage, agent headroom and reserved funds match approved budgets")
 
 
-def _known_issues(c, report: AuditReport) -> None:
+def _known_issues(c, report: AuditReport, *, include_administrative=True) -> None:
     now = c.execute("SELECT value FROM meta WHERE key='current_date'").fetchone()[0][:10]
     overdue = []
     for table, date, extra in [("libertadores_2027_round_of_16", "second_leg_date", ""),
@@ -158,11 +158,14 @@ def _known_issues(c, report: AuditReport) -> None:
                                ("cdb_2027_bracket", "leg2_date", "AND stage='Quartas'")]:
         count = c.execute(f"SELECT count(*) FROM {table} WHERE status='scheduled' AND {date}<? {extra}", (now,)).fetchone()[0]
         overdue.append(count)
-    report.warning("known.calendar", f"Overdue unplayed ties: Libertadores {overdue[0]}, Sudamericana {overdue[1]}, Copa do Brasil QF {overdue[2]}; no scores invented")
+    if include_administrative:
+        report.warning("known.calendar", f"Overdue unplayed ties: Libertadores {overdue[0]}, Sudamericana {overdue[1]}, Copa do Brasil QF {overdue[2]}; no scores invented")
     months = [r[0] for r in c.execute("SELECT substr(dated,1,7) FROM finance_ledger WHERE category='incremental wage payroll' ORDER BY dated")]
-    report.warning("known.payroll", f"Recorded payroll periods: {', '.join(months)}. August absent; September policy pending; cash is unreconciled")
+    if include_administrative:
+        report.warning("known.payroll", f"Recorded payroll periods: {', '.join(months)}. August absent; September policy pending; cash is unreconciled")
     pending = c.execute("SELECT count(*) FROM board_objectives WHERE achieved='pending'").fetchone()[0]
-    report.warning("known.objectives", f"{pending} board objective flags pending, including settled cup outcomes; finance wording still names original R$55m fee cap")
+    if include_administrative:
+        report.warning("known.objectives", f"{pending} board objective flags pending, including settled cup outcomes; finance wording still names original R$55m fee cap")
     report.warning("known.2026", "2026 final standings archived, granular fixtures partial (71 league records); do not reconstruct missing results")
     missing = c.execute("SELECT count(*) FROM fixtures WHERE status='final' AND (datetime_local IS NULL OR datetime_local NOT LIKE '____-__-__%')").fetchone()[0]
     report.warning("known.dates", f"{missing} completed fixtures lack an ISO calendar date; preserve unknowns")

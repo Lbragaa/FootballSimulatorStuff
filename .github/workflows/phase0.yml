@@ -1,4 +1,4 @@
-name: Phase 0 preservation
+name: History preservation and administrative checkpoints
 on: [push, pull_request]
 jobs:
   test:
@@ -18,3 +18,8 @@ jobs:
       - run: python -m braga_era inspect
       - run: python -m braga_era audit
       - run: python -m pytest
+      - run: python -m braga_era save create --output output/ci-046C
+      - run: python -m braga_era audit --profile 046C --db output/ci-046C/database.sqlite --parent data/handoff/canonical/braga_save.sqlite
+      - run: python -m braga_era save export output/ci-046C --output output/ci-046C.zip
+      - run: python -m braga_era save restore output/ci-046C.zip --output output/ci-restored
+      - run: python -m braga_era save verify output/ci-restored

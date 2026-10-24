@@ -1,3 +1,3 @@
-"""The Braga Era: preservation first. No simulation or writable save API."""
+"""The Braga Era: preservation first, isolated administrative candidates only."""
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"

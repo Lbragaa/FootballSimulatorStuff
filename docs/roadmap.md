@@ -1,10 +1,12 @@
-# Development roadmap — stop after Phase 0
+# Development roadmap — stop at candidate 046C
 
 ## Phase 0 — protected foundation (implemented)
 
 Authenticated extraction, preserved original backups, read-only SQL access, package and CLI, stable historical snapshot/table hashes, structured audit results, automated tests and documentation. No match execution, calendar progression or writable checkpoint management.
 
-## Phase 1 — administrative Save 046C (proposed, not executed)
+## Phase 1 — administrative Save 046C (candidate implemented, not accepted)
+
+Candidate creation, transactional reconciliation, explicit 046C replay validation, manifest-backed export/restore and a separate guarded acceptance API are implemented. The candidate has no automatic canonical promotion. It requires commissioner decisions on the 72h including-travel policy and unchanged league exceptions, long inter-leg/year-end holiday scheduling and actual-day/month-end incremental payroll. No game or fictional date has advanced. The implementation scope below is now delivered as a reviewable candidate; acceptance remains separate.
 
 Start from an authenticated **copy** of Save 046 and produce a separately versioned candidate. Keep parent SHA256, schema/profile version, operation log and output hash; validate candidate and retain parent before promoting any new canonical pointer.
 

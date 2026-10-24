@@ -7,6 +7,7 @@ build/
 dist/
 .tmp/
 data/handoff/
+output/
 *.sqlite-journal
 *.sqlite-wal
 *.sqlite-shm

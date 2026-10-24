@@ -47,10 +47,16 @@ def summary(connection) -> dict:
     ]:
         overdue[label] = connection.execute(f"SELECT count(*) FROM {name} WHERE status='scheduled' AND {date_column} < ? {predicate}",
                                              (meta["current_date"][:10],)).fetchone()[0]
-    return {"save_version": meta["saved_state_version"], "current_date": meta["current_date"],
+    state = {"save_version": meta["saved_state_version"], "current_date": meta["current_date"],
             "board_confidence": int(meta["board_confidence"]), "manager_matches": int(meta["braga_matches"]),
             "vasco": vasco, "next_fixture": dict(next_fixture) if next_fixture else None,
             "league": {"clubs": len(table), **inventory}, "competitions": competitions,
             "overdue_ties": overdue, "finance": {"restricted_cash_brl": cash, "budgets": budgets,
             "payroll_months": [row[0] for row in connection.execute("""SELECT substr(dated,1,7) FROM finance_ledger
                 WHERE account=? AND category='incremental wage payroll' ORDER BY dated""", (ACCOUNT,))]}}
+    if connection.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='checkpoint_info'").fetchone():
+        from .payroll import financial_statement
+        state["checkpoint"] = dict(connection.execute("SELECT * FROM checkpoint_info").fetchone())
+        state["payroll"] = financial_statement(connection)
+        state["finance"]["payroll_months"] = [p["period"] for p in state["payroll"]["periods"] if p["cash_cents"]]
+    return state

@@ -1,6 +1,6 @@
 # THE BRAGA ERA
 
-One continuous fictional football universe, preserved at **Save 046**. Phase 0 provides portable, read-only inspection and auditing. Python 3.11+; no runtime dependencies or external services.
+One continuous fictional football universe. **Save 046 remains accepted canonical history.** Phase 1 adds an isolated **candidate 046C**, transactional administrative reconciliation and portable verified checkpoints. Python 3.11+; no runtime dependencies or external services.
 
 Vasco beat Palmeiras **3–2** on September 26, 2027. Vasco is ninth with 38 points (11W, 5D, 9L; 36–37), after 25 rounds. Next: **Mirassol vs Vasco, October 3, 2027, 16:00, R26**, still scheduled. The fictional clock remains **2027-09-26 23:30**.
 
@@ -43,14 +43,49 @@ python -m braga_era audit --db /path/to/braga_save.sqlite --json
 
 Path precedence is `--db`, then `BRAGA_ERA_DB`, then the repository default. Wheel installations outside this checkout should set `--db` or `BRAGA_ERA_DB`. Both commands support `--json`. `braga-era` accepts the same arguments.
 
-Audit exit codes: **0** = checkpoint preserved (inherited warnings still listed); **1** = failed invariant, or warnings under `--strict`; **2** = input/open/query error. `audit --strict` intentionally exits 1 on unmodified Save 046. This audit targets Save 046 specifically; a later save needs a separately reviewed validation profile.
+Audit exit codes: **0** = profile passes (warnings still listed); **1** = failed invariant, or warnings under `--strict`; **2** = input/open/query error. The default audit still validates the exact **046** baseline. It deliberately rejects 046C unless the explicit profile and authenticated parent are supplied.
+
+## Candidate 046C and portable saves
+
+Create a new candidate directory; existing outputs and the preserved handoff cannot be overwritten:
+
+```sh
+python -m braga_era save create --parent data/handoff/canonical/braga_save.sqlite --output output/Save046C
+python -m braga_era inspect --db output/Save046C/database.sqlite
+python -m braga_era audit --profile 046C --db output/Save046C/database.sqlite --parent data/handoff/canonical/braga_save.sqlite
+python -m braga_era save verify output/Save046C
+python -m braga_era save export output/Save046C --output output/Save046C_candidate.zip
+python -m braga_era save verify output/Save046C_candidate.zip
+python -m braga_era save restore output/Save046C_candidate.zip --output output/restored-046C
+```
+
+The reviewed candidate from this task is under `output/Save046C/`; its ZIP is `output/Save046C_candidate.zip`. Re-running creation needs a **new** output name. These are ignored local artifacts, not committed binaries. Acceptance is separate; **there is no promotion CLI** and the original default database remains 046.
+
+Export and restore the original parent independently:
+
+```sh
+python -m braga_era save export data/handoff/canonical/braga_save.sqlite --output output/Save046_parent.zip
+python -m braga_era save restore output/Save046_parent.zip --output output/restored-046
+python -m braga_era audit --db output/restored-046/database.sqlite
+```
+
+Packages contain database(s), version/parent/schema metadata, a full-file manifest, validation reports and the permanent historical baseline. Candidate packages additionally contain deterministic operation/complete row-change logs, calendar plan/feasibility and financial statements. Restore authenticates the manifest **and** replays the authorized profile before atomically publishing a new directory. Checkpoint verification reads the database; it never trusts a stored PASS label or a rewritten manifest as permission to change history.
+
+The calendar solver can be exercised without creating a save:
+
+```sh
+python -m braga_era calendar --db data/handoff/canonical/braga_save.sqlite
+python -m braga_era calendar --travel-buffer-hours 6
+```
+
+The second command reports no solution under the stricter model. The candidate proposal uses **72h kickoff-to-kickoff including travel**, reserves undrawn later rounds for every possible qualifier and preserves all league dates. It discloses 12 inherited league rest shortfalls, unknown foreign domestic schedules, long inter-leg gaps, December 25 semifinals and December 28/31 finals. **These calendar choices and the proposed actual-day/month-end payroll policy need commissioner acceptance.** The schedule is conditionally feasible, not an unqualified global-calendar guarantee.
 
 ## Protection and current limitations
 
-Connections use SQLite `mode=ro`, `query_only=ON` and an authorizer that denies writes, attachments and unsafe PRAGMAs. All 64 user tables, the schema and all 331 completed main-table fixtures have checked-in fingerprints. The audit also independently checks league scheduling, standings, R25 goals/shots/appearances, player identities and finance limits. It never repairs the database. Tests that exercise corruption modify independent temporary copies only.
+Canonical/query connections use SQLite `mode=ro`, `query_only=ON` and an authorizer that denies writes, attachments and unsafe PRAGMAs. All original 64 user tables, the schema and 331 completed main-table fixtures retain their frozen fingerprints. The 046C profile permits only a specific independently replayed migration on a scratch copy. Tests that exercise corruption modify independent temporary copies only.
 
-Known warnings include **20 overdue unplayed cup ties**, missing August payroll, pending September policy, stale objective flags, partial 2026 fixture coverage, missing historical dates, historical card timing, incomplete engine metrics, Savarino's archived identity and JSON event ordering. Restricted cash **R$31.93m** is unreconciled; acquisition authority remaining is **R$1.4m**. See [known issues](docs/known_issues.md).
+Original 046 warnings include 20 overdue cup ties, missing August payroll, stale objectives and inherited history quality gaps. The unaccepted 046C candidate reschedules those ties, records August's R$1.38m payment, accrues **R$1,559,000.01** for September without a cash debit, and reconciles cup objectives. Candidate restricted cash is **R$30.55m**; fee authority remains **R$1.4m**, annual wage commitments **R$21.66m**, emergency reserve **R$16m**. Historical data-quality warnings remain. See [known issues](docs/known_issues.md).
 
-See the [Phase 0 report](docs/phase0_report.md), [canonical history and checksums](docs/canonical_history.md), [architecture](docs/architecture.md), [schema guide](docs/schema.md), [exact schema inventory](docs/schema_inventory.md), and [roadmap](docs/roadmap.md).
+See the [Phase 1 report](docs/phase1_report.md), [checkpoint format and storage](docs/checkpoints.md), [payroll policy](docs/payroll_policy.md), [Phase 0 report](docs/phase0_report.md), [canonical history and checksums](docs/canonical_history.md), [architecture](docs/architecture.md), [schema guide](docs/schema.md), and [roadmap](docs/roadmap.md).
 
-No matches have been simulated, no fictional dates advanced, and no new saves created by this project.
+No matches have been simulated and no fictional dates advanced. Candidate 046C has not been promoted.
