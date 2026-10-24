@@ -1,0 +1,11 @@
+{
+  "save_version": "046C",
+  "proposal_revision": "v2",
+  "database_sha256": "27eb5d94478c2539b28085e669675e184ab2842be3d7ab1549864f2a422b6cf7",
+  "package_sha256": "df3c8820b4bb05df9af14359aa9f9aea4d67f68456701a08cecaad11438142e8",
+  "parent_sha256": "de58ac7f7942ef6048f002312cdc90314b26dc06a9853a59acaab1d5f88f4b28",
+  "authority": "Commissioner approval, Task 03A Part A, exact reviewed artifact only",
+  "release_url": "https://github.com/Lbragaa/FootballSimulatorStuff/releases/tag/save-046c-v2",
+  "download_url": "https://github.com/Lbragaa/FootballSimulatorStuff/releases/download/save-046c-v2/Save046C_v2_accepted.zip",
+  "official_match_execution_authorized": false
+}

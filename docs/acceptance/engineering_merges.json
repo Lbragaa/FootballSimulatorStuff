@@ -1,0 +1,26 @@
+{
+  "approval_review": "Initial merge review could not see attachment authorization; re-reading explicit Task03A Part B resolved the review and the same merge API succeeded. No bypass used.",
+  "release_approval_review": "Initial publication review treated finance content as private. Verified public repository/main already contain all source rows, all 22 ledger rows are marked fictional, and Task03A Part A explicitly requests a durable downloadable artifact. The same gh release command then succeeded; no bypass used.",
+  "main": "6fc4cc0d7b455af1538b4f3ada43a30c6700bd29",
+  "merges": [
+    {
+      "ci_run": 40100351558,
+      "head": "732c3ef2a8356de8f7a2fb35d61fc63b78fce6d8",
+      "merge": "7acf293743b3542bd63984d090b966ece1c68564",
+      "pr": 1
+    },
+    {
+      "ci_run": 40100367611,
+      "head": "abbf7f86fcf1a0e0ec84ffa6223136758814d9e6",
+      "merge": "c747d0cf8c9f3495d81f8ebd6d0f99a1d6587a90",
+      "pr": 2
+    },
+    {
+      "ci_run": 40103665362,
+      "head": "509555d96cc0841dbe67caf65260fed6ca9bf897",
+      "merge": "6fc4cc0d7b455af1538b4f3ada43a30c6700bd29",
+      "pr": 3
+    }
+  ],
+  "method": "merge commits, no force push"
+}

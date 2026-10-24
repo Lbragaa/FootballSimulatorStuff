@@ -1,6 +1,6 @@
 # THE BRAGA ERA
 
-One continuous fictional football universe. **Save 046 remains accepted canonical history.** Task 02B provides revised **candidate 046C v2**, transactional reconciliation and portable verified checkpoints. The earlier v1 calendar was rejected and remains an immutable archival proposal. Python 3.11+; no runtime dependencies or external services.
+One continuous fictional football universe. **Save 046C v2 is the accepted administrative checkpoint.** Task 03A adds a working, pure headless Python match engine and complete **NONCANONICAL TEST SIMULATION** demonstrations. Original Save 046 and rejected 046C v1 remain preserved. Python 3.11+; standard library at runtime.
 
 Vasco beat Palmeiras **3–2** on September 26, 2027. Vasco is ninth with 38 points (11W, 5D, 9L; 36–37), after 25 rounds. Next: **Mirassol vs Vasco, October 3, 2027, 16:00, R26**, still scheduled. The fictional clock remains **2027-09-26 23:30**.
 
@@ -17,6 +17,7 @@ Activate with `.venv\Scripts\Activate.ps1` in PowerShell, or `source .venv/bin/a
 ```sh
 python -m pip install -e ".[dev]"
 python tools/bootstrap_handoff.py
+python tools/bootstrap_accepted.py --download --output output/accepted-046c
 python -m braga_era inspect
 python -m braga_era audit
 python -m pytest
@@ -34,18 +35,38 @@ In this checkout a prepared environment is available without activation:
 
 The extractor authenticates the original ZIP and every manifest entry, rejects unsafe paths, and refuses to overwrite altered extracted files. Repeating it with an unchanged handoff is safe. The original ZIP and nested backup chain remain untouched; the reproduced contents live in ignored `data/handoff/`.
 
-Default database: `data/handoff/canonical/braga_save.sqlite`, located relative to the package's repository directory rather than the shell's current directory. Override with an absolute or working-directory-relative argument:
+Default database: the authenticated checkpoint selected by `output/canonical.json` when a local accepted registry exists; otherwise the preserved original `data/handoff/canonical/braga_save.sqlite`. Installing the released archive does not silently promote or create a registry: use its database explicitly on a new machine. Override with an absolute or working-directory-relative argument:
 
 ```sh
 python -m braga_era inspect --db /path/to/braga_save.sqlite
 python -m braga_era audit --db /path/to/braga_save.sqlite --json
+python -m braga_era inspect --db output/accepted-046c/database.sqlite
+python -m braga_era audit --db output/accepted-046c/database.sqlite
 ```
 
-Path precedence is `--db`, then `BRAGA_ERA_DB`, then the repository default. Wheel installations outside this checkout should set `--db` or `BRAGA_ERA_DB`. Both commands support `--json`. `braga-era` accepts the same arguments.
+Path precedence is `--db`, then `BRAGA_ERA_DB`, then the hash-verified accepted registry, then original 046. `BRAGA_ERA_REGISTRY` overrides the pointer location. A corrupt or missing registered checkpoint fails closed. Wheel installations outside this checkout should set `--db` or `BRAGA_ERA_DB`. Both commands support `--json`. `braga-era` accepts the same arguments.
 
-Audit exit codes: **0** = profile passes (warnings still listed); **1** = failed invariant, or warnings under `--strict`; **2** = input/open/query error. The default audit still validates the exact **046** baseline. It deliberately rejects 046C unless the explicit profile and authenticated parent are supplied.
+Audit exit codes: **0** = profile passes (warnings still listed); **1** = failed invariant, or warnings under `--strict`; **2** = input/open/query error. Audit selects the strict registered profile for the recorded save version. For 046C it requires an authenticated parent, defaulting to the package's adjacent `parent.sqlite`. Explicit `--profile 046` still rejects 046C; neither profile was weakened. Immutable package reports retain their original candidate-era wording; acceptance is recorded separately.
 
-## Candidate 046C and portable saves
+## First playable engine
+
+The sandbox copies the source into a new output directory, records the input/configuration/seed commitment before draws, selects both teams autonomously, runs the pure engine and independently replays the complete result. It proves source and scratch database hashes unchanged. It never applies the result to SQLite.
+
+```sh
+python -m braga_era sandbox --db output/accepted-046c/database.sqlite --output output/my-league-demo --fixture league:333 --seed task03a-engine-smoke
+python -m braga_era sandbox --db output/accepted-046c/database.sqlite --output output/my-vasco-demo --synthetic --seed task03a-vasco-synthetic
+python -m braga_era narrate output/my-vasco-demo --count 1
+```
+
+Start Hikari with `preview.json`, then consume `narrate` in sequence. Postmatch statistics appear only with `FINAL_WHISTLE`. `private_match_report.json` and `private_events.jsonl` contain complete diagnostic spoilers and must not be supplied as normal pregame context. Reopening narration resumes the stored cursor without simulating again. The files are not encrypted or an access-control boundary.
+
+The [complete demonstration reports](docs/demos/README.md) contain Palmeiras–Goiás (a real scheduled fixture, simulated only in a disposable sandbox) and a separate synthetic Vasco–Fluminense match. All 16 September 30 continental fixtures fail roster preflight because foreign player records are absent. No foreign squads were invented. Extra time, penalties, official persistence and bracket progression await Task 03B.
+
+See [engine/configuration/seed policy](docs/engine.md), the [Task 03A report](docs/task03a_report.md), and [Task 03B plan](docs/task03b_plan.md).
+
+## Accepted 046C and portable saves
+
+The [durable release](https://github.com/Lbragaa/FootballSimulatorStuff/releases/tag/save-046c-v2) contains the exact accepted ZIP, separate approval receipt and SHA256 inventory. The [accepted ZIP](https://github.com/Lbragaa/FootballSimulatorStuff/releases/download/save-046c-v2/Save046C_v2_accepted.zip) hashes to `df3c8820b4bb05df9af14359aa9f9aea4d67f68456701a08cecaad11438142e8`; its database hashes to `27eb5d94478c2539b28085e669675e184ab2842be3d7ab1549864f2a422b6cf7`. `tools/bootstrap_accepted.py --archive PATH --output FRESH_DIRECTORY` also works offline. Restore exact released bytes; SQLite/compression versions may make a platform rebuild byte-different. A rebuild never receives automatic acceptance.
 
 Create a new candidate directory; existing outputs and the preserved handoff cannot be overwritten:
 
@@ -59,7 +80,7 @@ python -m braga_era save verify output/Save046C_v2_candidate.zip
 python -m braga_era save restore output/Save046C_v2_candidate.zip --output output/restored-046C-v2
 ```
 
-The revised candidate is under `output/Save046C_v2/`; its ZIP is `output/Save046C_v2_candidate.zip`. Original `output/Save046C/` and `output/Save046C_candidate.zip` are the **rejected v1** proposal, preserved unchanged. Verification authenticates both registered revisions; v1 is blocked from promotion. Explicit `--revision v1` is only for archival reproduction. Re-running creation needs a **new** output name. Outputs are ignored, not committed binaries. There is no promotion CLI and the default database remains 046.
+The accepted artifact remains under `output/Save046C_v2/`; its exact original ZIP is `output/Save046C_v2_candidate.zip`, also published byte-for-byte as `Save046C_v2_accepted.zip`. Original `output/Save046C/` and `output/Save046C_candidate.zip` are the **rejected v1** proposal, preserved unchanged. Verification authenticates both registered revisions; v1 is blocked from promotion. Explicit `--revision v1` is only for archival reproduction. Re-running creation needs a **new** output name and is an unaccepted reproduction. Outputs are ignored. The explicit Python acceptance API registered exact v2 under Task 03A; there is no promotion CLI.
 
 Export and restore the original parent independently:
 
@@ -82,7 +103,7 @@ python -m braga_era calendar --strategy B --travel-buffer-hours 6
 
 The default is revised strategy B. The comparison evaluates A (cup-only, no feasible witness in this model), B (controlled league adjustment) and C (January 2028 exception). B finishes CDB on December 4, Libertadores on December 7 and Sudamericana on December 21. It changes 70 future kickoffs: 36 calendar dates and 34 times only, pinning Mirassol–Vasco on October 3 at 16:00. Return legs are three to seven days apart, no new rest shortfall is introduced, and one inherited league exception remains. December 22–January 5 is a hard blackout.
 
-The 72h rule remains kickoff-to-kickoff including travel; it is never reduced. An extra-six-hour travel sensitivity makes this balanced family infeasible and is reported rather than silently relaxed. Foreign domestic calendars and actual routes remain unknown. The candidate requires commissioner acceptance of the full date inventory, travel/rest scope and inherited exception; supported payroll directions do not authorize automatic promotion. The recommendation needs no 2028 extension. The optional C alternative does and carries season/contract/preseason/finance consequences.
+The 72h rule remains kickoff-to-kickoff including travel; it is never reduced. An extra-six-hour travel sensitivity makes this balanced family infeasible and is reported rather than silently relaxed. Foreign domestic calendars and actual routes remain unknown. Task 03A explicitly accepted the full B inventory, travel/rest scope, inherited 69h Coritiba exception, payroll convention and objectives. The accepted calendar needs no 2028 extension. C remains an unused alternative with season/contract/preseason/finance consequences.
 
 ## Protection and current limitations
 
@@ -92,4 +113,4 @@ Original 046 warnings include 20 overdue cup ties, missing August payroll, stale
 
 See the [Task 02B report](docs/task02b_report.md), [Phase 2 engine design](docs/phase2_engine_design.md), [historical Phase 1 report](docs/phase1_report.md), [checkpoint format](docs/checkpoints.md), [payroll policy](docs/payroll_policy.md), [canonical history](docs/canonical_history.md), and [roadmap](docs/roadmap.md).
 
-No matches have been simulated and no fictional dates advanced. Candidate 046C has not been promoted.
+Only labeled noncanonical sandbox matches have been simulated. No official match was executed, no Save 047 created and no fictional date advanced. Mirassol–Vasco R26 remains scheduled.

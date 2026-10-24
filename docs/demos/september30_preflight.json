@@ -1,0 +1,150 @@
+{
+  "scope": "READ-ONLY PREFLIGHT",
+  "fixtures": [
+    {
+      "event_id": "LIB-R16-01:L1",
+      "competition": "LIB",
+      "home": "Bolívar",
+      "away": "Palmeiras",
+      "kickoff": "2027-09-30 16:00",
+      "executable": false,
+      "blocker": "Bolívar: no recorded player roster/club identity; no foreign names or ratings will be invented"
+    },
+    {
+      "event_id": "LIB-R16-02:L1",
+      "competition": "LIB",
+      "home": "Junior de Barranquilla",
+      "away": "Fluminense",
+      "kickoff": "2027-09-30 16:00",
+      "executable": false,
+      "blocker": "Junior de Barranquilla: no recorded player roster/club identity; no foreign names or ratings will be invented"
+    },
+    {
+      "event_id": "LIB-R16-03:L1",
+      "competition": "LIB",
+      "home": "O'Higgins",
+      "away": "Vélez Sarsfield",
+      "kickoff": "2027-09-30 16:00",
+      "executable": false,
+      "blocker": "O'Higgins: no recorded player roster/club identity; no foreign names or ratings will be invented"
+    },
+    {
+      "event_id": "LIB-R16-04:L1",
+      "competition": "LIB",
+      "home": "Atlético-MG",
+      "away": "River Plate",
+      "kickoff": "2027-09-30 16:00",
+      "executable": false,
+      "blocker": "River Plate: no recorded player roster/club identity; no foreign names or ratings will be invented"
+    },
+    {
+      "event_id": "LIB-R16-05:L1",
+      "competition": "LIB",
+      "home": "Estudiantes",
+      "away": "Santos",
+      "kickoff": "2027-09-30 16:00",
+      "executable": false,
+      "blocker": "Estudiantes: no recorded player roster/club identity; no foreign names or ratings will be invented"
+    },
+    {
+      "event_id": "LIB-R16-06:L1",
+      "competition": "LIB",
+      "home": "Huachipato",
+      "away": "Flamengo",
+      "kickoff": "2027-09-30 16:00",
+      "executable": false,
+      "blocker": "Huachipato: no recorded player roster/club identity; no foreign names or ratings will be invented"
+    },
+    {
+      "event_id": "LIB-R16-07:L1",
+      "competition": "LIB",
+      "home": "The Strongest",
+      "away": "Liverpool (URU)",
+      "kickoff": "2027-09-30 16:00",
+      "executable": false,
+      "blocker": "The Strongest: no recorded player roster/club identity; no foreign names or ratings will be invented"
+    },
+    {
+      "event_id": "LIB-R16-08:L1",
+      "competition": "LIB",
+      "home": "Atlético Nacional",
+      "away": "Sportivo Luqueño",
+      "kickoff": "2027-09-30 16:00",
+      "executable": false,
+      "blocker": "Atlético Nacional: no recorded player roster/club identity; no foreign names or ratings will be invented"
+    },
+    {
+      "event_id": "SULA-PO-01:L1",
+      "competition": "SULA",
+      "home": "Caracas FC",
+      "away": "San Lorenzo",
+      "kickoff": "2027-09-30 16:00",
+      "executable": false,
+      "blocker": "Caracas FC: no recorded player roster/club identity; no foreign names or ratings will be invented"
+    },
+    {
+      "event_id": "SULA-PO-02:L1",
+      "competition": "SULA",
+      "home": "Platense",
+      "away": "Emelec",
+      "kickoff": "2027-09-30 16:00",
+      "executable": false,
+      "blocker": "Platense: no recorded player roster/club identity; no foreign names or ratings will be invented"
+    },
+    {
+      "event_id": "SULA-PO-03:L1",
+      "competition": "SULA",
+      "home": "Sporting Cristal",
+      "away": "São Paulo",
+      "kickoff": "2027-09-30 16:00",
+      "executable": false,
+      "blocker": "Sporting Cristal: no recorded player roster/club identity; no foreign names or ratings will be invented"
+    },
+    {
+      "event_id": "SULA-PO-04:L1",
+      "competition": "SULA",
+      "home": "Athletico-PR",
+      "away": "Peñarol",
+      "kickoff": "2027-09-30 16:00",
+      "executable": false,
+      "blocker": "Peñarol: no recorded player roster/club identity; no foreign names or ratings will be invented"
+    },
+    {
+      "event_id": "SULA-PO-05:L1",
+      "competition": "SULA",
+      "home": "Rosario Central",
+      "away": "Libertad",
+      "kickoff": "2027-09-30 16:00",
+      "executable": false,
+      "blocker": "Rosario Central: no recorded player roster/club identity; no foreign names or ratings will be invented"
+    },
+    {
+      "event_id": "SULA-PO-06:L1",
+      "competition": "SULA",
+      "home": "Universitario",
+      "away": "Universidad Católica",
+      "kickoff": "2027-09-30 16:00",
+      "executable": false,
+      "blocker": "Universitario: no recorded player roster/club identity; no foreign names or ratings will be invented"
+    },
+    {
+      "event_id": "SULA-PO-07:L1",
+      "competition": "SULA",
+      "home": "Bragantino",
+      "away": "Independiente",
+      "kickoff": "2027-09-30 16:00",
+      "executable": false,
+      "blocker": "Independiente: no recorded player roster/club identity; no foreign names or ratings will be invented"
+    },
+    {
+      "event_id": "SULA-PO-08:L1",
+      "competition": "SULA",
+      "home": "Newell's Old Boys",
+      "away": "Botafogo",
+      "kickoff": "2027-09-30 16:00",
+      "executable": false,
+      "blocker": "Newell's Old Boys: no recorded player roster/club identity; no foreign names or ratings will be invented"
+    }
+  ],
+  "fallback": "league:333; no foreign player data invented"
+}
