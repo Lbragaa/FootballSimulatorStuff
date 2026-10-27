@@ -158,7 +158,14 @@ class Adapter:
             dep = self.c.execute(
                 "SELECT status FROM world_fixtures WHERE key=?", (d,)
             ).fetchone()
-            if not dep or dep[0] != "final":
+            from .forward_schema import enabled
+            from .progression import dependency_done
+
+            if not (
+                dependency_done(self.c, d)
+                if enabled(self.c)
+                else dep and dep[0] == "final"
+            ):
                 raise ValueError("Unresolved competition dependency: " + d)
         return pregame(self.c, f, self.policy, world_hash)
 

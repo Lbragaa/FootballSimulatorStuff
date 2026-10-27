@@ -248,7 +248,7 @@ def verify_checkpoint(directory: Path):
     if metadata.get("format_version") != FORMAT_VERSION:
         raise ValueError("Unsupported checkpoint metadata format")
     version = metadata.get("save_version")
-    if version == 'DEV-03B':
+    if version in ('DEV-03B', 'DEV-03C', 'FORWARD-CALCULATION-1', 'FORWARD-CALCULATION-TEST-1'):
         from .world.packages import verify_directory
         return verify_directory(directory)
     expected_files = {"database.sqlite", "checkpoint.json", "validation.json", "report.md", "save046_baseline.json"}

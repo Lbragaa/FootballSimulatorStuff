@@ -1,5 +1,18 @@
 # THE BRAGA ERA — durable engineering instructions
 
+## Task 03C authority and forward versions
+
+- PR #5 was ordinarily merged as `7a145b98ffc6096d42423d0ea9219dac1cad8e75`; Task 03C uses `codex/task-03c-final-readiness` and leaves its PR open. No official batch, production authority, Save 047 or canonical clock advancement is authorized. Exact 046C, its release/receipt and the real accepted registry remain unchanged.
+- Read `docs/task03c_report.md`, `docs/task03c_decisions.md` and `docs/official_play_runbook.md`. Proposed forward versions are config 1.1.0, world policy 2.1.0 and ET 2.1.0. Keep regulation 1.0.0, V1/Task 03B hashes and preliminary 2.0 compatibility intact. Default create/demo remains V1; `--policy readiness-v2` selects the new proposal explicitly.
+- Freeze foreign generation independently at `fictional-squads-1.0.0`; never seed it with the entire newer world policy. No modeled roster, rule or rare-event assumption is approved canonically. Alternatives require a new version and fresh evidence before execution.
+- Continental draws commit actual qualifier pools and named seeds before shuffle, expand approved reservations only after prerequisites, and never mark reservations as played. CDB keeps its bracket. Each simultaneous fixture stores its own exact config, including neutral-final variants.
+- ET 2.1 models extra substitutions/cards/injuries and equal penalty pools retaining the defending GK. Unresolved/abandoned outcomes fail closed. Preserve shared elapsed recovery, bans, exact stints and existing idempotent payroll.
+- Readiness adds exactly `world_blobs`, `world_draws`, `world_champions`. Blob references commit complete values and must reverse the journal exactly. Compact DEV-03C retains the existing 100 MB bound, full replay and nonpromotability.
+- `official-forward-profile-1` is separate from DEV. A trusted commissioner signature binds exact parent/batch/policy/config/seed/obligations; a different signed exact-hash decision accepts a validated successor. Unique parent/fixture claims prevent a different execution ID from replacing an authorized seed. Never release claims to search for an outcome.
+- Task 03C exercises only `test_only=True`, simulated signers, rehearsal scopes and disposable registries. Never provision a production key or call production execution/promotion here. Scoped forward calculations require authenticated authority; DEV cannot be relabeled 047.
+- Use `braga_era.gameplay` for normal Hikari delivery: earlier narration first, gated previews, tables from revealed finals only. Private diagnostic reports/ZIPs contain future results. A GitHub connector is not a Python runtime.
+- Full-season golden seed `task03c-final-a-fixed-v1` is recorded in `docs/validation/task03c_season.json`: 217 prospective fixtures and four month ends. Keep normal summaries free of future Vasco outcomes. The commissioner sheet's uncertainties are not settled by successful engineering tests.
+
 ## Authority and scope
 
 - This is an existing fictional universe, not a new simulation. SQLite is the structured source of truth. Documentation supplies context and limitations. Do not import real-world rosters/results automatically.

@@ -1,5 +1,7 @@
 # Phase 2A engine: execution, configuration and narration
 
+Task 03C preserves regulation 1.0.0 and its regression results. Proposed config 1.1.0 increases fitness selection weight to .12 and removes home advantage for neutral finals; ET 2.1 adds cards/injuries/substitutions, equal eligible penalty pools and independent extension accounting. Pure calculation is not execution authorization. See [calibration](task03c_calibration.md) and [decisions](task03c_decisions.md).
+
 Task 03B now reuses this regulation core inside a development-only chronological world. Shared metrics preserve both existing result digests. Extra-time/shootout resolution and persistent player/competition state are separate proposed forward layers; see [world integration](world_integration.md). The regulation-only behavior and original Task 03A sandbox remain available.
 
 `braga_era.engine` is executable headless Python with no runtime third-party dependencies. The pure match engine accepts immutable snapshots/plans and returns a complete result. It has no database connection, filesystem, UI or host-clock dependency. Version `braga-headless-1.0.0` is a forward model derived from legacy parameters, not a reproduction of historical RNG outputs or an authorization for official play.

@@ -13,7 +13,9 @@ from ..db import connect_read_only, file_sha256
 from ..history import canonical_json as encode, digest, table_fingerprint
 from ..migrations import rows_by_key, diff
 from . import SCOPE, VERSION
-from .policy import WorldPolicy
+from .scope import current as current_scope
+from .policy import is_readiness, WorldPolicy, ReadinessPolicy, load_policy
+from . import forward_schema
 from .schema import DDL, TABLES
 
 MUTABLE_LEGACY = {
@@ -42,7 +44,8 @@ def captured(c):
     return {
         t: rows_by_key(c, t)
         for t in tables(c)
-        if t in MUTABLE_LEGACY or t in TABLES - {"world_operations", "world_cursors"}
+        if t in MUTABLE_LEGACY
+        or t in (TABLES | forward_schema.TABLES) - {"world_operations", "world_cursors"}
     }
 
 
@@ -57,8 +60,16 @@ def journal(c, phase, before):
             "phase": phase,
             "table": op["table"],
             "key": op["key"],
-            "before": op["before"],
-            "after": op["after"],
+            "before": (
+                forward_schema.pack(c, op["before"])
+                if forward_schema.enabled(c)
+                else op["before"]
+            ),
+            "after": (
+                forward_schema.pack(c, op["after"])
+                if forward_schema.enabled(c)
+                else op["after"]
+            ),
             "previous_sha256": previous,
         }
         hashed = digest(item)
@@ -68,8 +79,8 @@ def journal(c, phase, before):
                 phase,
                 op["table"],
                 encode(op["key"]),
-                encode(op["before"]) if op["before"] is not None else None,
-                encode(op["after"]) if op["after"] is not None else None,
+                encode(item["before"]) if item["before"] is not None else None,
+                encode(item["after"]) if item["after"] is not None else None,
                 previous,
                 hashed,
             ),
@@ -123,7 +134,7 @@ def authenticate(directory):
     directory = Path(directory).resolve()
     marker = read_json(directory / "world.json")
     if marker != {
-        "scope": SCOPE,
+        "scope": current_scope(),
         "version": VERSION,
         "parent_sha256": catalog()["database_sha256"],
         "promotable": False,
@@ -147,12 +158,12 @@ def writer(directory):
         c.execute("PRAGMA synchronous=FULL")
         info = c.execute("SELECT * FROM world_info").fetchone()
         if (
-            info["scope"] != SCOPE
+            info["scope"] != current_scope()
             or info["version"] != VERSION
             or info["parent_sha256"] != catalog()["database_sha256"]
         ):
             raise ValueError("Unsupported world identity/profile")
-        policy = WorldPolicy(**json.loads(info["policy_json"]))
+        policy = load_policy(json.loads(info["policy_json"]))
         policy.validate()
         yield c, policy
 
@@ -167,7 +178,7 @@ def create(parent, destination, seed, policy=None):
         shutil.copyfile(parent, stage / "parent.sqlite")
         shutil.copyfile(parent, stage / "database.sqlite")
         marker = {
-            "scope": SCOPE,
+            "scope": current_scope(),
             "version": VERSION,
             "parent_sha256": catalog()["database_sha256"],
             "promotable": False,
@@ -188,7 +199,11 @@ def create(parent, destination, seed, policy=None):
             c.row_factory = sqlite3.Row
             c.execute("PRAGMA foreign_keys=ON")
             before = captured(c)
-            c.executescript("BEGIN IMMEDIATE;\n" + DDL)
+            c.executescript(
+                "BEGIN IMMEDIATE;\n"
+                + DDL
+                + (forward_schema.DDL if is_readiness(policy) else "")
+            )
             try:
                 now = c.execute(
                     "SELECT value FROM meta WHERE key='current_date'"
@@ -196,7 +211,7 @@ def create(parent, destination, seed, policy=None):
                 c.execute(
                     "INSERT INTO world_info VALUES(1,?,?,?,?,?,?)",
                     (
-                        SCOPE,
+                        current_scope(),
                         VERSION,
                         marker["parent_sha256"],
                         encode(asdict(policy)),
@@ -206,7 +221,9 @@ def create(parent, destination, seed, policy=None):
                 )
                 from . import rosters, adapters
 
-                rosters.install(c, policy, now)
+                rosters.install(
+                    c, WorldPolicy() if is_readiness(policy) else policy, now
+                )
                 adapters.install(c)
                 import calendar
 
@@ -233,7 +250,7 @@ def create(parent, destination, seed, policy=None):
         if file_sha256(parent) != marker["parent_sha256"]:
             raise ValueError("Accepted source changed during initialization")
     return {
-        "scope": SCOPE,
+        "scope": current_scope(),
         "directory": str(Path(destination).resolve()),
         "promotable": False,
     }
@@ -248,6 +265,7 @@ def logical_hash(c):
             if t
             not in (
                 "world_operations",
+                "world_blobs",
                 "world_cursors",
                 "world_executions",
                 "world_batches",

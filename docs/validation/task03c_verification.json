@@ -1,0 +1,113 @@
+{
+  "scope": "NONCANONICAL DEVELOPMENT TEST",
+  "official_matches_executed": 0,
+  "real_registry_changed": false,
+  "accepted_fictional_date": "2027-09-26 23:30",
+  "pr": "https://github.com/Lbragaa/FootballSimulatorStuff/pull/6",
+  "pr5_merge": "7a145b98ffc6096d42423d0ea9219dac1cad8e75",
+  "main_ci_run": 40577456389,
+  "main_ci_all_six": "success",
+  "local_full_suite": {
+    "passed": 207,
+    "seconds": 469.76
+  },
+  "local_readiness_after_additional_regression": {
+    "passed": 11,
+    "seconds": 75.77
+  },
+  "ci_suite_count": 210,
+  "calibration_trials": 1200,
+  "final_seasons": 2,
+  "fixtures_per_season": 217,
+  "portable_package": {
+    "bytes": 11468311,
+    "independently_restored": true,
+    "sha256": "d283775188e324db636606a628543f3ca766ab790beb0fa312cd694eb581ee8a",
+    "uncompressed_bytes": 86126982,
+    "path": "output/task03c-final-primary.zip",
+    "independent_restore": "output/task03c-final-primary-restored"
+  },
+  "protected_sha256": {
+    "BRAGA_ERA_HANDOFF_AFTER_046.zip": "527dd4d8d62f3bca8d4e0459a137e8588558315aed19aabc0cda58edbe007719",
+    "data/handoff/canonical/braga_save.sqlite": "de58ac7f7942ef6048f002312cdc90314b26dc06a9853a59acaab1d5f88f4b28",
+    "output/Save046C_v2/database.sqlite": "27eb5d94478c2539b28085e669675e184ab2842be3d7ab1549864f2a422b6cf7",
+    "output/Save046C_v2_candidate.zip": "df3c8820b4bb05df9af14359aa9f9aea4d67f68456701a08cecaad11438142e8",
+    "docs/acceptance/046C_v2_approval.json": "f000e0df48fd42c4f955f19add2db62762372ca2be12e3b5ef915dada24d015f",
+    "output/canonical.json": "2f1a763b96568e13a530d2b2a17e596d8d04e3a2c8672ca0b5f9c82980d260d0"
+  },
+  "ci_results": "The first six-job matrix passed as recorded. The final 210-test hardening matrix is linked by the current PR #6 head checks.",
+  "local_final_readiness": {
+    "passed": 13,
+    "seconds": 76.97
+  },
+  "wheel_restore": {
+    "isolated_install": true,
+    "python_no_site": true,
+    "outside_repository_cwd": true,
+    "restored_profile": "DEV-03C",
+    "independent_full_replay": true,
+    "world_sha256": "399f8beef50aaf88aa740a283096e32aca2e06e61fc705be80f5e4504348ee48",
+    "destination": "output/task03c-wheel-restore"
+  },
+  "calibration_repeated_sha256": "84ecb58ee9696f11353d6782d834d87561ad3d644b2b01112e2b6c0f39513052",
+  "local_final_full_suite": {
+    "passed": 210,
+    "seconds": 460.46,
+    "python": "3.12.14",
+    "platform": "Windows"
+  },
+  "first_pr_ci": {
+    "run": 40583274560,
+    "commit": "3b939c16863422d1f6d69752bcdc76c405287152",
+    "all_six_jobs": "success",
+    "tests_each": 208,
+    "full_season_matches_each": 217,
+    "golden_world_sha256": "399f8beef50aaf88aa740a283096e32aca2e06e61fc705be80f5e4504348ee48",
+    "linux_312_full_season_archive_roundtrip": "success",
+    "jobs": [
+      {
+        "platform": "Windows",
+        "python": "3.11",
+        "tests": 208,
+        "seconds": 617.11,
+        "result": "success"
+      },
+      {
+        "platform": "Windows",
+        "python": "3.12",
+        "tests": 208,
+        "seconds": 380.36,
+        "result": "success"
+      },
+      {
+        "platform": "Windows",
+        "python": "3.13",
+        "tests": 208,
+        "seconds": 549.51,
+        "result": "success"
+      },
+      {
+        "platform": "Linux",
+        "python": "3.11",
+        "tests": 208,
+        "seconds": 404.54,
+        "result": "success"
+      },
+      {
+        "platform": "Linux",
+        "python": "3.12",
+        "tests": 208,
+        "seconds": 323.55,
+        "result": "success"
+      },
+      {
+        "platform": "Linux",
+        "python": "3.13",
+        "tests": 208,
+        "seconds": 242.88,
+        "result": "success"
+      }
+    ]
+  },
+  "core_implementation_commit": "3b939c16863422d1f6d69752bcdc76c405287152"
+}

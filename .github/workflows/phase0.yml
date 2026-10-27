@@ -51,3 +51,16 @@ jobs:
       - run: python -m braga_era save export output/ci-046C --output output/ci-046C.zip
       - run: python -m braga_era save restore output/ci-046C.zip --output output/ci-restored
       - run: python -m braga_era save verify output/ci-restored
+
+      - run: python tools/stress_season.py --db output/ci-accepted/database.sqlite --output output/ci-season --seed task03c-final-a-fixed-v1 --no-package
+      - run: python tools/verify_season.py output/ci-season --reference docs/validation/task03c_season.json
+      - if: matrix.os == 'ubuntu-latest' && matrix.python == '3.12'
+        run: python tools/stress_season.py --db output/ci-accepted/database.sqlite --output output/ci-season --seed task03c-final-a-fixed-v1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: NONCANONICAL-season-${{ matrix.os }}-py${{ matrix.python }}
+          path: |
+            output/ci-season/private_season_report.json
+            output/ci-season/mirassol_preview.json
+            output/ci-season.zip
+            output/ci-tests.xml

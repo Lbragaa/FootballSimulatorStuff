@@ -19,6 +19,25 @@ from .adapters import adapter
 from .knockout import resolve, validate_bundle
 from .players import apply_players, moment, stamp
 from .audit import audit
+from .policy import is_readiness, ReadinessPolicy
+from .forward_config import configuration, load as load_config
+from .forward_schema import enabled as forward_enabled
+
+
+def resolution_functions(policy):
+    if is_readiness(policy):
+        if policy.extension_version == "braga-knockout-2.0.0":
+            from .knockout_v2_0 import (
+                resolve as forward_resolve,
+                validate_bundle as forward_validate,
+            )
+        else:
+            from .knockout_v2 import (
+                resolve as forward_resolve,
+                validate_bundle as forward_validate,
+            )
+        return forward_resolve, forward_validate
+    return resolve, validate_bundle
 
 
 class InjectedCrash(RuntimeError):
@@ -77,6 +96,16 @@ def agenda(c):
         dict(r, kind="completion", kickoff=r["finish_time"])
         for r in c.execute("SELECT * FROM world_batches WHERE status='simulated'")
     ]
+    from .forward_schema import enabled
+
+    if enabled(c):
+        from .progression import reservation_draw
+
+        fixtures = [
+            f
+            for f in fixtures
+            if ":reserve:" not in f["key"] or not reservation_draw(c, f["key"])
+        ]
     return sorted(
         fixtures + admin + finishes,
         key=lambda r: (
@@ -113,8 +142,8 @@ def claim(c, fixtures, policy):
     world_hash = logical_hash(c)
     prepared = []
     root = c.execute("SELECT seed FROM world_info").fetchone()[0]
-    config = EngineConfig()
     for f in fixtures:
+        config = configuration(policy, f["stage"] == "Final única")
         if (
             f["status"] != "scheduled"
             or c.execute(
@@ -124,14 +153,14 @@ def claim(c, fixtures, policy):
             raise ValueError("Already-final/claimed or conditional fixture")
         snapshot, rules, prior = context(c, f, policy, world_hash)
         seeds = commit_seeds(snapshot, config, root + ":" + f["key"])
-        prepared.append((f, snapshot, rules, prior, seeds))
+        prepared.append((f, snapshot, rules, prior, seeds, config))
     # All inputs in this group are captured from precisely the same pre-kickoff world.
     with transaction(c, "claim:" + batch_key):
         c.execute(
             "INSERT INTO world_batches VALUES(?,?,?,?,?)",
             (batch_key, kickoff, "claimed", world_hash, None),
         )
-        for f, snapshot, rules, prior, seeds in prepared:
+        for f, snapshot, rules, prior, seeds, config in prepared:
             data = {
                 "snapshot": asdict(snapshot),
                 "rules": asdict(rules),
@@ -169,17 +198,18 @@ def simulate_pending(c, batch_key, policy, crash=None):
         data = json.loads(row["input_json"])
         if digest(data) != row["input_sha256"]:
             raise ValueError("Committed snapshot changed")
-        config = EngineConfig(**json.loads(row["config_json"]))
-        if config != EngineConfig():
-            raise ValueError("Unsupported engine/config version")
+        config = load_config(
+            json.loads(row["config_json"]), policy, data["rules"]["extra_time"]
+        )
         snapshot = codec.snapshot(data["snapshot"])
         seeds = SeedCommitment(**json.loads(row["seed_json"]))
         rules = Rules(**data["rules"])
         plans = prepare(snapshot, config, seeds)
         preview = make_preview(snapshot, plans, config, seeds)
         result = simulate_match(snapshot, plans, config, seeds)
-        bundle = resolve(snapshot, result, config, rules, tuple(data["prior"]))
-        validation = validate_bundle(
+        resolver, validator = resolution_functions(policy)
+        bundle = resolver(snapshot, result, config, rules, tuple(data["prior"]))
+        validation = validator(
             snapshot, result, config, rules, tuple(data["prior"]), bundle
         )
         with transaction(c, "result:" + row["fixture_key"]):
@@ -240,10 +270,13 @@ def apply_batch(c, batch_key, policy, parent, crash=None):
             # Revalidate stored input/result, including all regulation accounting, on crash resumption.
             from .policy import Rules
 
-            validate_bundle(
+            _, validator = resolution_functions(policy)
+            validator(
                 snapshot,
                 codec.result(bundle["regulation"]),
-                EngineConfig(**json.loads(row["config_json"])),
+                load_config(
+                    json.loads(row["config_json"]), policy, f["stage"] == "Final única"
+                ),
                 Rules(**data["rules"]),
                 tuple(data["prior"]),
                 bundle,
@@ -275,7 +308,7 @@ def apply_batch(c, batch_key, policy, parent, crash=None):
             fault(crash, "during_apply")
         c.execute("UPDATE world_batches SET status='applied' WHERE key=?", (batch_key,))
         c.execute("UPDATE world_info SET clock=?", (end,))
-        audit(c, parent, check_journal=False)
+        audit(c, parent, check_journal=False, validate_results=not is_readiness(policy))
         fault(crash, "before_commit")
 
 
@@ -294,7 +327,7 @@ def apply_obligation(c, item, parent):
             )
             for r in entries:
                 c.execute(
-                    "INSERT INTO payroll_obligations VALUES(?,?,?,?,?,?,?,?)",
+                    "INSERT INTO payroll_obligations VALUES(?,?,?,?,?,?,?)",
                     tuple(
                         r[k]
                         for k in (
@@ -328,7 +361,7 @@ def apply_obligation(c, item, parent):
             ),
         )
         c.execute("UPDATE world_info SET clock=?", (item["kickoff"],))
-        audit(c, parent, check_journal=False)
+        audit(c, parent, check_journal=False, validate_results=not forward_enabled(c))
 
 
 def advance(directory, *, until=None, before_fixture=None, crash=None, max_groups=None):
@@ -356,6 +389,10 @@ def advance(directory, *, until=None, before_fixture=None, crash=None, max_group
                 "Requested boundary predates the committed fictional clock"
             )
         while True:
+            if is_readiness(policy):
+                from .progression import activate
+
+                activate(c)
             batch = c.execute(
                 "SELECT * FROM world_batches WHERE status='claimed' ORDER BY kickoff,key LIMIT 1"
             ).fetchone()
@@ -414,14 +451,16 @@ def fixture_preview(c, policy, key):
     if row:
         data = json.loads(row["input_json"])
         snapshot = codec.snapshot(data["snapshot"])
-        config = EngineConfig(**json.loads(row["config_json"]))
+        config = load_config(
+            json.loads(row["config_json"]), policy, data["rules"]["extra_time"]
+        )
         seeds = SeedCommitment(**json.loads(row["seed_json"]))
     else:
         f = c.execute("SELECT * FROM world_fixtures WHERE key=?", (key,)).fetchone()
         if not f:
             raise ValueError("Unknown fixture")
         snapshot, _, _ = context(c, f, policy, logical_hash(c))
-        config = EngineConfig()
+        config = configuration(policy, f["stage"] == "Final única")
         seeds = commit_seeds(
             snapshot,
             config,

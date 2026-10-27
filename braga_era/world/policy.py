@@ -47,6 +47,49 @@ class Rules:
     proposal: bool = True
 
 
+@dataclass(frozen=True)
+class ReadinessPolicy20(WorldPolicy):
+    """Forward proposal; the V1 roster generator remains frozen independently."""
+
+    version: str = "world-proposals-2.0.0"
+    draw_policy: str = (
+        "committed seeded stage draws v1; SULA group winners host return R16; later rounds open draw"
+    )
+    extension_version: str = "braga-knockout-2.0.0"
+    journal_policy: str = "content-addressed-row-images-1"
+
+    def validate(self):
+        if self != ReadinessPolicy20():
+            raise ValueError("Unsupported readiness policy")
+
+
+@dataclass(frozen=True)
+class ReadinessPolicy(ReadinessPolicy20):
+    version: str = "world-proposals-2.1.0"
+    extension_version: str = "braga-knockout-2.1.0"
+
+    def validate(self):
+        if self != ReadinessPolicy():
+            raise ValueError("Unsupported readiness policy")
+
+
+def is_readiness(policy):
+    return isinstance(policy, ReadinessPolicy20)
+
+
+def load_policy(value):
+    classes = {
+        "world-proposals-1.0.0": WorldPolicy,
+        "world-proposals-2.0.0": ReadinessPolicy20,
+        "world-proposals-2.1.0": ReadinessPolicy,
+    }
+    if value.get("version") not in classes:
+        raise ValueError("Unsupported world policy/version")
+    policy = classes[value["version"]](**value)
+    policy.validate()
+    return policy
+
+
 def rules_for(competition, decisive=False, single_final=False):
     if competition not in ("LEAGUE", "CDB", "LIB", "SULA"):
         raise ValueError("Unsupported competition")

@@ -323,9 +323,10 @@ def main(argv=None) -> int:
                     from .world.audit import audit as audit_world
 
                     validation = audit_world(connection, path.parent / "parent.sqlite")
+                    from .world.forward_schema import enabled as forward_schema_enabled
                     value = {
                         "scope": "NONCANONICAL DEVELOPMENT TEST",
-                        "save_version": "DEV-03B",
+                        "save_version": "DEV-03C" if forward_schema_enabled(connection) else "DEV-03B",
                         "promotable": False,
                         "clock": connection.execute(
                             "SELECT clock FROM world_info"

@@ -1,0 +1,25 @@
+{
+  "scope": "NONCANONICAL DEVELOPMENT TEST",
+  "seed": "task03c-final-a-fixed-v1",
+  "world_sha256": "399f8beef50aaf88aa740a283096e32aca2e06e61fc705be80f5e4504348ee48",
+  "accepted_parent_sha256": "27eb5d94478c2539b28085e669675e184ab2842be3d7ab1549864f2a422b6cf7",
+  "audit": {
+    "continental_final": 74,
+    "historical_tables_and_completed_rows_preserved": true,
+    "journal_verified": true,
+    "league_final": 130,
+    "ok": true,
+    "receipts": 217,
+    "rest_exceptions": [
+      {
+        "club": "club:12",
+        "first": "league:382",
+        "hours": 69.0,
+        "inherited": true,
+        "second": "league:393"
+      }
+    ],
+    "scope": "NONCANONICAL DEVELOPMENT TEST"
+  },
+  "database_bytes": 83759104
+}
