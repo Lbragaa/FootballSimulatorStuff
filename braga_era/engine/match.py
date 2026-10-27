@@ -5,6 +5,7 @@ from math import exp, factorial, sqrt
 from .models import Event, Shot, Performance, Prematch, MatchResult, SCOPE
 from .randomness import stream, verify_commitment
 from .validation import validate_plans
+from .metrics import performance
 
 
 def clamp(value, low, high):
@@ -482,63 +483,10 @@ def simulate_match(snapshot, plans, config, seeds):
     for side in (0, 1):
         for pid in sorted(active[side]):
             leave(pid, end)
-    performances = []
-    for pid, stat in sorted(stats.items()):
-        p = players[pid]
-        side = stat["side"]
-        win = score[side] > score[1 - side]
-        loss = score[side] < score[1 - side]
-        rating = round(
-            clamp(
-                6.45
-                + 0.033 * (p.ovr - 72)
-                + 0.18 * (p.form - 6.55)
-                + 0.86 * stat["goals"]
-                + 0.55 * stat["assists"]
-                + (0.19 if win else -0.17 if loss else 0.04)
-                + (0.1 if p.position == "GK" else 0)
-                + 0.04 * stat["saves"]
-                - 0.1 * stat["yellows"]
-                - 0.8 * stat["red"],
-                5.2,
-                9.8,
-            ),
-            1,
-        )
-        loss_fitness = rng_post.uniform(
-            config.fitness_loss_min, config.fitness_loss_max
-        ) * (stat["seconds"] / 5400)
-        if stat["injured"]:
-            loss_fitness += 5
-        recent = [(rating, stat["seconds"] / 60)] + list(p.recent_ratings[:3])
-        weights = [0.68**i * sqrt(min(1, m / 60)) for i, (_, m) in enumerate(recent)]
-        newform = 6.55 + (
-            sum(w * r for w, (r, _) in zip(weights, recent)) / sum(weights) - 6.55
-        ) * min(1, len(recent) / 3)
-        performances.append(
-            Performance(
-                pid,
-                keys[side],
-                stat["starter"],
-                stat["seconds"],
-                stat["goals"],
-                stat["assists"],
-                stat["shots"],
-                stat["on_target"],
-                round(stat["xg"], 4),
-                stat["saves"],
-                stat["yellows"],
-                stat["red"],
-                stat["injured"],
-                rating,
-                p.fitness,
-                round(clamp(p.fitness - loss_fitness, 0, 100), 2),
-                p.morale,
-                clamp(p.morale + (2 if win else -2 if loss else 0), 0, 100),
-                p.form,
-                round(newform, 3),
-            )
-        )
+    performances = [
+        performance(players[pid], stat, score, rng_post, config)
+        for pid, stat in sorted(stats.items())
+    ]
     possession = round(
         clamp(
             51

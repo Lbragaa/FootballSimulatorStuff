@@ -1,0 +1,274 @@
+{
+  "as_of": "2027-09-30 23:59",
+  "away": "Vasco",
+  "eligibility_exclusions": [],
+  "fixture_key": "league:332",
+  "home": "Mirassol",
+  "kickoff": "2027-10-03 16:00",
+  "notes": [
+    "NONCANONICAL DEVELOPMENT TEST; proposed rosters/rules/player timeline; no official authority",
+    "policy=90038892cd8e97176bdd4e35b42996013c5e0abb35161b1a60675f7317d2aa98",
+    "historical bans unknown; forward per-competition discipline only"
+  ],
+  "official": false,
+  "plans": [
+    {
+      "bench": [
+        83,
+        78,
+        79,
+        64,
+        62,
+        70,
+        67,
+        65,
+        72,
+        74,
+        73,
+        76
+      ],
+      "bench_names": [
+        "Zé Roberto",
+        "Edson Carioca",
+        "B. Santos",
+        "João Victor",
+        "Thomazella",
+        "Gabriel",
+        "Lucas Oliveira",
+        "W. Machado",
+        "Denilson",
+        "Eduardo",
+        "Shaylon",
+        "Chico"
+      ],
+      "club_key": "club:14",
+      "coach": "Modeled autonomous Mirassol coach",
+      "defensive_shape": "4-4-2",
+      "formation": "4-3-3",
+      "rationale": [
+        "Selected by recorded IDs, eligibility, positional fit, OVR, fitness, morale, rolling form and continuity",
+        "Risk cautious: coach preference, opponent strength and bounded imperfect judgement",
+        "No guaranteed starter names; no user-mandated changes or outcome-dependent rerolls"
+      ],
+      "risk": "cautious",
+      "roles": [
+        [
+          61,
+          "GK"
+        ],
+        [
+          63,
+          "RB"
+        ],
+        [
+          69,
+          "CB1"
+        ],
+        [
+          66,
+          "CB2"
+        ],
+        [
+          68,
+          "LB"
+        ],
+        [
+          77,
+          "DM"
+        ],
+        [
+          75,
+          "CM1"
+        ],
+        [
+          71,
+          "CM2"
+        ],
+        [
+          82,
+          "RW"
+        ],
+        [
+          81,
+          "LW"
+        ],
+        [
+          80,
+          "ST"
+        ]
+      ],
+      "starters": [
+        61,
+        63,
+        69,
+        66,
+        68,
+        77,
+        75,
+        71,
+        82,
+        81,
+        80
+      ],
+      "starting_names": [
+        "Walter",
+        "Igor Formiga",
+        "Carlos Eduardo",
+        "Reinaldo",
+        "Daniel Borges",
+        "Japa",
+        "Wallisson Luiz",
+        "Neto Moura",
+        "André Luis",
+        "Fernandinho",
+        "Alesson"
+      ],
+      "substitution_minutes": [
+        57,
+        74,
+        82
+      ]
+    },
+    {
+      "bench": [
+        29,
+        4,
+        32,
+        14,
+        384,
+        5,
+        304,
+        7,
+        27,
+        18,
+        25,
+        21
+      ],
+      "bench_names": [
+        "Nuno Moreira",
+        "Paulo Henrique",
+        "Johan Rojas",
+        "Thiago Mendes",
+        "Gustavo Martins",
+        "Alan Saldivia",
+        "Álvaro Barreal",
+        "Cuiabano",
+        "Brenner",
+        "Tchê Tchê",
+        "Bruno Duarte",
+        "Cauan Barros"
+      ],
+      "club_key": "club:15",
+      "coach": "Luan Braga",
+      "defensive_shape": "4-4-2 midblock",
+      "formation": "4-2-3-1 asymmetric",
+      "rationale": [
+        "Selected by recorded IDs, eligibility, positional fit, OVR, fitness, morale, rolling form and continuity",
+        "Risk balanced: coach preference, opponent strength and bounded imperfect judgement",
+        "No guaranteed starter names; no user-mandated changes or outcome-dependent rerolls"
+      ],
+      "risk": "balanced",
+      "roles": [
+        [
+          1,
+          "GK"
+        ],
+        [
+          227,
+          "RB"
+        ],
+        [
+          11,
+          "CB1"
+        ],
+        [
+          6,
+          "CB2"
+        ],
+        [
+          9,
+          "LB"
+        ],
+        [
+          13,
+          "DM1"
+        ],
+        [
+          163,
+          "DM2"
+        ],
+        [
+          15,
+          "AM"
+        ],
+        [
+          23,
+          "RW"
+        ],
+        [
+          24,
+          "LW"
+        ],
+        [
+          401,
+          "ST"
+        ]
+      ],
+      "starters": [
+        1,
+        227,
+        11,
+        6,
+        9,
+        13,
+        163,
+        15,
+        23,
+        24,
+        401
+      ],
+      "starting_names": [
+        "Léo Jardim",
+        "Arthur Dias",
+        "Carlos Cuesta",
+        "Robert Renan",
+        "Lucas Piton",
+        "Santiago Sosa",
+        "Rodrigo Villagra",
+        "Alan Lescano",
+        "Andrés Gómez",
+        "Facundo Colidio",
+        "Carlos Vinícius"
+      ],
+      "substitution_minutes": [
+        56,
+        71,
+        80
+      ]
+    }
+  ],
+  "postmatch_available": false,
+  "prematch": {
+    "away_quality": 76.2482,
+    "away_win_probability": 0.449693799813,
+    "draw_probability": 0.261056266644,
+    "expected_xg": [
+      1.1138,
+      1.4562
+    ],
+    "home_quality": 70.0226,
+    "home_win_probability": 0.289249933543,
+    "method": "Independent Poisson goal approximation from pregame xG; not a guaranteed outcome"
+  },
+  "scope": "NONCANONICAL DEVELOPMENT TEST",
+  "seed_commitment": {
+    "algorithm": "sha256-named-streams/python-random-MT19937-v1",
+    "config_sha256": "bddef82acb796e7e832df8dc945b9062079d039f14b7fdb47021b1bbe0123bec",
+    "namespace": "noncanonical-sandbox",
+    "requested_seed": "task03b-world-demo-v1:league:332",
+    "root_sha256": "8993ae489d3638eb7b06e9bf5df2ded714a50b3b2c87959dff732b209a2018d6",
+    "snapshot_sha256": "9eba43fadc8ca4700d31e89db59ff7c24a63cdeea38cea7aea618d5e6d6d13e0"
+  },
+  "source_sha256": "282d7d61445e4e0e7942aa03e5b23642c80a434e24ffc629773281061d12d927",
+  "synthetic": false
+}

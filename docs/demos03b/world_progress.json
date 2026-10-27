@@ -1,0 +1,29 @@
+{
+  "accepted_clock": "2027-09-26 23:30",
+  "canonical_roster_approval": false,
+  "development_clock": "2027-10-03 20:33:00",
+  "modeled_clubs": 49,
+  "modeled_players": 1276,
+  "official_records_changed": false,
+  "result_delivery": "Full results/standings are private diagnostics; ordinary narration releases only the selected match through its cursor.",
+  "scope": "NONCANONICAL DEVELOPMENT TEST",
+  "validation": {
+    "continental_final": 16,
+    "historical_tables_and_completed_rows_preserved": true,
+    "journal_verified": true,
+    "league_final": 10,
+    "ok": true,
+    "receipts": 26,
+    "rest_exceptions": [
+      {
+        "club": "club:12",
+        "first": "league:382",
+        "hours": 69.0,
+        "inherited": true,
+        "second": "league:393"
+      }
+    ],
+    "scope": "NONCANONICAL DEVELOPMENT TEST"
+  },
+  "world_sha256": "33d9a1899f9b8c724ef97f3eaf4da50bef4a7384426237d0c137bf9b35ccf17d"
+}

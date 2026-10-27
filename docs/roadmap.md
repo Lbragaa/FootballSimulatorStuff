@@ -1,6 +1,6 @@
 # Development roadmap
 
-Current status after Task 03A: exact 046C v2 accepted administratively, PRs #1–#3 merged, working headless regulation engine and noncanonical demonstrations delivered. No official play or time advance. [Task 03A report](task03a_report.md) and [Task 03B plan](task03b_plan.md) define the current boundary. The phase descriptions below retain the original administrative development sequence; pending-acceptance language describes the earlier Task 02B stage.
+Current status after Task 03B: exact 046C v2 accepted administratively, PRs #1–#4 merged, a working regulation engine plus chronological multi-competition development world, proposed foreign squads, player-state persistence and restorable DEV-03B packages delivered. No official play or time advance. [Task 03B report](task03b_report.md) and [Task 03C plan](task03c_plan.md) define the current boundary. The phase descriptions below retain the original administrative development sequence; pending-acceptance language describes the earlier Task 02B stage.
 
 ## Phase 0 — protected foundation (implemented)
 

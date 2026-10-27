@@ -1,0 +1,737 @@
+[
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:10777fd6555063e5",
+    "depth": 25,
+    "mean_ovr": 71.544,
+    "name": "San Lorenzo",
+    "positions": {
+      "DF": 8,
+      "FW": 6,
+      "GK": 3,
+      "MF": 8
+    },
+    "roster_sha256": "8755d7e30bdc1c0c96a82a3d7b7e4a4593dd1eb0a6f193b6a64c5b01a7150407",
+    "strength": 74.15
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:1a096ab64e0aec62",
+    "depth": 25,
+    "mean_ovr": 72.688,
+    "name": "Cerro Porteño",
+    "positions": {
+      "DF": 10,
+      "FW": 5,
+      "GK": 3,
+      "MF": 7
+    },
+    "roster_sha256": "977e1516d7e1269bd62d42c5fc59a31892b6d48658a2baef9be1cb1d408ee711",
+    "strength": 74.45
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:1f31e6f9debb4e9c",
+    "depth": 25,
+    "mean_ovr": 69.14,
+    "name": "El Nacional",
+    "positions": {
+      "DF": 8,
+      "FW": 7,
+      "GK": 3,
+      "MF": 7
+    },
+    "roster_sha256": "c9b042e0b21a40ce501e30f9a103195b2d595f072a6c6c827885c4adc07a47e1",
+    "strength": 70.4
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:2453cb11878edd8c",
+    "depth": 27,
+    "mean_ovr": 73.789,
+    "name": "Atlético Nacional",
+    "positions": {
+      "DF": 10,
+      "FW": 6,
+      "GK": 3,
+      "MF": 8
+    },
+    "roster_sha256": "d2b88227d67f3c415ffc78141f946622f7a8010a304c75e856f55da9ff08a1b6",
+    "strength": 76.3
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:24aa6fa1fda82d03",
+    "depth": 24,
+    "mean_ovr": 68.129,
+    "name": "Liverpool (URU)",
+    "positions": {
+      "DF": 9,
+      "FW": 5,
+      "GK": 3,
+      "MF": 7
+    },
+    "roster_sha256": "2211c03f3a64940064f96ea9a25f0ed89e530f41fe300db6356019d9e0df3eb5",
+    "strength": 71.2
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:2d0e5b1d3ce7ccec",
+    "depth": 26,
+    "mean_ovr": 68.015,
+    "name": "Universidad Católica",
+    "positions": {
+      "DF": 10,
+      "FW": 6,
+      "GK": 3,
+      "MF": 7
+    },
+    "roster_sha256": "7b9e94974415c9c095aa122f7dc7cf05a14d3d76468671a456a78be7efef6c1c",
+    "strength": 70.0
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:2dbd63bc020a81e6",
+    "depth": 26,
+    "mean_ovr": 70.292,
+    "name": "The Strongest",
+    "positions": {
+      "DF": 9,
+      "FW": 7,
+      "GK": 3,
+      "MF": 7
+    },
+    "roster_sha256": "953c2f444e0a2422706fbcd7e5d36c7a1702a646a685bbfd78f81990ee228d00",
+    "strength": 73.1
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:328ad3123647919c",
+    "depth": 28,
+    "mean_ovr": 76.329,
+    "name": "Boca Juniors",
+    "positions": {
+      "DF": 10,
+      "FW": 6,
+      "GK": 3,
+      "MF": 9
+    },
+    "roster_sha256": "fc6262a186345488f568e4a0722ec3033ff84ac7b9a359e5ea59668813583dbe",
+    "strength": 79.2
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:35380835760be593",
+    "depth": 27,
+    "mean_ovr": 68.507,
+    "name": "Sportivo Luqueño",
+    "positions": {
+      "DF": 8,
+      "FW": 6,
+      "GK": 3,
+      "MF": 10
+    },
+    "roster_sha256": "7f243f71d65a9996e9b1812981e77532e9cd84b6d459ee198c743dd26624a5ac",
+    "strength": 70.3
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:35dda9c02eec1ec7",
+    "depth": 27,
+    "mean_ovr": 68.815,
+    "name": "Nacional (URU)",
+    "positions": {
+      "DF": 10,
+      "FW": 7,
+      "GK": 3,
+      "MF": 7
+    },
+    "roster_sha256": "221c3ed9a5053f6453c315c51aa2037140a79ecb8fd40ad8b9ed705c9dd17588",
+    "strength": 70.45
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:4849f4caa8ac6f3c",
+    "depth": 25,
+    "mean_ovr": 73.46,
+    "name": "LDU Quito",
+    "positions": {
+      "DF": 8,
+      "FW": 5,
+      "GK": 3,
+      "MF": 9
+    },
+    "roster_sha256": "21669a155fe16f546264cb4e0da48166fc90a04876721f96b2895cd19d25a852",
+    "strength": 75.85
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:53946ba3c312793e",
+    "depth": 25,
+    "mean_ovr": 68.212,
+    "name": "Independiente",
+    "positions": {
+      "DF": 8,
+      "FW": 6,
+      "GK": 3,
+      "MF": 8
+    },
+    "roster_sha256": "db9954e2b4c31c4fe3e4abb41e2311832d78c341f5f77e35b9396d0cbecdbecd",
+    "strength": 69.85
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:543207748b9d76ec",
+    "depth": 27,
+    "mean_ovr": 71.274,
+    "name": "Defensa y Justicia",
+    "positions": {
+      "DF": 11,
+      "FW": 5,
+      "GK": 3,
+      "MF": 8
+    },
+    "roster_sha256": "d86c53c071adbba9e780c37dac21b59e5a5942d799d13e2523a463e70a61a69a",
+    "strength": 73.7
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:56cee1e9822ba34d",
+    "depth": 24,
+    "mean_ovr": 69.104,
+    "name": "Colo-Colo",
+    "positions": {
+      "DF": 8,
+      "FW": 6,
+      "GK": 3,
+      "MF": 7
+    },
+    "roster_sha256": "45bb9938232e41b3ee416d6e8f794f3a7fe6598d0a70c02b8c49b90307da353d",
+    "strength": 71.55
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:5932b1a8b1d0dd9f",
+    "depth": 28,
+    "mean_ovr": 74.15,
+    "name": "Bolívar",
+    "positions": {
+      "DF": 9,
+      "FW": 6,
+      "GK": 3,
+      "MF": 10
+    },
+    "roster_sha256": "6d910349a1cd247b245d50de71683c916a85d97f98166d3abd23723ff639e252",
+    "strength": 75.5
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:5a2fcd1bfd9e584c",
+    "depth": 26,
+    "mean_ovr": 69.465,
+    "name": "Barcelona SC",
+    "positions": {
+      "DF": 9,
+      "FW": 6,
+      "GK": 3,
+      "MF": 8
+    },
+    "roster_sha256": "bb4de67224345b5b06811beaea99cb5dcfcdba2416483d61145971105207cd25",
+    "strength": 72.0
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:5f110ca0212ab148",
+    "depth": 24,
+    "mean_ovr": 71.104,
+    "name": "Peñarol",
+    "positions": {
+      "DF": 8,
+      "FW": 5,
+      "GK": 3,
+      "MF": 8
+    },
+    "roster_sha256": "0b423db4650a043be0aae30efe006e9c8028de2ae0f4d8e2c690faca8f29c5ed",
+    "strength": 74.0
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:6096f9d4a06b3fe0",
+    "depth": 26,
+    "mean_ovr": 72.662,
+    "name": "Junior de Barranquilla",
+    "positions": {
+      "DF": 9,
+      "FW": 6,
+      "GK": 3,
+      "MF": 8
+    },
+    "roster_sha256": "aca0e5d6ed2e69764e1ca6560a800d83a4602861b37555471849032566f07efe",
+    "strength": 74.2
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:60eb30c4c4620d97",
+    "depth": 28,
+    "mean_ovr": 70.089,
+    "name": "Lanús",
+    "positions": {
+      "DF": 11,
+      "FW": 5,
+      "GK": 3,
+      "MF": 9
+    },
+    "roster_sha256": "c57f2c1ea85e67069881715fa90b37b88d1f18433328470edc666407245ce1d0",
+    "strength": 72.6
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:6217c69339b6e85e",
+    "depth": 28,
+    "mean_ovr": 69.693,
+    "name": "Newell's Old Boys",
+    "positions": {
+      "DF": 9,
+      "FW": 8,
+      "GK": 3,
+      "MF": 8
+    },
+    "roster_sha256": "13fd3ba68d5bf2828b66644c20e2549c06e22d70027f62c9b930ec1561a1135b",
+    "strength": 72.5
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:692953fa2346ee51",
+    "depth": 26,
+    "mean_ovr": 67.842,
+    "name": "Caracas FC",
+    "positions": {
+      "DF": 10,
+      "FW": 5,
+      "GK": 3,
+      "MF": 8
+    },
+    "roster_sha256": "2878fc63defc99369c06c6e5d06903dadd92002a2ade83f37fff4578d43fe19e",
+    "strength": 69.6
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:6d290cf8979c697e",
+    "depth": 26,
+    "mean_ovr": 66.796,
+    "name": "Danubio",
+    "positions": {
+      "DF": 9,
+      "FW": 7,
+      "GK": 3,
+      "MF": 7
+    },
+    "roster_sha256": "5be6f86953125a36611368c452aecc0cebe2a7397cb86e4c4bb2392b5349e6ff",
+    "strength": 69.9
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:6e97caf1910c922c",
+    "depth": 25,
+    "mean_ovr": 73.208,
+    "name": "Libertad",
+    "positions": {
+      "DF": 8,
+      "FW": 6,
+      "GK": 3,
+      "MF": 8
+    },
+    "roster_sha256": "5652d2787eaa22f8c514138c0bf282211b4a85f95beadf11d508ee3f64283383",
+    "strength": 74.0
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:6eded4e498617dff",
+    "depth": 26,
+    "mean_ovr": 71.65,
+    "name": "Huracán",
+    "positions": {
+      "DF": 9,
+      "FW": 5,
+      "GK": 3,
+      "MF": 9
+    },
+    "roster_sha256": "c45fcfb41c8f13db5dca73d4b901ce127c0eaa7056c9ab1a418ec958c9503903",
+    "strength": 73.7
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:6f92f0167ad07335",
+    "depth": 26,
+    "mean_ovr": 67.95,
+    "name": "Olimpia",
+    "positions": {
+      "DF": 10,
+      "FW": 6,
+      "GK": 3,
+      "MF": 7
+    },
+    "roster_sha256": "02f395593efcf711fe7c868740174d228d215fb99540387110dcf7c36599a380",
+    "strength": 71.25
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:751b6aa51663f15a",
+    "depth": 27,
+    "mean_ovr": 73.181,
+    "name": "Argentinos Juniors",
+    "positions": {
+      "DF": 8,
+      "FW": 7,
+      "GK": 3,
+      "MF": 9
+    },
+    "roster_sha256": "8a872ad000fa09ec6fb9bcb438f62698ed23c65b28e5ccddbd87d32991e48d15",
+    "strength": 74.45
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:76ad7747516ce6c1",
+    "depth": 27,
+    "mean_ovr": 69.356,
+    "name": "Platense",
+    "positions": {
+      "DF": 9,
+      "FW": 7,
+      "GK": 3,
+      "MF": 8
+    },
+    "roster_sha256": "0d6fc104fb2075726285e69ea427ad59664a3e95b9daa043a44c7a3ba0dd0412",
+    "strength": 71.9
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:80a504464f353368",
+    "depth": 24,
+    "mean_ovr": 68.158,
+    "name": "Audax Italiano",
+    "positions": {
+      "DF": 8,
+      "FW": 5,
+      "GK": 3,
+      "MF": 8
+    },
+    "roster_sha256": "7f0771ccceeb85568ca7e2a32e24f936b4fa95e063a5e08019eabc25d632652f",
+    "strength": 71.0
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:87b8efa10d8eccc1",
+    "depth": 28,
+    "mean_ovr": 68.064,
+    "name": "Palestino",
+    "positions": {
+      "DF": 10,
+      "FW": 6,
+      "GK": 3,
+      "MF": 9
+    },
+    "roster_sha256": "9f923940ed9f67164ce077238ea04c95a17e9c09b2adf8767afbf3f99c72dee6",
+    "strength": 70.3
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:88cdbbaf3f7fcd14",
+    "depth": 27,
+    "mean_ovr": 67.259,
+    "name": "Universidad de Chile",
+    "positions": {
+      "DF": 9,
+      "FW": 6,
+      "GK": 3,
+      "MF": 9
+    },
+    "roster_sha256": "c9b3ad47350a3903824b63d0cfe7d837058268ec105c9b032389b2cf802ba6c3",
+    "strength": 69.7
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:892d8325ccab217e",
+    "depth": 28,
+    "mean_ovr": 77.818,
+    "name": "River Plate",
+    "positions": {
+      "DF": 11,
+      "FW": 5,
+      "GK": 3,
+      "MF": 9
+    },
+    "roster_sha256": "4fc4c57772b5cc1e07d5a8d3c8a297c50143c227ea1410a58a4f549e11739dbc",
+    "strength": 80.0
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:a2818a7b78dc2795",
+    "depth": 25,
+    "mean_ovr": 72.12,
+    "name": "Independiente del Valle",
+    "positions": {
+      "DF": 9,
+      "FW": 5,
+      "GK": 3,
+      "MF": 8
+    },
+    "roster_sha256": "bbccba5e3984ab31e669953b86a44b6d2b68148bc50e56e8f29f5d4dba64b5e4",
+    "strength": 73.55
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:a936acc99f1ea5b7",
+    "depth": 28,
+    "mean_ovr": 75.168,
+    "name": "Vélez Sarsfield",
+    "positions": {
+      "DF": 11,
+      "FW": 6,
+      "GK": 3,
+      "MF": 8
+    },
+    "roster_sha256": "16811e670fb356ab3dc9e5eb8f6e99499bab8ae2ff3e2e428d50ecbbf2474639",
+    "strength": 76.7
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:af49035a06c4320b",
+    "depth": 26,
+    "mean_ovr": 71.962,
+    "name": "Rosario Central",
+    "positions": {
+      "DF": 9,
+      "FW": 6,
+      "GK": 3,
+      "MF": 8
+    },
+    "roster_sha256": "741b566702a3e24be28b593afdeaaeb62bb52e85415c641af453fb995d1f54c5",
+    "strength": 74.6
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:b0bfc163036b51a0",
+    "depth": 24,
+    "mean_ovr": 70.417,
+    "name": "Millonarios",
+    "positions": {
+      "DF": 8,
+      "FW": 6,
+      "GK": 3,
+      "MF": 7
+    },
+    "roster_sha256": "1a6f81e7da039a44a7344b29ab3a58482b9141212add4ed7f75d69302a0d5f0c",
+    "strength": 72.3
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:bd602776d3ec851b",
+    "depth": 24,
+    "mean_ovr": 68.05,
+    "name": "Defensor Sporting",
+    "positions": {
+      "DF": 9,
+      "FW": 5,
+      "GK": 3,
+      "MF": 7
+    },
+    "roster_sha256": "06d992d73eb9aedfb6fa97c4f9962cfa6393fc72223e437c23b30ac1ec7f620a",
+    "strength": 71.1
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:c7736aea27f345fa",
+    "depth": 26,
+    "mean_ovr": 67.415,
+    "name": "Emelec",
+    "positions": {
+      "DF": 10,
+      "FW": 5,
+      "GK": 3,
+      "MF": 8
+    },
+    "roster_sha256": "c2753d0ff12443b8ab05fafdd1e1a445339323d414633d160b76cc9e288f56b9",
+    "strength": 70.15
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:c84ba7d16b33e5a0",
+    "depth": 28,
+    "mean_ovr": 70.364,
+    "name": "Huachipato",
+    "positions": {
+      "DF": 11,
+      "FW": 5,
+      "GK": 3,
+      "MF": 9
+    },
+    "roster_sha256": "aa6626335d10163371025d4e042903aca1ae3bb018740501f0bbac940d4d9233",
+    "strength": 71.9
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:cb6b0140a169a6fa",
+    "depth": 24,
+    "mean_ovr": 73.471,
+    "name": "Guaraní",
+    "positions": {
+      "DF": 8,
+      "FW": 5,
+      "GK": 3,
+      "MF": 8
+    },
+    "roster_sha256": "41503df44b6063f2cfa1f8c1725c69b9ec97bcde8c7bbc16cd19bbb929eb74eb",
+    "strength": 75.4
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:cd5e264ed3442291",
+    "depth": 28,
+    "mean_ovr": 72.561,
+    "name": "Universitario",
+    "positions": {
+      "DF": 9,
+      "FW": 7,
+      "GK": 3,
+      "MF": 9
+    },
+    "roster_sha256": "78556e661cb14523f14b5f69c930f0e861d4106a77521473c1427f143f0e44ca",
+    "strength": 73.6
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:ce57637c58ef3785",
+    "depth": 27,
+    "mean_ovr": 67.43,
+    "name": "América de Cali",
+    "positions": {
+      "DF": 9,
+      "FW": 6,
+      "GK": 3,
+      "MF": 9
+    },
+    "roster_sha256": "8b179e8d8eddab9f83f50943adc29a492b7d94c7789e09349f4b207ec92a71b4",
+    "strength": 69.4
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:cef9dd403760816f",
+    "depth": 27,
+    "mean_ovr": 70.833,
+    "name": "O'Higgins",
+    "positions": {
+      "DF": 10,
+      "FW": 5,
+      "GK": 3,
+      "MF": 9
+    },
+    "roster_sha256": "5919cb67aac41f6a0da434300a793a56c3097d1ce156e0ecda393613426f760d",
+    "strength": 71.4
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:d38edc92a63ffb28",
+    "depth": 28,
+    "mean_ovr": 68.596,
+    "name": "Racing Club",
+    "positions": {
+      "DF": 11,
+      "FW": 7,
+      "GK": 3,
+      "MF": 7
+    },
+    "roster_sha256": "065e14eec36aca1fdaefff7b077bf8a1cd5e5b8f66d0a3d7171ddadc3508cfff",
+    "strength": 72.6
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:d8e5f48b818810dd",
+    "depth": 24,
+    "mean_ovr": 68.75,
+    "name": "Deportivo Táchira",
+    "positions": {
+      "DF": 9,
+      "FW": 5,
+      "GK": 3,
+      "MF": 7
+    },
+    "roster_sha256": "e8ac6f39b750837dcf0caf74475b47e70c8f43bc601f243e93c14037306d1a00",
+    "strength": 70.5
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:e911eeec72708091",
+    "depth": 28,
+    "mean_ovr": 72.429,
+    "name": "Aucas",
+    "positions": {
+      "DF": 11,
+      "FW": 6,
+      "GK": 3,
+      "MF": 8
+    },
+    "roster_sha256": "a67cb1c7625566a7acf330f486b2f93688205e04fb5763fe62f084206c98f3a0",
+    "strength": 73.5
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:ebeeef29e0a49a7a",
+    "depth": 26,
+    "mean_ovr": 67.835,
+    "name": "Talleres",
+    "positions": {
+      "DF": 10,
+      "FW": 5,
+      "GK": 3,
+      "MF": 8
+    },
+    "roster_sha256": "6785b89aa6bba2643d451e2ac202b785e4e5b38831d002434c667f59932256dd",
+    "strength": 69.1
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:ee557c5d24f14375",
+    "depth": 24,
+    "mean_ovr": 67.0,
+    "name": "2 de Mayo",
+    "positions": {
+      "DF": 8,
+      "FW": 5,
+      "GK": 3,
+      "MF": 8
+    },
+    "roster_sha256": "2306ef8b1370e2927e4fd38649e4d37174b7b19ea3d2b00e001ee633e6b52cd9",
+    "strength": 69.3
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:f9b4a37722d6b48c",
+    "depth": 24,
+    "mean_ovr": 76.133,
+    "name": "Estudiantes",
+    "positions": {
+      "DF": 8,
+      "FW": 5,
+      "GK": 3,
+      "MF": 8
+    },
+    "roster_sha256": "f11fc81a1d67f6dfdbf2e1dd967a92934dd75274c1054f762bab93f153224d58",
+    "strength": 78.4
+  },
+  {
+    "canonical_approval": false,
+    "club_key": "modeled:feecf2d71a317ab7",
+    "depth": 24,
+    "mean_ovr": 69.825,
+    "name": "Sporting Cristal",
+    "positions": {
+      "DF": 9,
+      "FW": 5,
+      "GK": 3,
+      "MF": 7
+    },
+    "roster_sha256": "932f36811f60e85d8f6b9d6afcf566b132007739b3d7ece2ae17ccec729d3051",
+    "strength": 72.4
+  }
+]

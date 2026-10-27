@@ -60,7 +60,9 @@ def test_candidate_state_history_and_finance(candidate, canonical_path):
         assert table_fingerprint(c, "fixtures") == load_baseline()["tables"]["fixtures"]
         assert table_fingerprint(c, "players") == load_baseline()["tables"]["players"]
     assert file_sha256(canonical_path) == load_baseline()["database_sha256"]
-    assert database_path() == canonical_path
+    # Candidate creation never changes acceptance; default reads stay on exact approved 046C.
+    from braga_era.acceptance import catalog
+    assert file_sha256(database_path()) == catalog()['database_sha256']
 
 
 def test_reconciliation_is_byte_and_report_deterministic(candidate, canonical_path, tmp_path):
