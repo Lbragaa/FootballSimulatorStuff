@@ -293,7 +293,7 @@ def manifest_for(ready, accepted_path):
 
 
 def test_gate_requires_separate_signed_execution_and_exact_hash_acceptance(
-    ready, accepted_path, tmp_path
+    ready, accepted_path, tmp_path, monkeypatch
 ):
     key = b"test-only-authority-key-32-bytes!!"
     registry = tmp_path / "authority" / "test.sqlite"
@@ -364,6 +364,21 @@ def test_gate_requires_separate_signed_execution_and_exact_hash_acceptance(
     with pytest.raises(ValueError):
         forward.execute(registry, key, manifest["execution_id"], target, accepted_path)
 
+    def unexpected_replay(*args, **kwargs):
+        raise AssertionError(
+            "Narration should verify signed restoration evidence, not rerun the season"
+        )
+
+    monkeypatch.setattr("braga_era.checkpoints.verify_archive", unexpected_replay)
+    page = forward.gameplay(registry, key, manifest["execution_id"], "next")
+    assert page["test_only"] and page["accepted"] and page["events"]
+    with sqlite3.connect(target / "calculation/database.sqlite") as changed:
+        changed.execute(
+            "UPDATE world_player_state SET state_json='{}' WHERE player_id=(SELECT min(player_id) FROM world_player_state)"
+        )
+    with pytest.raises(ValueError, match="Working forward world"):
+        forward.gameplay(registry, key, manifest["execution_id"], "next")
+
 
 def test_wrong_gate_parent_key_policy_and_fixture_inventory(
     ready, accepted_path, tmp_path
@@ -399,4 +414,24 @@ def test_wrong_gate_parent_key_policy_and_fixture_inventory(
             manifest["execution_id"],
             tmp_path / "bad-batch",
             accepted_path,
+        )
+
+
+def test_new_world_inspection_identifies_compact_profile(ready, capsys):
+    from braga_era.cli import main
+
+    assert main(["inspect", "--db", str(ready / "database.sqlite"), "--json"]) == 0
+    report = json.loads(capsys.readouterr().out)
+    assert report["save_version"] == "DEV-03C" and not report["promotable"]
+    assert "score" not in report and "standings" not in report
+
+
+def test_forward_preparation_rejects_unregistered_future_season(accepted_path):
+    with pytest.raises(ValueError, match="only the remaining"):
+        forward.prepare(
+            accepted_path,
+            until="2028-01-01 12:00",
+            fixtures=["league:333"],
+            seed="wrong-season",
+            execution_id="wrong-season",
         )

@@ -108,7 +108,13 @@ def prepare(parent, *, until, fixtures, seed, execution_id):
 
     if file_sha256(parent) != catalog()["database_sha256"]:
         raise ValueError("Exact accepted parent required")
-    moment(until)
+    boundary = moment(until)
+    if boundary.tzinfo is not None or not moment(
+        "2027-09-26 23:30"
+    ) < boundary <= moment("2027-12-31 23:59:59"):
+        raise ValueError(
+            "The registered initial forward profile covers only the remaining naive-time 2027 agenda"
+        )
     if (
         not execution_id
         or not seed
@@ -346,6 +352,13 @@ def execute(registry, key, execution_id, directory, parent, *, crash=None):
             archive = directory / "successor-calculation.zip"
             if not archive.exists():
                 export_world(world, archive)
+            else:
+                from .checkpoints import verify_archive
+
+                if verify_archive(archive)["metadata"]["world_sha256"] != world_hash:
+                    raise ValueError(
+                        "Interrupted export differs from the committed calculation"
+                    )
             # The wrapper is a distinct registered candidate, never DEV renamed to 047.
             candidate = {
                 "profile": PROFILE,
@@ -359,16 +372,38 @@ def execute(registry, key, execution_id, directory, parent, *, crash=None):
                 "receipt_inventory": receipts,
             }
             write_json(directory / "forward_candidate.json", candidate)
-            c.execute(
-                "UPDATE batches SET state='candidate',candidate_hash=? WHERE id=?",
-                (digest(candidate), execution_id),
-            )
+            attestation = {
+                "candidate_sha256": digest(candidate),
+                "world_sha256": world_hash,
+                "independent_restoration": True,
+                "test_only": bool(trusted["test_only"]),
+            }
+            c.execute("BEGIN IMMEDIATE")
+            try:
+                c.execute(
+                    "UPDATE batches SET state='candidate',candidate_hash=? WHERE id=?",
+                    (digest(candidate), execution_id),
+                )
+                c.execute(
+                    "INSERT INTO decisions(batch,kind,document,signature) VALUES(?,?,?,?)",
+                    (
+                        execution_id,
+                        "validation",
+                        encode(attestation),
+                        sign(key, attestation),
+                    ),
+                )
+                c.commit()
+            except BaseException:
+                c.rollback()
+                raise
             return verify_candidate(directory, registry, key)
 
 
 @scoped
-def verify_candidate(directory, registry, key):
+def verify_candidate(directory, registry, key, *, replay=True):
     from .checkpoints import verify_archive
+    from .world.packages import fingerprints
 
     directory = Path(directory)
     candidate = read_json(directory / "forward_candidate.json")
@@ -397,22 +432,42 @@ def verify_candidate(directory, registry, key):
             receipt["signature"], sign(key, json.loads(receipt["document"]))
         ):
             raise ValueError("Authorization receipt signature mismatch")
+        checked = c.execute(
+            "SELECT * FROM decisions WHERE batch=? AND kind='validation'", (row["id"],)
+        ).fetchone()
+        expected = {
+            "candidate_sha256": digest(candidate),
+            "world_sha256": candidate["world_sha256"],
+            "independent_restoration": True,
+            "test_only": bool(trusted["test_only"]),
+        }
+        if (
+            not checked
+            or json.loads(checked["document"]) != expected
+            or not hmac.compare_digest(checked["signature"], sign(key, expected))
+        ):
+            raise ValueError("Missing or changed signed independent-validation receipt")
     archive = directory / "successor-calculation.zip"
     if file_sha256(archive) != candidate["calculation_archive_sha256"]:
         raise ValueError("Forward successor archive changed")
-    verified = verify_archive(archive)
-    if (
-        verified["metadata"]["world_sha256"] != candidate["world_sha256"]
-        or verified["metadata"]["parent_sha256"]
-        != candidate["manifest"]["parent_sha256"]
-    ):
-        raise ValueError("Independent forward restoration differs")
+    if replay:
+        verified = verify_archive(archive)
+        if (
+            verified["metadata"]["world_sha256"] != candidate["world_sha256"]
+            or verified["metadata"]["parent_sha256"]
+            != candidate["manifest"]["parent_sha256"]
+        ):
+            raise ValueError("Independent forward restoration differs")
+    with connect_read_only(directory / "calculation/database.sqlite") as world:
+        if digest(fingerprints(world)) != candidate["world_sha256"]:
+            raise ValueError("Working forward world differs from validated candidate")
     return {
         "ok": True,
         "candidate_sha256": digest(candidate),
         "scope": candidate["scope"],
         "test_only": candidate["test_only"],
         "independent_restoration": True,
+        "replayed_this_call": replay,
         "promotion_required": True,
     }
 
@@ -479,7 +534,7 @@ def gameplay(registry, key, execution_id, command, fixture=None, count=1):
         row = c.execute("SELECT * FROM batches WHERE id=?", (execution_id,)).fetchone()
         if not row or row["state"] not in ("candidate", "accepted"):
             raise ValueError("No validated forward candidate for gameplay")
-        verified = verify_candidate(row["candidate_path"], registry, key)
+        verified = verify_candidate(row["candidate_path"], registry, key, replay=False)
         value = handoff(
             Path(row["candidate_path"]) / "calculation", command, fixture, count
         )

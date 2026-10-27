@@ -199,7 +199,7 @@ followed by independent restore and a separate successor acceptance decision.
 
 The unchanged baseline passed 197 tests; the expanded suite passed 207 tests in
 469.76 seconds, followed by 11 readiness tests in 73.75 seconds after the additional
-stage-draw recovery test. The final CI suite includes 208 tests. Checks cover all
+stage-draw recovery test. The final suite includes 210 tests, including explicit DEV-03C inspection and unsupported future-season rejection. Checks cover all
 prior six execution crash stages, locks/concurrent runners, transaction rollback,
 original/accepted hashes, tampered archives/history/journals, unsupported versions,
 fitness/bans/contracts/identity, payroll idempotency, mixed neutral/nonneutral
@@ -217,3 +217,40 @@ month end (the accepted September 26 accrual remains R$1,559,000.01 in its immut
 source); October-December are R$1,805,000 each under existing contracts. The test
 account closes at R$23,335,333.33, above the unchanged R$16m reserve; no authority
 budget, capital, award or revenue is invented.
+
+## Portable artifact inventory
+
+Final primary archive: `output/task03c-final-primary.zip`, SHA256
+`d283775188e324db636606a628543f3ca766ab790beb0fa312cd694eb581ee8a`,
+11,468,311 compressed bytes. Independent restoration at
+`output/task03c-final-primary-restored` completed with full deterministic replay.
+The ZIP is intentionally a local/CI artifact rather than a committed save binary.
+The [verification inventory](validation/task03c_verification.json) records payload
+size, protected hashes and test evidence. PR [#6](https://github.com/Lbragaa/FootballSimulatorStuff/pull/6)
+remains open and unmerged. Cross-platform final job results are recorded there.
+
+The installed 0.6.0 wheel independently restored the full primary ZIP from an
+outside working directory using Python `-S` and only the isolated installed
+package on PYTHONPATH. The restored world fingerprint exactly matched the
+primary. The 1,200-trial calibration was repeated and reproduced digest
+`84ecb58ee9696f11353d6782d834d87561ad3d644b2b01112e2b6c0f39513052`.
+
+Forward gameplay verifies a signed independent-validation attestation, exact
+archive hash and current working-world fingerprint (excluding narration cursors).
+It does not rerun a season for every narration page. Candidate creation, explicit
+verification and promotion retain full restoration/replay. Tampering with the
+working calculation is rejected before Hikari sees it, even if the original
+archive remains intact. Candidate state and signed validation receipt are committed
+atomically. The initial official profile rejects 2028/time-zone boundaries.
+
+## Final verification pass
+
+The final local suite passed **210 tests in 460.46 seconds** on Windows/Python
+3.12.14. The first PR matrix, run
+[40583274560](https://github.com/Lbragaa/FootballSimulatorStuff/actions/runs/40583274560),
+passed all six jobs at implementation commit
+`3b939c16863422d1f6d69752bcdc76c405287152`: 208 tests per job, both old regulation
+regressions, the unchanged Task 03B demo, and the 217-match golden season on every
+OS/Python combination. Linux 3.12 also passed the complete season archive's full
+independent restore/replay. The final additional authorization/delivery hardening
+has 210 local tests; its matrix is tracked by the current PR head checks.

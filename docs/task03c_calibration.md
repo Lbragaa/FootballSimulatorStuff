@@ -24,3 +24,14 @@ Rare events remain uncertain: the six cells contain 306 player dismissals in 1,2
 Foreign roster review: all 49 modeled clubs retain the 1,276 V1 fictional identities and immutable provenance. Depths 24/25/26/27/28 occur for 11/7/11/9/11 clubs. Each roster has three goalkeepers and a mixed outfield reserve. Club power ranges 69.1-80; average squad OVR ranges 66.796-77.818. The JSON lists each club, positional counts, GK distribution and starter/reserve OVR gap. Recorded LIB power and documented SULA pot/group-points priors remain separate evidence types. Nationality, age, salary and historical appearances are not invented. Three GKs at every club is a deliberate availability floor, not observed history.
 
 There is no independent evidence that justifies changing the committed V1 foreign player identities/attributes. Retain the proposed roster version for this review. Its limited strength range, generic names, missing ages and uncertain countries are disclosed limits; accepting the roster does not accept any match or seed. Fitness recovery remains 1.5 points per elapsed day, with exact appearance stints and one shared cross-competition state; the full-season artifacts provide longer-run sensitivity evidence. No autonomous transfer market or invented training workload is introduced.
+
+Recreate the original calibration inputs on a fresh installation before running
+the command above (the exact accepted parent path may differ):
+
+```text
+python -c "from braga_era.world.storage import create; from braga_era.world.policy import ReadinessPolicy20; create('output/accepted-046c/database.sqlite','output/task03c-calibration-world','task03c-calibration-fixed',ReadinessPolicy20())"
+```
+
+This pins the preserved preliminary 2.0 world input identity used for this Monte
+Carlo. It evaluates regulation configurations 1.0.0 and 1.1.0; the later 2.1
+shootout eligibility correction does not enter these regulation-only trials.

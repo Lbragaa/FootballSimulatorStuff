@@ -107,7 +107,7 @@ eligibility exclusions and forecast uncertainty without a result.
 
 User: “Continue to halftime.”
 
-Runtime: repeatedly requests chronological narration pages, stopping when
+Runtime: repeatedly requests one-event narration pages (`--count 1`), stopping when
 `HALF_TIME` appears. Hikari reports only delivered events. The final result is
 still withheld even though it is already durably calculated.
 
