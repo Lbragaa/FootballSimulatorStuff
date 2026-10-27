@@ -1,0 +1,25 @@
+{
+  "accepted_at_utc": "2026-10-24T15:02:22.486772+00:00",
+  "accepted_version": "046C",
+  "approvals": [
+    "controlled_70_future_kickoffs_36_date_changes_pin_mirassol_vasco",
+    "72h_turnaround_including_travel_one_inherited_exception_foreign_calendar_limits",
+    "accept_candidate_hash_and_provisionally_supported_payroll_policy"
+  ],
+  "approved_implementation": "509555d96cc0841dbe67caf65260fed6ca9bf897",
+  "authority": "Explicit commissioner approval in user-provided Task 03A, Part A",
+  "database_sha256": "27eb5d94478c2539b28085e669675e184ab2842be3d7ab1549864f2a422b6cf7",
+  "fictional_date_unchanged": "2027-09-26 23:30",
+  "instruction_sha256": "cb8af0663b00c0c3eb893bc5736cb99989d7426afc51fc2e6f1e80cac8ce55aa",
+  "official_match_execution_authorized": false,
+  "package_sha256": "df3c8820b4bb05df9af14359aa9f9aea4d67f68456701a08cecaad11438142e8",
+  "parent_sha256": "de58ac7f7942ef6048f002312cdc90314b26dc06a9853a59acaab1d5f88f4b28",
+  "parent_version": "046",
+  "proposal_revision": "v2",
+  "verification": {
+    "audit_checks": 36,
+    "audit_failures": 0,
+    "exact_hashes": true,
+    "independent_restoration": true
+  }
+}

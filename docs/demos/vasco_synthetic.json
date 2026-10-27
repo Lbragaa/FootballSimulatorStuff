@@ -1,0 +1,5851 @@
+{
+  "config": {
+    "assist_probability": 0.72,
+    "away_base_xg": 1.2,
+    "chance_beta_a": 1.5,
+    "chance_beta_b": 12,
+    "club_quality_weight": 0.71,
+    "composure_probability_weight": 0.003,
+    "finishing_attack_weight": 0.002,
+    "finishing_form_weight": 0.25,
+    "fitness_loss_max": 8,
+    "fitness_loss_min": 3,
+    "fitness_quality_weight": 0.02,
+    "goalkeeper_probability_weight": 0.006,
+    "home_base_xg": 1.55,
+    "individual_form_weight": 0.45,
+    "injury_absence_days": 5,
+    "injury_probability_per_match": 0.015,
+    "isolated_rng_streams": true,
+    "lineup_form_weight": 2.1,
+    "live_attack_xg_multiplier": 1.08,
+    "live_caution_xg_multiplier": 0.94,
+    "maximum_substitution_windows": 3,
+    "maximum_substitutions": 5,
+    "maximum_yellow_events_per_team": 4,
+    "missing_player_xg_penalty": 0.1,
+    "quality_difference_xg": 0.054,
+    "shot_count_lambda": 11,
+    "shot_maximum": 21,
+    "shot_minimum": 5,
+    "shot_strength_coefficient": 0.08,
+    "stoppage_minutes": 3,
+    "straight_red_probability_per_team": 0.035,
+    "team_form_weight": 0.42,
+    "version": "braga-headless-1.0.0",
+    "xi_quality_weight": 0.29,
+    "yellow_lambda": 1.55
+  },
+  "database_guard": {
+    "after_sha256": "27eb5d94478c2539b28085e669675e184ab2842be3d7ab1549864f2a422b6cf7",
+    "before_sha256": "27eb5d94478c2539b28085e669675e184ab2842be3d7ab1549864f2a422b6cf7",
+    "unchanged": true
+  },
+  "official": false,
+  "parameter_provenance": {
+    "explicit_new_extensions": "bounded goalkeeper/composure/attack finishing, straight/second-yellow reds, exact stints/event sequence, symmetric live tactics, timed injuries, named RNG streams",
+    "fitness": "Pregame fitness is the observed checkpoint value; no unplayed intervening matches or recovery is silently assumed",
+    "latest_adjustments": "run046.py: form-weighted lineup/quality/finishing; active-player cards",
+    "legacy_reference": "engine_2027_reference.py, inspected as text; never imported or executed",
+    "no_vasco_bonus": "The same quality/tactic/finishing functions apply to every club; identity affects coach profile only",
+    "retained": "quality weights, home advantage, Poisson shot counts, beta chance sizes, assist probability, yellow rate, rare injury, bounded ratings/fitness loss",
+    "training": "R25 -0.06 opponent xG was consumed historically and is not applied to future/synthetic matches"
+  },
+  "result": {
+    "config_sha256": "bddef82acb796e7e832df8dc945b9062079d039f14b7fdb47021b1bbe0123bec",
+    "duration_seconds": 5580,
+    "engine_version": "braga-headless-1.0.0",
+    "events": [
+      {
+        "club_key": null,
+        "details": {
+          "duration_seconds": 5580,
+          "scope": "NONCANONICAL TEST SIMULATION"
+        },
+        "elapsed_seconds": 0,
+        "kind": "KICKOFF",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          353,
+          354,
+          355
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          13,
+          14,
+          15,
+          23,
+          24,
+          227,
+          384,
+          401
+        ],
+        "period": "1",
+        "player_id": null,
+        "post_score": [
+          0,
+          0
+        ],
+        "pre_score": [
+          0,
+          0
+        ],
+        "sequence": 1
+      },
+      {
+        "club_key": "club:5",
+        "details": {
+          "goal": false,
+          "goal_probability": 0.2883465,
+          "goalkeeper_id": 1,
+          "on_target": false,
+          "shot_id": 1,
+          "xg": 0.2015
+        },
+        "elapsed_seconds": 180,
+        "kind": "SHOT",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          353,
+          354,
+          355
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          13,
+          14,
+          15,
+          23,
+          24,
+          227,
+          384,
+          401
+        ],
+        "period": "1",
+        "player_id": 354,
+        "post_score": [
+          0,
+          0
+        ],
+        "pre_score": [
+          0,
+          0
+        ],
+        "sequence": 2
+      },
+      {
+        "club_key": "club:15",
+        "details": {
+          "goal": false,
+          "goal_probability": 0.11413219,
+          "goalkeeper_id": 337,
+          "on_target": false,
+          "shot_id": 2,
+          "xg": 0.1133
+        },
+        "elapsed_seconds": 953,
+        "kind": "SHOT",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          353,
+          354,
+          355
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          13,
+          14,
+          15,
+          23,
+          24,
+          227,
+          384,
+          401
+        ],
+        "period": "1",
+        "player_id": 14,
+        "post_score": [
+          0,
+          0
+        ],
+        "pre_score": [
+          0,
+          0
+        ],
+        "sequence": 3
+      },
+      {
+        "club_key": "club:5",
+        "details": {
+          "goal": false,
+          "goal_probability": 0.17569834,
+          "goalkeeper_id": 1,
+          "on_target": true,
+          "shot_id": 3,
+          "xg": 0.1756
+        },
+        "elapsed_seconds": 957,
+        "kind": "SHOT",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          353,
+          354,
+          355
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          13,
+          14,
+          15,
+          23,
+          24,
+          227,
+          384,
+          401
+        ],
+        "period": "1",
+        "player_id": 347,
+        "post_score": [
+          0,
+          0
+        ],
+        "pre_score": [
+          0,
+          0
+        ],
+        "sequence": 4
+      },
+      {
+        "club_key": "club:15",
+        "details": {
+          "shooter_id": 347,
+          "shot_id": 3
+        },
+        "elapsed_seconds": 957,
+        "kind": "SAVE",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          353,
+          354,
+          355
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          13,
+          14,
+          15,
+          23,
+          24,
+          227,
+          384,
+          401
+        ],
+        "period": "1",
+        "player_id": 1,
+        "post_score": [
+          0,
+          0
+        ],
+        "pre_score": [
+          0,
+          0
+        ],
+        "sequence": 5
+      },
+      {
+        "club_key": "club:15",
+        "details": {
+          "goal": false,
+          "goal_probability": 0.06303528,
+          "goalkeeper_id": 337,
+          "on_target": false,
+          "shot_id": 4,
+          "xg": 0.0568
+        },
+        "elapsed_seconds": 1060,
+        "kind": "SHOT",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          353,
+          354,
+          355
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          13,
+          14,
+          15,
+          23,
+          24,
+          227,
+          384,
+          401
+        ],
+        "period": "1",
+        "player_id": 401,
+        "post_score": [
+          0,
+          0
+        ],
+        "pre_score": [
+          0,
+          0
+        ],
+        "sequence": 6
+      },
+      {
+        "club_key": "club:15",
+        "details": {
+          "goal": true,
+          "goal_probability": 0.35546125,
+          "goalkeeper_id": 337,
+          "on_target": true,
+          "shot_id": 5,
+          "xg": 0.3203
+        },
+        "elapsed_seconds": 1526,
+        "kind": "SHOT",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          353,
+          354,
+          355
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          13,
+          14,
+          15,
+          23,
+          24,
+          227,
+          384,
+          401
+        ],
+        "period": "1",
+        "player_id": 401,
+        "post_score": [
+          0,
+          0
+        ],
+        "pre_score": [
+          0,
+          0
+        ],
+        "sequence": 7
+      },
+      {
+        "club_key": "club:15",
+        "details": {
+          "assist_id": 14,
+          "shot_id": 5
+        },
+        "elapsed_seconds": 1526,
+        "kind": "GOAL",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          353,
+          354,
+          355
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          13,
+          14,
+          15,
+          23,
+          24,
+          227,
+          384,
+          401
+        ],
+        "period": "1",
+        "player_id": 401,
+        "post_score": [
+          1,
+          0
+        ],
+        "pre_score": [
+          0,
+          0
+        ],
+        "sequence": 8
+      },
+      {
+        "club_key": "club:5",
+        "details": {
+          "goal": false,
+          "goal_probability": 0.16430826,
+          "goalkeeper_id": 1,
+          "on_target": false,
+          "shot_id": 6,
+          "xg": 0.1258
+        },
+        "elapsed_seconds": 1639,
+        "kind": "SHOT",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          353,
+          354,
+          355
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          13,
+          14,
+          15,
+          23,
+          24,
+          227,
+          384,
+          401
+        ],
+        "period": "1",
+        "player_id": 355,
+        "post_score": [
+          1,
+          0
+        ],
+        "pre_score": [
+          1,
+          0
+        ],
+        "sequence": 9
+      },
+      {
+        "club_key": "club:5",
+        "details": {
+          "yellow_count": 1
+        },
+        "elapsed_seconds": 1739,
+        "kind": "YELLOW_CARD",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          353,
+          354,
+          355
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          13,
+          14,
+          15,
+          23,
+          24,
+          227,
+          384,
+          401
+        ],
+        "period": "1",
+        "player_id": 347,
+        "post_score": [
+          1,
+          0
+        ],
+        "pre_score": [
+          1,
+          0
+        ],
+        "sequence": 10
+      },
+      {
+        "club_key": "club:5",
+        "details": {
+          "goal": false,
+          "goal_probability": 0.17462688,
+          "goalkeeper_id": 1,
+          "on_target": false,
+          "shot_id": 7,
+          "xg": 0.1445
+        },
+        "elapsed_seconds": 1805,
+        "kind": "SHOT",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          353,
+          354,
+          355
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          13,
+          14,
+          15,
+          23,
+          24,
+          227,
+          384,
+          401
+        ],
+        "period": "1",
+        "player_id": 351,
+        "post_score": [
+          1,
+          0
+        ],
+        "pre_score": [
+          1,
+          0
+        ],
+        "sequence": 11
+      },
+      {
+        "club_key": "club:5",
+        "details": {
+          "goal": false,
+          "goal_probability": 0.11727696,
+          "goalkeeper_id": 1,
+          "on_target": false,
+          "shot_id": 8,
+          "xg": 0.0969
+        },
+        "elapsed_seconds": 1880,
+        "kind": "SHOT",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          353,
+          354,
+          355
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          13,
+          14,
+          15,
+          23,
+          24,
+          227,
+          384,
+          401
+        ],
+        "period": "1",
+        "player_id": 353,
+        "post_score": [
+          1,
+          0
+        ],
+        "pre_score": [
+          1,
+          0
+        ],
+        "sequence": 12
+      },
+      {
+        "club_key": "club:5",
+        "details": {
+          "goal": false,
+          "goal_probability": 0.14745948,
+          "goalkeeper_id": 1,
+          "on_target": true,
+          "shot_id": 9,
+          "xg": 0.1129
+        },
+        "elapsed_seconds": 2027,
+        "kind": "SHOT",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          353,
+          354,
+          355
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          13,
+          14,
+          15,
+          23,
+          24,
+          227,
+          384,
+          401
+        ],
+        "period": "1",
+        "player_id": 355,
+        "post_score": [
+          1,
+          0
+        ],
+        "pre_score": [
+          1,
+          0
+        ],
+        "sequence": 13
+      },
+      {
+        "club_key": "club:15",
+        "details": {
+          "shooter_id": 355,
+          "shot_id": 9
+        },
+        "elapsed_seconds": 2027,
+        "kind": "SAVE",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          353,
+          354,
+          355
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          13,
+          14,
+          15,
+          23,
+          24,
+          227,
+          384,
+          401
+        ],
+        "period": "1",
+        "player_id": 1,
+        "post_score": [
+          1,
+          0
+        ],
+        "pre_score": [
+          1,
+          0
+        ],
+        "sequence": 14
+      },
+      {
+        "club_key": "club:5",
+        "details": {
+          "goal": false,
+          "goal_probability": 0.15048422,
+          "goalkeeper_id": 1,
+          "on_target": false,
+          "shot_id": 10,
+          "xg": 0.1504
+        },
+        "elapsed_seconds": 2658,
+        "kind": "SHOT",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          353,
+          354,
+          355
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          13,
+          14,
+          15,
+          23,
+          24,
+          227,
+          384,
+          401
+        ],
+        "period": "1",
+        "player_id": 347,
+        "post_score": [
+          1,
+          0
+        ],
+        "pre_score": [
+          1,
+          0
+        ],
+        "sequence": 15
+      },
+      {
+        "club_key": null,
+        "details": {},
+        "elapsed_seconds": 2700,
+        "kind": "HALF_TIME",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          353,
+          354,
+          355
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          13,
+          14,
+          15,
+          23,
+          24,
+          227,
+          384,
+          401
+        ],
+        "period": "1",
+        "player_id": null,
+        "post_score": [
+          1,
+          0
+        ],
+        "pre_score": [
+          1,
+          0
+        ],
+        "sequence": 16
+      },
+      {
+        "club_key": null,
+        "details": {},
+        "elapsed_seconds": 2700,
+        "kind": "SECOND_HALF_KICKOFF",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          353,
+          354,
+          355
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          13,
+          14,
+          15,
+          23,
+          24,
+          227,
+          384,
+          401
+        ],
+        "period": "2",
+        "player_id": null,
+        "post_score": [
+          1,
+          0
+        ],
+        "pre_score": [
+          1,
+          0
+        ],
+        "sequence": 17
+      },
+      {
+        "club_key": "club:15",
+        "details": {
+          "goal": true,
+          "goal_probability": 0.23957096,
+          "goalkeeper_id": 337,
+          "on_target": true,
+          "shot_id": 11,
+          "xg": 0.1806
+        },
+        "elapsed_seconds": 3212,
+        "kind": "SHOT",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          353,
+          354,
+          355
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          13,
+          14,
+          15,
+          23,
+          24,
+          227,
+          384,
+          401
+        ],
+        "period": "2",
+        "player_id": 23,
+        "post_score": [
+          1,
+          0
+        ],
+        "pre_score": [
+          1,
+          0
+        ],
+        "sequence": 18
+      },
+      {
+        "club_key": "club:15",
+        "details": {
+          "assist_id": null,
+          "shot_id": 11
+        },
+        "elapsed_seconds": 3212,
+        "kind": "GOAL",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          353,
+          354,
+          355
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          13,
+          14,
+          15,
+          23,
+          24,
+          227,
+          384,
+          401
+        ],
+        "period": "2",
+        "player_id": 23,
+        "post_score": [
+          2,
+          0
+        ],
+        "pre_score": [
+          1,
+          0
+        ],
+        "sequence": 19
+      },
+      {
+        "club_key": "club:15",
+        "details": {
+          "yellow_count": 1
+        },
+        "elapsed_seconds": 3216,
+        "kind": "YELLOW_CARD",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          353,
+          354,
+          355
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          13,
+          14,
+          15,
+          23,
+          24,
+          227,
+          384,
+          401
+        ],
+        "period": "2",
+        "player_id": 11,
+        "post_score": [
+          2,
+          0
+        ],
+        "pre_score": [
+          2,
+          0
+        ],
+        "sequence": 20
+      },
+      {
+        "club_key": "club:5",
+        "details": {
+          "goal": false,
+          "goal_probability": 0.05167932,
+          "goalkeeper_id": 1,
+          "on_target": false,
+          "shot_id": 12,
+          "xg": 0.0427
+        },
+        "elapsed_seconds": 3482,
+        "kind": "SHOT",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          353,
+          354,
+          355
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          13,
+          14,
+          15,
+          23,
+          24,
+          227,
+          384,
+          401
+        ],
+        "period": "2",
+        "player_id": 353,
+        "post_score": [
+          2,
+          0
+        ],
+        "pre_score": [
+          2,
+          0
+        ],
+        "sequence": 21
+      },
+      {
+        "club_key": "club:5",
+        "details": {
+          "goal": false,
+          "goal_probability": 0.09077164,
+          "goalkeeper_id": 1,
+          "on_target": false,
+          "shot_id": 13,
+          "xg": 0.075
+        },
+        "elapsed_seconds": 3587,
+        "kind": "SHOT",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          353,
+          354,
+          355
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          13,
+          14,
+          15,
+          23,
+          24,
+          227,
+          384,
+          401
+        ],
+        "period": "2",
+        "player_id": 353,
+        "post_score": [
+          2,
+          0
+        ],
+        "pre_score": [
+          2,
+          0
+        ],
+        "sequence": 22
+      },
+      {
+        "club_key": "club:15",
+        "details": {
+          "outgoing_id": 15,
+          "reason": "score-aware positional refresh"
+        },
+        "elapsed_seconds": 3660,
+        "kind": "SUBSTITUTION",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          353,
+          354,
+          355
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          13,
+          14,
+          23,
+          24,
+          227,
+          304,
+          384,
+          401
+        ],
+        "period": "2",
+        "player_id": 304,
+        "post_score": [
+          2,
+          0
+        ],
+        "pre_score": [
+          2,
+          0
+        ],
+        "sequence": 23
+      },
+      {
+        "club_key": "club:5",
+        "details": {
+          "after": "attacking",
+          "before": "balanced",
+          "reason": "Autonomous live score/workload decision"
+        },
+        "elapsed_seconds": 3660,
+        "kind": "TACTICAL_CHANGE",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          353,
+          354,
+          355
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          13,
+          14,
+          23,
+          24,
+          227,
+          304,
+          384,
+          401
+        ],
+        "period": "2",
+        "player_id": null,
+        "post_score": [
+          2,
+          0
+        ],
+        "pre_score": [
+          2,
+          0
+        ],
+        "sequence": 24
+      },
+      {
+        "club_key": "club:5",
+        "details": {
+          "outgoing_id": 353,
+          "reason": "score-aware positional refresh"
+        },
+        "elapsed_seconds": 3660,
+        "kind": "SUBSTITUTION",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          354,
+          355,
+          356
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          13,
+          14,
+          23,
+          24,
+          227,
+          304,
+          384,
+          401
+        ],
+        "period": "2",
+        "player_id": 356,
+        "post_score": [
+          2,
+          0
+        ],
+        "pre_score": [
+          2,
+          0
+        ],
+        "sequence": 25
+      },
+      {
+        "club_key": "club:15",
+        "details": {
+          "goal": false,
+          "goal_probability": 0.13296954,
+          "goalkeeper_id": 337,
+          "on_target": true,
+          "shot_id": 14,
+          "xg": 0.132
+        },
+        "elapsed_seconds": 3726,
+        "kind": "SHOT",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          354,
+          355,
+          356
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          13,
+          14,
+          23,
+          24,
+          227,
+          304,
+          384,
+          401
+        ],
+        "period": "2",
+        "player_id": 14,
+        "post_score": [
+          2,
+          0
+        ],
+        "pre_score": [
+          2,
+          0
+        ],
+        "sequence": 26
+      },
+      {
+        "club_key": "club:5",
+        "details": {
+          "shooter_id": 14,
+          "shot_id": 14
+        },
+        "elapsed_seconds": 3726,
+        "kind": "SAVE",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          354,
+          355,
+          356
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          13,
+          14,
+          23,
+          24,
+          227,
+          304,
+          384,
+          401
+        ],
+        "period": "2",
+        "player_id": 337,
+        "post_score": [
+          2,
+          0
+        ],
+        "pre_score": [
+          2,
+          0
+        ],
+        "sequence": 27
+      },
+      {
+        "club_key": "club:5",
+        "details": {
+          "goal": false,
+          "goal_probability": 0.02220382,
+          "goalkeeper_id": 1,
+          "on_target": false,
+          "shot_id": 15,
+          "xg": 0.017
+        },
+        "elapsed_seconds": 3872,
+        "kind": "SHOT",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          354,
+          355,
+          356
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          13,
+          14,
+          23,
+          24,
+          227,
+          304,
+          384,
+          401
+        ],
+        "period": "2",
+        "player_id": 355,
+        "post_score": [
+          2,
+          0
+        ],
+        "pre_score": [
+          2,
+          0
+        ],
+        "sequence": 28
+      },
+      {
+        "club_key": "club:15",
+        "details": {
+          "goal": false,
+          "goal_probability": 0.23061145,
+          "goalkeeper_id": 337,
+          "on_target": true,
+          "shot_id": 16,
+          "xg": 0.2078
+        },
+        "elapsed_seconds": 4109,
+        "kind": "SHOT",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          354,
+          355,
+          356
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          13,
+          14,
+          23,
+          24,
+          227,
+          304,
+          384,
+          401
+        ],
+        "period": "2",
+        "player_id": 401,
+        "post_score": [
+          2,
+          0
+        ],
+        "pre_score": [
+          2,
+          0
+        ],
+        "sequence": 29
+      },
+      {
+        "club_key": "club:5",
+        "details": {
+          "shooter_id": 401,
+          "shot_id": 16
+        },
+        "elapsed_seconds": 4109,
+        "kind": "SAVE",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          354,
+          355,
+          356
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          13,
+          14,
+          23,
+          24,
+          227,
+          304,
+          384,
+          401
+        ],
+        "period": "2",
+        "player_id": 337,
+        "post_score": [
+          2,
+          0
+        ],
+        "pre_score": [
+          2,
+          0
+        ],
+        "sequence": 30
+      },
+      {
+        "club_key": "club:15",
+        "details": {
+          "after": "cautious",
+          "before": "balanced",
+          "reason": "Autonomous live score/workload decision"
+        },
+        "elapsed_seconds": 4200,
+        "kind": "TACTICAL_CHANGE",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          354,
+          355,
+          356
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          13,
+          14,
+          23,
+          24,
+          227,
+          304,
+          384,
+          401
+        ],
+        "period": "2",
+        "player_id": null,
+        "post_score": [
+          2,
+          0
+        ],
+        "pre_score": [
+          2,
+          0
+        ],
+        "sequence": 31
+      },
+      {
+        "club_key": "club:15",
+        "details": {
+          "outgoing_id": 13,
+          "reason": "score-aware positional refresh"
+        },
+        "elapsed_seconds": 4200,
+        "kind": "SUBSTITUTION",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          354,
+          355,
+          356
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          14,
+          23,
+          24,
+          163,
+          227,
+          304,
+          384,
+          401
+        ],
+        "period": "2",
+        "player_id": 163,
+        "post_score": [
+          2,
+          0
+        ],
+        "pre_score": [
+          2,
+          0
+        ],
+        "sequence": 32
+      },
+      {
+        "club_key": "club:15",
+        "details": {
+          "goal": false,
+          "goal_probability": 0.3243361,
+          "goalkeeper_id": 337,
+          "on_target": true,
+          "shot_id": 17,
+          "xg": 0.2445
+        },
+        "elapsed_seconds": 4281,
+        "kind": "SHOT",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          354,
+          355,
+          356
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          14,
+          23,
+          24,
+          163,
+          227,
+          304,
+          384,
+          401
+        ],
+        "period": "2",
+        "player_id": 23,
+        "post_score": [
+          2,
+          0
+        ],
+        "pre_score": [
+          2,
+          0
+        ],
+        "sequence": 33
+      },
+      {
+        "club_key": "club:5",
+        "details": {
+          "shooter_id": 23,
+          "shot_id": 17
+        },
+        "elapsed_seconds": 4281,
+        "kind": "SAVE",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          354,
+          355,
+          356
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          14,
+          23,
+          24,
+          163,
+          227,
+          304,
+          384,
+          401
+        ],
+        "period": "2",
+        "player_id": 337,
+        "post_score": [
+          2,
+          0
+        ],
+        "pre_score": [
+          2,
+          0
+        ],
+        "sequence": 34
+      },
+      {
+        "club_key": "club:5",
+        "details": {
+          "outgoing_id": 354,
+          "reason": "score-aware positional refresh"
+        },
+        "elapsed_seconds": 4500,
+        "kind": "SUBSTITUTION",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          355,
+          356,
+          357
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          14,
+          23,
+          24,
+          163,
+          227,
+          304,
+          384,
+          401
+        ],
+        "period": "2",
+        "player_id": 357,
+        "post_score": [
+          2,
+          0
+        ],
+        "pre_score": [
+          2,
+          0
+        ],
+        "sequence": 35
+      },
+      {
+        "club_key": "club:5",
+        "details": {
+          "goal": false,
+          "goal_probability": 0.11065884,
+          "goalkeeper_id": 1,
+          "on_target": true,
+          "shot_id": 18,
+          "xg": 0.1137
+        },
+        "elapsed_seconds": 4588,
+        "kind": "SHOT",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          355,
+          356,
+          357
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          14,
+          23,
+          24,
+          163,
+          227,
+          304,
+          384,
+          401
+        ],
+        "period": "2",
+        "player_id": 357,
+        "post_score": [
+          2,
+          0
+        ],
+        "pre_score": [
+          2,
+          0
+        ],
+        "sequence": 36
+      },
+      {
+        "club_key": "club:15",
+        "details": {
+          "shooter_id": 357,
+          "shot_id": 18
+        },
+        "elapsed_seconds": 4588,
+        "kind": "SAVE",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          355,
+          356,
+          357
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          14,
+          23,
+          24,
+          163,
+          227,
+          304,
+          384,
+          401
+        ],
+        "period": "2",
+        "player_id": 1,
+        "post_score": [
+          2,
+          0
+        ],
+        "pre_score": [
+          2,
+          0
+        ],
+        "sequence": 37
+      },
+      {
+        "club_key": "club:15",
+        "details": {
+          "goal": false,
+          "goal_probability": 0.17736836,
+          "goalkeeper_id": 337,
+          "on_target": false,
+          "shot_id": 19,
+          "xg": 0.1516
+        },
+        "elapsed_seconds": 4674,
+        "kind": "SHOT",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          355,
+          356,
+          357
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          14,
+          23,
+          24,
+          163,
+          227,
+          304,
+          384,
+          401
+        ],
+        "period": "2",
+        "player_id": 24,
+        "post_score": [
+          2,
+          0
+        ],
+        "pre_score": [
+          2,
+          0
+        ],
+        "sequence": 38
+      },
+      {
+        "club_key": "club:5",
+        "details": {
+          "outgoing_id": 355,
+          "reason": "score-aware positional refresh"
+        },
+        "elapsed_seconds": 4860,
+        "kind": "SUBSTITUTION",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          356,
+          357,
+          358
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          14,
+          23,
+          24,
+          163,
+          227,
+          304,
+          384,
+          401
+        ],
+        "period": "2",
+        "player_id": 358,
+        "post_score": [
+          2,
+          0
+        ],
+        "pre_score": [
+          2,
+          0
+        ],
+        "sequence": 39
+      },
+      {
+        "club_key": "club:15",
+        "details": {
+          "outgoing_id": 163,
+          "reason": "score-aware positional refresh"
+        },
+        "elapsed_seconds": 5100,
+        "kind": "SUBSTITUTION",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          356,
+          357,
+          358
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          14,
+          18,
+          23,
+          24,
+          227,
+          304,
+          384,
+          401
+        ],
+        "period": "2",
+        "player_id": 18,
+        "post_score": [
+          2,
+          0
+        ],
+        "pre_score": [
+          2,
+          0
+        ],
+        "sequence": 40
+      },
+      {
+        "club_key": "club:5",
+        "details": {
+          "goal": false,
+          "goal_probability": 0.02743273,
+          "goalkeeper_id": 1,
+          "on_target": false,
+          "shot_id": 20,
+          "xg": 0.0227
+        },
+        "elapsed_seconds": 5289,
+        "kind": "SHOT",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          356,
+          357,
+          358
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          14,
+          18,
+          23,
+          24,
+          227,
+          304,
+          384,
+          401
+        ],
+        "period": "2",
+        "player_id": 351,
+        "post_score": [
+          2,
+          0
+        ],
+        "pre_score": [
+          2,
+          0
+        ],
+        "sequence": 41
+      },
+      {
+        "club_key": "club:15",
+        "details": {
+          "yellow_count": 1
+        },
+        "elapsed_seconds": 5335,
+        "kind": "YELLOW_CARD",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          356,
+          357,
+          358
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          14,
+          18,
+          23,
+          24,
+          227,
+          304,
+          384,
+          401
+        ],
+        "period": "2",
+        "player_id": 304,
+        "post_score": [
+          2,
+          0
+        ],
+        "pre_score": [
+          2,
+          0
+        ],
+        "sequence": 42
+      },
+      {
+        "club_key": "club:15",
+        "details": {
+          "goal": false,
+          "goal_probability": 0.05117313,
+          "goalkeeper_id": 337,
+          "on_target": false,
+          "shot_id": 21,
+          "xg": 0.0508
+        },
+        "elapsed_seconds": 5432,
+        "kind": "SHOT",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          356,
+          357,
+          358
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          14,
+          18,
+          23,
+          24,
+          227,
+          304,
+          384,
+          401
+        ],
+        "period": "2",
+        "player_id": 14,
+        "post_score": [
+          2,
+          0
+        ],
+        "pre_score": [
+          2,
+          0
+        ],
+        "sequence": 43
+      },
+      {
+        "club_key": "club:15",
+        "details": {
+          "goal": false,
+          "goal_probability": 0.02091622,
+          "goalkeeper_id": 337,
+          "on_target": false,
+          "shot_id": 22,
+          "xg": 0.022
+        },
+        "elapsed_seconds": 5475,
+        "kind": "SHOT",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          356,
+          357,
+          358
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          14,
+          18,
+          23,
+          24,
+          227,
+          304,
+          384,
+          401
+        ],
+        "period": "2",
+        "player_id": 18,
+        "post_score": [
+          2,
+          0
+        ],
+        "pre_score": [
+          2,
+          0
+        ],
+        "sequence": 44
+      },
+      {
+        "club_key": null,
+        "details": {},
+        "elapsed_seconds": 5580,
+        "kind": "FINAL_WHISTLE",
+        "on_field_away": [
+          337,
+          340,
+          341,
+          342,
+          343,
+          347,
+          351,
+          352,
+          356,
+          357,
+          358
+        ],
+        "on_field_home": [
+          1,
+          6,
+          11,
+          14,
+          18,
+          23,
+          24,
+          227,
+          304,
+          384,
+          401
+        ],
+        "period": "2",
+        "player_id": null,
+        "post_score": [
+          2,
+          0
+        ],
+        "pre_score": [
+          2,
+          0
+        ],
+        "sequence": 45
+      }
+    ],
+    "fixture_key": "synthetic:Vasco:Fluminense",
+    "performances": [
+      {
+        "assists": 0,
+        "club_key": "club:15",
+        "fitness_after": 64.79,
+        "fitness_before": 69,
+        "form_after": 7.015,
+        "form_before": 6.911,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 77,
+        "morale_before": 75,
+        "on_target": 0,
+        "player_id": 1,
+        "rating": 7.1,
+        "red": false,
+        "saves": 3,
+        "seconds_played": 5580,
+        "shots": 0,
+        "starter": true,
+        "xg": 0.0,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:15",
+        "fitness_after": 73.98,
+        "fitness_before": 78,
+        "form_after": 6.862,
+        "form_before": 6.866,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 66,
+        "morale_before": 64,
+        "on_target": 0,
+        "player_id": 6,
+        "rating": 6.8,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 5580,
+        "shots": 0,
+        "starter": true,
+        "xg": 0.0,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:15",
+        "fitness_after": 91.65,
+        "fitness_before": 96,
+        "form_after": 6.687,
+        "form_before": 6.643,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 59,
+        "morale_before": 57,
+        "on_target": 0,
+        "player_id": 11,
+        "rating": 6.7,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 5580,
+        "shots": 0,
+        "starter": true,
+        "xg": 0.0,
+        "yellows": 1
+      },
+      {
+        "assists": 0,
+        "club_key": "club:15",
+        "fitness_after": 68.14,
+        "fitness_before": 73,
+        "form_after": 6.774,
+        "form_before": 6.724,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 80,
+        "morale_before": 78,
+        "on_target": 0,
+        "player_id": 13,
+        "rating": 6.8,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 4200,
+        "shots": 0,
+        "starter": true,
+        "xg": 0.0,
+        "yellows": 0
+      },
+      {
+        "assists": 1,
+        "club_key": "club:15",
+        "fitness_after": 86.76,
+        "fitness_before": 90,
+        "form_after": 6.988,
+        "form_before": 6.704,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 86,
+        "morale_before": 84,
+        "on_target": 1,
+        "player_id": 14,
+        "rating": 7.3,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 5580,
+        "shots": 3,
+        "starter": true,
+        "xg": 0.2961,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:15",
+        "fitness_after": 66.97,
+        "fitness_before": 70,
+        "form_after": 6.875,
+        "form_before": 6.824,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 67,
+        "morale_before": 65,
+        "on_target": 0,
+        "player_id": 15,
+        "rating": 6.9,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 3660,
+        "shots": 0,
+        "starter": true,
+        "xg": 0.0,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:15",
+        "fitness_after": 99.48,
+        "fitness_before": 100,
+        "form_after": 6.6,
+        "form_before": 6.6,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 72,
+        "morale_before": 70,
+        "on_target": 0,
+        "player_id": 18,
+        "rating": 6.6,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 480,
+        "shots": 1,
+        "starter": false,
+        "xg": 0.022,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:15",
+        "fitness_after": 64.7,
+        "fitness_before": 68,
+        "form_after": 7.908,
+        "form_before": 7.814,
+        "goals": 1,
+        "injured": false,
+        "morale_after": 73,
+        "morale_before": 71,
+        "on_target": 2,
+        "player_id": 23,
+        "rating": 8.0,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 5580,
+        "shots": 2,
+        "starter": true,
+        "xg": 0.4251,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:15",
+        "fitness_after": 62.7,
+        "fitness_before": 68,
+        "form_after": 7.211,
+        "form_before": 7.306,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 61,
+        "morale_before": 59,
+        "on_target": 0,
+        "player_id": 24,
+        "rating": 6.9,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 5580,
+        "shots": 1,
+        "starter": true,
+        "xg": 0.1516,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:15",
+        "fitness_after": 74.48,
+        "fitness_before": 75,
+        "form_after": 6.886,
+        "form_before": 6.862,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 79,
+        "morale_before": 77,
+        "on_target": 0,
+        "player_id": 163,
+        "rating": 6.8,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 900,
+        "shots": 0,
+        "starter": false,
+        "xg": 0.0,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:15",
+        "fitness_after": 79.98,
+        "fitness_before": 85,
+        "form_after": 6.763,
+        "form_before": 6.72,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 53,
+        "morale_before": 51,
+        "on_target": 0,
+        "player_id": 227,
+        "rating": 6.8,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 5580,
+        "shots": 0,
+        "starter": true,
+        "xg": 0.0,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:15",
+        "fitness_after": 97.38,
+        "fitness_before": 100,
+        "form_after": 6.654,
+        "form_before": 6.7,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 76,
+        "morale_before": 74,
+        "on_target": 0,
+        "player_id": 304,
+        "rating": 6.6,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 1920,
+        "shots": 0,
+        "starter": false,
+        "xg": 0.0,
+        "yellows": 1
+      },
+      {
+        "assists": 0,
+        "club_key": "club:5",
+        "fitness_after": 71.12,
+        "fitness_before": 75,
+        "form_after": 6.8,
+        "form_before": 6.872,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 64,
+        "morale_before": 66,
+        "on_target": 0,
+        "player_id": 337,
+        "rating": 6.7,
+        "red": false,
+        "saves": 3,
+        "seconds_played": 5580,
+        "shots": 0,
+        "starter": true,
+        "xg": 0.0,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:5",
+        "fitness_after": 68.52,
+        "fitness_before": 72,
+        "form_after": 6.902,
+        "form_before": 7.129,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 64,
+        "morale_before": 66,
+        "on_target": 0,
+        "player_id": 340,
+        "rating": 6.5,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 5580,
+        "shots": 0,
+        "starter": true,
+        "xg": 0.0,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:5",
+        "fitness_after": 74.3,
+        "fitness_before": 80,
+        "form_after": 6.802,
+        "form_before": 6.991,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 62,
+        "morale_before": 64,
+        "on_target": 0,
+        "player_id": 341,
+        "rating": 6.4,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 5580,
+        "shots": 0,
+        "starter": true,
+        "xg": 0.0,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:5",
+        "fitness_after": 66.33,
+        "fitness_before": 72,
+        "form_after": 6.587,
+        "form_before": 6.713,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 79,
+        "morale_before": 81,
+        "on_target": 0,
+        "player_id": 342,
+        "rating": 6.4,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 5580,
+        "shots": 0,
+        "starter": true,
+        "xg": 0.0,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:5",
+        "fitness_after": 66.89,
+        "fitness_before": 75,
+        "form_after": 6.779,
+        "form_before": 6.948,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 67,
+        "morale_before": 69,
+        "on_target": 0,
+        "player_id": 343,
+        "rating": 6.5,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 5580,
+        "shots": 0,
+        "starter": true,
+        "xg": 0.0,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:5",
+        "fitness_after": 83.79,
+        "fitness_before": 89,
+        "form_after": 6.44,
+        "form_before": 6.719,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 79,
+        "morale_before": 81,
+        "on_target": 1,
+        "player_id": 347,
+        "rating": 6.2,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 5580,
+        "shots": 2,
+        "starter": true,
+        "xg": 0.326,
+        "yellows": 1
+      },
+      {
+        "assists": 0,
+        "club_key": "club:5",
+        "fitness_after": 70.38,
+        "fitness_before": 78,
+        "form_after": 7.16,
+        "form_before": 7.513,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 72,
+        "morale_before": 74,
+        "on_target": 0,
+        "player_id": 351,
+        "rating": 6.6,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 5580,
+        "shots": 2,
+        "starter": true,
+        "xg": 0.1672,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:5",
+        "fitness_after": 91.74,
+        "fitness_before": 96,
+        "form_after": 6.487,
+        "form_before": 6.7,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 70,
+        "morale_before": 72,
+        "on_target": 0,
+        "player_id": 352,
+        "rating": 6.3,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 5580,
+        "shots": 0,
+        "starter": true,
+        "xg": 0.0,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:5",
+        "fitness_after": 69.86,
+        "fitness_before": 72,
+        "form_after": 6.993,
+        "form_before": 7.396,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 78,
+        "morale_before": 80,
+        "on_target": 0,
+        "player_id": 353,
+        "rating": 6.6,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 3660,
+        "shots": 3,
+        "starter": true,
+        "xg": 0.2146,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:5",
+        "fitness_after": 67.22,
+        "fitness_before": 73,
+        "form_after": 7.785,
+        "form_before": 8.274,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 76,
+        "morale_before": 78,
+        "on_target": 0,
+        "player_id": 354,
+        "rating": 6.8,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 4500,
+        "shots": 1,
+        "starter": true,
+        "xg": 0.2015,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:5",
+        "fitness_after": 80.6,
+        "fitness_before": 84,
+        "form_after": 7.397,
+        "form_before": 7.764,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 66,
+        "morale_before": 68,
+        "on_target": 1,
+        "player_id": 355,
+        "rating": 6.7,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 4860,
+        "shots": 3,
+        "starter": true,
+        "xg": 0.2557,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:5",
+        "fitness_after": 97.8,
+        "fitness_before": 100,
+        "form_after": 6.567,
+        "form_before": 6.73,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 55,
+        "morale_before": 57,
+        "on_target": 0,
+        "player_id": 356,
+        "rating": 6.3,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 1920,
+        "shots": 0,
+        "starter": false,
+        "xg": 0.0,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:5",
+        "fitness_after": 98.63,
+        "fitness_before": 100,
+        "form_after": 6.48,
+        "form_before": 6.601,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 68,
+        "morale_before": 70,
+        "on_target": 1,
+        "player_id": 357,
+        "rating": 6.3,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 1080,
+        "shots": 1,
+        "starter": false,
+        "xg": 0.1137,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:5",
+        "fitness_after": 99.45,
+        "fitness_before": 100,
+        "form_after": 6.2,
+        "form_before": 6.317,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 71,
+        "morale_before": 73,
+        "on_target": 0,
+        "player_id": 358,
+        "rating": 6.2,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 720,
+        "shots": 0,
+        "starter": false,
+        "xg": 0.0,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:15",
+        "fitness_after": 92.47,
+        "fitness_before": 100,
+        "form_after": 6.743,
+        "form_before": 6.711,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 70,
+        "morale_before": 68,
+        "on_target": 0,
+        "player_id": 384,
+        "rating": 6.7,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 5580,
+        "shots": 0,
+        "starter": true,
+        "xg": 0.0,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:15",
+        "fitness_after": 87.39,
+        "fitness_before": 92,
+        "form_after": 7.387,
+        "form_before": 6.998,
+        "goals": 1,
+        "injured": false,
+        "morale_after": 62,
+        "morale_before": 60,
+        "on_target": 2,
+        "player_id": 401,
+        "rating": 7.7,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 5580,
+        "shots": 3,
+        "starter": true,
+        "xg": 0.5849,
+        "yellows": 0
+      }
+    ],
+    "plans": [
+      {
+        "bench": [
+          163,
+          25,
+          29,
+          304,
+          21,
+          7,
+          9,
+          5,
+          28,
+          4,
+          32,
+          18
+        ],
+        "club_key": "club:15",
+        "coach": "Luan Braga",
+        "defensive_shape": "4-4-2 midblock",
+        "formation": "4-2-3-1 asymmetric",
+        "rationale": [
+          "Selected by recorded IDs, eligibility, positional fit, OVR, fitness, morale, rolling form and continuity",
+          "Risk balanced: coach preference, opponent strength and bounded imperfect judgement",
+          "No guaranteed starter names; no user-mandated changes or outcome-dependent rerolls"
+        ],
+        "risk": "balanced",
+        "roles": [
+          [
+            1,
+            "GK"
+          ],
+          [
+            11,
+            "RB"
+          ],
+          [
+            6,
+            "CB1"
+          ],
+          [
+            227,
+            "CB2"
+          ],
+          [
+            384,
+            "LB"
+          ],
+          [
+            13,
+            "DM1"
+          ],
+          [
+            15,
+            "DM2"
+          ],
+          [
+            14,
+            "AM"
+          ],
+          [
+            23,
+            "RW"
+          ],
+          [
+            24,
+            "LW"
+          ],
+          [
+            401,
+            "ST"
+          ]
+        ],
+        "starters": [
+          1,
+          11,
+          6,
+          227,
+          384,
+          13,
+          15,
+          14,
+          23,
+          24,
+          401
+        ],
+        "substitution_minutes": [
+          61,
+          70,
+          85
+        ]
+      },
+      {
+        "bench": [
+          349,
+          348,
+          345,
+          357,
+          346,
+          338,
+          344,
+          358,
+          356,
+          350,
+          339
+        ],
+        "club_key": "club:5",
+        "coach": "Modeled autonomous Fluminense coach",
+        "defensive_shape": "4-4-2",
+        "formation": "4-3-3",
+        "rationale": [
+          "Selected by recorded IDs, eligibility, positional fit, OVR, fitness, morale, rolling form and continuity",
+          "Risk balanced: coach preference, opponent strength and bounded imperfect judgement",
+          "No guaranteed starter names; no user-mandated changes or outcome-dependent rerolls"
+        ],
+        "risk": "balanced",
+        "roles": [
+          [
+            337,
+            "GK"
+          ],
+          [
+            340,
+            "RB"
+          ],
+          [
+            342,
+            "CB1"
+          ],
+          [
+            343,
+            "CB2"
+          ],
+          [
+            341,
+            "LB"
+          ],
+          [
+            351,
+            "DM"
+          ],
+          [
+            347,
+            "CM1"
+          ],
+          [
+            352,
+            "CM2"
+          ],
+          [
+            355,
+            "RW"
+          ],
+          [
+            354,
+            "LW"
+          ],
+          [
+            353,
+            "ST"
+          ]
+        ],
+        "starters": [
+          337,
+          340,
+          342,
+          343,
+          341,
+          351,
+          347,
+          352,
+          355,
+          354,
+          353
+        ],
+        "substitution_minutes": [
+          61,
+          75,
+          81
+        ]
+      }
+    ],
+    "possession_home": 45.5,
+    "prematch": {
+      "away_quality": 77.3766,
+      "away_win_probability": 0.32630912496,
+      "draw_probability": 0.25391503168,
+      "expected_xg": [
+        1.4774,
+        1.2726
+      ],
+      "home_quality": 76.033,
+      "home_win_probability": 0.41977584336,
+      "method": "Independent Poisson goal approximation from pregame xG; not a guaranteed outcome"
+    },
+    "scope": "NONCANONICAL TEST SIMULATION",
+    "score": [
+      2,
+      0
+    ],
+    "seeds": {
+      "algorithm": "sha256-named-streams/python-random-MT19937-v1",
+      "config_sha256": "bddef82acb796e7e832df8dc945b9062079d039f14b7fdb47021b1bbe0123bec",
+      "namespace": "noncanonical-sandbox",
+      "requested_seed": "task03a-vasco-synthetic",
+      "root_sha256": "c1900233e58087a14a9e0db22fec3b95c5e2ef5fd6bd3b849ef7e97b17272268",
+      "snapshot_sha256": "8db695f213f94682d9ccd4d8975e00d07f800b00fb98dd20f53428fea3b48f49"
+    },
+    "shots": [
+      {
+        "assist_id": null,
+        "club_key": "club:5",
+        "elapsed_seconds": 180,
+        "goal": false,
+        "goal_probability": 0.2883465,
+        "goalkeeper_id": 1,
+        "id": 1,
+        "on_target": false,
+        "player_id": 354,
+        "xg": 0.2015
+      },
+      {
+        "assist_id": null,
+        "club_key": "club:15",
+        "elapsed_seconds": 953,
+        "goal": false,
+        "goal_probability": 0.11413219,
+        "goalkeeper_id": 337,
+        "id": 2,
+        "on_target": false,
+        "player_id": 14,
+        "xg": 0.1133
+      },
+      {
+        "assist_id": null,
+        "club_key": "club:5",
+        "elapsed_seconds": 957,
+        "goal": false,
+        "goal_probability": 0.17569834,
+        "goalkeeper_id": 1,
+        "id": 3,
+        "on_target": true,
+        "player_id": 347,
+        "xg": 0.1756
+      },
+      {
+        "assist_id": null,
+        "club_key": "club:15",
+        "elapsed_seconds": 1060,
+        "goal": false,
+        "goal_probability": 0.06303528,
+        "goalkeeper_id": 337,
+        "id": 4,
+        "on_target": false,
+        "player_id": 401,
+        "xg": 0.0568
+      },
+      {
+        "assist_id": 14,
+        "club_key": "club:15",
+        "elapsed_seconds": 1526,
+        "goal": true,
+        "goal_probability": 0.35546125,
+        "goalkeeper_id": 337,
+        "id": 5,
+        "on_target": true,
+        "player_id": 401,
+        "xg": 0.3203
+      },
+      {
+        "assist_id": null,
+        "club_key": "club:5",
+        "elapsed_seconds": 1639,
+        "goal": false,
+        "goal_probability": 0.16430826,
+        "goalkeeper_id": 1,
+        "id": 6,
+        "on_target": false,
+        "player_id": 355,
+        "xg": 0.1258
+      },
+      {
+        "assist_id": null,
+        "club_key": "club:5",
+        "elapsed_seconds": 1805,
+        "goal": false,
+        "goal_probability": 0.17462688,
+        "goalkeeper_id": 1,
+        "id": 7,
+        "on_target": false,
+        "player_id": 351,
+        "xg": 0.1445
+      },
+      {
+        "assist_id": null,
+        "club_key": "club:5",
+        "elapsed_seconds": 1880,
+        "goal": false,
+        "goal_probability": 0.11727696,
+        "goalkeeper_id": 1,
+        "id": 8,
+        "on_target": false,
+        "player_id": 353,
+        "xg": 0.0969
+      },
+      {
+        "assist_id": null,
+        "club_key": "club:5",
+        "elapsed_seconds": 2027,
+        "goal": false,
+        "goal_probability": 0.14745948,
+        "goalkeeper_id": 1,
+        "id": 9,
+        "on_target": true,
+        "player_id": 355,
+        "xg": 0.1129
+      },
+      {
+        "assist_id": null,
+        "club_key": "club:5",
+        "elapsed_seconds": 2658,
+        "goal": false,
+        "goal_probability": 0.15048422,
+        "goalkeeper_id": 1,
+        "id": 10,
+        "on_target": false,
+        "player_id": 347,
+        "xg": 0.1504
+      },
+      {
+        "assist_id": null,
+        "club_key": "club:15",
+        "elapsed_seconds": 3212,
+        "goal": true,
+        "goal_probability": 0.23957096,
+        "goalkeeper_id": 337,
+        "id": 11,
+        "on_target": true,
+        "player_id": 23,
+        "xg": 0.1806
+      },
+      {
+        "assist_id": null,
+        "club_key": "club:5",
+        "elapsed_seconds": 3482,
+        "goal": false,
+        "goal_probability": 0.05167932,
+        "goalkeeper_id": 1,
+        "id": 12,
+        "on_target": false,
+        "player_id": 353,
+        "xg": 0.0427
+      },
+      {
+        "assist_id": null,
+        "club_key": "club:5",
+        "elapsed_seconds": 3587,
+        "goal": false,
+        "goal_probability": 0.09077164,
+        "goalkeeper_id": 1,
+        "id": 13,
+        "on_target": false,
+        "player_id": 353,
+        "xg": 0.075
+      },
+      {
+        "assist_id": null,
+        "club_key": "club:15",
+        "elapsed_seconds": 3726,
+        "goal": false,
+        "goal_probability": 0.13296954,
+        "goalkeeper_id": 337,
+        "id": 14,
+        "on_target": true,
+        "player_id": 14,
+        "xg": 0.132
+      },
+      {
+        "assist_id": null,
+        "club_key": "club:5",
+        "elapsed_seconds": 3872,
+        "goal": false,
+        "goal_probability": 0.02220382,
+        "goalkeeper_id": 1,
+        "id": 15,
+        "on_target": false,
+        "player_id": 355,
+        "xg": 0.017
+      },
+      {
+        "assist_id": null,
+        "club_key": "club:15",
+        "elapsed_seconds": 4109,
+        "goal": false,
+        "goal_probability": 0.23061145,
+        "goalkeeper_id": 337,
+        "id": 16,
+        "on_target": true,
+        "player_id": 401,
+        "xg": 0.2078
+      },
+      {
+        "assist_id": null,
+        "club_key": "club:15",
+        "elapsed_seconds": 4281,
+        "goal": false,
+        "goal_probability": 0.3243361,
+        "goalkeeper_id": 337,
+        "id": 17,
+        "on_target": true,
+        "player_id": 23,
+        "xg": 0.2445
+      },
+      {
+        "assist_id": null,
+        "club_key": "club:5",
+        "elapsed_seconds": 4588,
+        "goal": false,
+        "goal_probability": 0.11065884,
+        "goalkeeper_id": 1,
+        "id": 18,
+        "on_target": true,
+        "player_id": 357,
+        "xg": 0.1137
+      },
+      {
+        "assist_id": null,
+        "club_key": "club:15",
+        "elapsed_seconds": 4674,
+        "goal": false,
+        "goal_probability": 0.17736836,
+        "goalkeeper_id": 337,
+        "id": 19,
+        "on_target": false,
+        "player_id": 24,
+        "xg": 0.1516
+      },
+      {
+        "assist_id": null,
+        "club_key": "club:5",
+        "elapsed_seconds": 5289,
+        "goal": false,
+        "goal_probability": 0.02743273,
+        "goalkeeper_id": 1,
+        "id": 20,
+        "on_target": false,
+        "player_id": 351,
+        "xg": 0.0227
+      },
+      {
+        "assist_id": null,
+        "club_key": "club:15",
+        "elapsed_seconds": 5432,
+        "goal": false,
+        "goal_probability": 0.05117313,
+        "goalkeeper_id": 337,
+        "id": 21,
+        "on_target": false,
+        "player_id": 14,
+        "xg": 0.0508
+      },
+      {
+        "assist_id": null,
+        "club_key": "club:15",
+        "elapsed_seconds": 5475,
+        "goal": false,
+        "goal_probability": 0.02091622,
+        "goalkeeper_id": 337,
+        "id": 22,
+        "on_target": false,
+        "player_id": 18,
+        "xg": 0.022
+      }
+    ],
+    "snapshot_sha256": "8db695f213f94682d9ccd4d8975e00d07f800b00fb98dd20f53428fea3b48f49"
+  },
+  "result_sha256": "ccf264435df61cdbc67cfc130bfd7cb4309d405781cb46db04950ab5c4446eb3",
+  "runtime": {
+    "platform": "Windows",
+    "python": "3.12.14"
+  },
+  "scope": "NONCANONICAL TEST SIMULATION",
+  "sealed_postmatch_summary": {
+    "away": "Fluminense",
+    "fixture_key": "synthetic:Vasco:Fluminense",
+    "home": "Vasco",
+    "performances": [
+      {
+        "assists": 0,
+        "club_key": "club:15",
+        "fitness_after": 64.79,
+        "fitness_before": 69,
+        "form_after": 7.015,
+        "form_before": 6.911,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 77,
+        "morale_before": 75,
+        "on_target": 0,
+        "player_id": 1,
+        "rating": 7.1,
+        "red": false,
+        "saves": 3,
+        "seconds_played": 5580,
+        "shots": 0,
+        "starter": true,
+        "xg": 0.0,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:15",
+        "fitness_after": 73.98,
+        "fitness_before": 78,
+        "form_after": 6.862,
+        "form_before": 6.866,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 66,
+        "morale_before": 64,
+        "on_target": 0,
+        "player_id": 6,
+        "rating": 6.8,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 5580,
+        "shots": 0,
+        "starter": true,
+        "xg": 0.0,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:15",
+        "fitness_after": 91.65,
+        "fitness_before": 96,
+        "form_after": 6.687,
+        "form_before": 6.643,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 59,
+        "morale_before": 57,
+        "on_target": 0,
+        "player_id": 11,
+        "rating": 6.7,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 5580,
+        "shots": 0,
+        "starter": true,
+        "xg": 0.0,
+        "yellows": 1
+      },
+      {
+        "assists": 0,
+        "club_key": "club:15",
+        "fitness_after": 68.14,
+        "fitness_before": 73,
+        "form_after": 6.774,
+        "form_before": 6.724,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 80,
+        "morale_before": 78,
+        "on_target": 0,
+        "player_id": 13,
+        "rating": 6.8,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 4200,
+        "shots": 0,
+        "starter": true,
+        "xg": 0.0,
+        "yellows": 0
+      },
+      {
+        "assists": 1,
+        "club_key": "club:15",
+        "fitness_after": 86.76,
+        "fitness_before": 90,
+        "form_after": 6.988,
+        "form_before": 6.704,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 86,
+        "morale_before": 84,
+        "on_target": 1,
+        "player_id": 14,
+        "rating": 7.3,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 5580,
+        "shots": 3,
+        "starter": true,
+        "xg": 0.2961,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:15",
+        "fitness_after": 66.97,
+        "fitness_before": 70,
+        "form_after": 6.875,
+        "form_before": 6.824,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 67,
+        "morale_before": 65,
+        "on_target": 0,
+        "player_id": 15,
+        "rating": 6.9,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 3660,
+        "shots": 0,
+        "starter": true,
+        "xg": 0.0,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:15",
+        "fitness_after": 99.48,
+        "fitness_before": 100,
+        "form_after": 6.6,
+        "form_before": 6.6,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 72,
+        "morale_before": 70,
+        "on_target": 0,
+        "player_id": 18,
+        "rating": 6.6,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 480,
+        "shots": 1,
+        "starter": false,
+        "xg": 0.022,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:15",
+        "fitness_after": 64.7,
+        "fitness_before": 68,
+        "form_after": 7.908,
+        "form_before": 7.814,
+        "goals": 1,
+        "injured": false,
+        "morale_after": 73,
+        "morale_before": 71,
+        "on_target": 2,
+        "player_id": 23,
+        "rating": 8.0,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 5580,
+        "shots": 2,
+        "starter": true,
+        "xg": 0.4251,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:15",
+        "fitness_after": 62.7,
+        "fitness_before": 68,
+        "form_after": 7.211,
+        "form_before": 7.306,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 61,
+        "morale_before": 59,
+        "on_target": 0,
+        "player_id": 24,
+        "rating": 6.9,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 5580,
+        "shots": 1,
+        "starter": true,
+        "xg": 0.1516,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:15",
+        "fitness_after": 74.48,
+        "fitness_before": 75,
+        "form_after": 6.886,
+        "form_before": 6.862,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 79,
+        "morale_before": 77,
+        "on_target": 0,
+        "player_id": 163,
+        "rating": 6.8,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 900,
+        "shots": 0,
+        "starter": false,
+        "xg": 0.0,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:15",
+        "fitness_after": 79.98,
+        "fitness_before": 85,
+        "form_after": 6.763,
+        "form_before": 6.72,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 53,
+        "morale_before": 51,
+        "on_target": 0,
+        "player_id": 227,
+        "rating": 6.8,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 5580,
+        "shots": 0,
+        "starter": true,
+        "xg": 0.0,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:15",
+        "fitness_after": 97.38,
+        "fitness_before": 100,
+        "form_after": 6.654,
+        "form_before": 6.7,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 76,
+        "morale_before": 74,
+        "on_target": 0,
+        "player_id": 304,
+        "rating": 6.6,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 1920,
+        "shots": 0,
+        "starter": false,
+        "xg": 0.0,
+        "yellows": 1
+      },
+      {
+        "assists": 0,
+        "club_key": "club:5",
+        "fitness_after": 71.12,
+        "fitness_before": 75,
+        "form_after": 6.8,
+        "form_before": 6.872,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 64,
+        "morale_before": 66,
+        "on_target": 0,
+        "player_id": 337,
+        "rating": 6.7,
+        "red": false,
+        "saves": 3,
+        "seconds_played": 5580,
+        "shots": 0,
+        "starter": true,
+        "xg": 0.0,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:5",
+        "fitness_after": 68.52,
+        "fitness_before": 72,
+        "form_after": 6.902,
+        "form_before": 7.129,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 64,
+        "morale_before": 66,
+        "on_target": 0,
+        "player_id": 340,
+        "rating": 6.5,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 5580,
+        "shots": 0,
+        "starter": true,
+        "xg": 0.0,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:5",
+        "fitness_after": 74.3,
+        "fitness_before": 80,
+        "form_after": 6.802,
+        "form_before": 6.991,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 62,
+        "morale_before": 64,
+        "on_target": 0,
+        "player_id": 341,
+        "rating": 6.4,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 5580,
+        "shots": 0,
+        "starter": true,
+        "xg": 0.0,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:5",
+        "fitness_after": 66.33,
+        "fitness_before": 72,
+        "form_after": 6.587,
+        "form_before": 6.713,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 79,
+        "morale_before": 81,
+        "on_target": 0,
+        "player_id": 342,
+        "rating": 6.4,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 5580,
+        "shots": 0,
+        "starter": true,
+        "xg": 0.0,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:5",
+        "fitness_after": 66.89,
+        "fitness_before": 75,
+        "form_after": 6.779,
+        "form_before": 6.948,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 67,
+        "morale_before": 69,
+        "on_target": 0,
+        "player_id": 343,
+        "rating": 6.5,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 5580,
+        "shots": 0,
+        "starter": true,
+        "xg": 0.0,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:5",
+        "fitness_after": 83.79,
+        "fitness_before": 89,
+        "form_after": 6.44,
+        "form_before": 6.719,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 79,
+        "morale_before": 81,
+        "on_target": 1,
+        "player_id": 347,
+        "rating": 6.2,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 5580,
+        "shots": 2,
+        "starter": true,
+        "xg": 0.326,
+        "yellows": 1
+      },
+      {
+        "assists": 0,
+        "club_key": "club:5",
+        "fitness_after": 70.38,
+        "fitness_before": 78,
+        "form_after": 7.16,
+        "form_before": 7.513,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 72,
+        "morale_before": 74,
+        "on_target": 0,
+        "player_id": 351,
+        "rating": 6.6,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 5580,
+        "shots": 2,
+        "starter": true,
+        "xg": 0.1672,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:5",
+        "fitness_after": 91.74,
+        "fitness_before": 96,
+        "form_after": 6.487,
+        "form_before": 6.7,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 70,
+        "morale_before": 72,
+        "on_target": 0,
+        "player_id": 352,
+        "rating": 6.3,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 5580,
+        "shots": 0,
+        "starter": true,
+        "xg": 0.0,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:5",
+        "fitness_after": 69.86,
+        "fitness_before": 72,
+        "form_after": 6.993,
+        "form_before": 7.396,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 78,
+        "morale_before": 80,
+        "on_target": 0,
+        "player_id": 353,
+        "rating": 6.6,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 3660,
+        "shots": 3,
+        "starter": true,
+        "xg": 0.2146,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:5",
+        "fitness_after": 67.22,
+        "fitness_before": 73,
+        "form_after": 7.785,
+        "form_before": 8.274,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 76,
+        "morale_before": 78,
+        "on_target": 0,
+        "player_id": 354,
+        "rating": 6.8,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 4500,
+        "shots": 1,
+        "starter": true,
+        "xg": 0.2015,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:5",
+        "fitness_after": 80.6,
+        "fitness_before": 84,
+        "form_after": 7.397,
+        "form_before": 7.764,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 66,
+        "morale_before": 68,
+        "on_target": 1,
+        "player_id": 355,
+        "rating": 6.7,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 4860,
+        "shots": 3,
+        "starter": true,
+        "xg": 0.2557,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:5",
+        "fitness_after": 97.8,
+        "fitness_before": 100,
+        "form_after": 6.567,
+        "form_before": 6.73,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 55,
+        "morale_before": 57,
+        "on_target": 0,
+        "player_id": 356,
+        "rating": 6.3,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 1920,
+        "shots": 0,
+        "starter": false,
+        "xg": 0.0,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:5",
+        "fitness_after": 98.63,
+        "fitness_before": 100,
+        "form_after": 6.48,
+        "form_before": 6.601,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 68,
+        "morale_before": 70,
+        "on_target": 1,
+        "player_id": 357,
+        "rating": 6.3,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 1080,
+        "shots": 1,
+        "starter": false,
+        "xg": 0.1137,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:5",
+        "fitness_after": 99.45,
+        "fitness_before": 100,
+        "form_after": 6.2,
+        "form_before": 6.317,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 71,
+        "morale_before": 73,
+        "on_target": 0,
+        "player_id": 358,
+        "rating": 6.2,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 720,
+        "shots": 0,
+        "starter": false,
+        "xg": 0.0,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:15",
+        "fitness_after": 92.47,
+        "fitness_before": 100,
+        "form_after": 6.743,
+        "form_before": 6.711,
+        "goals": 0,
+        "injured": false,
+        "morale_after": 70,
+        "morale_before": 68,
+        "on_target": 0,
+        "player_id": 384,
+        "rating": 6.7,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 5580,
+        "shots": 0,
+        "starter": true,
+        "xg": 0.0,
+        "yellows": 0
+      },
+      {
+        "assists": 0,
+        "club_key": "club:15",
+        "fitness_after": 87.39,
+        "fitness_before": 92,
+        "form_after": 7.387,
+        "form_before": 6.998,
+        "goals": 1,
+        "injured": false,
+        "morale_after": 62,
+        "morale_before": 60,
+        "on_target": 2,
+        "player_id": 401,
+        "rating": 7.7,
+        "red": false,
+        "saves": 0,
+        "seconds_played": 5580,
+        "shots": 3,
+        "starter": true,
+        "xg": 0.5849,
+        "yellows": 0
+      }
+    ],
+    "possession_home": 45.5,
+    "scope": "NONCANONICAL TEST SIMULATION",
+    "score": [
+      2,
+      0
+    ],
+    "team_stats": [
+      {
+        "club_key": "club:15",
+        "on_target": 5,
+        "red_cards": 0,
+        "shots": 10,
+        "substitutions": 3,
+        "xg": 1.4797,
+        "yellow_cards": 2
+      },
+      {
+        "club_key": "club:5",
+        "on_target": 3,
+        "red_cards": 0,
+        "shots": 12,
+        "substitutions": 3,
+        "xg": 1.2787,
+        "yellow_cards": 1
+      }
+    ]
+  },
+  "snapshot": {
+    "archived_ids": [
+      196
+    ],
+    "as_of": "2027-09-26 23:30",
+    "away": {
+      "coach": {
+        "continuity_preference": 0.4,
+        "decision_noise": 1.0,
+        "defensive_shape": "4-4-2",
+        "formation": "4-3-3",
+        "name": "Modeled autonomous Fluminense coach",
+        "risk_preference": 0.46
+      },
+      "form": 2.4613313762535984,
+      "key": "club:5",
+      "name": "Fluminense",
+      "players": [
+        {
+          "attack": 85,
+          "club_key": "club:5",
+          "composure": 80,
+          "defense": 38,
+          "eligible": false,
+          "exclusion_reasons": [
+            "archived historical identity",
+            "injury: identity_archive_do_not_select"
+          ],
+          "fitness": 50,
+          "form": 7.237,
+          "goalkeeping": 10,
+          "id": 196,
+          "morale": 75,
+          "name": "Jefferson Savarino [historical Botafogo archive]",
+          "ovr": 77,
+          "passing": 74,
+          "physical": 76,
+          "position": "FW",
+          "recent_ratings": [
+            [
+              7.4,
+              78.0
+            ],
+            [
+              7.7,
+              90.0
+            ],
+            [
+              6.5,
+              65.0
+            ],
+            [
+              6.8,
+              90.0
+            ]
+          ]
+        },
+        {
+          "attack": 13,
+          "club_key": "club:5",
+          "composure": 73,
+          "defense": 50,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 75,
+          "form": 6.872,
+          "goalkeeping": 76,
+          "id": 337,
+          "morale": 66,
+          "name": "Fábio",
+          "ovr": 76,
+          "passing": 68,
+          "physical": 75,
+          "position": "GK",
+          "recent_ratings": [
+            [
+              6.9,
+              90.0
+            ],
+            [
+              6.8,
+              90.0
+            ],
+            [
+              6.9,
+              90.0
+            ],
+            [
+              6.9,
+              90.0
+            ]
+          ]
+        },
+        {
+          "attack": 19,
+          "club_key": "club:5",
+          "composure": 62,
+          "defense": 53,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 100,
+          "form": 6.55,
+          "goalkeeping": 72,
+          "id": 338,
+          "morale": 57,
+          "name": "Marcelo Pitaluga",
+          "ovr": 71,
+          "passing": 62,
+          "physical": 76,
+          "position": "GK",
+          "recent_ratings": []
+        },
+        {
+          "attack": 54,
+          "club_key": "club:5",
+          "composure": 57,
+          "defense": 71,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 100,
+          "form": 6.55,
+          "goalkeeping": 18,
+          "id": 339,
+          "morale": 71,
+          "name": "Guga",
+          "ovr": 63,
+          "passing": 59,
+          "physical": 46,
+          "position": "DF",
+          "recent_ratings": []
+        },
+        {
+          "attack": 51,
+          "club_key": "club:5",
+          "composure": 81,
+          "defense": 82,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 72,
+          "form": 7.129,
+          "goalkeeping": 10,
+          "id": 340,
+          "morale": 66,
+          "name": "Thiago Silva",
+          "ovr": 77,
+          "passing": 78,
+          "physical": 83,
+          "position": "DF",
+          "recent_ratings": [
+            [
+              7.4,
+              90.0
+            ],
+            [
+              6.7,
+              90.0
+            ],
+            [
+              7.4,
+              90.0
+            ],
+            [
+              6.8,
+              90.0
+            ]
+          ]
+        },
+        {
+          "attack": 47,
+          "club_key": "club:5",
+          "composure": 74,
+          "defense": 79,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 80,
+          "form": 6.991,
+          "goalkeeping": 10,
+          "id": 341,
+          "morale": 64,
+          "name": "Julián Millán",
+          "ovr": 74,
+          "passing": 69,
+          "physical": 77,
+          "position": "DF",
+          "recent_ratings": [
+            [
+              7.3,
+              90.0
+            ],
+            [
+              6.6,
+              90.0
+            ],
+            [
+              7.3,
+              90.0
+            ],
+            [
+              6.4,
+              90.0
+            ]
+          ]
+        },
+        {
+          "attack": 47,
+          "club_key": "club:5",
+          "composure": 77,
+          "defense": 81,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 72,
+          "form": 6.713,
+          "goalkeeping": 10,
+          "id": 342,
+          "morale": 81,
+          "name": "Guilherme Arana",
+          "ovr": 75,
+          "passing": 68,
+          "physical": 74,
+          "position": "DF",
+          "recent_ratings": [
+            [
+              6.8,
+              90.0
+            ],
+            [
+              6.6,
+              90.0
+            ],
+            [
+              6.7,
+              90.0
+            ],
+            [
+              6.7,
+              90.0
+            ]
+          ]
+        },
+        {
+          "attack": 47,
+          "club_key": "club:5",
+          "composure": 76,
+          "defense": 81,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 75,
+          "form": 6.948,
+          "goalkeeping": 10,
+          "id": 343,
+          "morale": 69,
+          "name": "Jemmes",
+          "ovr": 75,
+          "passing": 67,
+          "physical": 77,
+          "position": "DF",
+          "recent_ratings": [
+            [
+              7.3,
+              90.0
+            ],
+            [
+              6.6,
+              90.0
+            ],
+            [
+              6.8,
+              90.0
+            ],
+            [
+              6.8,
+              90.0
+            ]
+          ]
+        },
+        {
+          "attack": 62,
+          "club_key": "club:5",
+          "composure": 65,
+          "defense": 82,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 100,
+          "form": 6.482,
+          "goalkeeping": 11,
+          "id": 344,
+          "morale": 73,
+          "name": "Ignacio Rabello",
+          "ovr": 72,
+          "passing": 78,
+          "physical": 84,
+          "position": "DF",
+          "recent_ratings": []
+        },
+        {
+          "attack": 60,
+          "club_key": "club:5",
+          "composure": 64,
+          "defense": 77,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 100,
+          "form": 6.55,
+          "goalkeeping": 3,
+          "id": 345,
+          "morale": 78,
+          "name": "Samuel Xavier",
+          "ovr": 71,
+          "passing": 65,
+          "physical": 80,
+          "position": "DF",
+          "recent_ratings": []
+        },
+        {
+          "attack": 61,
+          "club_key": "club:5",
+          "composure": 63,
+          "defense": 82,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 100,
+          "form": 6.6,
+          "goalkeeping": 14,
+          "id": 346,
+          "morale": 57,
+          "name": "Renê",
+          "ovr": 73,
+          "passing": 78,
+          "physical": 79,
+          "position": "DF",
+          "recent_ratings": [
+            [
+              6.7,
+              90.0
+            ]
+          ]
+        },
+        {
+          "attack": 67,
+          "club_key": "club:5",
+          "composure": 78,
+          "defense": 66,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 89,
+          "form": 6.719,
+          "goalkeeping": 10,
+          "id": 347,
+          "morale": 81,
+          "name": "Nonato",
+          "ovr": 73,
+          "passing": 74,
+          "physical": 70,
+          "position": "MF",
+          "recent_ratings": [
+            [
+              6.7,
+              12.0
+            ],
+            [
+              6.7,
+              12.0
+            ],
+            [
+              7.2,
+              12.0
+            ],
+            [
+              6.3,
+              25.0
+            ]
+          ]
+        },
+        {
+          "attack": 68,
+          "club_key": "club:5",
+          "composure": 72,
+          "defense": 68,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 73,
+          "form": 6.745,
+          "goalkeeping": 10,
+          "id": 348,
+          "morale": 72,
+          "name": "Martinelli",
+          "ovr": 75,
+          "passing": 77,
+          "physical": 77,
+          "position": "MF",
+          "recent_ratings": [
+            [
+              6.8,
+              65.0
+            ],
+            [
+              6.6,
+              90.0
+            ],
+            [
+              6.8,
+              65.0
+            ],
+            [
+              6.8,
+              78.0
+            ]
+          ]
+        },
+        {
+          "attack": 75,
+          "club_key": "club:5",
+          "composure": 75,
+          "defense": 45,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 96,
+          "form": 6.704,
+          "goalkeeping": 10,
+          "id": 349,
+          "morale": 73,
+          "name": "Paulo Henrique Ganso",
+          "ovr": 74,
+          "passing": 79,
+          "physical": 76,
+          "position": "MF",
+          "recent_ratings": [
+            [
+              6.7,
+              90.0
+            ],
+            [
+              6.6,
+              90.0
+            ],
+            [
+              6.8,
+              90.0
+            ],
+            [
+              6.8,
+              90.0
+            ]
+          ]
+        },
+        {
+          "attack": 75,
+          "club_key": "club:5",
+          "composure": 74,
+          "defense": 74,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 100,
+          "form": 6.55,
+          "goalkeeping": 6,
+          "id": 350,
+          "morale": 64,
+          "name": "Hércules",
+          "ovr": 71,
+          "passing": 73,
+          "physical": 75,
+          "position": "MF",
+          "recent_ratings": []
+        },
+        {
+          "attack": 77,
+          "club_key": "club:5",
+          "composure": 76,
+          "defense": 46,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 78,
+          "form": 7.513,
+          "goalkeeping": 10,
+          "id": 351,
+          "morale": 74,
+          "name": "L. Acosta",
+          "ovr": 76,
+          "passing": 80,
+          "physical": 74,
+          "position": "MF",
+          "recent_ratings": [
+            [
+              7.0,
+              78.0
+            ],
+            [
+              7.9,
+              90.0
+            ],
+            [
+              8.2,
+              78.0
+            ],
+            [
+              7.3,
+              90.0
+            ]
+          ]
+        },
+        {
+          "attack": 66,
+          "club_key": "club:5",
+          "composure": 75,
+          "defense": 67,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 96,
+          "form": 6.7,
+          "goalkeeping": 10,
+          "id": 352,
+          "morale": 72,
+          "name": "Otávio",
+          "ovr": 73,
+          "passing": 77,
+          "physical": 72,
+          "position": "MF",
+          "recent_ratings": [
+            [
+              6.7,
+              25.0
+            ],
+            [
+              6.7,
+              25.0
+            ],
+            [
+              6.7,
+              12.0
+            ],
+            [
+              6.7,
+              25.0
+            ]
+          ]
+        },
+        {
+          "attack": 82,
+          "club_key": "club:5",
+          "composure": 81,
+          "defense": 37,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 72,
+          "form": 7.396,
+          "goalkeeping": 10,
+          "id": 353,
+          "morale": 80,
+          "name": "Agustín Canobbio",
+          "ovr": 76,
+          "passing": 74,
+          "physical": 72,
+          "position": "FW",
+          "recent_ratings": [
+            [
+              7.7,
+              90.0
+            ],
+            [
+              6.8,
+              65.0
+            ],
+            [
+              7.0,
+              90.0
+            ],
+            [
+              8.3,
+              90.0
+            ]
+          ]
+        },
+        {
+          "attack": 84,
+          "club_key": "club:5",
+          "composure": 80,
+          "defense": 39,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 73,
+          "form": 8.274,
+          "goalkeeping": 10,
+          "id": 354,
+          "morale": 78,
+          "name": "Jefferson Savarino",
+          "ovr": 78,
+          "passing": 77,
+          "physical": 79,
+          "position": "FW",
+          "recent_ratings": [
+            [
+              8.8,
+              90.0
+            ],
+            [
+              7.8,
+              78.0
+            ],
+            [
+              8.7,
+              90.0
+            ],
+            [
+              7.0,
+              65.0
+            ]
+          ]
+        },
+        {
+          "attack": 85,
+          "club_key": "club:5",
+          "composure": 80,
+          "defense": 39,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 84,
+          "form": 7.764,
+          "goalkeeping": 10,
+          "id": 355,
+          "morale": 68,
+          "name": "Hulk",
+          "ovr": 78,
+          "passing": 75,
+          "physical": 83,
+          "position": "FW",
+          "recent_ratings": [
+            [
+              8.4,
+              90.0
+            ],
+            [
+              7.7,
+              90.0
+            ],
+            [
+              7.0,
+              90.0
+            ],
+            [
+              7.0,
+              90.0
+            ]
+          ]
+        },
+        {
+          "attack": 82,
+          "club_key": "club:5",
+          "composure": 67,
+          "defense": 56,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 100,
+          "form": 6.73,
+          "goalkeeping": 15,
+          "id": 356,
+          "morale": 57,
+          "name": "Rodrigo Castillo",
+          "ovr": 72,
+          "passing": 71,
+          "physical": 74,
+          "position": "FW",
+          "recent_ratings": [
+            [
+              6.5,
+              25.0
+            ],
+            [
+              7.5,
+              25.0
+            ],
+            [
+              6.3,
+              25.0
+            ],
+            [
+              6.3,
+              12.0
+            ]
+          ]
+        },
+        {
+          "attack": 84,
+          "club_key": "club:5",
+          "composure": 67,
+          "defense": 57,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 100,
+          "form": 6.601,
+          "goalkeeping": 16,
+          "id": 357,
+          "morale": 70,
+          "name": "Kevin Serna",
+          "ovr": 71,
+          "passing": 73,
+          "physical": 78,
+          "position": "FW",
+          "recent_ratings": [
+            [
+              6.5,
+              12.0
+            ],
+            [
+              6.3,
+              12.0
+            ],
+            [
+              7.4,
+              12.0
+            ],
+            [
+              6.4,
+              12.0
+            ]
+          ]
+        },
+        {
+          "attack": 76,
+          "club_key": "club:5",
+          "composure": 67,
+          "defense": 67,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 100,
+          "form": 6.317,
+          "goalkeeping": 14,
+          "id": 358,
+          "morale": 73,
+          "name": "Yeferson Soteldo",
+          "ovr": 71,
+          "passing": 71,
+          "physical": 72,
+          "position": "FW",
+          "recent_ratings": [
+            [
+              6.2,
+              12.0
+            ],
+            [
+              6.2,
+              12.0
+            ]
+          ]
+        }
+      ],
+      "strength": 76.5
+    },
+    "fixture_key": "synthetic:Vasco:Fluminense",
+    "home": {
+      "coach": {
+        "continuity_preference": 0.65,
+        "decision_noise": 0.8,
+        "defensive_shape": "4-4-2 midblock",
+        "formation": "4-2-3-1 asymmetric",
+        "name": "Luan Braga",
+        "risk_preference": 0.53
+      },
+      "form": 2.246216558243799,
+      "key": "club:15",
+      "name": "Vasco",
+      "players": [
+        {
+          "attack": 20,
+          "club_key": "club:15",
+          "composure": 78,
+          "defense": 30,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 69,
+          "form": 6.911,
+          "goalkeeping": 80,
+          "id": 1,
+          "morale": 75,
+          "name": "Léo Jardim",
+          "ovr": 78,
+          "passing": 64,
+          "physical": 75,
+          "position": "GK",
+          "recent_ratings": [
+            [
+              7.0,
+              90.0
+            ],
+            [
+              7.0,
+              90.0
+            ],
+            [
+              6.8,
+              90.0
+            ],
+            [
+              6.6,
+              90.0
+            ]
+          ]
+        },
+        {
+          "attack": 18,
+          "club_key": "club:15",
+          "composure": 64,
+          "defense": 25,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 100,
+          "form": 6.55,
+          "goalkeeping": 69,
+          "id": 2,
+          "morale": 57,
+          "name": "Daniel Fuzato",
+          "ovr": 69,
+          "passing": 53,
+          "physical": 72,
+          "position": "GK",
+          "recent_ratings": []
+        },
+        {
+          "attack": 16,
+          "club_key": "club:15",
+          "composure": 54,
+          "defense": 23,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 100,
+          "form": 6.55,
+          "goalkeeping": 66,
+          "id": 3,
+          "morale": 64,
+          "name": "Pablo",
+          "ovr": 67,
+          "passing": 48,
+          "physical": 64,
+          "position": "GK",
+          "recent_ratings": []
+        },
+        {
+          "attack": 59,
+          "club_key": "club:15",
+          "composure": 71,
+          "defense": 70,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 71,
+          "form": 6.85,
+          "goalkeeping": 10,
+          "id": 4,
+          "morale": 59,
+          "name": "Paulo Henrique",
+          "ovr": 74,
+          "passing": 65,
+          "physical": 81,
+          "position": "DF",
+          "recent_ratings": [
+            [
+              6.8,
+              90.0
+            ],
+            [
+              7.3,
+              90.0
+            ],
+            [
+              6.6,
+              90.0
+            ],
+            [
+              6.4,
+              90.0
+            ]
+          ]
+        },
+        {
+          "attack": 38,
+          "club_key": "club:15",
+          "composure": 66,
+          "defense": 75,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 92,
+          "form": 6.572,
+          "goalkeeping": 10,
+          "id": 5,
+          "morale": 72,
+          "name": "Alan Saldivia",
+          "ovr": 72,
+          "passing": 62,
+          "physical": 74,
+          "position": "DF",
+          "recent_ratings": [
+            [
+              6.6,
+              90.0
+            ],
+            [
+              6.5,
+              90.0
+            ],
+            [
+              6.6,
+              90.0
+            ],
+            [
+              6.6,
+              90.0
+            ]
+          ]
+        },
+        {
+          "attack": 39,
+          "club_key": "club:15",
+          "composure": 67,
+          "defense": 76,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 78,
+          "form": 6.866,
+          "goalkeeping": 10,
+          "id": 6,
+          "morale": 64,
+          "name": "Robert Renan",
+          "ovr": 75,
+          "passing": 76,
+          "physical": 75,
+          "position": "DF",
+          "recent_ratings": [
+            [
+              6.8,
+              90.0
+            ],
+            [
+              7.2,
+              90.0
+            ],
+            [
+              6.7,
+              90.0
+            ],
+            [
+              6.6,
+              90.0
+            ]
+          ]
+        },
+        {
+          "attack": 68,
+          "club_key": "club:15",
+          "composure": 64,
+          "defense": 66,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 70,
+          "form": 6.624,
+          "goalkeeping": 10,
+          "id": 7,
+          "morale": 64,
+          "name": "Cuiabano",
+          "ovr": 73,
+          "passing": 70,
+          "physical": 80,
+          "position": "DF",
+          "recent_ratings": [
+            [
+              6.7,
+              90.0
+            ],
+            [
+              6.7,
+              90.0
+            ],
+            [
+              6.5,
+              90.0
+            ],
+            [
+              6.4,
+              90.0
+            ]
+          ]
+        },
+        {
+          "attack": 60,
+          "club_key": "club:15",
+          "composure": 64,
+          "defense": 66,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 100,
+          "form": 6.55,
+          "goalkeeping": 10,
+          "id": 8,
+          "morale": 55,
+          "name": "Puma Rodríguez",
+          "ovr": 71,
+          "passing": 64,
+          "physical": 73,
+          "position": "DF",
+          "recent_ratings": []
+        },
+        {
+          "attack": 66,
+          "club_key": "club:15",
+          "composure": 64,
+          "defense": 66,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 100,
+          "form": 6.448,
+          "goalkeeping": 10,
+          "id": 9,
+          "morale": 50,
+          "name": "Lucas Piton",
+          "ovr": 74,
+          "passing": 76,
+          "physical": 74,
+          "position": "DF",
+          "recent_ratings": [
+            [
+              6.3,
+              90.0
+            ],
+            [
+              6.7,
+              90.0
+            ],
+            [
+              6.5,
+              90.0
+            ],
+            [
+              6.3,
+              90.0
+            ]
+          ]
+        },
+        {
+          "attack": 37,
+          "club_key": "club:15",
+          "composure": 65,
+          "defense": 71,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 100,
+          "form": 6.55,
+          "goalkeeping": 10,
+          "id": 10,
+          "morale": 64,
+          "name": "Lucas Freitas",
+          "ovr": 69,
+          "passing": 60,
+          "physical": 69,
+          "position": "DF",
+          "recent_ratings": []
+        },
+        {
+          "attack": 37,
+          "club_key": "club:15",
+          "composure": 72,
+          "defense": 79,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 96,
+          "form": 6.643,
+          "goalkeeping": 10,
+          "id": 11,
+          "morale": 57,
+          "name": "Carlos Cuesta",
+          "ovr": 75,
+          "passing": 66,
+          "physical": 75,
+          "position": "DF",
+          "recent_ratings": [
+            [
+              6.7,
+              90.0
+            ],
+            [
+              6.7,
+              90.0
+            ],
+            [
+              6.6,
+              90.0
+            ],
+            [
+              6.4,
+              90.0
+            ]
+          ]
+        },
+        {
+          "attack": 36,
+          "club_key": "club:15",
+          "composure": 62,
+          "defense": 71,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 100,
+          "form": 6.55,
+          "goalkeeping": 10,
+          "id": 12,
+          "morale": 66,
+          "name": "Gabriel Pereira",
+          "ovr": 69,
+          "passing": 59,
+          "physical": 74,
+          "position": "DF",
+          "recent_ratings": []
+        },
+        {
+          "attack": 51,
+          "club_key": "club:15",
+          "composure": 77,
+          "defense": 82,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 73,
+          "form": 6.724,
+          "goalkeeping": 10,
+          "id": 13,
+          "morale": 78,
+          "name": "Santiago Sosa",
+          "ovr": 76,
+          "passing": 73,
+          "physical": 77,
+          "position": "MF",
+          "recent_ratings": [
+            [
+              6.8,
+              90.0
+            ],
+            [
+              6.8,
+              73.0
+            ],
+            [
+              6.6,
+              90.0
+            ],
+            [
+              6.5,
+              90.0
+            ]
+          ]
+        },
+        {
+          "attack": 63,
+          "club_key": "club:15",
+          "composure": 76,
+          "defense": 73,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 90,
+          "form": 6.704,
+          "goalkeeping": 10,
+          "id": 14,
+          "morale": 84,
+          "name": "Thiago Mendes",
+          "ovr": 74,
+          "passing": 76,
+          "physical": 68,
+          "position": "MF",
+          "recent_ratings": [
+            [
+              6.7,
+              31.0
+            ],
+            [
+              6.6,
+              31.0
+            ],
+            [
+              6.8,
+              31.0
+            ],
+            [
+              6.8,
+              31.0
+            ]
+          ]
+        },
+        {
+          "attack": 81,
+          "club_key": "club:15",
+          "composure": 72,
+          "defense": 39,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 70,
+          "form": 6.824,
+          "goalkeeping": 10,
+          "id": 15,
+          "morale": 65,
+          "name": "Alan Lescano",
+          "ovr": 77,
+          "passing": 83,
+          "physical": 70,
+          "position": "MF",
+          "recent_ratings": [
+            [
+              6.9,
+              90.0
+            ],
+            [
+              6.9,
+              59.0
+            ],
+            [
+              6.7,
+              59.0
+            ],
+            [
+              6.6,
+              90.0
+            ]
+          ]
+        },
+        {
+          "attack": 75,
+          "club_key": "club:15",
+          "composure": 65,
+          "defense": 34,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 100,
+          "form": 6.55,
+          "goalkeeping": 10,
+          "id": 16,
+          "morale": 55,
+          "name": "Adson",
+          "ovr": 71,
+          "passing": 69,
+          "physical": 74,
+          "position": "MF",
+          "recent_ratings": []
+        },
+        {
+          "attack": 57,
+          "club_key": "club:15",
+          "composure": 68,
+          "defense": 69,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 100,
+          "form": 6.6,
+          "goalkeeping": 10,
+          "id": 17,
+          "morale": 57,
+          "name": "Jair",
+          "ovr": 71,
+          "passing": 68,
+          "physical": 70,
+          "position": "MF",
+          "recent_ratings": [
+            [
+              6.7,
+              31.0
+            ]
+          ]
+        },
+        {
+          "attack": 55,
+          "club_key": "club:15",
+          "composure": 71,
+          "defense": 67,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 100,
+          "form": 6.6,
+          "goalkeeping": 10,
+          "id": 18,
+          "morale": 70,
+          "name": "Tchê Tchê",
+          "ovr": 72,
+          "passing": 73,
+          "physical": 75,
+          "position": "MF",
+          "recent_ratings": [
+            [
+              6.6,
+              8.0
+            ],
+            [
+              6.6,
+              8.0
+            ],
+            [
+              6.6,
+              17.0
+            ],
+            [
+              6.6,
+              8.0
+            ]
+          ]
+        },
+        {
+          "attack": 59,
+          "club_key": "club:15",
+          "composure": 62,
+          "defense": 62,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 100,
+          "form": 6.55,
+          "goalkeeping": 10,
+          "id": 19,
+          "morale": 55,
+          "name": "Ramon Rique",
+          "ovr": 68,
+          "passing": 66,
+          "physical": 70,
+          "position": "MF",
+          "recent_ratings": []
+        },
+        {
+          "attack": 55,
+          "club_key": "club:15",
+          "composure": 65,
+          "defense": 67,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 100,
+          "form": 6.55,
+          "goalkeeping": 10,
+          "id": 20,
+          "morale": 57,
+          "name": "Mateus Carvalho",
+          "ovr": 70,
+          "passing": 64,
+          "physical": 68,
+          "position": "MF",
+          "recent_ratings": []
+        },
+        {
+          "attack": 54,
+          "club_key": "club:15",
+          "composure": 67,
+          "defense": 72,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 100,
+          "form": 6.6,
+          "goalkeeping": 10,
+          "id": 21,
+          "morale": 71,
+          "name": "Cauan Barros",
+          "ovr": 72,
+          "passing": 64,
+          "physical": 77,
+          "position": "MF",
+          "recent_ratings": [
+            [
+              6.6,
+              8.0
+            ],
+            [
+              6.6,
+              17.0
+            ],
+            [
+              6.6,
+              17.0
+            ],
+            [
+              6.6,
+              8.0
+            ]
+          ]
+        },
+        {
+          "attack": 57,
+          "club_key": "club:15",
+          "composure": 66,
+          "defense": 60,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 100,
+          "form": 6.55,
+          "goalkeeping": 10,
+          "id": 22,
+          "morale": 55,
+          "name": "Paulinho",
+          "ovr": 69,
+          "passing": 69,
+          "physical": 65,
+          "position": "MF",
+          "recent_ratings": []
+        },
+        {
+          "attack": 85,
+          "club_key": "club:15",
+          "composure": 74,
+          "defense": 34,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 68,
+          "form": 7.814,
+          "goalkeeping": 10,
+          "id": 23,
+          "morale": 71,
+          "name": "Andrés Gómez",
+          "ovr": 79,
+          "passing": 72,
+          "physical": 83,
+          "position": "FW",
+          "recent_ratings": [
+            [
+              7.7,
+              59.0
+            ],
+            [
+              8.7,
+              90.0
+            ],
+            [
+              6.9,
+              73.0
+            ],
+            [
+              7.6,
+              59.0
+            ]
+          ]
+        },
+        {
+          "attack": 79,
+          "club_key": "club:15",
+          "composure": 70,
+          "defense": 38,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 68,
+          "form": 7.306,
+          "goalkeeping": 10,
+          "id": 24,
+          "morale": 59,
+          "name": "Facundo Colidio",
+          "ovr": 76,
+          "passing": 73,
+          "physical": 77,
+          "position": "FW",
+          "recent_ratings": [
+            [
+              7.7,
+              73.0
+            ],
+            [
+              6.9,
+              90.0
+            ],
+            [
+              7.6,
+              82.0
+            ],
+            [
+              6.5,
+              73.0
+            ]
+          ]
+        },
+        {
+          "attack": 78,
+          "club_key": "club:15",
+          "composure": 70,
+          "defense": 35,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 71,
+          "form": 6.643,
+          "goalkeeping": 10,
+          "id": 25,
+          "morale": 60,
+          "name": "Bruno Duarte",
+          "ovr": 73,
+          "passing": 65,
+          "physical": 77,
+          "position": "FW",
+          "recent_ratings": [
+            [
+              6.7,
+              82.0
+            ],
+            [
+              6.7,
+              90.0
+            ],
+            [
+              6.6,
+              90.0
+            ],
+            [
+              6.4,
+              82.0
+            ]
+          ]
+        },
+        {
+          "attack": 75,
+          "club_key": "club:15",
+          "composure": 65,
+          "defense": 32,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 100,
+          "form": 6.55,
+          "goalkeeping": 10,
+          "id": 26,
+          "morale": 55,
+          "name": "David",
+          "ovr": 70,
+          "passing": 61,
+          "physical": 78,
+          "position": "FW",
+          "recent_ratings": []
+        },
+        {
+          "attack": 76,
+          "club_key": "club:15",
+          "composure": 68,
+          "defense": 32,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 100,
+          "form": 6.343,
+          "goalkeeping": 10,
+          "id": 27,
+          "morale": 49,
+          "name": "Brenner",
+          "ovr": 72,
+          "passing": 67,
+          "physical": 76,
+          "position": "FW",
+          "recent_ratings": [
+            [
+              6.3,
+              8.0
+            ],
+            [
+              6.5,
+              8.0
+            ],
+            [
+              6.3,
+              8.0
+            ],
+            [
+              6.2,
+              8.0
+            ]
+          ]
+        },
+        {
+          "attack": 77,
+          "club_key": "club:15",
+          "composure": 60,
+          "defense": 30,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 100,
+          "form": 6.436,
+          "goalkeeping": 10,
+          "id": 28,
+          "morale": 51,
+          "name": "Marino Hinestroza",
+          "ovr": 72,
+          "passing": 67,
+          "physical": 84,
+          "position": "FW",
+          "recent_ratings": [
+            [
+              6.3,
+              8.0
+            ]
+          ]
+        },
+        {
+          "attack": 74,
+          "club_key": "club:15",
+          "composure": 73,
+          "defense": 40,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 92,
+          "form": 6.771,
+          "goalkeeping": 10,
+          "id": 29,
+          "morale": 61,
+          "name": "Nuno Moreira",
+          "ovr": 73,
+          "passing": 74,
+          "physical": 73,
+          "position": "FW",
+          "recent_ratings": [
+            [
+              7.2,
+              17.0
+            ],
+            [
+              6.5,
+              8.0
+            ],
+            [
+              6.3,
+              17.0
+            ],
+            [
+              6.5,
+              17.0
+            ]
+          ]
+        },
+        {
+          "attack": 75,
+          "club_key": "club:15",
+          "composure": 65,
+          "defense": 30,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 100,
+          "form": 6.55,
+          "goalkeeping": 10,
+          "id": 30,
+          "morale": 59,
+          "name": "Claudio Spinelli",
+          "ovr": 70,
+          "passing": 62,
+          "physical": 73,
+          "position": "FW",
+          "recent_ratings": []
+        },
+        {
+          "attack": 72,
+          "club_key": "club:15",
+          "composure": 61,
+          "defense": 29,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 100,
+          "form": 6.55,
+          "goalkeeping": 10,
+          "id": 31,
+          "morale": 55,
+          "name": "Loide Augusto",
+          "ovr": 69,
+          "passing": 61,
+          "physical": 79,
+          "position": "FW",
+          "recent_ratings": []
+        },
+        {
+          "attack": 74,
+          "club_key": "club:15",
+          "composure": 67,
+          "defense": 32,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 96,
+          "form": 6.79,
+          "goalkeeping": 10,
+          "id": 32,
+          "morale": 56,
+          "name": "Johan Rojas",
+          "ovr": 72,
+          "passing": 76,
+          "physical": 73,
+          "position": "FW",
+          "recent_ratings": [
+            [
+              7.5,
+              8.0
+            ],
+            [
+              6.3,
+              8.0
+            ],
+            [
+              6.5,
+              8.0
+            ],
+            [
+              6.3,
+              20.0
+            ]
+          ]
+        },
+        {
+          "attack": 51,
+          "club_key": "club:15",
+          "composure": 72,
+          "defense": 77,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 75,
+          "form": 6.862,
+          "goalkeeping": 10,
+          "id": 163,
+          "morale": 77,
+          "name": "Rodrigo Villagra",
+          "ovr": 75,
+          "passing": 75,
+          "physical": 73,
+          "position": "MF",
+          "recent_ratings": [
+            [
+              6.8,
+              90.0
+            ],
+            [
+              7.3,
+              82.0
+            ],
+            [
+              6.6,
+              90.0
+            ],
+            [
+              6.5,
+              90.0
+            ]
+          ]
+        },
+        {
+          "attack": 48,
+          "club_key": "club:15",
+          "composure": 66,
+          "defense": 79,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 85,
+          "form": 6.72,
+          "goalkeeping": 10,
+          "id": 227,
+          "morale": 51,
+          "name": "Arthur Dias",
+          "ovr": 75,
+          "passing": 71,
+          "physical": 71,
+          "position": "DF",
+          "recent_ratings": [
+            [
+              6.8,
+              90.0
+            ],
+            [
+              6.4,
+              90.0
+            ],
+            [
+              7.1,
+              90.0
+            ],
+            [
+              6.6,
+              90.0
+            ]
+          ]
+        },
+        {
+          "attack": 65,
+          "club_key": "club:15",
+          "composure": 73,
+          "defense": 66,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 100,
+          "form": 6.7,
+          "goalkeeping": 10,
+          "id": 304,
+          "morale": 74,
+          "name": "Álvaro Barreal",
+          "ovr": 73,
+          "passing": 73,
+          "physical": 69,
+          "position": "MF",
+          "recent_ratings": [
+            [
+              6.7,
+              17.0
+            ],
+            [
+              6.7,
+              25.0
+            ],
+            [
+              6.7,
+              25.0
+            ],
+            [
+              6.7,
+              25.0
+            ]
+          ]
+        },
+        {
+          "attack": 37,
+          "club_key": "club:15",
+          "composure": 65,
+          "defense": 73,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 100,
+          "form": 6.711,
+          "goalkeeping": 10,
+          "id": 384,
+          "morale": 68,
+          "name": "Gustavo Martins",
+          "ovr": 72,
+          "passing": 62,
+          "physical": 75,
+          "position": "DF",
+          "recent_ratings": [
+            [
+              6.9,
+              90.0
+            ],
+            [
+              6.7,
+              90.0
+            ],
+            [
+              6.6,
+              90.0
+            ],
+            [
+              6.3,
+              90.0
+            ]
+          ]
+        },
+        {
+          "attack": 77,
+          "club_key": "club:15",
+          "composure": 76,
+          "defense": 30,
+          "eligible": true,
+          "exclusion_reasons": [],
+          "fitness": 92,
+          "form": 6.998,
+          "goalkeeping": 10,
+          "id": 401,
+          "morale": 60,
+          "name": "Carlos Vinícius",
+          "ovr": 75,
+          "passing": 63,
+          "physical": 76,
+          "position": "FW",
+          "recent_ratings": [
+            [
+              7.6,
+              31.0
+            ],
+            [
+              6.6,
+              17.0
+            ],
+            [
+              6.4,
+              31.0
+            ],
+            [
+              6.6,
+              31.0
+            ]
+          ]
+        }
+      ],
+      "strength": 74.8
+    },
+    "kickoff": "2027-09-30 16:00",
+    "notes": [
+      "Synthetic match using recorded squads; not Mirassol R26 or any official result"
+    ],
+    "rules": {
+      "aggregate_before": null,
+      "away_goals": false,
+      "competition": "Synthetic exhibition; no official fixture",
+      "extra_time_if_tied": false,
+      "penalties_if_tied": false,
+      "progression": "No qualification or official progression in Phase 2A",
+      "season": 2027
+    },
+    "scope": "NONCANONICAL TEST SIMULATION",
+    "source_sha256": "27eb5d94478c2539b28085e669675e184ab2842be3d7ab1549864f2a422b6cf7",
+    "synthetic": true
+  },
+  "snapshot_sha256": "8db695f213f94682d9ccd4d8975e00d07f800b00fb98dd20f53428fea3b48f49",
+  "summary_sha256": "9b0432969c46cce3595a8df7679240f1dba17a1a9d1a42199bebaf24fb526bfb",
+  "synthetic": true,
+  "validation": {
+    "checks": 642,
+    "errors": [],
+    "failures": 0,
+    "ok": true
+  }
+}

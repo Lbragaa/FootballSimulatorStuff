@@ -1,0 +1,270 @@
+{
+  "as_of": "2027-09-26 23:30",
+  "away": "Fluminense",
+  "eligibility_exclusions": [
+    {
+      "id": 196,
+      "name": "Jefferson Savarino [historical Botafogo archive]",
+      "reasons": [
+        "archived historical identity",
+        "injury: identity_archive_do_not_select"
+      ]
+    }
+  ],
+  "fixture_key": "synthetic:Vasco:Fluminense",
+  "home": "Vasco",
+  "kickoff": "2027-09-30 16:00",
+  "notes": [
+    "Synthetic match using recorded squads; not Mirassol R26 or any official result"
+  ],
+  "plans": [
+    {
+      "bench": [
+        163,
+        25,
+        29,
+        304,
+        21,
+        7,
+        9,
+        5,
+        28,
+        4,
+        32,
+        18
+      ],
+      "bench_names": [
+        "Rodrigo Villagra",
+        "Bruno Duarte",
+        "Nuno Moreira",
+        "Álvaro Barreal",
+        "Cauan Barros",
+        "Cuiabano",
+        "Lucas Piton",
+        "Alan Saldivia",
+        "Marino Hinestroza",
+        "Paulo Henrique",
+        "Johan Rojas",
+        "Tchê Tchê"
+      ],
+      "club_key": "club:15",
+      "coach": "Luan Braga",
+      "defensive_shape": "4-4-2 midblock",
+      "formation": "4-2-3-1 asymmetric",
+      "rationale": [
+        "Selected by recorded IDs, eligibility, positional fit, OVR, fitness, morale, rolling form and continuity",
+        "Risk balanced: coach preference, opponent strength and bounded imperfect judgement",
+        "No guaranteed starter names; no user-mandated changes or outcome-dependent rerolls"
+      ],
+      "risk": "balanced",
+      "roles": [
+        [
+          1,
+          "GK"
+        ],
+        [
+          11,
+          "RB"
+        ],
+        [
+          6,
+          "CB1"
+        ],
+        [
+          227,
+          "CB2"
+        ],
+        [
+          384,
+          "LB"
+        ],
+        [
+          13,
+          "DM1"
+        ],
+        [
+          15,
+          "DM2"
+        ],
+        [
+          14,
+          "AM"
+        ],
+        [
+          23,
+          "RW"
+        ],
+        [
+          24,
+          "LW"
+        ],
+        [
+          401,
+          "ST"
+        ]
+      ],
+      "starters": [
+        1,
+        11,
+        6,
+        227,
+        384,
+        13,
+        15,
+        14,
+        23,
+        24,
+        401
+      ],
+      "starting_names": [
+        "Léo Jardim",
+        "Carlos Cuesta",
+        "Robert Renan",
+        "Arthur Dias",
+        "Gustavo Martins",
+        "Santiago Sosa",
+        "Alan Lescano",
+        "Thiago Mendes",
+        "Andrés Gómez",
+        "Facundo Colidio",
+        "Carlos Vinícius"
+      ],
+      "substitution_minutes": [
+        61,
+        70,
+        85
+      ]
+    },
+    {
+      "bench": [
+        349,
+        348,
+        345,
+        357,
+        346,
+        338,
+        344,
+        358,
+        356,
+        350,
+        339
+      ],
+      "bench_names": [
+        "Paulo Henrique Ganso",
+        "Martinelli",
+        "Samuel Xavier",
+        "Kevin Serna",
+        "Renê",
+        "Marcelo Pitaluga",
+        "Ignacio Rabello",
+        "Yeferson Soteldo",
+        "Rodrigo Castillo",
+        "Hércules",
+        "Guga"
+      ],
+      "club_key": "club:5",
+      "coach": "Modeled autonomous Fluminense coach",
+      "defensive_shape": "4-4-2",
+      "formation": "4-3-3",
+      "rationale": [
+        "Selected by recorded IDs, eligibility, positional fit, OVR, fitness, morale, rolling form and continuity",
+        "Risk balanced: coach preference, opponent strength and bounded imperfect judgement",
+        "No guaranteed starter names; no user-mandated changes or outcome-dependent rerolls"
+      ],
+      "risk": "balanced",
+      "roles": [
+        [
+          337,
+          "GK"
+        ],
+        [
+          340,
+          "RB"
+        ],
+        [
+          342,
+          "CB1"
+        ],
+        [
+          343,
+          "CB2"
+        ],
+        [
+          341,
+          "LB"
+        ],
+        [
+          351,
+          "DM"
+        ],
+        [
+          347,
+          "CM1"
+        ],
+        [
+          352,
+          "CM2"
+        ],
+        [
+          355,
+          "RW"
+        ],
+        [
+          354,
+          "LW"
+        ],
+        [
+          353,
+          "ST"
+        ]
+      ],
+      "starters": [
+        337,
+        340,
+        342,
+        343,
+        341,
+        351,
+        347,
+        352,
+        355,
+        354,
+        353
+      ],
+      "starting_names": [
+        "Fábio",
+        "Thiago Silva",
+        "Guilherme Arana",
+        "Jemmes",
+        "Julián Millán",
+        "L. Acosta",
+        "Nonato",
+        "Otávio",
+        "Hulk",
+        "Jefferson Savarino",
+        "Agustín Canobbio"
+      ],
+      "substitution_minutes": [
+        61,
+        75,
+        81
+      ]
+    }
+  ],
+  "postmatch_available": false,
+  "prematch": {
+    "away_quality": 77.3766,
+    "away_win_probability": 0.32630912496,
+    "draw_probability": 0.25391503168,
+    "expected_xg": [
+      1.4774,
+      1.2726
+    ],
+    "home_quality": 76.033,
+    "home_win_probability": 0.41977584336,
+    "method": "Independent Poisson goal approximation from pregame xG; not a guaranteed outcome"
+  },
+  "scope": "NONCANONICAL TEST SIMULATION",
+  "source_sha256": "27eb5d94478c2539b28085e669675e184ab2842be3d7ab1549864f2a422b6cf7",
+  "synthetic": true
+}

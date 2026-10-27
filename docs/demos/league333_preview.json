@@ -1,0 +1,250 @@
+{
+  "as_of": "2027-09-26 23:30",
+  "away": "Goiás",
+  "eligibility_exclusions": [],
+  "fixture_key": "league:333",
+  "home": "Palmeiras",
+  "kickoff": "2027-10-03 16:00",
+  "notes": [
+    "Observed checkpoint fitness/form; no intervening games or future recovery assumed",
+    "No canonical suspension register exists; injuries/archive exclusions are enforced, no historical bans are invented"
+  ],
+  "plans": [
+    {
+      "bench": [
+        263,
+        253,
+        265,
+        255,
+        250,
+        261,
+        254,
+        252,
+        246
+      ],
+      "bench_names": [
+        "Ramón Sosa",
+        "Bruno Fuchs",
+        "Paulinho",
+        "Marlon Freitas",
+        "Agustín Giay",
+        "Larson",
+        "A. Gabriel",
+        "Khellven",
+        "Marcelo Lomba"
+      ],
+      "club_key": "club:2",
+      "coach": "Modeled autonomous Palmeiras coach",
+      "defensive_shape": "4-4-2",
+      "formation": "4-3-3",
+      "rationale": [
+        "Selected by recorded IDs, eligibility, positional fit, OVR, fitness, morale, rolling form and continuity",
+        "Risk attacking: coach preference, opponent strength and bounded imperfect judgement",
+        "No guaranteed starter names; no user-mandated changes or outcome-dependent rerolls"
+      ],
+      "risk": "attacking",
+      "roles": [
+        [
+          245,
+          "GK"
+        ],
+        [
+          248,
+          "RB"
+        ],
+        [
+          249,
+          "CB1"
+        ],
+        [
+          247,
+          "CB2"
+        ],
+        [
+          251,
+          "LB"
+        ],
+        [
+          257,
+          "DM"
+        ],
+        [
+          256,
+          "CM1"
+        ],
+        [
+          259,
+          "CM2"
+        ],
+        [
+          262,
+          "RW"
+        ],
+        [
+          264,
+          "LW"
+        ],
+        [
+          258,
+          "ST"
+        ]
+      ],
+      "starters": [
+        245,
+        248,
+        249,
+        247,
+        251,
+        257,
+        256,
+        259,
+        262,
+        264,
+        258
+      ],
+      "starting_names": [
+        "Carlos Miguel",
+        "Gustavo Gómez",
+        "A. Barboza",
+        "Murilo",
+        "Joaquín Piquerez",
+        "Andreas Pereira",
+        "Lucas Evangelista",
+        "Emiliano Martínez",
+        "Flaco López",
+        "Felipe Anderson",
+        "Jhon Arias"
+      ],
+      "substitution_minutes": [
+        62,
+        71,
+        85
+      ]
+    },
+    {
+      "bench": [
+        519,
+        526,
+        525,
+        516,
+        528,
+        524,
+        527,
+        529
+      ],
+      "bench_names": [
+        "Lourenço",
+        "Goiás Academy #03",
+        "Goiás Academy #02",
+        "Nicolas",
+        "Goiás Academy #05",
+        "Goiás Academy #01",
+        "Goiás Academy #04",
+        "Goiás Academy #06"
+      ],
+      "club_key": "club:23",
+      "coach": "Modeled autonomous Goiás coach",
+      "defensive_shape": "4-4-2",
+      "formation": "4-3-3",
+      "rationale": [
+        "Selected by recorded IDs, eligibility, positional fit, OVR, fitness, morale, rolling form and continuity",
+        "Risk cautious: coach preference, opponent strength and bounded imperfect judgement",
+        "No guaranteed starter names; no user-mandated changes or outcome-dependent rerolls"
+      ],
+      "risk": "cautious",
+      "roles": [
+        [
+          512,
+          "GK"
+        ],
+        [
+          513,
+          "RB"
+        ],
+        [
+          523,
+          "CB1"
+        ],
+        [
+          515,
+          "CB2"
+        ],
+        [
+          514,
+          "LB"
+        ],
+        [
+          462,
+          "DM"
+        ],
+        [
+          517,
+          "CM1"
+        ],
+        [
+          518,
+          "CM2"
+        ],
+        [
+          521,
+          "RW"
+        ],
+        [
+          522,
+          "LW"
+        ],
+        [
+          520,
+          "ST"
+        ]
+      ],
+      "starters": [
+        512,
+        513,
+        523,
+        515,
+        514,
+        462,
+        517,
+        518,
+        521,
+        522,
+        520
+      ],
+      "starting_names": [
+        "Tadeu",
+        "Diego Caito",
+        "David Braz",
+        "Lucas Ribeiro",
+        "Luis Felipe",
+        "Tomás Pérez",
+        "Gegê",
+        "Filipe Machado",
+        "Lucas Lima",
+        "Anselmo Ramon",
+        "Jean Carlos"
+      ],
+      "substitution_minutes": [
+        57,
+        74,
+        79
+      ]
+    }
+  ],
+  "postmatch_available": false,
+  "prematch": {
+    "away_quality": 69.2532,
+    "away_win_probability": 0.079360435884,
+    "draw_probability": 0.172628753694,
+    "expected_xg": [
+      2.1506,
+      0.5394
+    ],
+    "home_quality": 80.3761,
+    "home_win_probability": 0.748010810423,
+    "method": "Independent Poisson goal approximation from pregame xG; not a guaranteed outcome"
+  },
+  "scope": "NONCANONICAL TEST SIMULATION",
+  "source_sha256": "27eb5d94478c2539b28085e669675e184ab2842be3d7ab1549864f2a422b6cf7",
+  "synthetic": false
+}

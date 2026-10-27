@@ -1,5 +1,7 @@
 # Task 03 technical design: modular, headless simulation engine
 
+Historical Task 02B design. Task 03A has now accepted exact 046C v2 and implemented the regulation sandbox engine; see [implementation](engine.md) and [Task 03A report](task03a_report.md). Statements below about work remaining and pending administrative acceptance describe the earlier planning stage. Official execution remains unauthorized.
+
 This is a design only. Task 02B implements no match engine, official match execution, R26 result or fictional clock advance. The accepted world remains Save 046 until the commissioner explicitly accepts a candidate. The proposed 046C v2 calendar is a separate administrative change, not a simulation input authorized for official execution yet.
 
 ## Evidence and compatibility boundary

@@ -1,0 +1,82 @@
+{
+  "scope": "ENGINEERING VALIDATION; NONCANONICAL DEMOS ONLY",
+  "pull_request": "https://github.com/Lbragaa/FootballSimulatorStuff/pull/4",
+  "source_revision": "baaa85c91c9555375d20c808038ba8b3004d606c",
+  "run_id": 40108799493,
+  "run_url": "https://github.com/Lbragaa/FootballSimulatorStuff/actions/runs/40108799493",
+  "conclusion": "success",
+  "jobs": [
+    {
+      "name": "test (windows-latest, 3.13)",
+      "job_id": 120915972909,
+      "status": "success",
+      "test_summary": [
+        "158 passed in 74.02s (0:01:14) ========================"
+      ],
+      "demo_digests": [
+        "afd0b52c8c4b41a1f25c095792dbec3bcce28e21a33899a5794b3ca07a679fad",
+        "ccf264435df61cdbc67cfc130bfd7cb4309d405781cb46db04950ab5c4446eb3"
+      ]
+    },
+    {
+      "name": "test (windows-latest, 3.11)",
+      "job_id": 120915973096,
+      "status": "success",
+      "test_summary": [
+        "158 passed in 45.62s ============================="
+      ],
+      "demo_digests": [
+        "afd0b52c8c4b41a1f25c095792dbec3bcce28e21a33899a5794b3ca07a679fad",
+        "ccf264435df61cdbc67cfc130bfd7cb4309d405781cb46db04950ab5c4446eb3"
+      ]
+    },
+    {
+      "name": "test (ubuntu-latest, 3.11)",
+      "job_id": 120915973122,
+      "status": "success",
+      "test_summary": [
+        "158 passed in 61.72s (0:01:01) ========================"
+      ],
+      "demo_digests": [
+        "afd0b52c8c4b41a1f25c095792dbec3bcce28e21a33899a5794b3ca07a679fad",
+        "ccf264435df61cdbc67cfc130bfd7cb4309d405781cb46db04950ab5c4446eb3"
+      ]
+    },
+    {
+      "name": "test (ubuntu-latest, 3.12)",
+      "job_id": 120915973124,
+      "status": "success",
+      "test_summary": [
+        "158 passed in 69.36s (0:01:09) ========================"
+      ],
+      "demo_digests": [
+        "afd0b52c8c4b41a1f25c095792dbec3bcce28e21a33899a5794b3ca07a679fad",
+        "ccf264435df61cdbc67cfc130bfd7cb4309d405781cb46db04950ab5c4446eb3"
+      ]
+    },
+    {
+      "name": "test (windows-latest, 3.12)",
+      "job_id": 120915973166,
+      "status": "success",
+      "test_summary": [
+        "158 passed in 58.84s ============================="
+      ],
+      "demo_digests": [
+        "afd0b52c8c4b41a1f25c095792dbec3bcce28e21a33899a5794b3ca07a679fad",
+        "ccf264435df61cdbc67cfc130bfd7cb4309d405781cb46db04950ab5c4446eb3"
+      ]
+    },
+    {
+      "name": "test (ubuntu-latest, 3.13)",
+      "job_id": 120915973212,
+      "status": "success",
+      "test_summary": [
+        "158 passed in 40.01s ============================="
+      ],
+      "demo_digests": [
+        "afd0b52c8c4b41a1f25c095792dbec3bcce28e21a33899a5794b3ca07a679fad",
+        "ccf264435df61cdbc67cfc130bfd7cb4309d405781cb46db04950ab5c4446eb3"
+      ]
+    }
+  ]
+}

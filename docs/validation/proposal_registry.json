@@ -1,7 +1,9 @@
 {
-  "accepted_canonical_db_sha256": "de58ac7f7942ef6048f002312cdc90314b26dc06a9853a59acaab1d5f88f4b28",
-  "accepted_canonical_version": "046",
-  "canonical_promoted": false,
+  "accepted_canonical_db_sha256": "27eb5d94478c2539b28085e669675e184ab2842be3d7ab1549864f2a422b6cf7",
+  "accepted_canonical_version": "046C",
+  "canonical_promoted": true,
+  "authority": "Task 03A Part A; administrative acceptance only",
+  "official_match_execution_authorized": false,
   "proposals": [
     {
       "revision": "v1",
@@ -11,7 +13,7 @@
     },
     {
       "revision": "v2",
-      "status": "pending_commissioner_acceptance",
+      "status": "accepted_administrative_checkpoint",
       "version": "046C",
       "zip_sha256": "df3c8820b4bb05df9af14359aa9f9aea4d67f68456701a08cecaad11438142e8"
     }

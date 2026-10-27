@@ -1,4 +1,6 @@
-# Development roadmap — stop at candidate 046C
+# Development roadmap
+
+Current status after Task 03A: exact 046C v2 accepted administratively, PRs #1–#3 merged, working headless regulation engine and noncanonical demonstrations delivered. No official play or time advance. [Task 03A report](task03a_report.md) and [Task 03B plan](task03b_plan.md) define the current boundary. The phase descriptions below retain the original administrative development sequence; pending-acceptance language describes the earlier Task 02B stage.
 
 ## Phase 0 — protected foundation (implemented)
 

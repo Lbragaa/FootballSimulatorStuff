@@ -1,3 +1,3 @@
-"""The Braga Era: preservation first, isolated administrative candidates only."""
+"""The Braga Era: preserved history and isolated headless match simulations."""
 
-__version__ = "0.3.0"
+__version__ = "0.4.0"

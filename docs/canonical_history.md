@@ -1,5 +1,7 @@
 # Verified canonical history and provenance
 
+Current checkpoint: Task 03A accepted **046C v2** administratively, database SHA256 `27eb5d94478c2539b28085e669675e184ab2842be3d7ab1549864f2a422b6cf7`, ZIP `df3c8820b4bb05df9af14359aa9f9aea4d67f68456701a08cecaad11438142e8`. The date and all settled sporting history below remain unchanged. August payroll, objectives and approved future calendar adjustments are described in [Task 03A](task03a_report.md). The remainder of this document records the preserved original Save 046, including its original cash and calendar defects; it is not a new 046C financial statement.
+
 Source: the repository's original `BRAGA_ERA_HANDOFF_AFTER_046.zip`, safely reproduced into `data/handoff/`. Its full internal SHA256 manifest was validated. The unmodified original verification script passed, including equality of the extracted database with `Save046/braga_save.sqlite` inside the original nested Save046 ZIP. Reference engines were inspected as text only.
 
 | Artifact | SHA256 |
