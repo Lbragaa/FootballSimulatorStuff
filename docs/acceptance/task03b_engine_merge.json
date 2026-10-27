@@ -1,0 +1,14 @@
+{
+  "authority": "Explicit Task 03B Part 1 authorization to merge PR #4 after verification",
+  "pull_request": "https://github.com/Lbragaa/FootballSimulatorStuff/pull/4",
+  "expected_head": "362327de8fe2e4ebf0ede50a164d81df0e7c8626",
+  "previous_main": "6fc4cc0d7b455af1538b4f3ada43a30c6700bd29",
+  "merge_commit": "16c17e414b58a331f3965ec39198fc7b261376ba",
+  "merge_method": "ordinary merge commit; no force push, reset or discarded commits",
+  "merged_at_utc": "2026-10-27T03:12:21Z",
+  "verified_ci_run": "https://github.com/Lbragaa/FootballSimulatorStuff/actions/runs/40109062644",
+  "verified_ci_jobs": "six successful Windows/Linux jobs, Python 3.11, 3.12 and 3.13",
+  "local_merged_baseline_tests": {"passed": 158, "failures": 0, "time_seconds": 99.42},
+  "new_branch": "codex/task-03b-world-integration",
+  "official_match_authorization": false
+}

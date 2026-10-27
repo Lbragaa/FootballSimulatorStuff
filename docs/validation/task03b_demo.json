@@ -1,0 +1,12 @@
+{
+  "archive_sha256": "fc5b73ee1cb8237a44ab533f278fcccf573deb79a40ca67198f04881f2da4887",
+  "continental_matches": 16,
+  "independent_restoration_and_replay": true,
+  "league_matches": 10,
+  "parent_sha256_after": "27eb5d94478c2539b28085e669675e184ab2842be3d7ab1549864f2a422b6cf7",
+  "parent_sha256_before": "27eb5d94478c2539b28085e669675e184ab2842be3d7ab1549864f2a422b6cf7",
+  "promotable": false,
+  "resumption_changed_results": false,
+  "scope": "NONCANONICAL DEVELOPMENT TEST",
+  "world_sha256": "33d9a1899f9b8c724ef97f3eaf4da50bef4a7384426237d0c137bf9b35ccf17d"
+}

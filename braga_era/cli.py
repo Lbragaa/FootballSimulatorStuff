@@ -174,8 +174,17 @@ def main(argv=None) -> int:
     )
     narrate.add_argument("directory", type=Path)
     narrate.add_argument("--count", type=int, default=1)
+    from .world.cli import configure
+
+    configure(commands)
     args = parser.parse_args(argv)
     try:
+        if args.command == "world":
+            from .world.cli import execute
+
+            result = execute(args)
+            print(json.dumps(result, ensure_ascii=False, indent=2))
+            return 0
         if args.command == "narrate":
             from .engine.sandbox import next_narration
 
@@ -275,6 +284,19 @@ def main(argv=None) -> int:
             )
         if args.command == "audit":
             with connect_read_only(path) as connection:
+                if (
+                    args.profile is None
+                    and connection.execute(
+                        "SELECT 1 FROM sqlite_master WHERE name='world_info' AND type='table'"
+                    ).fetchone()
+                ):
+                    from .world.audit import audit as audit_world
+
+                    value = audit_world(
+                        connection, args.parent or path.parent / "parent.sqlite"
+                    )
+                    print(json.dumps(value, ensure_ascii=False, indent=2))
+                    return 0
                 version = connection.execute(
                     "SELECT value FROM meta WHERE key='saved_state_version'"
                 ).fetchone()[0]
@@ -295,6 +317,25 @@ def main(argv=None) -> int:
             return 0 if report.ok and not (args.strict and result["warnings"]) else 1
         with connect_read_only(path) as connection:
             if args.command == "inspect":
+                if connection.execute(
+                    "SELECT 1 FROM sqlite_master WHERE name='world_info' AND type='table'"
+                ).fetchone():
+                    from .world.audit import audit as audit_world
+
+                    validation = audit_world(connection, path.parent / "parent.sqlite")
+                    value = {
+                        "scope": "NONCANONICAL DEVELOPMENT TEST",
+                        "save_version": "DEV-03B",
+                        "promotable": False,
+                        "clock": connection.execute(
+                            "SELECT clock FROM world_info"
+                        ).fetchone()[0],
+                        "receipts": validation["receipts"],
+                        "official_records_changed": False,
+                        "detail": "Use world report for explicitly private diagnostics; normal narration has no future-result spoilers.",
+                    }
+                    print(json.dumps(value, ensure_ascii=False, indent=2))
+                    return 0
                 state = summary(connection)
                 from .acceptance import accepted_context
 
@@ -314,6 +355,7 @@ def main(argv=None) -> int:
         ValueError,
         StopIteration,
         NotImplementedError,
+        RuntimeError,
         zipfile.BadZipFile,
     ) as error:
         if getattr(args, "json", False):

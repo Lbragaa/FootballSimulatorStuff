@@ -1,6 +1,6 @@
 # THE BRAGA ERA
 
-One continuous fictional football universe. **Save 046C v2 is the accepted administrative checkpoint.** Task 03A adds a working, pure headless Python match engine and complete **NONCANONICAL TEST SIMULATION** demonstrations. Original Save 046 and rejected 046C v1 remain preserved. Python 3.11+; standard library at runtime.
+One continuous fictional football universe. **Save 046C v2 is the accepted administrative checkpoint.** Task 03B integrates the headless engine with a chronological world, proposed fictional foreign squads, player state, competition adapters and safe portable persistence. Development simulations are **NONCANONICAL DEVELOPMENT TEST** only. Original Save 046, rejected v1 and accepted v2 remain preserved. Python 3.11+; standard library at runtime.
 
 Vasco beat Palmeiras **3–2** on September 26, 2027. Vasco is ninth with 38 points (11W, 5D, 9L; 36–37), after 25 rounds. Next: **Mirassol vs Vasco, October 3, 2027, 16:00, R26**, still scheduled. The fictional clock remains **2027-09-26 23:30**.
 
@@ -35,7 +35,7 @@ In this checkout a prepared environment is available without activation:
 
 The extractor authenticates the original ZIP and every manifest entry, rejects unsafe paths, and refuses to overwrite altered extracted files. Repeating it with an unchanged handoff is safe. The original ZIP and nested backup chain remain untouched; the reproduced contents live in ignored `data/handoff/`.
 
-Default database: the authenticated checkpoint selected by `output/canonical.json` when a local accepted registry exists; otherwise the preserved original `data/handoff/canonical/braga_save.sqlite`. Installing the released archive does not silently promote or create a registry: use its database explicitly on a new machine. Override with an absolute or working-directory-relative argument:
+Default database: the authenticated accepted registry, or an exact-hash installation at `output/accepted-046c`, `output/ci-accepted` or `output/Save046C_v2`. If no accepted installation exists, commands fail with installation instructions. Old Save 046 requires an explicit historical `--db`; it is never a silent default. Installing the released archive does not promote or create a registry. Override with an absolute or working-directory-relative argument:
 
 ```sh
 python -m braga_era inspect --db /path/to/braga_save.sqlite
@@ -44,7 +44,23 @@ python -m braga_era inspect --db output/accepted-046c/database.sqlite
 python -m braga_era audit --db output/accepted-046c/database.sqlite
 ```
 
-Path precedence is `--db`, then `BRAGA_ERA_DB`, then the hash-verified accepted registry, then original 046. `BRAGA_ERA_REGISTRY` overrides the pointer location. A corrupt or missing registered checkpoint fails closed. Wheel installations outside this checkout should set `--db` or `BRAGA_ERA_DB`. Both commands support `--json`. `braga-era` accepts the same arguments.
+Path precedence is `--db`, then `BRAGA_ERA_DB`, then the hash-verified accepted registry, then known exact-hash accepted installations. `BRAGA_ERA_REGISTRY` overrides the pointer location. A corrupt or missing registered checkpoint fails closed. Wheel installations outside this checkout should set `--db` or `BRAGA_ERA_DB`. Both commands support `--json`. `braga-era` accepts the same arguments.
+
+## Chronological development world
+
+```sh
+python -m braga_era world demo --db output/accepted-046c/database.sqlite --output output/my-world-demo --seed task03b-world-demo-v1
+python -m braga_era world audit output/my-world-demo/world
+python -m braga_era world narrate output/my-world-demo/world --fixture league:332 --count 1
+python -m braga_era save verify output/my-world-demo/NONCANONICAL_DEV_03B.zip
+python -m braga_era save restore output/my-world-demo/NONCANONICAL_DEV_03B.zip --output output/my-restored-test-world
+```
+
+The complete demo generates stable proposed squads inside an additive schema, processes all 16 September 30 continentals and existing month-end payroll, captures a pregame-only Mirassol preview, then processes all ten R26 fixtures on the disposable world. It proves resumption does not reroll results and independently restores/replays the portable `DEV-03B` package. That package cannot be promoted as 047. No accepted data or official clock changes.
+
+For controlled steps use `world create`, `world preflight`, `world advance --before-fixture league:332` or `--until "2027-10-03 23:59"`, `world preview`, `world export` and `world report`. Normal summaries contain counts rather than the future Vasco result or resulting table; explicitly private diagnostic files hold complete results, standings and state changes. Normal narration reveals only the selected match in sequence.
+
+See [world architecture and policies](docs/world_integration.md), [Task 03B report](docs/task03b_report.md), [spoiler-safe demonstration evidence](docs/demos03b/README.md) and [Task 03C plan](docs/task03c_plan.md). Foreign-roster and knockout policies remain proposals; undrawn continental later-round reservations fail closed until a draw policy is authorized.
 
 Audit exit codes: **0** = profile passes (warnings still listed); **1** = failed invariant, or warnings under `--strict`; **2** = input/open/query error. Audit selects the strict registered profile for the recorded save version. For 046C it requires an authenticated parent, defaulting to the package's adjacent `parent.sqlite`. Explicit `--profile 046` still rejects 046C; neither profile was weakened. Immutable package reports retain their original candidate-era wording; acceptance is recorded separately.
 

@@ -1,5 +1,7 @@
 # Phase 2A engine: execution, configuration and narration
 
+Task 03B now reuses this regulation core inside a development-only chronological world. Shared metrics preserve both existing result digests. Extra-time/shootout resolution and persistent player/competition state are separate proposed forward layers; see [world integration](world_integration.md). The regulation-only behavior and original Task 03A sandbox remain available.
+
 `braga_era.engine` is executable headless Python with no runtime third-party dependencies. The pure match engine accepts immutable snapshots/plans and returns a complete result. It has no database connection, filesystem, UI or host-clock dependency. Version `braga-headless-1.0.0` is a forward model derived from legacy parameters, not a reproduction of historical RNG outputs or an authorization for official play.
 
 ```python

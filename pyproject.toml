@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "braga-era"
-version = "0.4.0"
-description = "Preserved football history, verified checkpoints and a pure headless match engine"
+version = "0.5.0"
+description = "Preserved football history, chronological world integration and verified noncanonical checkpoints"
 requires-python = ">=3.11"
 dependencies = []
 

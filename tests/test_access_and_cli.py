@@ -48,7 +48,8 @@ def test_configuration_precedence(monkeypatch, tmp_path):
     assert database_path().name == "environment.sqlite"
     assert database_path(tmp_path / "explicit.sqlite").name == "explicit.sqlite"
     monkeypatch.delenv("BRAGA_ERA_DB")
-    assert database_path().name == "braga_save.sqlite"
+    from braga_era.acceptance import catalog
+    assert file_sha256(database_path())==catalog()['database_sha256']
 
 
 @pytest.mark.parametrize("arguments,code,key", [

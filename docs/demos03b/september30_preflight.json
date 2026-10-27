@@ -1,0 +1,167 @@
+{
+  "canonical_roster_approval": false,
+  "fixtures": [
+    {
+      "away": "Palmeiras",
+      "eligible_squads": [
+        28,
+        20
+      ],
+      "executable": true,
+      "fixture": "lib:LIB-R16-01:L1",
+      "home": "Bolívar"
+    },
+    {
+      "away": "Fluminense",
+      "eligible_squads": [
+        26,
+        22
+      ],
+      "executable": true,
+      "fixture": "lib:LIB-R16-02:L1",
+      "home": "Junior de Barranquilla"
+    },
+    {
+      "away": "Vélez Sarsfield",
+      "eligible_squads": [
+        27,
+        28
+      ],
+      "executable": true,
+      "fixture": "lib:LIB-R16-03:L1",
+      "home": "O'Higgins"
+    },
+    {
+      "away": "River Plate",
+      "eligible_squads": [
+        23,
+        28
+      ],
+      "executable": true,
+      "fixture": "lib:LIB-R16-04:L1",
+      "home": "Atlético-MG"
+    },
+    {
+      "away": "Santos",
+      "eligible_squads": [
+        24,
+        23
+      ],
+      "executable": true,
+      "fixture": "lib:LIB-R16-05:L1",
+      "home": "Estudiantes"
+    },
+    {
+      "away": "Flamengo",
+      "eligible_squads": [
+        28,
+        23
+      ],
+      "executable": true,
+      "fixture": "lib:LIB-R16-06:L1",
+      "home": "Huachipato"
+    },
+    {
+      "away": "Liverpool (URU)",
+      "eligible_squads": [
+        26,
+        24
+      ],
+      "executable": true,
+      "fixture": "lib:LIB-R16-07:L1",
+      "home": "The Strongest"
+    },
+    {
+      "away": "Sportivo Luqueño",
+      "eligible_squads": [
+        27,
+        27
+      ],
+      "executable": true,
+      "fixture": "lib:LIB-R16-08:L1",
+      "home": "Atlético Nacional"
+    },
+    {
+      "away": "San Lorenzo",
+      "eligible_squads": [
+        26,
+        25
+      ],
+      "executable": true,
+      "fixture": "sula:SULA-PO-01:L1",
+      "home": "Caracas FC"
+    },
+    {
+      "away": "Emelec",
+      "eligible_squads": [
+        27,
+        26
+      ],
+      "executable": true,
+      "fixture": "sula:SULA-PO-02:L1",
+      "home": "Platense"
+    },
+    {
+      "away": "São Paulo",
+      "eligible_squads": [
+        24,
+        24
+      ],
+      "executable": true,
+      "fixture": "sula:SULA-PO-03:L1",
+      "home": "Sporting Cristal"
+    },
+    {
+      "away": "Peñarol",
+      "eligible_squads": [
+        21,
+        24
+      ],
+      "executable": true,
+      "fixture": "sula:SULA-PO-04:L1",
+      "home": "Athletico-PR"
+    },
+    {
+      "away": "Libertad",
+      "eligible_squads": [
+        26,
+        25
+      ],
+      "executable": true,
+      "fixture": "sula:SULA-PO-05:L1",
+      "home": "Rosario Central"
+    },
+    {
+      "away": "Universidad Católica",
+      "eligible_squads": [
+        28,
+        26
+      ],
+      "executable": true,
+      "fixture": "sula:SULA-PO-06:L1",
+      "home": "Universitario"
+    },
+    {
+      "away": "Independiente",
+      "eligible_squads": [
+        23,
+        25
+      ],
+      "executable": true,
+      "fixture": "sula:SULA-PO-07:L1",
+      "home": "Bragantino"
+    },
+    {
+      "away": "Botafogo",
+      "eligible_squads": [
+        28,
+        24
+      ],
+      "executable": true,
+      "fixture": "sula:SULA-PO-08:L1",
+      "home": "Newell's Old Boys"
+    }
+  ],
+  "passed": true,
+  "scope": "NONCANONICAL DEVELOPMENT TEST"
+}

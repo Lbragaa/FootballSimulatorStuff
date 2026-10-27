@@ -1,5 +1,7 @@
 # Task 03B plan — official persistence and the global calendar
 
+Historical planning document. The development-only implementation is now described in [Task 03B report](task03b_report.md) and [world architecture](world_integration.md); [Task 03C](task03c_plan.md) covers remaining calibration, draw/rule decisions and the official-play gate. No official execution has been authorized or performed.
+
 No work in this plan is permission to execute an official match. Task 03A leaves accepted 046C v2 at 2027-09-26 23:30, all September 30 continentals pending and Mirassol–Vasco R26 unplayed. Save numbers must represent accepted chronological checkpoints, not implicitly one Brasileirão round each.
 
 1. **Resolve missing source data and rules first.** All 16 September 30 fixtures have at least one foreign club without recorded players. Obtain commissioner-approved fictional squad/identity/rating evidence or an explicitly approved modeled-roster policy, preserving original history and source provenance. Do not import current real-world squads or replace missing players silently. Specify registration, suspensions, aggregate orientation, extra-time/shootout/away-goal rules and tie-breaking per competition. Confirm the forward engine/configuration/seed policy before official execution.
