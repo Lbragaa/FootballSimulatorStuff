@@ -51,7 +51,7 @@ def prepare(snapshot, config, seeds):
         # Score each player's current attributes once; never look at outcomes.
         scores = {
             p.id: p.ovr
-            + 0.05 * p.fitness
+            + getattr(config, "lineup_fitness_weight", 0.05) * p.fitness
             + 0.01 * p.morale
             + config.lineup_form_weight * (p.form - 6.55)
             + team.coach.continuity_preference * min(1, len(p.recent_ratings) / 4)

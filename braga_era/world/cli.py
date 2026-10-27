@@ -14,6 +14,8 @@ def configure(commands):
         p.add_argument("--db")
         p.add_argument("--output", type=Path, required=True)
         p.add_argument("--seed", required=True)
+        if name == "create":
+            p.add_argument("--policy", choices=("v1", "readiness-v2"), default="v1")
     for name in (
         "advance",
         "audit",
@@ -40,6 +42,7 @@ def configure(commands):
 def execute(args):
     from ..config import database_path
     from .storage import create, writer
+    from .policy import ReadinessPolicy
     from .runner import advance, narrate, fixture_preview
     from .reporting import demo, report, preflight
     from .audit import audit
@@ -49,7 +52,12 @@ def execute(args):
     if name in ("create", "demo"):
         parent = database_path(args.db)
         return (
-            create(parent, args.output, args.seed)
+            create(
+                parent,
+                args.output,
+                args.seed,
+                ReadinessPolicy() if args.policy == "readiness-v2" else None,
+            )
             if name == "create"
             else demo(parent, args.output, args.seed)
         )

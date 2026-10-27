@@ -18,6 +18,8 @@ from . import SCOPE, VERSION
 from .audit import audit
 from .storage import authenticate, writer, create, tables
 from .runner import advance, pending
+from .policy import is_readiness, ReadinessPolicy, load_policy
+from .scope import current as current_scope, save_profile
 
 FILES = {
     "database.sqlite",
@@ -41,12 +43,25 @@ def verify_directory(directory, *, replay=True):
     directory = authenticate(directory)
     if read_json(directory / "manifest.json") != manifest_for(directory):
         raise ValueError("Development checkpoint manifest mismatch")
-    if set(read_json(directory / "manifest.json")["files"]) != FILES:
+    compact = read_json(directory / "checkpoint.json").get("save_version") in (
+        "DEV-03C",
+        "FORWARD-CALCULATION-1",
+        "FORWARD-CALCULATION-TEST-1",
+    )
+    if set(read_json(directory / "manifest.json")["files"]) != (
+        FILES - {"operations.json", "private_matches.json"} if compact else FILES
+    ):
         raise ValueError("Unexpected development payload inventory")
     metadata = read_json(directory / "checkpoint.json")
     if (
-        metadata.get("save_version") != "DEV-03B"
-        or metadata.get("scope") != SCOPE
+        metadata.get("save_version")
+        not in (
+            "DEV-03B",
+            "DEV-03C",
+            "FORWARD-CALCULATION-1",
+            "FORWARD-CALCULATION-TEST-1",
+        )
+        or metadata.get("scope") != current_scope()
         or metadata.get("promotable") is not False
     ):
         raise ValueError("Development package cannot claim canonical identity")
@@ -58,8 +73,8 @@ def verify_directory(directory, *, replay=True):
         expected = fingerprints(c)
         if metadata != {
             "format_version": 1,
-            "save_version": "DEV-03B",
-            "scope": SCOPE,
+            "save_version": save_profile() if compact else "DEV-03B",
+            "scope": current_scope(),
             "promotable": False,
             "version": VERSION,
             "parent_sha256": info["parent_sha256"],
@@ -91,8 +106,13 @@ def verify_directory(directory, *, replay=True):
             ("narration.json", narration),
             ("rosters.json", distribution(c)),
         ]:
+            if compact and filename in ("operations.json", "private_matches.json"):
+                continue
             if read_json(directory / filename) != value:
                 raise ValueError("Export does not match database: " + filename)
+        policy = load_policy(json.loads(info["policy_json"]))
+        if compact != is_readiness(policy):
+            raise ValueError("Development profile/policy mismatch")
         commitment = read_json(directory / "initialization_commitment.json")
         if commitment != {
             "seed": info["seed"],
@@ -123,7 +143,7 @@ def verify_directory(directory, *, replay=True):
             dir=directory.parent, prefix=".world-replay-"
         ) as scratch:
             target = Path(scratch) / "replay"
-            create(directory / "parent.sqlite", target, info["seed"])
+            create(directory / "parent.sqlite", target, info["seed"], policy)
             if receipts:
                 advance(target, until=info["clock"])
             with connect_read_only(target / "database.sqlite") as c:
@@ -160,11 +180,12 @@ def export_world(directory, archive):
                 "initialization_commitment.json",
             ):
                 shutil.copyfile(directory / filename, stage / filename)
+            compact = is_readiness(policy)
             info = c.execute("SELECT * FROM world_info").fetchone()
             metadata = {
                 "format_version": 1,
-                "save_version": "DEV-03B",
-                "scope": SCOPE,
+                "save_version": save_profile() if compact else "DEV-03B",
+                "scope": current_scope(),
                 "promotable": False,
                 "version": VERSION,
                 "parent_sha256": info["parent_sha256"],
@@ -185,7 +206,10 @@ def export_world(directory, archive):
                 ),
                 ("narration.json", "SELECT * FROM world_cursors ORDER BY fixture_key"),
             ]:
-                write_json(stage / filename, [dict(r) for r in c.execute(query)])
+                if not (
+                    compact and filename in ("operations.json", "private_matches.json")
+                ):
+                    write_json(stage / filename, [dict(r) for r in c.execute(query)])
             write_json(stage / "rosters.json", distribution(c))
         write_json(stage / "manifest.json", manifest_for(stage))
         return export_checkpoint(stage, archive)

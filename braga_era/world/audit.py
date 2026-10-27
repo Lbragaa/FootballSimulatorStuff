@@ -8,14 +8,16 @@ from ..migrations import rows_by_key
 from .storage import tables, captured, MUTABLE_LEGACY
 from .adapters import recompute_standings
 from .schema import DDL, TABLES
+from . import forward_schema
+from .scope import current as current_scope
 
 
-def audit(c, parent_path, *, check_journal=True):
-    from .policy import WorldPolicy
+def audit(c, parent_path, *, check_journal=True, validate_results=True):
+    from .policy import load_policy
 
-    WorldPolicy(
-        **json.loads(c.execute("SELECT policy_json FROM world_info").fetchone()[0])
-    ).validate()
+    policy = load_policy(
+        json.loads(c.execute("SELECT policy_json FROM world_info").fetchone()[0])
+    )
     if file_sha256(parent_path) != catalog()["database_sha256"]:
         raise ValueError("Accepted parent hash mismatch")
     if (
@@ -25,7 +27,8 @@ def audit(c, parent_path, *, check_journal=True):
         raise ValueError("SQLite integrity/foreign-key failure")
     if (
         c.execute(
-            "SELECT count(*) FROM world_info WHERE scope='NONCANONICAL DEVELOPMENT TEST' AND version='braga-world-1.0.0'"
+            "SELECT count(*) FROM world_info WHERE scope=? AND version='braga-world-1.0.0'",
+            (current_scope(),),
         ).fetchone()[0]
         != 1
     ):
@@ -43,7 +46,9 @@ def audit(c, parent_path, *, check_journal=True):
             }
 
         with closing(sqlite3.connect(":memory:")) as schema:
-            schema.executescript(DDL)
+            schema.executescript(
+                DDL + (forward_schema.DDL if forward_schema.enabled(c) else "")
+            )
             if objects(c) != {**objects(parent), **objects(schema)}:
                 raise ValueError("Unexpected world schema/object change")
         for table in tables(parent):
@@ -151,7 +156,7 @@ def audit(c, parent_path, *, check_journal=True):
     receipts = {r["fixture_key"]: r for r in c.execute("SELECT * FROM world_receipts")}
     if set(finals) != set(receipts):
         raise ValueError("Final fixture/one-time receipt mismatch")
-    for key, receipt in receipts.items():
+    for key, receipt in receipts.items() if validate_results else ():
         row = c.execute(
             "SELECT * FROM world_executions WHERE fixture_key=?", (key,)
         ).fetchone()
@@ -168,9 +173,18 @@ def audit(c, parent_path, *, check_journal=True):
         from .policy import Rules, rules_for
         from .knockout import validate_bundle
 
+        if forward_schema.enabled(c):
+            from .runner import resolution_functions
+
+            _, validate_bundle = resolution_functions(policy)
+
         data = json.loads(row["input_json"])
-        config = EngineConfig(**json.loads(row["config_json"]))
-        if config != EngineConfig() or digest(data) != row["input_sha256"]:
+        from .forward_config import load
+
+        config = load(
+            json.loads(row["config_json"]), policy, f["stage"] == "Final única"
+        )
+        if digest(data) != row["input_sha256"]:
             raise ValueError("Unsupported engine/config or changed input")
         rule = rules_for(
             f["competition"],
@@ -232,10 +246,14 @@ def audit(c, parent_path, *, check_journal=True):
             or json.loads(fixtures[-1]["resolution_json"])["winner"] != tie["winner"]
         ):
             raise ValueError("Qualified club mismatch")
+    if forward_schema.enabled(c):
+        from .progression import validate
+
+        validate(c)
     violations = rest_inventory(c)
     return {
         "ok": True,
-        "scope": "NONCANONICAL DEVELOPMENT TEST",
+        "scope": current_scope(),
         "receipts": len(receipts),
         "league_final": sum(r["competition"] == "LEAGUE" for r in finals.values()),
         "continental_final": sum(
@@ -269,6 +287,9 @@ def verify_journal(c, parent):
         ):
             raise ValueError("Operation journal hash/sequence mismatch")
         previous = r["sha256"]
+        if forward_schema.enabled(c):
+            op["before"] = forward_schema.unpack(c, op["before"])
+            op["after"] = forward_schema.unpack(c, op["after"])
         ops.append(op)
     for op in reversed(ops):
         table = op["table"]
@@ -280,7 +301,11 @@ def verify_journal(c, parent):
         else:
             current[table][key] = op["before"]
     for table, rows in current.items():
-        expected = {} if table in TABLES else rows_by_key(parent, table)
+        expected = (
+            {}
+            if table in TABLES | forward_schema.TABLES
+            else rows_by_key(parent, table)
+        )
         if rows != expected:
             raise ValueError(
                 "Operation journal does not reconstruct accepted parent: " + table

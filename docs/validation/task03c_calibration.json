@@ -1,0 +1,1673 @@
+{
+  "actual_fixtures": 1200,
+  "groups": {
+    "braga-headless-1.0.0:gap-15": {
+      "HDA": [
+        0.15,
+        0.305,
+        0.545
+      ],
+      "binomial_95_halfwidth_max": 0.0693,
+      "counts": {
+        "A": 109,
+        "D": 61,
+        "H": 30,
+        "injuries": 3,
+        "reds": 53,
+        "yellows": 662
+      },
+      "distinct_lineups": 200,
+      "goals": {
+        "mean": 2.715,
+        "median": 3.0,
+        "p05": 1,
+        "p95": 5
+      },
+      "n": 200,
+      "postmatch_fitness": {
+        "mean": 85.56993,
+        "median": 85.46,
+        "p05": 82.2,
+        "p95": 89.31
+      },
+      "ratings": {
+        "mean": 6.63973,
+        "median": 6.5,
+        "p05": 6.3,
+        "p95": 7.5
+      },
+      "scorelines": {
+        "0-0": 7,
+        "0-1": 28,
+        "0-2": 12,
+        "0-3": 3,
+        "0-4": 9,
+        "1-0": 12,
+        "1-1": 36,
+        "1-2": 30,
+        "1-3": 11,
+        "1-4": 6,
+        "2-0": 3,
+        "2-1": 7,
+        "2-2": 16,
+        "2-3": 4,
+        "2-4": 3,
+        "3-0": 3,
+        "3-1": 1,
+        "3-2": 4,
+        "3-3": 2,
+        "3-4": 1,
+        "3-5": 1,
+        "4-5": 1
+      },
+      "shots": {
+        "mean": 21.555,
+        "median": 21.0,
+        "p05": 15,
+        "p95": 29
+      },
+      "xg": {
+        "mean": 2.7107,
+        "median": 2.69495,
+        "p05": 2.569,
+        "p95": 2.8833
+      }
+    },
+    "braga-headless-1.0.0:gap0": {
+      "HDA": [
+        0.53,
+        0.3,
+        0.17
+      ],
+      "binomial_95_halfwidth_max": 0.0693,
+      "counts": {
+        "A": 34,
+        "D": 60,
+        "H": 106,
+        "injuries": 2,
+        "reds": 44,
+        "yellows": 609
+      },
+      "distinct_lineups": 200,
+      "goals": {
+        "mean": 2.695,
+        "median": 3.0,
+        "p05": 0,
+        "p95": 5
+      },
+      "n": 200,
+      "postmatch_fitness": {
+        "mean": 85.56284,
+        "median": 85.43,
+        "p05": 82.15,
+        "p95": 89.32
+      },
+      "ratings": {
+        "mean": 6.63791,
+        "median": 6.6,
+        "p05": 6.1,
+        "p95": 7.6
+      },
+      "scorelines": {
+        "0-0": 11,
+        "0-1": 10,
+        "0-2": 2,
+        "0-3": 3,
+        "1-0": 17,
+        "1-1": 36,
+        "1-2": 11,
+        "1-3": 3,
+        "1-4": 1,
+        "2-0": 14,
+        "2-1": 24,
+        "2-2": 12,
+        "2-3": 3,
+        "2-4": 1,
+        "3-0": 15,
+        "3-1": 23,
+        "3-2": 4,
+        "3-3": 1,
+        "4-0": 3,
+        "4-1": 4,
+        "4-3": 1,
+        "5-1": 1
+      },
+      "shots": {
+        "mean": 21.8,
+        "median": 21.0,
+        "p05": 15,
+        "p95": 29
+      },
+      "xg": {
+        "mean": 2.73984,
+        "median": 2.7522,
+        "p05": 2.5629,
+        "p95": 2.9489
+      }
+    },
+    "braga-headless-1.0.0:gap15": {
+      "HDA": [
+        0.895,
+        0.095,
+        0.01
+      ],
+      "binomial_95_halfwidth_max": 0.0693,
+      "counts": {
+        "A": 2,
+        "D": 19,
+        "H": 179,
+        "injuries": 4,
+        "reds": 63,
+        "yellows": 612
+      },
+      "distinct_lineups": 200,
+      "goals": {
+        "mean": 2.825,
+        "median": 3.0,
+        "p05": 1,
+        "p95": 5
+      },
+      "n": 200,
+      "postmatch_fitness": {
+        "mean": 85.53082,
+        "median": 85.38,
+        "p05": 82.13,
+        "p95": 89.31
+      },
+      "ratings": {
+        "mean": 6.63961,
+        "median": 6.7,
+        "p05": 5.8,
+        "p95": 7.9
+      },
+      "scorelines": {
+        "0-0": 9,
+        "0-1": 2,
+        "1-0": 19,
+        "1-1": 8,
+        "2-0": 45,
+        "2-1": 14,
+        "2-2": 2,
+        "3-0": 46,
+        "3-1": 11,
+        "3-2": 1,
+        "4-0": 23,
+        "4-1": 7,
+        "5-0": 6,
+        "5-1": 3,
+        "6-0": 2,
+        "6-1": 2
+      },
+      "shots": {
+        "mean": 22,
+        "median": 22.0,
+        "p05": 15,
+        "p95": 30
+      },
+      "xg": {
+        "mean": 2.69462,
+        "median": 2.70975,
+        "p05": 2.4962,
+        "p95": 2.8782
+      }
+    },
+    "braga-headless-1.1.0:gap-15": {
+      "HDA": [
+        0.19,
+        0.225,
+        0.585
+      ],
+      "binomial_95_halfwidth_max": 0.0693,
+      "counts": {
+        "A": 117,
+        "D": 45,
+        "H": 38,
+        "injuries": 2,
+        "reds": 47,
+        "yellows": 603
+      },
+      "distinct_lineups": 200,
+      "goals": {
+        "mean": 2.56,
+        "median": 2.0,
+        "p05": 1,
+        "p95": 5
+      },
+      "n": 200,
+      "postmatch_fitness": {
+        "mean": 85.55842,
+        "median": 85.44,
+        "p05": 82.16,
+        "p95": 89.31
+      },
+      "ratings": {
+        "mean": 6.63018,
+        "median": 6.5,
+        "p05": 6.3,
+        "p95": 7.5
+      },
+      "scorelines": {
+        "0-0": 8,
+        "0-1": 30,
+        "0-2": 27,
+        "0-3": 9,
+        "0-4": 2,
+        "1-0": 15,
+        "1-1": 24,
+        "1-2": 23,
+        "1-3": 8,
+        "1-4": 3,
+        "1-5": 1,
+        "1-6": 1,
+        "2-0": 2,
+        "2-1": 13,
+        "2-2": 12,
+        "2-3": 11,
+        "2-4": 2,
+        "3-0": 1,
+        "3-2": 6,
+        "3-3": 1,
+        "4-0": 1
+      },
+      "shots": {
+        "mean": 21.905,
+        "median": 22.0,
+        "p05": 15,
+        "p95": 30
+      },
+      "xg": {
+        "mean": 2.70767,
+        "median": 2.6948,
+        "p05": 2.5677,
+        "p95": 2.8833
+      }
+    },
+    "braga-headless-1.1.0:gap0": {
+      "HDA": [
+        0.615,
+        0.21,
+        0.175
+      ],
+      "binomial_95_halfwidth_max": 0.0693,
+      "counts": {
+        "A": 35,
+        "D": 42,
+        "H": 123,
+        "injuries": 1,
+        "reds": 58,
+        "yellows": 606
+      },
+      "distinct_lineups": 200,
+      "goals": {
+        "mean": 2.88,
+        "median": 3.0,
+        "p05": 0,
+        "p95": 5
+      },
+      "n": 200,
+      "postmatch_fitness": {
+        "mean": 85.55576,
+        "median": 85.43,
+        "p05": 82.18,
+        "p95": 89.32
+      },
+      "ratings": {
+        "mean": 6.637,
+        "median": 6.6,
+        "p05": 5.9,
+        "p95": 7.7
+      },
+      "scorelines": {
+        "0-0": 12,
+        "0-1": 7,
+        "0-2": 5,
+        "0-3": 4,
+        "1-0": 19,
+        "1-1": 13,
+        "1-2": 13,
+        "1-3": 2,
+        "2-0": 25,
+        "2-1": 26,
+        "2-2": 15,
+        "2-3": 4,
+        "3-0": 13,
+        "3-1": 12,
+        "3-2": 11,
+        "3-3": 1,
+        "4-0": 2,
+        "4-1": 9,
+        "4-2": 3,
+        "4-4": 1,
+        "5-2": 2,
+        "6-0": 1
+      },
+      "shots": {
+        "mean": 21.67,
+        "median": 22.0,
+        "p05": 15,
+        "p95": 28
+      },
+      "xg": {
+        "mean": 2.75038,
+        "median": 2.76275,
+        "p05": 2.5344,
+        "p95": 2.9135
+      }
+    },
+    "braga-headless-1.1.0:gap15": {
+      "HDA": [
+        0.895,
+        0.075,
+        0.03
+      ],
+      "binomial_95_halfwidth_max": 0.0693,
+      "counts": {
+        "A": 6,
+        "D": 15,
+        "H": 179,
+        "injuries": 3,
+        "reds": 41,
+        "yellows": 588
+      },
+      "distinct_lineups": 200,
+      "goals": {
+        "mean": 2.815,
+        "median": 3.0,
+        "p05": 1,
+        "p95": 5
+      },
+      "n": 200,
+      "postmatch_fitness": {
+        "mean": 85.52112,
+        "median": 85.42,
+        "p05": 82.15,
+        "p95": 89.33
+      },
+      "ratings": {
+        "mean": 6.63993,
+        "median": 6.7,
+        "p05": 5.8,
+        "p95": 7.9
+      },
+      "scorelines": {
+        "0-0": 4,
+        "0-1": 1,
+        "0-2": 1,
+        "1-0": 26,
+        "1-1": 9,
+        "1-2": 2,
+        "1-3": 1,
+        "2-0": 44,
+        "2-1": 15,
+        "2-2": 2,
+        "2-3": 1,
+        "3-0": 43,
+        "3-1": 11,
+        "3-2": 2,
+        "4-0": 19,
+        "4-1": 6,
+        "4-3": 1,
+        "5-0": 8,
+        "5-1": 2,
+        "6-0": 2
+      },
+      "shots": {
+        "mean": 22.225,
+        "median": 22.0,
+        "p05": 14,
+        "p95": 30
+      },
+      "xg": {
+        "mean": 2.6979,
+        "median": 2.7088,
+        "p05": 2.5124,
+        "p95": 2.86
+      }
+    }
+  },
+  "limitations": [
+    "Historical coverage is selected, not an independent representative sample",
+    "Club and player quality are varied together; this is sensitivity analysis, not parameter identification",
+    "Rare-event uncertainty is large; zero observations do not imply zero risk",
+    "No real-world squads/results or desired Vasco outcomes were used"
+  ],
+  "modeled_rosters": [
+    {
+      "club": "modeled:10777fd6555063e5",
+      "depth": 25,
+      "gk_ovr": {
+        "mean": 71.66667,
+        "median": 69.0,
+        "p05": 68.9,
+        "p95": 69.0
+      },
+      "ovr": {
+        "mean": 71.544,
+        "median": 71.0,
+        "p05": 65.9,
+        "p95": 77.1
+      },
+      "positions": {
+        "DF": 8,
+        "FW": 6,
+        "GK": 3,
+        "MF": 8
+      },
+      "reserve_gap": 6.805,
+      "strength": 74.15
+    },
+    {
+      "club": "modeled:1a096ab64e0aec62",
+      "depth": 25,
+      "gk_ovr": {
+        "mean": 75.0,
+        "median": 72.9,
+        "p05": 72.2,
+        "p95": 72.9
+      },
+      "ovr": {
+        "mean": 72.688,
+        "median": 72.9,
+        "p05": 68.6,
+        "p95": 75.3
+      },
+      "positions": {
+        "DF": 10,
+        "FW": 5,
+        "GK": 3,
+        "MF": 7
+      },
+      "reserve_gap": 4.859,
+      "strength": 74.45
+    },
+    {
+      "club": "modeled:1f31e6f9debb4e9c",
+      "depth": 25,
+      "gk_ovr": {
+        "mean": 72.96667,
+        "median": 71.9,
+        "p05": 71.9,
+        "p95": 71.9
+      },
+      "ovr": {
+        "mean": 69.14,
+        "median": 68.4,
+        "p05": 64.0,
+        "p95": 72.6
+      },
+      "positions": {
+        "DF": 8,
+        "FW": 7,
+        "GK": 3,
+        "MF": 7
+      },
+      "reserve_gap": 5.432,
+      "strength": 70.4
+    },
+    {
+      "club": "modeled:2453cb11878edd8c",
+      "depth": 27,
+      "gk_ovr": {
+        "mean": 76.86667,
+        "median": 77.3,
+        "p05": 71.7,
+        "p95": 77.3
+      },
+      "ovr": {
+        "mean": 73.78889,
+        "median": 73.8,
+        "p05": 66.3,
+        "p95": 78.4
+      },
+      "positions": {
+        "DF": 10,
+        "FW": 6,
+        "GK": 3,
+        "MF": 8
+      },
+      "reserve_gap": 6.585,
+      "strength": 76.3
+    },
+    {
+      "club": "modeled:24aa6fa1fda82d03",
+      "depth": 24,
+      "gk_ovr": {
+        "mean": 69.53333,
+        "median": 72.1,
+        "p05": 64.0,
+        "p95": 72.1
+      },
+      "ovr": {
+        "mean": 68.12917,
+        "median": 68.05,
+        "p05": 62.7,
+        "p95": 72.1
+      },
+      "positions": {
+        "DF": 9,
+        "FW": 5,
+        "GK": 3,
+        "MF": 7
+      },
+      "reserve_gap": 4.931,
+      "strength": 71.2
+    },
+    {
+      "club": "modeled:2d0e5b1d3ce7ccec",
+      "depth": 26,
+      "gk_ovr": {
+        "mean": 69.5,
+        "median": 69.5,
+        "p05": 69.4,
+        "p95": 69.5
+      },
+      "ovr": {
+        "mean": 68.01538,
+        "median": 67.75,
+        "p05": 63.7,
+        "p95": 70.3
+      },
+      "positions": {
+        "DF": 10,
+        "FW": 6,
+        "GK": 3,
+        "MF": 7
+      },
+      "reserve_gap": 4.858,
+      "strength": 70.0
+    },
+    {
+      "club": "modeled:2dbd63bc020a81e6",
+      "depth": 26,
+      "gk_ovr": {
+        "mean": 68.63333,
+        "median": 68.7,
+        "p05": 68.3,
+        "p95": 68.7
+      },
+      "ovr": {
+        "mean": 70.29231,
+        "median": 69.0,
+        "p05": 66.7,
+        "p95": 75.9
+      },
+      "positions": {
+        "DF": 9,
+        "FW": 7,
+        "GK": 3,
+        "MF": 7
+      },
+      "reserve_gap": 4.93,
+      "strength": 73.1
+    },
+    {
+      "club": "modeled:328ad3123647919c",
+      "depth": 28,
+      "gk_ovr": {
+        "mean": 78.33333,
+        "median": 79.2,
+        "p05": 72.7,
+        "p95": 79.2
+      },
+      "ovr": {
+        "mean": 76.32857,
+        "median": 77.0,
+        "p05": 70.3,
+        "p95": 81.2
+      },
+      "positions": {
+        "DF": 10,
+        "FW": 6,
+        "GK": 3,
+        "MF": 9
+      },
+      "reserve_gap": 5.867,
+      "strength": 79.2
+    },
+    {
+      "club": "modeled:35380835760be593",
+      "depth": 27,
+      "gk_ovr": {
+        "mean": 69.3,
+        "median": 68.9,
+        "p05": 66.6,
+        "p95": 68.9
+      },
+      "ovr": {
+        "mean": 68.50741,
+        "median": 69.0,
+        "p05": 61.7,
+        "p95": 72.8
+      },
+      "positions": {
+        "DF": 8,
+        "FW": 6,
+        "GK": 3,
+        "MF": 10
+      },
+      "reserve_gap": 6.277,
+      "strength": 70.3
+    },
+    {
+      "club": "modeled:35dda9c02eec1ec7",
+      "depth": 27,
+      "gk_ovr": {
+        "mean": 69.56667,
+        "median": 68.1,
+        "p05": 67.2,
+        "p95": 68.1
+      },
+      "ovr": {
+        "mean": 68.81481,
+        "median": 68.1,
+        "p05": 62.9,
+        "p95": 76.2
+      },
+      "positions": {
+        "DF": 10,
+        "FW": 7,
+        "GK": 3,
+        "MF": 7
+      },
+      "reserve_gap": 6.648,
+      "strength": 70.45
+    },
+    {
+      "club": "modeled:4849f4caa8ac6f3c",
+      "depth": 25,
+      "gk_ovr": {
+        "mean": 73.93333,
+        "median": 77.1,
+        "p05": 67.4,
+        "p95": 77.1
+      },
+      "ovr": {
+        "mean": 73.46,
+        "median": 74.3,
+        "p05": 67.4,
+        "p95": 77.3
+      },
+      "positions": {
+        "DF": 8,
+        "FW": 5,
+        "GK": 3,
+        "MF": 9
+      },
+      "reserve_gap": 6.273,
+      "strength": 75.85
+    },
+    {
+      "club": "modeled:53946ba3c312793e",
+      "depth": 25,
+      "gk_ovr": {
+        "mean": 69.43333,
+        "median": 68.4,
+        "p05": 66.7,
+        "p95": 68.4
+      },
+      "ovr": {
+        "mean": 68.212,
+        "median": 68.2,
+        "p05": 64.6,
+        "p95": 71.7
+      },
+      "positions": {
+        "DF": 8,
+        "FW": 6,
+        "GK": 3,
+        "MF": 8
+      },
+      "reserve_gap": 4.784,
+      "strength": 69.85
+    },
+    {
+      "club": "modeled:543207748b9d76ec",
+      "depth": 27,
+      "gk_ovr": {
+        "mean": 68.9,
+        "median": 69.2,
+        "p05": 66.5,
+        "p95": 69.2
+      },
+      "ovr": {
+        "mean": 71.27407,
+        "median": 71.0,
+        "p05": 66.5,
+        "p95": 78.4
+      },
+      "positions": {
+        "DF": 11,
+        "FW": 5,
+        "GK": 3,
+        "MF": 8
+      },
+      "reserve_gap": 5.889,
+      "strength": 73.7
+    },
+    {
+      "club": "modeled:56cee1e9822ba34d",
+      "depth": 24,
+      "gk_ovr": {
+        "mean": 68.46667,
+        "median": 65.4,
+        "p05": 65.0,
+        "p95": 65.4
+      },
+      "ovr": {
+        "mean": 69.10417,
+        "median": 69.75,
+        "p05": 62.9,
+        "p95": 74.5
+      },
+      "positions": {
+        "DF": 8,
+        "FW": 6,
+        "GK": 3,
+        "MF": 7
+      },
+      "reserve_gap": 6.756,
+      "strength": 71.55
+    },
+    {
+      "club": "modeled:5932b1a8b1d0dd9f",
+      "depth": 28,
+      "gk_ovr": {
+        "mean": 75.0,
+        "median": 75.1,
+        "p05": 74.4,
+        "p95": 75.1
+      },
+      "ovr": {
+        "mean": 74.15,
+        "median": 75.15,
+        "p05": 68.4,
+        "p95": 78.4
+      },
+      "positions": {
+        "DF": 9,
+        "FW": 6,
+        "GK": 3,
+        "MF": 10
+      },
+      "reserve_gap": 3.871,
+      "strength": 75.5
+    },
+    {
+      "club": "modeled:5a2fcd1bfd9e584c",
+      "depth": 26,
+      "gk_ovr": {
+        "mean": 69.56667,
+        "median": 69.1,
+        "p05": 68.3,
+        "p95": 69.1
+      },
+      "ovr": {
+        "mean": 69.46538,
+        "median": 69.25,
+        "p05": 63.4,
+        "p95": 73.7
+      },
+      "positions": {
+        "DF": 9,
+        "FW": 6,
+        "GK": 3,
+        "MF": 8
+      },
+      "reserve_gap": 5.985,
+      "strength": 72.0
+    },
+    {
+      "club": "modeled:5f110ca0212ab148",
+      "depth": 24,
+      "gk_ovr": {
+        "mean": 68.7,
+        "median": 68.4,
+        "p05": 66.3,
+        "p95": 68.4
+      },
+      "ovr": {
+        "mean": 71.10417,
+        "median": 71.25,
+        "p05": 66.1,
+        "p95": 76.0
+      },
+      "positions": {
+        "DF": 8,
+        "FW": 5,
+        "GK": 3,
+        "MF": 8
+      },
+      "reserve_gap": 4.557,
+      "strength": 74.0
+    },
+    {
+      "club": "modeled:6096f9d4a06b3fe0",
+      "depth": 26,
+      "gk_ovr": {
+        "mean": 70.26667,
+        "median": 70.8,
+        "p05": 69.2,
+        "p95": 70.8
+      },
+      "ovr": {
+        "mean": 72.66154,
+        "median": 72.25,
+        "p05": 68.7,
+        "p95": 77.3
+      },
+      "positions": {
+        "DF": 9,
+        "FW": 6,
+        "GK": 3,
+        "MF": 8
+      },
+      "reserve_gap": 5.692,
+      "strength": 74.2
+    },
+    {
+      "club": "modeled:60eb30c4c4620d97",
+      "depth": 28,
+      "gk_ovr": {
+        "mean": 68.66667,
+        "median": 68.3,
+        "p05": 67.2,
+        "p95": 68.3
+      },
+      "ovr": {
+        "mean": 70.08929,
+        "median": 70.6,
+        "p05": 64.2,
+        "p95": 74.6
+      },
+      "positions": {
+        "DF": 11,
+        "FW": 5,
+        "GK": 3,
+        "MF": 9
+      },
+      "reserve_gap": 4.854,
+      "strength": 72.6
+    },
+    {
+      "club": "modeled:6217c69339b6e85e",
+      "depth": 28,
+      "gk_ovr": {
+        "mean": 73.3,
+        "median": 73.9,
+        "p05": 71.5,
+        "p95": 73.9
+      },
+      "ovr": {
+        "mean": 69.69286,
+        "median": 69.75,
+        "p05": 63.4,
+        "p95": 74.5
+      },
+      "positions": {
+        "DF": 9,
+        "FW": 8,
+        "GK": 3,
+        "MF": 8
+      },
+      "reserve_gap": 6.345,
+      "strength": 72.5
+    },
+    {
+      "club": "modeled:692953fa2346ee51",
+      "depth": 26,
+      "gk_ovr": {
+        "mean": 68.86667,
+        "median": 68.0,
+        "p05": 65.5,
+        "p95": 68.0
+      },
+      "ovr": {
+        "mean": 67.84231,
+        "median": 67.4,
+        "p05": 62.5,
+        "p95": 73.3
+      },
+      "positions": {
+        "DF": 10,
+        "FW": 5,
+        "GK": 3,
+        "MF": 8
+      },
+      "reserve_gap": 5.253,
+      "strength": 69.6
+    },
+    {
+      "club": "modeled:6d290cf8979c697e",
+      "depth": 26,
+      "gk_ovr": {
+        "mean": 67.56667,
+        "median": 69.8,
+        "p05": 61.4,
+        "p95": 69.8
+      },
+      "ovr": {
+        "mean": 66.79615,
+        "median": 67.25,
+        "p05": 61.4,
+        "p95": 70.5
+      },
+      "positions": {
+        "DF": 9,
+        "FW": 7,
+        "GK": 3,
+        "MF": 7
+      },
+      "reserve_gap": 5.222,
+      "strength": 69.9
+    },
+    {
+      "club": "modeled:6e97caf1910c922c",
+      "depth": 25,
+      "gk_ovr": {
+        "mean": 71.13333,
+        "median": 70.6,
+        "p05": 70.1,
+        "p95": 70.6
+      },
+      "ovr": {
+        "mean": 73.208,
+        "median": 72.7,
+        "p05": 69.1,
+        "p95": 78.0
+      },
+      "positions": {
+        "DF": 8,
+        "FW": 6,
+        "GK": 3,
+        "MF": 8
+      },
+      "reserve_gap": 5.456,
+      "strength": 74.0
+    },
+    {
+      "club": "modeled:6eded4e498617dff",
+      "depth": 26,
+      "gk_ovr": {
+        "mean": 66.8,
+        "median": 66.2,
+        "p05": 64.0,
+        "p95": 66.2
+      },
+      "ovr": {
+        "mean": 71.65,
+        "median": 72.1,
+        "p05": 66.0,
+        "p95": 76.6
+      },
+      "positions": {
+        "DF": 9,
+        "FW": 5,
+        "GK": 3,
+        "MF": 9
+      },
+      "reserve_gap": 5.87,
+      "strength": 73.7
+    },
+    {
+      "club": "modeled:6f92f0167ad07335",
+      "depth": 26,
+      "gk_ovr": {
+        "mean": 65.63333,
+        "median": 65.0,
+        "p05": 64.2,
+        "p95": 65.0
+      },
+      "ovr": {
+        "mean": 67.95,
+        "median": 67.9,
+        "p05": 62.3,
+        "p95": 72.2
+      },
+      "positions": {
+        "DF": 10,
+        "FW": 6,
+        "GK": 3,
+        "MF": 7
+      },
+      "reserve_gap": 6.138,
+      "strength": 71.25
+    },
+    {
+      "club": "modeled:751b6aa51663f15a",
+      "depth": 27,
+      "gk_ovr": {
+        "mean": 74.13333,
+        "median": 73.9,
+        "p05": 73.2,
+        "p95": 73.9
+      },
+      "ovr": {
+        "mean": 73.18148,
+        "median": 73.9,
+        "p05": 68.3,
+        "p95": 76.6
+      },
+      "positions": {
+        "DF": 8,
+        "FW": 7,
+        "GK": 3,
+        "MF": 9
+      },
+      "reserve_gap": 5.017,
+      "strength": 74.45
+    },
+    {
+      "club": "modeled:76ad7747516ce6c1",
+      "depth": 27,
+      "gk_ovr": {
+        "mean": 65.96667,
+        "median": 65.8,
+        "p05": 59.8,
+        "p95": 65.8
+      },
+      "ovr": {
+        "mean": 69.35556,
+        "median": 69.4,
+        "p05": 60.6,
+        "p95": 75.1
+      },
+      "positions": {
+        "DF": 9,
+        "FW": 7,
+        "GK": 3,
+        "MF": 8
+      },
+      "reserve_gap": 7.791,
+      "strength": 71.9
+    },
+    {
+      "club": "modeled:80a504464f353368",
+      "depth": 24,
+      "gk_ovr": {
+        "mean": 68.4,
+        "median": 69.6,
+        "p05": 64.1,
+        "p95": 69.6
+      },
+      "ovr": {
+        "mean": 68.15833,
+        "median": 68.15,
+        "p05": 63.5,
+        "p95": 72.3
+      },
+      "positions": {
+        "DF": 8,
+        "FW": 5,
+        "GK": 3,
+        "MF": 8
+      },
+      "reserve_gap": 5.213,
+      "strength": 71.0
+    },
+    {
+      "club": "modeled:87b8efa10d8eccc1",
+      "depth": 28,
+      "gk_ovr": {
+        "mean": 71.86667,
+        "median": 72.4,
+        "p05": 68.8,
+        "p95": 72.4
+      },
+      "ovr": {
+        "mean": 68.06429,
+        "median": 67.3,
+        "p05": 63.7,
+        "p95": 72.6
+      },
+      "positions": {
+        "DF": 10,
+        "FW": 6,
+        "GK": 3,
+        "MF": 9
+      },
+      "reserve_gap": 5.449,
+      "strength": 70.3
+    },
+    {
+      "club": "modeled:88cdbbaf3f7fcd14",
+      "depth": 27,
+      "gk_ovr": {
+        "mean": 65.46667,
+        "median": 64.8,
+        "p05": 62.8,
+        "p95": 64.8
+      },
+      "ovr": {
+        "mean": 67.25926,
+        "median": 67.3,
+        "p05": 62.7,
+        "p95": 72.2
+      },
+      "positions": {
+        "DF": 9,
+        "FW": 6,
+        "GK": 3,
+        "MF": 9
+      },
+      "reserve_gap": 5.53,
+      "strength": 69.7
+    },
+    {
+      "club": "modeled:892d8325ccab217e",
+      "depth": 28,
+      "gk_ovr": {
+        "mean": 76.43333,
+        "median": 76.1,
+        "p05": 75.4,
+        "p95": 76.1
+      },
+      "ovr": {
+        "mean": 77.81786,
+        "median": 77.94999999999999,
+        "p05": 72.0,
+        "p95": 83.2
+      },
+      "positions": {
+        "DF": 11,
+        "FW": 5,
+        "GK": 3,
+        "MF": 9
+      },
+      "reserve_gap": 5.391,
+      "strength": 80.0
+    },
+    {
+      "club": "modeled:a2818a7b78dc2795",
+      "depth": 25,
+      "gk_ovr": {
+        "mean": 72.76667,
+        "median": 74.9,
+        "p05": 67.5,
+        "p95": 74.9
+      },
+      "ovr": {
+        "mean": 72.12,
+        "median": 72.5,
+        "p05": 67.5,
+        "p95": 75.8
+      },
+      "positions": {
+        "DF": 9,
+        "FW": 5,
+        "GK": 3,
+        "MF": 8
+      },
+      "reserve_gap": 4.169,
+      "strength": 73.55
+    },
+    {
+      "club": "modeled:a936acc99f1ea5b7",
+      "depth": 28,
+      "gk_ovr": {
+        "mean": 78.43333,
+        "median": 78.2,
+        "p05": 77.7,
+        "p95": 78.2
+      },
+      "ovr": {
+        "mean": 75.16786,
+        "median": 75.35,
+        "p05": 69.3,
+        "p95": 79.1
+      },
+      "positions": {
+        "DF": 11,
+        "FW": 6,
+        "GK": 3,
+        "MF": 8
+      },
+      "reserve_gap": 5.443,
+      "strength": 76.7
+    },
+    {
+      "club": "modeled:af49035a06c4320b",
+      "depth": 26,
+      "gk_ovr": {
+        "mean": 70.46667,
+        "median": 69.8,
+        "p05": 68.1,
+        "p95": 69.8
+      },
+      "ovr": {
+        "mean": 71.96154,
+        "median": 71.7,
+        "p05": 67.7,
+        "p95": 76.3
+      },
+      "positions": {
+        "DF": 9,
+        "FW": 6,
+        "GK": 3,
+        "MF": 8
+      },
+      "reserve_gap": 4.069,
+      "strength": 74.6
+    },
+    {
+      "club": "modeled:b0bfc163036b51a0",
+      "depth": 24,
+      "gk_ovr": {
+        "mean": 72.23333,
+        "median": 73.7,
+        "p05": 67.6,
+        "p95": 73.7
+      },
+      "ovr": {
+        "mean": 70.41667,
+        "median": 70.30000000000001,
+        "p05": 64.7,
+        "p95": 74.0
+      },
+      "positions": {
+        "DF": 8,
+        "FW": 6,
+        "GK": 3,
+        "MF": 7
+      },
+      "reserve_gap": 4.501,
+      "strength": 72.3
+    },
+    {
+      "club": "modeled:bd602776d3ec851b",
+      "depth": 24,
+      "gk_ovr": {
+        "mean": 66.96667,
+        "median": 67.6,
+        "p05": 62.9,
+        "p95": 67.6
+      },
+      "ovr": {
+        "mean": 68.05,
+        "median": 68.15,
+        "p05": 63.3,
+        "p95": 71.5
+      },
+      "positions": {
+        "DF": 9,
+        "FW": 5,
+        "GK": 3,
+        "MF": 7
+      },
+      "reserve_gap": 4.657,
+      "strength": 71.1
+    },
+    {
+      "club": "modeled:c7736aea27f345fa",
+      "depth": 26,
+      "gk_ovr": {
+        "mean": 66.8,
+        "median": 66.7,
+        "p05": 65.0,
+        "p95": 66.7
+      },
+      "ovr": {
+        "mean": 67.41538,
+        "median": 66.65,
+        "p05": 64.0,
+        "p95": 70.5
+      },
+      "positions": {
+        "DF": 10,
+        "FW": 5,
+        "GK": 3,
+        "MF": 8
+      },
+      "reserve_gap": 3.976,
+      "strength": 70.15
+    },
+    {
+      "club": "modeled:c84ba7d16b33e5a0",
+      "depth": 28,
+      "gk_ovr": {
+        "mean": 70.36667,
+        "median": 73.8,
+        "p05": 61.9,
+        "p95": 73.8
+      },
+      "ovr": {
+        "mean": 70.36429,
+        "median": 70.9,
+        "p05": 65.1,
+        "p95": 74.2
+      },
+      "positions": {
+        "DF": 11,
+        "FW": 5,
+        "GK": 3,
+        "MF": 9
+      },
+      "reserve_gap": 5.539,
+      "strength": 71.9
+    },
+    {
+      "club": "modeled:cb6b0140a169a6fa",
+      "depth": 24,
+      "gk_ovr": {
+        "mean": 77.93333,
+        "median": 78.7,
+        "p05": 74.4,
+        "p95": 78.7
+      },
+      "ovr": {
+        "mean": 73.47083,
+        "median": 73.35,
+        "p05": 68.7,
+        "p95": 77.9
+      },
+      "positions": {
+        "DF": 8,
+        "FW": 5,
+        "GK": 3,
+        "MF": 8
+      },
+      "reserve_gap": 5.995,
+      "strength": 75.4
+    },
+    {
+      "club": "modeled:cd5e264ed3442291",
+      "depth": 28,
+      "gk_ovr": {
+        "mean": 72.6,
+        "median": 73.5,
+        "p05": 69.1,
+        "p95": 73.5
+      },
+      "ovr": {
+        "mean": 72.56071,
+        "median": 72.95,
+        "p05": 69.0,
+        "p95": 76.0
+      },
+      "positions": {
+        "DF": 9,
+        "FW": 7,
+        "GK": 3,
+        "MF": 9
+      },
+      "reserve_gap": 4.227,
+      "strength": 73.6
+    },
+    {
+      "club": "modeled:ce57637c58ef3785",
+      "depth": 27,
+      "gk_ovr": {
+        "mean": 67.63333,
+        "median": 70.8,
+        "p05": 61.1,
+        "p95": 70.8
+      },
+      "ovr": {
+        "mean": 67.42963,
+        "median": 67.9,
+        "p05": 60.4,
+        "p95": 72.6
+      },
+      "positions": {
+        "DF": 9,
+        "FW": 6,
+        "GK": 3,
+        "MF": 9
+      },
+      "reserve_gap": 7.222,
+      "strength": 69.4
+    },
+    {
+      "club": "modeled:cef9dd403760816f",
+      "depth": 27,
+      "gk_ovr": {
+        "mean": 69.76667,
+        "median": 70.1,
+        "p05": 65.5,
+        "p95": 70.1
+      },
+      "ovr": {
+        "mean": 70.83333,
+        "median": 70.1,
+        "p05": 63.8,
+        "p95": 75.0
+      },
+      "positions": {
+        "DF": 10,
+        "FW": 5,
+        "GK": 3,
+        "MF": 9
+      },
+      "reserve_gap": 6.801,
+      "strength": 71.4
+    },
+    {
+      "club": "modeled:d38edc92a63ffb28",
+      "depth": 28,
+      "gk_ovr": {
+        "mean": 66.03333,
+        "median": 67.3,
+        "p05": 63.0,
+        "p95": 67.3
+      },
+      "ovr": {
+        "mean": 68.59643,
+        "median": 69.30000000000001,
+        "p05": 62.5,
+        "p95": 73.7
+      },
+      "positions": {
+        "DF": 11,
+        "FW": 7,
+        "GK": 3,
+        "MF": 7
+      },
+      "reserve_gap": 6.37,
+      "strength": 72.6
+    },
+    {
+      "club": "modeled:d8e5f48b818810dd",
+      "depth": 24,
+      "gk_ovr": {
+        "mean": 67.73333,
+        "median": 68.9,
+        "p05": 61.9,
+        "p95": 68.9
+      },
+      "ovr": {
+        "mean": 68.75,
+        "median": 68.95,
+        "p05": 63.4,
+        "p95": 73.5
+      },
+      "positions": {
+        "DF": 9,
+        "FW": 5,
+        "GK": 3,
+        "MF": 7
+      },
+      "reserve_gap": 5.933,
+      "strength": 70.5
+    },
+    {
+      "club": "modeled:e911eeec72708091",
+      "depth": 28,
+      "gk_ovr": {
+        "mean": 74.63333,
+        "median": 73.4,
+        "p05": 71.4,
+        "p95": 73.4
+      },
+      "ovr": {
+        "mean": 72.42857,
+        "median": 72.5,
+        "p05": 66.4,
+        "p95": 77.5
+      },
+      "positions": {
+        "DF": 11,
+        "FW": 6,
+        "GK": 3,
+        "MF": 8
+      },
+      "reserve_gap": 6.107,
+      "strength": 73.5
+    },
+    {
+      "club": "modeled:ebeeef29e0a49a7a",
+      "depth": 26,
+      "gk_ovr": {
+        "mean": 70.93333,
+        "median": 70.4,
+        "p05": 66.2,
+        "p95": 70.4
+      },
+      "ovr": {
+        "mean": 67.83462,
+        "median": 68.45,
+        "p05": 62.8,
+        "p95": 70.9
+      },
+      "positions": {
+        "DF": 10,
+        "FW": 5,
+        "GK": 3,
+        "MF": 8
+      },
+      "reserve_gap": 4.967,
+      "strength": 69.1
+    },
+    {
+      "club": "modeled:ee557c5d24f14375",
+      "depth": 24,
+      "gk_ovr": {
+        "mean": 63.73333,
+        "median": 62.8,
+        "p05": 59.0,
+        "p95": 62.8
+      },
+      "ovr": {
+        "mean": 67.0,
+        "median": 67.19999999999999,
+        "p05": 59.0,
+        "p95": 72.6
+      },
+      "positions": {
+        "DF": 8,
+        "FW": 5,
+        "GK": 3,
+        "MF": 8
+      },
+      "reserve_gap": 6.965,
+      "strength": 69.3
+    },
+    {
+      "club": "modeled:f9b4a37722d6b48c",
+      "depth": 24,
+      "gk_ovr": {
+        "mean": 75.66667,
+        "median": 77.1,
+        "p05": 72.7,
+        "p95": 77.1
+      },
+      "ovr": {
+        "mean": 76.13333,
+        "median": 76.75,
+        "p05": 71.7,
+        "p95": 79.2
+      },
+      "positions": {
+        "DF": 8,
+        "FW": 5,
+        "GK": 3,
+        "MF": 8
+      },
+      "reserve_gap": 4.957,
+      "strength": 78.4
+    },
+    {
+      "club": "modeled:feecf2d71a317ab7",
+      "depth": 24,
+      "gk_ovr": {
+        "mean": 67.26667,
+        "median": 65.8,
+        "p05": 63.0,
+        "p95": 65.8
+      },
+      "ovr": {
+        "mean": 69.825,
+        "median": 70.30000000000001,
+        "p05": 63.0,
+        "p95": 73.4
+      },
+      "positions": {
+        "DF": 9,
+        "FW": 5,
+        "GK": 3,
+        "MF": 7
+      },
+      "reserve_gap": 5.543,
+      "strength": 72.4
+    }
+  ],
+  "policy": "task03c-calibration-v1",
+  "recorded_history": {
+    "Brasileirão": {
+      "HDA": [
+        0.39436619718309857,
+        0.29577464788732394,
+        0.30985915492957744
+      ],
+      "goals": {
+        "mean": 2.40845,
+        "median": 2,
+        "p05": 0,
+        "p95": 5
+      },
+      "n": 71
+    },
+    "Brasileirão 2027": {
+      "HDA": [
+        0.468,
+        0.272,
+        0.26
+      ],
+      "goals": {
+        "mean": 2.832,
+        "median": 3.0,
+        "p05": 0,
+        "p95": 5
+      },
+      "n": 250
+    },
+    "Campeonato Carioca": {
+      "HDA": [
+        0.2,
+        0.2,
+        0.6
+      ],
+      "goals": {
+        "mean": 2.4,
+        "median": 2,
+        "p05": 1,
+        "p95": 3
+      },
+      "n": 5
+    },
+    "Copa do Brasil": {
+      "HDA": [
+        0.6,
+        0.2,
+        0.2
+      ],
+      "goals": {
+        "mean": 1.4,
+        "median": 1,
+        "p05": 0,
+        "p95": 1
+      },
+      "n": 5
+    }
+  },
+  "scope": "NONCANONICAL DEVELOPMENT TEST",
+  "seed_policy": "fixed task03c-calibration-v1:gap:index; no outcome selection"
+}

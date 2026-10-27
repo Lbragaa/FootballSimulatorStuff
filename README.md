@@ -1,5 +1,23 @@
 # THE BRAGA ERA
 
+Task 03C (0.6.0) adds proposed committed continental draws through both finals,
+ET/penalty eligibility, full-season stress evidence, compact restorable packages
+and a separately signed forward authorization profile. **No official gameplay is
+authorized.** Review the [report](docs/task03c_report.md),
+[commissioner decisions](docs/task03c_decisions.md), [calibration](docs/task03c_calibration.md)
+and [Hikari runbook](docs/official_play_runbook.md).
+
+```sh
+python -m braga_era world create --db output/accepted-046c/database.sqlite --output output/readiness-world --seed readiness-example-fixed-v1 --policy readiness-v2
+python -m braga_era.gameplay output/readiness-world next
+python tools/stress_season.py --db output/accepted-046c/database.sqlite --output output/readiness-season --seed task03c-final-a-fixed-v1
+```
+
+The last command calculates/restores a complete **noncanonical** remaining-2027
+season. Its private reports contain spoilers; normal Hikari output follows the
+narration cursor. Production authorization is an explicit Python API, separate
+from software/policy acceptance; DEV exports remain unpromotable.
+
 One continuous fictional football universe. **Save 046C v2 is the accepted administrative checkpoint.** Task 03B integrates the headless engine with a chronological world, proposed fictional foreign squads, player state, competition adapters and safe portable persistence. Development simulations are **NONCANONICAL DEVELOPMENT TEST** only. Original Save 046, rejected v1 and accepted v2 remain preserved. Python 3.11+; standard library at runtime.
 
 Vasco beat Palmeiras **3–2** on September 26, 2027. Vasco is ninth with 38 points (11W, 5D, 9L; 36–37), after 25 rounds. Next: **Mirassol vs Vasco, October 3, 2027, 16:00, R26**, still scheduled. The fictional clock remains **2027-09-26 23:30**.

@@ -1,5 +1,7 @@
 # Task 03B world architecture and versioned proposals
 
+Task 03C extends this preserved V1 layer through explicit readiness policy 2.1.0: committed continental draws/finals, ET 2.1, compact journal values, full-season stress/replay and a separate signed forward profile. Default V1 demos/results remain unchanged. The assumptions below describe Task 03B historically; see the current [report](task03c_report.md), [decision sheet](task03c_decisions.md) and [runbook](official_play_runbook.md). No policy or official match is approved by implementation.
+
 Everything in this layer is **NONCANONICAL DEVELOPMENT TEST**. Accepted 046C v2, its approval receipt and original 046 stay immutable. Package 0.5.0 adds `braga_era/world`; it reuses regulation engine `braga-headless-1.0.0`, autonomous coaches, validators and existing payroll/checkpoint infrastructure. Shared metrics were extracted without changing either Task 03A regression result digest. The proposed wrapper is `braga-knockout-1.0.0`, world schema/runtime `braga-world-1.0.0`, and policy `world-proposals-1.0.0`.
 
 ## Foreign squads and identity
