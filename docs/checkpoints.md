@@ -50,3 +50,8 @@ ZIP timestamps are fixed at 1980-01-01, file order and permissions are fixed, an
 Manifests detect corruption, not authorship: they are not signatures. Re-sealing an altered manifest cannot authorize a history change because registered profiles replay the approved delta against an authenticated parent. Python package/profile code is a trusted review surface; a future accepted checkpoint needs a registered, reviewed profile, not an edited digest to silence tests. Restore never executes archive code.
 
 No crash-durability claim is made for cloud sync or sudden power loss beyond SQLite transaction semantics and flushed atomic file publication on the host filesystem. Exclusive locks coordinate this application's writers. Stale locks after a crash should be investigated, not automatically bypassed. The policy choices listed in candidate metadata remain commissioner decisions before any real acceptance.
+
+
+## Continuous accepted-parent profile (Task 03D)
+
+`continuous-forward-lineage-2` carries a signed ancestor proof chain, exact immediate-parent bytes, immutable historical 046C root, engine/policy/seed commitments, execution authorization, independent delta validation and a separate acceptance receipt. It inherits prior receipts, players, journal and payroll; only the new authorized delta executes. DEV profiles and root-only profile 1 retain their validation rules. New archives are bounded at 256 MiB and contain no nested ancestor ZIPs. Publication uses a crash-released lock and an owned unpublished-stage journal; published worlds/results are never removed during recovery. See [continuous runbook](continuous_play_runbook.md).

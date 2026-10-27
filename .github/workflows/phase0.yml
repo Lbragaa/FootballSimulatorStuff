@@ -23,7 +23,15 @@ jobs:
       - run: python -m braga_era audit
       - run: python -m braga_era inspect --db output/ci-accepted/database.sqlite
       - run: python -m braga_era audit --db output/ci-accepted/database.sqlite
+      - run: python tools/rehearse_task03d.py --db output/ci-accepted/database.sqlite --output output/ci-lineage
+      - run: python tools/verify_lineage_demo.py output/ci-lineage --reference docs/validation/task03d_rehearsal.json
       - run: python -m pytest --junitxml output/ci-tests.xml
+        env:
+          BRAGA_LINEAGE_TEST_CHAIN: output/ci-lineage
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TEST-ONLY-continuous-report-${{ matrix.os }}-py${{ matrix.python }}
+          path: output/ci-lineage/rehearsal.json
       - run: python -m braga_era sandbox --db output/ci-accepted/database.sqlite --output output/ci-real-match --seed task03a-engine-smoke --fixture league:333
       - run: python -m braga_era sandbox --db output/ci-accepted/database.sqlite --output output/ci-vasco-synthetic --seed task03a-vasco-synthetic --synthetic
       - run: python tools/verify_engine_demos.py --directory output/ci-real-match --reference docs/demos/league333.json

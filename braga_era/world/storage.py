@@ -102,8 +102,10 @@ def transaction(c, phase):
 
 
 @contextmanager
-def process_lock(directory):
-    path = Path(directory) / ".runner.lock"
+def process_lock(directory, name=".runner.lock"):
+    if Path(name).name != name or name in ("", ".", ".."):
+        raise ValueError("Process lock name must be a local filename")
+    path = Path(directory) / name
     with path.open("a+b") as stream:
         if path.stat().st_size == 0:
             stream.write(b"0")
@@ -121,7 +123,7 @@ def process_lock(directory):
         except OSError as error:
             raise RuntimeError("Another world runner owns the process lock") from error
         try:
-            yield
+            yield stream
         finally:
             stream.seek(0)
             if os.name == "nt":

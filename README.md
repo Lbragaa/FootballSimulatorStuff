@@ -1,5 +1,24 @@
 # THE BRAGA ERA
 
+Task 03D (0.7.0) adds signed, immediate-parent career continuation, stable career
+seeds, separate batch authorization and checkpoint acceptance, portable authority
+transfer and resumable Hikari narration. All demonstrated progression is
+**TEST-ONLY NONCANONICAL**. No production authority or official match is authorized.
+Read the [Task 03D report](docs/task03d_report.md),
+[decision sheet](docs/task03d_decisions.md),
+[continuous-play runbook](docs/continuous_play_runbook.md) and
+[unsigned first-batch template](docs/first_official_batch_manifest.md).
+
+```sh
+python -m braga_era.continuous --help
+python tools/rehearse_task03d.py --db output/accepted-046c/database.sqlite --output output/test-continuous-career
+```
+
+The rehearsal separately authorizes and accepts three disposable checkpoints,
+transfers the authority after batch one and verifies the final football state
+against one uninterrupted simulation. Production use requires a subsequent
+commissioner instruction and an external protected key.
+
 Task 03C (0.6.0) adds proposed committed continental draws through both finals,
 ET/penalty eligibility, full-season stress evidence, compact restorable packages
 and a separately signed forward authorization profile. **No official gameplay is

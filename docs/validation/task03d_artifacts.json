@@ -1,0 +1,57 @@
+{
+  "scope": "TEST-ONLY NONCANONICAL",
+  "checkpoints": [
+    {
+      "generation": 1,
+      "checkpoint_sha256": "598d1c966f38227589cb4c0c8a8552e4ede7b22e0d3c23edf63d5e6a216d45a4",
+      "parent_checkpoint_sha256": "27eb5d94478c2539b28085e669675e184ab2842be3d7ab1549864f2a422b6cf7",
+      "database_sha256": "aea9c52f05efdeab2e628eeca2b7bf1b3651e4c4e82fa629c964516879736308",
+      "immediate_parent_database_sha256": "27eb5d94478c2539b28085e669675e184ab2842be3d7ab1549864f2a422b6cf7",
+      "archive_sha256": "d51d4a6f7950bcf3f0bf45cec6a942cf281845c7e43075c11b772f61cf7d5fea",
+      "archive_bytes": 3485913,
+      "clock": "2027-09-30 23:59",
+      "independent_delta_replay": true,
+      "test_only": true
+    },
+    {
+      "generation": 2,
+      "checkpoint_sha256": "64549e8d87653be540a1252e5a61b7d43092b26f72edcc64fed84e6c3770be41",
+      "parent_checkpoint_sha256": "598d1c966f38227589cb4c0c8a8552e4ede7b22e0d3c23edf63d5e6a216d45a4",
+      "database_sha256": "0ba17683acb20287204ab56ad8f5d56ad8b1456479799000a7b03b2deb4353d6",
+      "immediate_parent_database_sha256": "aea9c52f05efdeab2e628eeca2b7bf1b3651e4c4e82fa629c964516879736308",
+      "archive_sha256": "e587f5f66520773b23b2867f11c00b62e0554da8cba91f0aa43e6fd3abf1f4f9",
+      "archive_bytes": 5475320,
+      "clock": "2027-10-03 20:33:00",
+      "independent_delta_replay": true,
+      "test_only": true
+    },
+    {
+      "generation": 3,
+      "checkpoint_sha256": "dd6354e77c4abb5ea4ea30eb6f516bf802360e7564873c121c5891e88d0e5983",
+      "parent_checkpoint_sha256": "64549e8d87653be540a1252e5a61b7d43092b26f72edcc64fed84e6c3770be41",
+      "database_sha256": "814bcb974262c4381163d79b10c0fbcee539aafc0aceaba11f154c81da8d7808",
+      "immediate_parent_database_sha256": "0ba17683acb20287204ab56ad8f5d56ad8b1456479799000a7b03b2deb4353d6",
+      "archive_sha256": "a991931954feb9f67687b089b4455c4ff6ef10942a42b3f288b82164e0091f17",
+      "archive_bytes": 6631017,
+      "clock": "2027-10-06 17:42:00",
+      "independent_delta_replay": true,
+      "test_only": true
+    }
+  ],
+  "wheel_fresh_install_restore": {
+    "version": "0.7.0",
+    "python": "3.12.14",
+    "outside_repository_import": true,
+    "site_disabled": true,
+    "generation": 1,
+    "ok": true
+  },
+  "protected_artifacts": {
+    "BRAGA_ERA_HANDOFF_AFTER_046.zip": "527dd4d8d62f3bca8d4e0459a137e8588558315aed19aabc0cda58edbe007719",
+    "data\\handoff\\canonical\\braga_save.sqlite": "de58ac7f7942ef6048f002312cdc90314b26dc06a9853a59acaab1d5f88f4b28",
+    "output\\Save046C_v2\\database.sqlite": "27eb5d94478c2539b28085e669675e184ab2842be3d7ab1549864f2a422b6cf7",
+    "output\\Save046C_v2_candidate.zip": "df3c8820b4bb05df9af14359aa9f9aea4d67f68456701a08cecaad11438142e8",
+    "docs\\acceptance\\046C_v2_approval.json": "f000e0df48fd42c4f955f19add2db62762372ca2be12e3b5ef915dada24d015f",
+    "output\\canonical.json": "2f1a763b96568e13a530d2b2a17e596d8d04e3a2c8672ca0b5f9c82980d260d0"
+  }
+}

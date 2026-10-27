@@ -1,5 +1,14 @@
 # THE BRAGA ERA — durable engineering instructions
 
+## Task 03D continuation
+
+- PR #6 was ordinarily merged as `f9e7538ed0344d5948290c90d2fcf6326be5dcc0`. Task 03D uses `codex/task-03d-continuous-play`; leave its PR open. No official execution, production authority provisioning, Save 047, canonical date advance or accepted-registry change is authorized.
+- `continuous-forward-lineage-2` is separate from root-only forward profile 1 and DEV profiles. Each generation requires the exact registered immediate accepted parent, a separately signed execution manifest and a separate acceptance decision. Its embedded immutable 046C root authenticates history; later execution copies the immediate parent without reinitializing rosters or historical state.
+- Keep the career seed and fixture commitments stable across checkpoints, batch IDs and interruptions. Claims prevent overlapping authorized continuations. Never reselect a seed or accept an unregistered, stale, development or mixed-mode parent. Existing engine 1.0 and forward 1.1 / world policy 2.1 behavior remain unchanged.
+- Use one active authority per career. Keep the commissioner key external to archives and chat. Portable transfer fences the source; ordinary backup recovery requires explicit lost-authority acknowledgment. Possession of cloned registries and keys is a trusted-operator limitation, not distributed consensus. TEST-ONLY authority cannot be restored as production.
+- Accepted checkpoint bytes remain immutable; signed narration pages/cursors live in the authority registry. A repeated page ID returns the same response, including after a checkpoint transition. Profile-2 publication journals recover only verified owned unpublished staging trees; never delete published checkpoints or cached match results during recovery.
+- Read `docs/task03d_report.md`, `docs/task03d_decisions.md` and `docs/continuous_play_runbook.md`. All policies remain pending commissioner approval. The first official batch requires a later explicit instruction; software acceptance alone authorizes no fixture.
+
 ## Task 03C authority and forward versions
 
 - PR #5 was ordinarily merged as `7a145b98ffc6096d42423d0ea9219dac1cad8e75`; Task 03C uses `codex/task-03c-final-readiness` and leaves its PR open. No official batch, production authority, Save 047 or canonical clock advancement is authorized. Exact 046C, its release/receipt and the real accepted registry remain unchanged.
