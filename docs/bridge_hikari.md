@@ -27,6 +27,10 @@ an open request with no valid reply is queued, not executed or completed.
 5. Narrate only the returned pages, in order. A completed database result is not
    permission to reveal its later events. Do not infer a shot outcome before its
    goal/save event. Only returned final-whistle pages unlock final statistics.
+   Fetch the eligible pregame preview (or its stored delivery) before commentary:
+   its starters/bench include exact ID/name pairs for resolving event actors.
+   In a new conversation, retrieve that preview again rather than guessing a
+   player's name from an ID or importing a contemporary real-world roster.
 6. “Continue to halftime” uses `narrate_until_halftime`; check `boundary_reached`.
    “Continue” uses `narrate_next` or an explicitly requested small count.
    A retry uses the original UUID/body and returns the same delivery. A genuinely

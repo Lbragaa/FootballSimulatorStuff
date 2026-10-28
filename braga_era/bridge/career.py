@@ -126,7 +126,18 @@ class Career:
         )
         result = {k: v[k] for k in keys}
         result["lineups"] = [
-            {k: p[k] for k in ("formation", "starting_names", "bench_names") if k in p}
+            {
+                "club_key": p["club_key"],
+                "formation": p["formation"],
+                "starters": [
+                    {"id": i, "name": name}
+                    for i, name in zip(p["starters"], p["starting_names"], strict=True)
+                ],
+                "bench": [
+                    {"id": i, "name": name}
+                    for i, name in zip(p["bench"], p["bench_names"], strict=True)
+                ],
+            }
             for p in v["plans"]
         ]
         result["postmatch_available"] = False

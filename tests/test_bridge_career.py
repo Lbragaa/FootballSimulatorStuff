@@ -53,6 +53,12 @@ def test_preview_filters_seeds_and_does_not_touch_accepted_bytes(actual):
     assert preview["home"] and preview["away"] and not preview["postmatch_available"]
     safe_output(preview)
     assert "seed_commitment" not in preview
+    assert all(len(team["starters"]) == 11 for team in preview["lineups"])
+    assert all(
+        type(p["id"]) is int and p["name"]
+        for team in preview["lineups"]
+        for p in team["starters"] + team["bench"]
+    )
     with pytest.raises(ValueError):
         career.preview("league:332")
     assert file_sha256(db) == before
