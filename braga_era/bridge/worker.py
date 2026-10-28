@@ -3,6 +3,7 @@
 import hmac
 import json
 import sqlite3
+import time
 from contextlib import closing
 from pathlib import Path
 from ..history import canonical_json as encode, digest
@@ -178,9 +179,9 @@ class Worker:
             return self.career.manifest_summary(manifest)
         if name == "inspect_batch_manifest":
             m = c.execute(
-                "SELECT manifest FROM requests WHERE id=?", (args["prepare_id"],)
+                "SELECT manifest,body FROM requests WHERE id=?", (args["prepare_id"],)
             ).fetchone()
-            if not m or not m[0]:
+            if not m or not m[0] or json.loads(m[1])["command"] != "prepare_batch":
                 raise ValueError("Unknown prepared manifest")
             return self.career.manifest_summary(json.loads(m[0]))
         if name == "repeat_previous_delivery":
@@ -203,7 +204,22 @@ class Worker:
         boundary = "HALF_TIME" if name == "narrate_until_halftime" else "FINAL_WHISTLE"
         until = name.startswith("narrate_until_")
         limit = 128 if until else args.get("count", 1)
-        already = until and self.career.boundary_seen(args["fixture"], boundary)
+        already = False
+        if until:
+            if row["manifest"] is None:
+                initial = {
+                    "bridge_boundary_already_seen": self.career.boundary_seen(
+                        args["fixture"], boundary
+                    )
+                }
+                c.execute(
+                    "UPDATE requests SET manifest=? WHERE id=?",
+                    (encode(initial), row["id"]),
+                )
+                self.save(c)
+            else:
+                initial = json.loads(row["manifest"])
+            already = initial["bridge_boundary_already_seen"]
         while len(pages) < limit:
             if pages and (
                 pages[-1]["postmatch_available"]
@@ -327,6 +343,13 @@ class Worker:
                 safe_output(result)
                 status = "completed"
             except ValueError:
+                retained = c.execute(
+                    "SELECT pages FROM requests WHERE id=?", (row["id"],)
+                ).fetchone()[0]
+                if json.loads(retained):
+                    raise RuntimeError(
+                        "Retained partial delivery requires local review; original pages preserved"
+                    ) from None
                 # Do not publish exception text, paths, private diagnostics or future results.
                 result = {"error": "COMMAND_REFUSED", "resume_existing_delivery": True}
                 status = "refused"
@@ -379,6 +402,14 @@ class Worker:
             for x in self.transport.comments(number)
         )
         if not found:
+            if delivery["done"] < 0 and time.time() + delivery["done"] < 30:
+                return
+            c.execute(
+                "UPDATE deliveries SET done=? WHERE issue=?",
+                (-int(time.time()), number),
+            )
+            self.save(c)
+            self.fault("before_post")
             self.transport.reply(number, body)
             self.fault("after_post_before_ack")
         self.transport.close(number)
@@ -398,7 +429,7 @@ class Worker:
                 )
             self.transport.privacy()
             for row in c.execute(
-                "SELECT issue FROM deliveries WHERE done=0 ORDER BY issue"
+                "SELECT issue FROM deliveries WHERE done<>1 ORDER BY issue"
             ).fetchall():
                 self.deliver(c, row[0])
             for issue in sorted(self.transport.issues(), key=lambda x: x["number"]):

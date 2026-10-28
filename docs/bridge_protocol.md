@@ -80,7 +80,10 @@ deterministic lineage page ID derived from repository/request/index. If it dies
 after the lineage cursor commits but before the bridge stores that page, the
 same page ID returns the original signed page. Responses are stored before HTTP
 POST. An uncertain POST is reconciled against existing matching worker comments
-before retrying; no extra cursor page or duplicate worker comment is needed.
+before retrying, including a 30-second uncertainty grace period. GitHub has no
+cross-system transaction/idempotency key for comment creation: extreme delayed
+comment visibility can still produce identical physical copies. Clients dedupe
+by request UUID/body hash; the answer and cursor effects remain the same.
 The SQLite inbox/outbox, context and sequence are HMAC-sealed; tampering fails
 closed. Never delete the ledger to fix a delivery; back it up with the authority.
 

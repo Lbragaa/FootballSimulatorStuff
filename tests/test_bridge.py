@@ -325,3 +325,61 @@ def test_transport_context_cannot_be_rebound(rig):
     t.repository_id += 1
     with pytest.raises(ValueError, match="different configured"):
         Worker(t, c, w.path, REQUESTERS).poll()
+
+
+@pytest.mark.parametrize(
+    "command,start", [("narrate_until_halftime", 2), ("narrate_until_final", 4)]
+)
+def test_crash_on_first_boundary_page_is_not_lost(rig, command, start):
+    t, c, w = rig
+    c.position = start
+    n = t.add(request(command, fixture="league:1"))
+    w.crash = "after_page_before_store"
+    with pytest.raises(RuntimeError):
+        w.poll()
+    Worker(t, c, w.path, REQUESTERS).poll()
+    result = t.result(n)["response"]["result"]
+    assert result["boundary_reached"] and len(result["pages"]) == 1
+    assert result["pages"][0]["events"][0]["sequence"] == start + 1
+    assert c.position == start + 1
+
+
+def test_partial_page_error_is_retained_until_recovered(rig):
+    t, c, w = rig
+    n = t.add(request("narrate_until_halftime", fixture="league:1"))
+    original = c.play
+
+    def broken(view, *args, **kwargs):
+        if c.position == 1:
+            raise ValueError("Temporary backend validation problem")
+        return original(view, *args, **kwargs)
+
+    c.play = broken
+    with pytest.raises(RuntimeError, match="partial delivery"):
+        w.poll()
+    assert not t.notes
+    c.play = original
+    Worker(t, c, w.path, REQUESTERS).poll()
+    assert [
+        e["sequence"]
+        for p in t.result(n)["response"]["result"]["pages"]
+        for e in p["events"]
+    ] == [1, 2, 3]
+
+
+def test_pre_post_process_death_waits_before_uncertain_retry(rig, monkeypatch):
+    from braga_era.bridge import worker
+
+    t, c, w = rig
+    n = t.add(request())
+    w.crash = "before_post"
+    now = [1000000]
+    monkeypatch.setattr(worker.time, "time", lambda: now[0])
+    with pytest.raises(RuntimeError):
+        w.poll()
+    restarted = Worker(t, c, w.path, REQUESTERS)
+    restarted.poll()
+    assert not t.notes
+    now[0] += 31
+    restarted.poll()
+    assert len(t.notes[n]) == 1
