@@ -77,6 +77,7 @@ def main(argv=None):
             "once",
             "credential-set",
             "status",
+            "initialize-ledger",
             "startup-enable",
             "startup-disable",
         ),
@@ -85,6 +86,12 @@ def main(argv=None):
     a = p.parse_args(argv)
     try:
         v = config(a.config)
+        if a.action == "initialize-ledger":
+            if Path(v["ledger"]).exists():
+                raise ValueError("Existing ledger must never be reset")
+            build(v, "")
+            print("Local bridge ledger initialized explicitly; no command processed.")
+            return 0
         if a.action.startswith("startup-"):
             if not a.confirm_login_startup:
                 raise ValueError("Explicit startup confirmation required")
@@ -122,6 +129,10 @@ def main(argv=None):
                 )
             )
             return 0
+        if not Path(v["ledger"]).is_file():
+            raise ValueError(
+                "Bridge ledger missing: restore its backup; initialize only for a genuinely new bridge"
+            )
         # Linux migration hook: secret manager supplies an environment credential.
         token = (
             credentials.read(v["credential_target"])

@@ -62,7 +62,7 @@ immutable; only the isolated authority/session cursors are changed.
 
 ## Tests and remaining acceptance gates
 
-The focused bridge suite passed **49 tests**: closed schemas, duplicate JSON,
+The focused bridge suite passed **50 tests**: closed schemas, duplicate JSON,
 invalid users/roles, edited requests, sequence collisions, wrong heads, future
 preview denial, same-ID delivery, halfway/final boundaries, offline queue,
 uncertain HTTP POST, crash at three delivery stages, process-object restart,
@@ -70,7 +70,7 @@ sealed-ledger tampering, pinned transport/mode, secret-field filtering and real
 signed-page retry/reveal behavior on an isolated existing career. No new football
 match is generated for these focused tests. Extra cases cover a crash on the
 first boundary page, retention/recovery of a partially delivered request and the
-pre-POST reconciliation grace period. Full regressions/CI are recorded in
+pre-POST reconciliation grace period and refusal to recreate a missing persistent ledger. Full regressions/CI are recorded in
 the implementation PR when complete; pending runs are not claimed as passing.
 
 Outstanding human checks at this report's preparation:

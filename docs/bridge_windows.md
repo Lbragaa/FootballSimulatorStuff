@@ -65,6 +65,11 @@ Start-Process -FilePath "$PWD\.venv\Scripts\pythonw.exe" -ArgumentList @('-m','b
 Keep one worker per ledger/authority. The OS process lock rejects concurrent
 runners. Finish/stop bridge processing before an out-of-band authorized execution,
 acceptance or authority transfer; then restart with its updated accepted head.
+For a genuinely new configuration, initialize its ledger once with the local
+`initialize-ledger` action before `run`/`once`. The supplied TEST configuration
+is already initialized. A missing ledger on restart is refused: restore its
+backup rather than silently starting a new sequence. Existing ledgers are never
+reset by the initialization command.
 
 ## Explicit login startup opt-in
 

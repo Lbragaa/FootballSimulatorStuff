@@ -124,3 +124,19 @@ def test_generated_schema_equals_committed_reference():
         json.loads(Path("docs/bridge_response.schema.json").read_text())
         == response_schema()
     )
+
+
+def test_missing_persistent_ledger_is_not_silently_recreated(tmp_path, monkeypatch):
+    from braga_era.bridge.__main__ import main
+    from braga_era.bridge import credentials
+
+    v = sample(tmp_path)
+    p = tmp_path / "config.json"
+    p.write_text(json.dumps(v))
+    monkeypatch.setattr(
+        credentials,
+        "read",
+        lambda _: (_ for _ in ()).throw(AssertionError("No credential read allowed")),
+    )
+    assert main(["--config", str(p), "run"]) == 2
+    assert not Path(v["ledger"]).exists()
