@@ -1,5 +1,12 @@
 # THE BRAGA ERA
 
+Task 04B adds a standard-library private GitHub Issues ↔ local Python bridge.
+See the [bridge report](docs/task04b_report.md),
+[protocol](docs/bridge_protocol.md), [Windows setup](docs/bridge_windows.md) and
+[Hikari phone instructions](docs/bridge_hikari.md). It exposes inspection,
+review preparation and signed-cursor narration; execution/acceptance remain
+disabled. Check the report for completed mobile tests and remaining setup gates.
+
 The merged implementation is awaiting human pre-gameplay decisions. Start with
 the [final preparation report](docs/final_pregameplay_report.md),
 [short policy review](docs/commissioner_policy_review.md),

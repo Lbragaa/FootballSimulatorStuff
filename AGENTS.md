@@ -1,5 +1,13 @@
 # THE BRAGA ERA — durable engineering instructions
 
+## Task 04B phone bridge
+
+- Task 04B authorizes the communication integration on `codex/task-04b-phone-bridge`; no football model retuning, official execution or production authority provisioning. The dedicated command repository is PRIVATE `Lbragaa/BragaEraCommandBridge`, ID `1436541980`. Never use public FootballSimulatorStuff issues as gameplay transport.
+- `braga_era.bridge` uses existing lineage APIs, strict JSON/identity/head/sequence validation, sealed local inbox/outbox and deterministic lineage page IDs. Never execute issue-supplied code/paths or expose raw seeds, databases, saves, authorization files or future diagnostics. Execution, acceptance and provisioning commands are absent.
+- Persistent worker credentials must be repository-scoped fine-grained PATs stored in Windows Credential Manager. Never print tokens, paste them into chat or commit local configuration/keys/ledgers. A development-only one-shot in-memory existing GitHub login can test the private channel; it is not a persistent worker credential.
+- The commissioner confirmed normal iPhone ChatGPT can read the private repository/issues/comments. Do not equate that with a completed mobile write/narration/background-worker test. Record actual round-trip evidence and pending credential/login/sleep tests in `docs/task04b_report.md` before claiming readiness.
+- Login startup requires explicit local opt-in. No production key/registry or canonical binding is automatically created. Existing official 046C, fictional clock, budgets and settled history remain immutable. Read `docs/bridge_protocol.md`, `docs/bridge_windows.md` and `docs/bridge_hikari.md`.
+
 ## Final pre-gameplay preparation
 
 - The subsequent explicit user instruction authorized merging reviewed PR #7; it was ordinarily merged as `fa34d606f2ba9666dc7fc9fb68389499c3800b7f`. Earlier instructions to leave that PR open describe the completed Task 03D review stage and are superseded for this merge only.
