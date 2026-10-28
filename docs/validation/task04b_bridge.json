@@ -1,0 +1,53 @@
+{
+  "scope": "TEST-ONLY PHONE BRIDGE DEVELOPMENT",
+  "private_repository": "Lbragaa/BragaEraCommandBridge",
+  "repository_id": 1436541980,
+  "worker_id": 78325376,
+  "iphone_private_read_access": "confirmed directly by commissioner",
+  "connector_issue_create_and_reply_fetch": true,
+  "live_issues": [
+    {
+      "number": 2,
+      "command": "next_event",
+      "completed": true
+    },
+    {
+      "number": 3,
+      "command": "prematch_preview",
+      "completed": true
+    },
+    {
+      "number": 4,
+      "command": "narrate_until_halftime",
+      "completed": true,
+      "pages": 11,
+      "first_sequence": 2,
+      "last_sequence": 12,
+      "last_kind": "HALF_TIME",
+      "postmatch_available": false
+    },
+    {
+      "number": 5,
+      "command": "same_uuid_halftime_retry",
+      "identical_reply": true,
+      "extra_events_consumed": 0
+    }
+  ],
+  "next_sequence": 4,
+  "ordinary_worker_openai_or_codex_calls": 0,
+  "production_execution_enabled": false,
+  "production_acceptance_enabled": false,
+  "production_authority_provisioned": false,
+  "protected_artifacts_unchanged": true,
+  "protected_sha256": {
+    "BRAGA_ERA_HANDOFF_AFTER_046.zip": "527dd4d8d62f3bca8d4e0459a137e8588558315aed19aabc0cda58edbe007719",
+    "data\\handoff\\canonical\\braga_save.sqlite": "de58ac7f7942ef6048f002312cdc90314b26dc06a9853a59acaab1d5f88f4b28",
+    "output\\Save046C_v2\\database.sqlite": "27eb5d94478c2539b28085e669675e184ab2842be3d7ab1549864f2a422b6cf7",
+    "output\\Save046C_v2_candidate.zip": "df3c8820b4bb05df9af14359aa9f9aea4d67f68456701a08cecaad11438142e8",
+    "docs\\acceptance\\046C_v2_approval.json": "f000e0df48fd42c4f955f19add2db62762372ca2be12e3b5ef915dada24d015f",
+    "output\\canonical.json": "2f1a763b96568e13a530d2b2a17e596d8d04e3a2c8672ca0b5f9c82980d260d0"
+  },
+  "scoped_persistent_credential": "pending human hidden prompt",
+  "iphone_command_creation": "pending requested continuation test",
+  "physical_sleep_and_login_restart": "not performed; requires human opt-in/check"
+}

@@ -1,0 +1,741 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "request_id",
+        "sequence",
+        "career",
+        "expected_checkpoint",
+        "command",
+        "args"
+      ],
+      "properties": {
+        "protocol": {
+          "const": "braga-bridge-1"
+        },
+        "command": {
+          "const": "inspect_career"
+        },
+        "request_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "career": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,80}$"
+        },
+        "expected_checkpoint": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "args": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [],
+          "properties": {}
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "request_id",
+        "sequence",
+        "career",
+        "expected_checkpoint",
+        "command",
+        "args"
+      ],
+      "properties": {
+        "protocol": {
+          "const": "braga-bridge-1"
+        },
+        "command": {
+          "const": "next_event"
+        },
+        "request_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "career": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,80}$"
+        },
+        "expected_checkpoint": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "args": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [],
+          "properties": {}
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "request_id",
+        "sequence",
+        "career",
+        "expected_checkpoint",
+        "command",
+        "args"
+      ],
+      "properties": {
+        "protocol": {
+          "const": "braga-bridge-1"
+        },
+        "command": {
+          "const": "current_table"
+        },
+        "request_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "career": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,80}$"
+        },
+        "expected_checkpoint": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "args": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [],
+          "properties": {}
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "request_id",
+        "sequence",
+        "career",
+        "expected_checkpoint",
+        "command",
+        "args"
+      ],
+      "properties": {
+        "protocol": {
+          "const": "braga-bridge-1"
+        },
+        "command": {
+          "const": "current_finances"
+        },
+        "request_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "career": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,80}$"
+        },
+        "expected_checkpoint": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "args": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [],
+          "properties": {}
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "request_id",
+        "sequence",
+        "career",
+        "expected_checkpoint",
+        "command",
+        "args"
+      ],
+      "properties": {
+        "protocol": {
+          "const": "braga-bridge-1"
+        },
+        "command": {
+          "const": "inspect_accepted_checkpoint"
+        },
+        "request_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "career": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,80}$"
+        },
+        "expected_checkpoint": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "args": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [],
+          "properties": {}
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "request_id",
+        "sequence",
+        "career",
+        "expected_checkpoint",
+        "command",
+        "args"
+      ],
+      "properties": {
+        "protocol": {
+          "const": "braga-bridge-1"
+        },
+        "command": {
+          "const": "prematch_preview"
+        },
+        "request_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "career": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,80}$"
+        },
+        "expected_checkpoint": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "args": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "fixture"
+          ],
+          "properties": {
+            "fixture": {
+              "type": "string",
+              "pattern": "^(?:league:[0-9]{1,6}|(?:lib|sula|cdb):[A-Za-z0-9:_-]{1,64})$"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "request_id",
+        "sequence",
+        "career",
+        "expected_checkpoint",
+        "command",
+        "args"
+      ],
+      "properties": {
+        "protocol": {
+          "const": "braga-bridge-1"
+        },
+        "command": {
+          "const": "available_team_news"
+        },
+        "request_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "career": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,80}$"
+        },
+        "expected_checkpoint": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "args": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "fixture"
+          ],
+          "properties": {
+            "fixture": {
+              "type": "string",
+              "pattern": "^(?:league:[0-9]{1,6}|(?:lib|sula|cdb):[A-Za-z0-9:_-]{1,64})$"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "request_id",
+        "sequence",
+        "career",
+        "expected_checkpoint",
+        "command",
+        "args"
+      ],
+      "properties": {
+        "protocol": {
+          "const": "braga-bridge-1"
+        },
+        "command": {
+          "const": "narrate_next"
+        },
+        "request_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "career": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,80}$"
+        },
+        "expected_checkpoint": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "args": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "fixture"
+          ],
+          "properties": {
+            "fixture": {
+              "type": "string",
+              "pattern": "^(?:league:[0-9]{1,6}|(?:lib|sula|cdb):[A-Za-z0-9:_-]{1,64})$"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "request_id",
+        "sequence",
+        "career",
+        "expected_checkpoint",
+        "command",
+        "args"
+      ],
+      "properties": {
+        "protocol": {
+          "const": "braga-bridge-1"
+        },
+        "command": {
+          "const": "narrate_count"
+        },
+        "request_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "career": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,80}$"
+        },
+        "expected_checkpoint": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "args": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "fixture",
+            "count"
+          ],
+          "properties": {
+            "fixture": {
+              "type": "string",
+              "pattern": "^(?:league:[0-9]{1,6}|(?:lib|sula|cdb):[A-Za-z0-9:_-]{1,64})$"
+            },
+            "count": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 20
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "request_id",
+        "sequence",
+        "career",
+        "expected_checkpoint",
+        "command",
+        "args"
+      ],
+      "properties": {
+        "protocol": {
+          "const": "braga-bridge-1"
+        },
+        "command": {
+          "const": "narrate_until_halftime"
+        },
+        "request_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "career": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,80}$"
+        },
+        "expected_checkpoint": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "args": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "fixture"
+          ],
+          "properties": {
+            "fixture": {
+              "type": "string",
+              "pattern": "^(?:league:[0-9]{1,6}|(?:lib|sula|cdb):[A-Za-z0-9:_-]{1,64})$"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "request_id",
+        "sequence",
+        "career",
+        "expected_checkpoint",
+        "command",
+        "args"
+      ],
+      "properties": {
+        "protocol": {
+          "const": "braga-bridge-1"
+        },
+        "command": {
+          "const": "narrate_until_final"
+        },
+        "request_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "career": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,80}$"
+        },
+        "expected_checkpoint": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "args": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "fixture"
+          ],
+          "properties": {
+            "fixture": {
+              "type": "string",
+              "pattern": "^(?:league:[0-9]{1,6}|(?:lib|sula|cdb):[A-Za-z0-9:_-]{1,64})$"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "request_id",
+        "sequence",
+        "career",
+        "expected_checkpoint",
+        "command",
+        "args"
+      ],
+      "properties": {
+        "protocol": {
+          "const": "braga-bridge-1"
+        },
+        "command": {
+          "const": "repeat_previous_delivery"
+        },
+        "request_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "career": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,80}$"
+        },
+        "expected_checkpoint": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "args": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "delivery_id"
+          ],
+          "properties": {
+            "delivery_id": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "request_id",
+        "sequence",
+        "career",
+        "expected_checkpoint",
+        "command",
+        "args"
+      ],
+      "properties": {
+        "protocol": {
+          "const": "braga-bridge-1"
+        },
+        "command": {
+          "const": "prepare_batch"
+        },
+        "request_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "career": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,80}$"
+        },
+        "expected_checkpoint": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "args": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "until"
+          ],
+          "properties": {
+            "until": {
+              "type": "string",
+              "pattern": "^2027-\\d{2}-\\d{2} 23:59$"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "request_id",
+        "sequence",
+        "career",
+        "expected_checkpoint",
+        "command",
+        "args"
+      ],
+      "properties": {
+        "protocol": {
+          "const": "braga-bridge-1"
+        },
+        "command": {
+          "const": "inspect_batch_manifest"
+        },
+        "request_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "career": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,80}$"
+        },
+        "expected_checkpoint": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "args": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "prepare_id"
+          ],
+          "properties": {
+            "prepare_id": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "request_id",
+        "sequence",
+        "career",
+        "expected_checkpoint",
+        "command",
+        "args"
+      ],
+      "properties": {
+        "protocol": {
+          "const": "braga-bridge-1"
+        },
+        "command": {
+          "const": "inspect_candidate_validation"
+        },
+        "request_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "career": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,80}$"
+        },
+        "expected_checkpoint": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "args": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "checkpoint"
+          ],
+          "properties": {
+            "checkpoint": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          }
+        }
+      }
+    }
+  ]
+}
