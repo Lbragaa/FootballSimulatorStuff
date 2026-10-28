@@ -1,0 +1,83 @@
+{
+  "scope": "READ-ONLY FINAL PRE-GAMEPLAY PREFLIGHT; NO APPROVAL",
+  "reviewed_implementation": "fc734020b50a45d1b3901751ca6451157e0a0f89",
+  "consolidation_merge": "fa34d606f2ba9666dc7fc9fb68389499c3800b7f",
+  "runtime_tree": "209afbeae33aaaa2cf553515b13824575a5ff07f",
+  "runtime_identical_to_reviewed_pr": true,
+  "protected_artifacts": {
+    "BRAGA_ERA_HANDOFF_AFTER_046.zip": "527dd4d8d62f3bca8d4e0459a137e8588558315aed19aabc0cda58edbe007719",
+    "data\\handoff\\canonical\\braga_save.sqlite": "de58ac7f7942ef6048f002312cdc90314b26dc06a9853a59acaab1d5f88f4b28",
+    "output\\Save046C_v2\\database.sqlite": "27eb5d94478c2539b28085e669675e184ab2842be3d7ab1549864f2a422b6cf7",
+    "output\\Save046C_v2_candidate.zip": "df3c8820b4bb05df9af14359aa9f9aea4d67f68456701a08cecaad11438142e8",
+    "docs\\acceptance\\046C_v2_approval.json": "f000e0df48fd42c4f955f19add2db62762372ca2be12e3b5ef915dada24d015f",
+    "output\\canonical.json": "2f1a763b96568e13a530d2b2a17e596d8d04e3a2c8672ca0b5f9c82980d260d0"
+  },
+  "official_clock": "2027-09-26 23:30",
+  "official_matches_executed": 0,
+  "production_authority_provisioned": false,
+  "production_key_generated": false,
+  "official_career_seed_committed": false,
+  "commissioner_policy_accepted": false,
+  "new_match_simulations_run": 0,
+  "first_batch": {
+    "lib_first_legs": 8,
+    "sula_playoff_first_legs": 8,
+    "league_fixtures": 0,
+    "fixtures": [
+      "lib:LIB-R16-01:L1",
+      "lib:LIB-R16-02:L1",
+      "lib:LIB-R16-03:L1",
+      "lib:LIB-R16-04:L1",
+      "lib:LIB-R16-05:L1",
+      "lib:LIB-R16-06:L1",
+      "lib:LIB-R16-07:L1",
+      "lib:LIB-R16-08:L1",
+      "sula:SULA-PO-01:L1",
+      "sula:SULA-PO-02:L1",
+      "sula:SULA-PO-03:L1",
+      "sula:SULA-PO-04:L1",
+      "sula:SULA-PO-05:L1",
+      "sula:SULA-PO-06:L1",
+      "sula:SULA-PO-07:L1",
+      "sula:SULA-PO-08:L1"
+    ],
+    "obligations": [
+      "payroll:2027-09"
+    ],
+    "incremental_payroll_due_cents": 179966667,
+    "current_cash_cents": 3055000000,
+    "projected_cash_if_authorized_cents": 2875033333,
+    "reserve_cents": 1600000000,
+    "payment_posted": false,
+    "template_seed_still_placeholder": true
+  },
+  "existing_noncanonical_accepted_chain": [
+    {
+      "generation": 1,
+      "checkpoint_sha256": "598d1c966f38227589cb4c0c8a8552e4ede7b22e0d3c23edf63d5e6a216d45a4",
+      "test_only": true,
+      "existing_accepted_proof_verified": true
+    },
+    {
+      "generation": 2,
+      "checkpoint_sha256": "64549e8d87653be540a1252e5a61b7d43092b26f72edcc64fed84e6c3770be41",
+      "test_only": true,
+      "existing_accepted_proof_verified": true
+    },
+    {
+      "generation": 3,
+      "checkpoint_sha256": "dd6354e77c4abb5ea4ea30eb6f516bf802360e7564873c121c5891e88d0e5983",
+      "test_only": true,
+      "existing_accepted_proof_verified": true
+    }
+  ],
+  "continuation_new_fixture_counts": [
+    10,
+    16
+  ],
+  "test_only_to_production_rejected": true,
+  "separate_exact_hash_acceptance_required": true,
+  "unsigned_acceptance_rejected": true,
+  "known_production_runtime_present": false,
+  "new_code_obstacles": []
+}

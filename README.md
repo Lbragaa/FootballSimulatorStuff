@@ -1,5 +1,12 @@
 # THE BRAGA ERA
 
+The merged implementation is awaiting human pre-gameplay decisions. Start with
+the [final preparation report](docs/final_pregameplay_report.md),
+[short policy review](docs/commissioner_policy_review.md),
+[unsigned first-batch summary](docs/first_batch_review.md) and
+[Windows setup guide](docs/windows_runtime_setup.md). These grant no policy
+approval, production authority or official match authorization.
+
 Task 03D (0.7.0) adds signed, immediate-parent career continuation, stable career
 seeds, separate batch authorization and checkpoint acceptance, portable authority
 transfer and resumable Hikari narration. All demonstrated progression is

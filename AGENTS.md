@@ -1,5 +1,12 @@
 # THE BRAGA ERA — durable engineering instructions
 
+## Final pre-gameplay preparation
+
+- The subsequent explicit user instruction authorized merging reviewed PR #7; it was ordinarily merged as `fa34d606f2ba9666dc7fc9fb68389499c3800b7f`. Earlier instructions to leave that PR open describe the completed Task 03D review stage and are superseded for this merge only.
+- Preparation adds documentation/evidence on main, without engine retuning, a new development phase or additional branches. Read `docs/final_pregameplay_report.md`, `docs/commissioner_policy_review.md`, `docs/first_batch_review.md` and `docs/windows_runtime_setup.md`.
+- The policy bundle remains recommended and unsigned. No production key/registry, official career seed commitment, official match, Save 047, acceptance receipt, canonical-date advance or accepted-artifact mutation is authorized. Future key/provisioning code in the Windows guide is instructions only and requires a separate human instruction before execution.
+- First proposed batch is exactly eight LIB R16 first legs, eight SULA playoff first legs and September month-end incremental payroll once; no R26 fixture. Read-only payroll projection is R$1,799,666.67, not a payment. Separate exact-manifest execution authority and subsequent exact-hash acceptance remain mandatory.
+
 ## Task 03D continuation
 
 - PR #6 was ordinarily merged as `f9e7538ed0344d5948290c90d2fcf6326be5dcc0`. Task 03D uses `codex/task-03d-continuous-play`; leave its PR open. No official execution, production authority provisioning, Save 047, canonical date advance or accepted-registry change is authorized.
