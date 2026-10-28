@@ -39,3 +39,8 @@ Candidate 046C preserves that original schema and adds seven administrative tabl
 Ranking convention in the inherited scripts: points, wins, goal difference, goals scored (descending), club name as a deterministic final fallback. The project preserves that convention; it does not import a contemporary competition rulebook.
 
 `fixtures.competition='Brasileirão'` identifies recorded 2026 league history; `Brasileirão 2027` identifies the 380-fixture 2027 season. Filtering solely by `clubs` or a round label can mix unrelated seasons. Separate continental/CDB tables must be included when reporting universe-wide coverage.
+
+
+## Task 03D authority schema
+
+The football schema is unchanged. A separate authority SQLite registry holds signed career/model identity, stable seed, active transfer lease, accepted-parent head, batch and unique parent/fixture/obligation claims, authorization/acceptance decisions, signed cursor revisions and idempotent narration pages. Accepted payloads contain the inherited football database and a signed proof chain. Registry path locators may change on verified restoration; immutable checkpoint identities do not. No Task 03D migration writes into accepted 046C. See [report](task03d_report.md).

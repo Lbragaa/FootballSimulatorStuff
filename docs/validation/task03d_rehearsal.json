@@ -1,0 +1,111 @@
+{
+  "accepted_test_head": "dd6354e77c4abb5ea4ea30eb6f516bf802360e7564873c121c5891e88d0e5983",
+  "batch_boundaries_change_football": false,
+  "batches": [
+    {
+      "accepted": true,
+      "checkpoint_sha256": "598d1c966f38227589cb4c0c8a8552e4ede7b22e0d3c23edf63d5e6a216d45a4",
+      "generation": 1,
+      "immediate_parent_sha256": "27eb5d94478c2539b28085e669675e184ab2842be3d7ab1549864f2a422b6cf7",
+      "independent_delta_replay": true,
+      "new_receipts": 16,
+      "ok": true,
+      "profile": "continuous-forward-lineage-2",
+      "receipts": 16,
+      "test_only": true,
+      "validation": {
+        "continental_final": 16,
+        "historical_tables_and_completed_rows_preserved": true,
+        "journal_verified": true,
+        "league_final": 0,
+        "ok": true,
+        "receipts": 16,
+        "rest_exceptions": [
+          {
+            "club": "club:12",
+            "first": "league:382",
+            "hours": 69.0,
+            "inherited": true,
+            "second": "league:393"
+          }
+        ],
+        "scope": "NONCANONICAL FORWARD AUTHORIZATION REHEARSAL"
+      },
+      "world_sha256": "c99bada8287eae7d047423b121ba337188e42e9c0c8745fd5222a237ff2049be"
+    },
+    {
+      "accepted": true,
+      "checkpoint_sha256": "64549e8d87653be540a1252e5a61b7d43092b26f72edcc64fed84e6c3770be41",
+      "generation": 2,
+      "immediate_parent_sha256": "598d1c966f38227589cb4c0c8a8552e4ede7b22e0d3c23edf63d5e6a216d45a4",
+      "independent_delta_replay": true,
+      "new_receipts": 10,
+      "ok": true,
+      "profile": "continuous-forward-lineage-2",
+      "receipts": 26,
+      "test_only": true,
+      "validation": {
+        "continental_final": 16,
+        "historical_tables_and_completed_rows_preserved": true,
+        "journal_verified": true,
+        "league_final": 10,
+        "ok": true,
+        "receipts": 26,
+        "rest_exceptions": [
+          {
+            "club": "club:12",
+            "first": "league:382",
+            "hours": 69.0,
+            "inherited": true,
+            "second": "league:393"
+          }
+        ],
+        "scope": "NONCANONICAL FORWARD AUTHORIZATION REHEARSAL"
+      },
+      "world_sha256": "1df37db54d9658ec765dc4381dabb24b306f821a667cd5a46d8e5f18f665d9a1"
+    },
+    {
+      "accepted": true,
+      "checkpoint_sha256": "dd6354e77c4abb5ea4ea30eb6f516bf802360e7564873c121c5891e88d0e5983",
+      "generation": 3,
+      "immediate_parent_sha256": "64549e8d87653be540a1252e5a61b7d43092b26f72edcc64fed84e6c3770be41",
+      "independent_delta_replay": true,
+      "new_receipts": 16,
+      "ok": true,
+      "profile": "continuous-forward-lineage-2",
+      "receipts": 42,
+      "test_only": true,
+      "validation": {
+        "continental_final": 32,
+        "historical_tables_and_completed_rows_preserved": true,
+        "journal_verified": true,
+        "league_final": 10,
+        "ok": true,
+        "receipts": 42,
+        "rest_exceptions": [
+          {
+            "club": "club:12",
+            "first": "league:382",
+            "hours": 69.0,
+            "inherited": true,
+            "second": "league:393"
+          }
+        ],
+        "scope": "NONCANONICAL FORWARD AUTHORIZATION REHEARSAL"
+      },
+      "world_sha256": "5e1ed0d03c3c5f3d9cce25b043ff8bd33cb296df903a09da1d113d2003dd3151"
+    }
+  ],
+  "narration_sequences_across_generations": [
+    1,
+    2,
+    3
+  ],
+  "official_matches_executed": 0,
+  "original_accepted_sha256": "27eb5d94478c2539b28085e669675e184ab2842be3d7ab1549864f2a422b6cf7",
+  "portable_machine_transfer_after_generation": 1,
+  "production_authority_provisioned": false,
+  "profile": "continuous-forward-lineage-2",
+  "scope": "TEST-ONLY NONCANONICAL CONTINUOUS CHECKPOINT REHEARSAL",
+  "single_world_sha256": "5e1ed0d03c3c5f3d9cce25b043ff8bd33cb296df903a09da1d113d2003dd3151"
+}

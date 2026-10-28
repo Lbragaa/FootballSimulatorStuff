@@ -1,0 +1,667 @@
+{
+  "analysis_only_card_alternatives": {
+    "ANALYSIS-03D-straight-.015": {
+      "A": 85,
+      "D": 85,
+      "H": 130,
+      "any_dismissal": 66,
+      "dismissals": 69,
+      "goals": 792,
+      "injuries": 3,
+      "matches": 300,
+      "second_yellow": 61,
+      "shots": 6706,
+      "straight_red": 8,
+      "xg": 830.6227999999996,
+      "yellows": 952
+    },
+    "ANALYSIS-03D-yellow-1.2": {
+      "A": 97,
+      "D": 67,
+      "H": 136,
+      "any_dismissal": 58,
+      "dismissals": 62,
+      "goals": 803,
+      "injuries": 6,
+      "matches": 300,
+      "second_yellow": 33,
+      "shots": 6703,
+      "straight_red": 29,
+      "xg": 831.8839,
+      "yellows": 700
+    },
+    "ANALYSIS-03D-yellow-cap-2": {
+      "A": 81,
+      "D": 92,
+      "H": 127,
+      "any_dismissal": 40,
+      "dismissals": 41,
+      "goals": 772,
+      "injuries": 5,
+      "matches": 300,
+      "second_yellow": 21,
+      "shots": 6540,
+      "straight_red": 20,
+      "xg": 830.4094000000006,
+      "yellows": 739
+    },
+    "braga-headless-1.1.0": {
+      "A": 81,
+      "D": 85,
+      "H": 134,
+      "any_dismissal": 86,
+      "dismissals": 96,
+      "goals": 791,
+      "injuries": 1,
+      "matches": 300,
+      "second_yellow": 76,
+      "shots": 6661,
+      "straight_red": 20,
+      "xg": 830.2502000000004,
+      "yellows": 953
+    }
+  },
+  "controls": {
+    "attacking_cautious": {
+      "A": 79,
+      "D": 88,
+      "H": 133,
+      "any_dismissal": 63,
+      "dismissals": 73,
+      "goals": 792,
+      "injuries": 5,
+      "matches": 300,
+      "second_yellow": 52,
+      "shots": 6609,
+      "straight_red": 21,
+      "xg": 809.1992000000007,
+      "yellows": 884
+    },
+    "both_15": {
+      "A": 13,
+      "D": 34,
+      "H": 253,
+      "any_dismissal": 69,
+      "dismissals": 73,
+      "goals": 856,
+      "injuries": 1,
+      "matches": 300,
+      "second_yellow": 56,
+      "shots": 6723,
+      "straight_red": 17,
+      "xg": 825.0581000000002,
+      "yellows": 923
+    },
+    "both_3": {
+      "A": 70,
+      "D": 75,
+      "H": 155,
+      "any_dismissal": 71,
+      "dismissals": 79,
+      "goals": 829,
+      "injuries": 2,
+      "matches": 300,
+      "second_yellow": 61,
+      "shots": 6695,
+      "straight_red": 18,
+      "xg": 831.2976999999995,
+      "yellows": 935
+    },
+    "cautious_attacking": {
+      "A": 88,
+      "D": 90,
+      "H": 122,
+      "any_dismissal": 69,
+      "dismissals": 77,
+      "goals": 770,
+      "injuries": 7,
+      "matches": 300,
+      "second_yellow": 61,
+      "shots": 6587,
+      "straight_red": 16,
+      "xg": 809.3449000000007,
+      "yellows": 892
+    },
+    "identical": {
+      "A": 81,
+      "D": 90,
+      "H": 129,
+      "any_dismissal": 80,
+      "dismissals": 90,
+      "goals": 801,
+      "injuries": 4,
+      "matches": 300,
+      "second_yellow": 71,
+      "shots": 6539,
+      "straight_red": 19,
+      "xg": 831.8257999999998,
+      "yellows": 918
+    },
+    "players_only_15": {
+      "A": 47,
+      "D": 71,
+      "H": 182,
+      "any_dismissal": 62,
+      "dismissals": 67,
+      "goals": 800,
+      "injuries": 4,
+      "matches": 300,
+      "second_yellow": 45,
+      "shots": 6527,
+      "straight_red": 22,
+      "xg": 829.7833999999997,
+      "yellows": 939
+    },
+    "players_only_3": {
+      "A": 72,
+      "D": 83,
+      "H": 145,
+      "any_dismissal": 82,
+      "dismissals": 87,
+      "goals": 815,
+      "injuries": 2,
+      "matches": 300,
+      "second_yellow": 65,
+      "shots": 6610,
+      "straight_red": 22,
+      "xg": 829.574800000001,
+      "yellows": 1005
+    },
+    "reversed": {
+      "A": 80,
+      "D": 81,
+      "H": 139,
+      "any_dismissal": 65,
+      "dismissals": 68,
+      "goals": 792,
+      "injuries": 6,
+      "matches": 300,
+      "second_yellow": 49,
+      "shots": 6618,
+      "straight_red": 19,
+      "xg": 830.5969999999998,
+      "yellows": 891
+    },
+    "strength_only_15": {
+      "A": 27,
+      "D": 56,
+      "H": 217,
+      "any_dismissal": 81,
+      "dismissals": 90,
+      "goals": 768,
+      "injuries": 3,
+      "matches": 300,
+      "second_yellow": 63,
+      "shots": 6592,
+      "straight_red": 27,
+      "xg": 825.1764000000002,
+      "yellows": 906
+    },
+    "strength_only_3": {
+      "A": 50,
+      "D": 91,
+      "H": 159,
+      "any_dismissal": 70,
+      "dismissals": 76,
+      "goals": 766,
+      "injuries": 7,
+      "matches": 300,
+      "second_yellow": 56,
+      "shots": 6687,
+      "straight_red": 20,
+      "xg": 830.3549000000002,
+      "yellows": 904
+    }
+  },
+  "dismissals_by_club": {
+    "club:2": 169,
+    "club:23": 137
+  },
+  "dismissals_by_player": {
+    "245": 1,
+    "247": 19,
+    "248": 25,
+    "249": 37,
+    "251": 29,
+    "253": 8,
+    "255": 14,
+    "256": 5,
+    "257": 12,
+    "258": 1,
+    "259": 12,
+    "261": 1,
+    "262": 2,
+    "264": 2,
+    "265": 1,
+    "462": 10,
+    "512": 2,
+    "513": 24,
+    "514": 18,
+    "515": 18,
+    "516": 1,
+    "517": 9,
+    "518": 7,
+    "519": 3,
+    "520": 3,
+    "521": 4,
+    "522": 3,
+    "523": 25,
+    "525": 7,
+    "527": 1,
+    "528": 1,
+    "529": 1
+  },
+  "dismissals_by_position": {
+    "DF": 211,
+    "FW": 17,
+    "GK": 3,
+    "MF": 75
+  },
+  "dismissals_by_score_state": {
+    "leading": 98,
+    "level": 95,
+    "trailing": 113
+  },
+  "fitness_24_matches_every_3_days_no_medical_or_cards": {
+    "0.05": [
+      {
+        "changes": 0,
+        "fixture": 0,
+        "mean_home_starter_fitness": 90,
+        "minimum_home_fitness": 90
+      },
+      {
+        "changes": 11,
+        "fixture": 1,
+        "mean_home_starter_fitness": 94.5,
+        "minimum_home_fitness": 87.18
+      },
+      {
+        "changes": 7,
+        "fixture": 2,
+        "mean_home_starter_fitness": 95.73,
+        "minimum_home_fitness": 91.08
+      },
+      {
+        "changes": 8,
+        "fixture": 3,
+        "mean_home_starter_fitness": 96.72636363636363,
+        "minimum_home_fitness": 89.91
+      },
+      {
+        "changes": 9,
+        "fixture": 4,
+        "mean_home_starter_fitness": 97.39363636363636,
+        "minimum_home_fitness": 92.29
+      },
+      {
+        "changes": 6,
+        "fixture": 5,
+        "mean_home_starter_fitness": 98.73545454545454,
+        "minimum_home_fitness": 92.85
+      },
+      {
+        "changes": 6,
+        "fixture": 6,
+        "mean_home_starter_fitness": 98.57454545454546,
+        "minimum_home_fitness": 93.19
+      },
+      {
+        "changes": 3,
+        "fixture": 7,
+        "mean_home_starter_fitness": 98.94727272727273,
+        "minimum_home_fitness": 92.32
+      },
+      {
+        "changes": 0,
+        "fixture": 8,
+        "mean_home_starter_fitness": 98.65,
+        "minimum_home_fitness": 95.1
+      },
+      {
+        "changes": 2,
+        "fixture": 9,
+        "mean_home_starter_fitness": 98.19454545454545,
+        "minimum_home_fitness": 94.71
+      },
+      {
+        "changes": 1,
+        "fixture": 10,
+        "mean_home_starter_fitness": 97.78818181818181,
+        "minimum_home_fitness": 95.02
+      },
+      {
+        "changes": 0,
+        "fixture": 11,
+        "mean_home_starter_fitness": 97.20636363636363,
+        "minimum_home_fitness": 94.74
+      },
+      {
+        "changes": 1,
+        "fixture": 12,
+        "mean_home_starter_fitness": 96.79545454545455,
+        "minimum_home_fitness": 94.02
+      },
+      {
+        "changes": 1,
+        "fixture": 13,
+        "mean_home_starter_fitness": 96.34818181818181,
+        "minimum_home_fitness": 90.33
+      },
+      {
+        "changes": 2,
+        "fixture": 14,
+        "mean_home_starter_fitness": 95.43181818181819,
+        "minimum_home_fitness": 91.5
+      },
+      {
+        "changes": 5,
+        "fixture": 15,
+        "mean_home_starter_fitness": 96.51727272727273,
+        "minimum_home_fitness": 90.88
+      },
+      {
+        "changes": 3,
+        "fixture": 16,
+        "mean_home_starter_fitness": 95.56727272727272,
+        "minimum_home_fitness": 89.63
+      },
+      {
+        "changes": 2,
+        "fixture": 17,
+        "mean_home_starter_fitness": 94.91727272727273,
+        "minimum_home_fitness": 90.13
+      },
+      {
+        "changes": 3,
+        "fixture": 18,
+        "mean_home_starter_fitness": 95.46,
+        "minimum_home_fitness": 88.86
+      },
+      {
+        "changes": 3,
+        "fixture": 19,
+        "mean_home_starter_fitness": 95.81090909090909,
+        "minimum_home_fitness": 85.73
+      },
+      {
+        "changes": 7,
+        "fixture": 20,
+        "mean_home_starter_fitness": 97.19,
+        "minimum_home_fitness": 89.1
+      },
+      {
+        "changes": 9,
+        "fixture": 21,
+        "mean_home_starter_fitness": 98.00909090909092,
+        "minimum_home_fitness": 87.6
+      },
+      {
+        "changes": 7,
+        "fixture": 22,
+        "mean_home_starter_fitness": 98.45454545454545,
+        "minimum_home_fitness": 92.1
+      },
+      {
+        "changes": 2,
+        "fixture": 23,
+        "mean_home_starter_fitness": 98.78636363636363,
+        "minimum_home_fitness": 88.59
+      }
+    ],
+    "0.12": [
+      {
+        "changes": 0,
+        "fixture": 0,
+        "mean_home_starter_fitness": 90,
+        "minimum_home_fitness": 90
+      },
+      {
+        "changes": 11,
+        "fixture": 1,
+        "mean_home_starter_fitness": 94.5,
+        "minimum_home_fitness": 86.46
+      },
+      {
+        "changes": 9,
+        "fixture": 2,
+        "mean_home_starter_fitness": 94.75454545454545,
+        "minimum_home_fitness": 90.83
+      },
+      {
+        "changes": 5,
+        "fixture": 3,
+        "mean_home_starter_fitness": 96.26545454545455,
+        "minimum_home_fitness": 89.34
+      },
+      {
+        "changes": 7,
+        "fixture": 4,
+        "mean_home_starter_fitness": 98.43727272727273,
+        "minimum_home_fitness": 88.58
+      },
+      {
+        "changes": 9,
+        "fixture": 5,
+        "mean_home_starter_fitness": 98.69,
+        "minimum_home_fitness": 92.69
+      },
+      {
+        "changes": 7,
+        "fixture": 6,
+        "mean_home_starter_fitness": 99.22727272727273,
+        "minimum_home_fitness": 91.2
+      },
+      {
+        "changes": 4,
+        "fixture": 7,
+        "mean_home_starter_fitness": 98.49454545454546,
+        "minimum_home_fitness": 94.04
+      },
+      {
+        "changes": 8,
+        "fixture": 8,
+        "mean_home_starter_fitness": 98.97454545454545,
+        "minimum_home_fitness": 94.12
+      },
+      {
+        "changes": 5,
+        "fixture": 9,
+        "mean_home_starter_fitness": 98.64454545454545,
+        "minimum_home_fitness": 92.05
+      },
+      {
+        "changes": 7,
+        "fixture": 10,
+        "mean_home_starter_fitness": 98.41363636363637,
+        "minimum_home_fitness": 92.89
+      },
+      {
+        "changes": 10,
+        "fixture": 11,
+        "mean_home_starter_fitness": 99.77090909090909,
+        "minimum_home_fitness": 93.91
+      },
+      {
+        "changes": 3,
+        "fixture": 12,
+        "mean_home_starter_fitness": 99.37272727272727,
+        "minimum_home_fitness": 96.38
+      },
+      {
+        "changes": 3,
+        "fixture": 13,
+        "mean_home_starter_fitness": 98.94272727272727,
+        "minimum_home_fitness": 96.06
+      },
+      {
+        "changes": 6,
+        "fixture": 14,
+        "mean_home_starter_fitness": 99.35181818181819,
+        "minimum_home_fitness": 95.22
+      },
+      {
+        "changes": 3,
+        "fixture": 15,
+        "mean_home_starter_fitness": 99.24636363636364,
+        "minimum_home_fitness": 95.64
+      },
+      {
+        "changes": 4,
+        "fixture": 16,
+        "mean_home_starter_fitness": 99.07,
+        "minimum_home_fitness": 93.88
+      },
+      {
+        "changes": 3,
+        "fixture": 17,
+        "mean_home_starter_fitness": 98.9290909090909,
+        "minimum_home_fitness": 95.3
+      },
+      {
+        "changes": 5,
+        "fixture": 18,
+        "mean_home_starter_fitness": 98.56727272727272,
+        "minimum_home_fitness": 95.74
+      },
+      {
+        "changes": 5,
+        "fixture": 19,
+        "mean_home_starter_fitness": 98.45181818181818,
+        "minimum_home_fitness": 93.85
+      },
+      {
+        "changes": 5,
+        "fixture": 20,
+        "mean_home_starter_fitness": 97.98181818181818,
+        "minimum_home_fitness": 96.04
+      },
+      {
+        "changes": 5,
+        "fixture": 21,
+        "mean_home_starter_fitness": 98.62727272727273,
+        "minimum_home_fitness": 92.94
+      },
+      {
+        "changes": 4,
+        "fixture": 22,
+        "mean_home_starter_fitness": 99.23636363636363,
+        "minimum_home_fitness": 90.09
+      },
+      {
+        "changes": 3,
+        "fixture": 23,
+        "mean_home_starter_fitness": 98.5390909090909,
+        "minimum_home_fitness": 94.59
+      }
+    ]
+  },
+  "fitness_weight_selection_controls": {
+    "0.05": {
+      "suspended_star_excluded": true,
+      "three_fit_78_ovr_alternatives_available": true,
+      "tired_80_ovr_star_starts": true
+    },
+    "0.12": {
+      "suspended_star_excluded": true,
+      "three_fit_78_ovr_alternatives_available": true,
+      "tired_80_ovr_star_starts": false
+    }
+  },
+  "original_1200_breakdown": {
+    "braga-headless-1.0.0:gap-15": {
+      "A": 109,
+      "D": 61,
+      "H": 30,
+      "any_dismissal": 48,
+      "dismissals": 53,
+      "goals": 543,
+      "injuries": 3,
+      "matches": 200,
+      "second_yellow": 42,
+      "shots": 4311,
+      "straight_red": 11,
+      "xg": 542.1400000000002,
+      "yellows": 662
+    },
+    "braga-headless-1.0.0:gap0": {
+      "A": 34,
+      "D": 60,
+      "H": 106,
+      "any_dismissal": 41,
+      "dismissals": 44,
+      "goals": 539,
+      "injuries": 2,
+      "matches": 200,
+      "second_yellow": 30,
+      "shots": 4360,
+      "straight_red": 14,
+      "xg": 547.9688000000002,
+      "yellows": 609
+    },
+    "braga-headless-1.0.0:gap15": {
+      "A": 2,
+      "D": 19,
+      "H": 179,
+      "any_dismissal": 56,
+      "dismissals": 63,
+      "goals": 565,
+      "injuries": 4,
+      "matches": 200,
+      "second_yellow": 44,
+      "shots": 4400,
+      "straight_red": 19,
+      "xg": 538.9239000000001,
+      "yellows": 612
+    },
+    "braga-headless-1.1.0:gap-15": {
+      "A": 117,
+      "D": 45,
+      "H": 38,
+      "any_dismissal": 40,
+      "dismissals": 47,
+      "goals": 512,
+      "injuries": 2,
+      "matches": 200,
+      "second_yellow": 38,
+      "shots": 4381,
+      "straight_red": 9,
+      "xg": 541.5336000000001,
+      "yellows": 603
+    },
+    "braga-headless-1.1.0:gap0": {
+      "A": 35,
+      "D": 42,
+      "H": 123,
+      "any_dismissal": 52,
+      "dismissals": 58,
+      "goals": 576,
+      "injuries": 1,
+      "matches": 200,
+      "second_yellow": 38,
+      "shots": 4334,
+      "straight_red": 20,
+      "xg": 550.0762,
+      "yellows": 606
+    },
+    "braga-headless-1.1.0:gap15": {
+      "A": 6,
+      "D": 15,
+      "H": 179,
+      "any_dismissal": 35,
+      "dismissals": 41,
+      "goals": 563,
+      "injuries": 3,
+      "matches": 200,
+      "second_yellow": 33,
+      "shots": 4445,
+      "straight_red": 8,
+      "xg": 539.5807999999998,
+      "yellows": 588
+    }
+  },
+  "policy": "task03d-controlled-analysis-v1",
+  "scope": "NONCANONICAL DEVELOPMENT TEST",
+  "trials_per_control": 300,
+  "uncertainty": "Maximum binomial 95% half-width about 0.0566; synthetic experiments are not independent real-football observations"
+}

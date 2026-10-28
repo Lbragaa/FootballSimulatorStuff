@@ -62,3 +62,8 @@ Development packages reuse the existing atomic publisher, manifest, safe ZIP ext
 `DEV-03B` always returns `acceptance_eligible=False`; the existing promotion API rejects it. Changing its label to 047 fails the strict profile. A future official profile/authorization workflow must be separately implemented and reviewed.
 
 Hikari receives a pregame-only preview, then `world narrate DIRECTORY --fixture KEY --count 1`. A persistent result-bound cursor releases only that match's next events, stripping future shot resolution and withholding final statistics until the final whistle. It does not expose unrelated future results. Complete world progress, including the noncanonical Vasco result and derived table, is explicitly private diagnostic context. Local files are not encrypted/access-controlled; direct opening bypasses the normal spoiler gate. The public engineering summary exposes counts, validation and hashes, not the Vasco result.
+
+
+## Task 03D continuous execution
+
+The existing world executor and outcome models remain in use. The new `braga_era.lineage` coordinator copies each immediate registered accepted parent and preserves the career seed across batches. A separate authority registry commits each batch before draws and accepts its independently restored candidate only after another signed decision. Batch boundaries currently require 23:59; sequential narration remains independent of execution boundaries. The three TEST-ONLY checkpoints through September 30, October 3 and October 6 are compared with an uninterrupted same-seed control. See [report](task03d_report.md) and [operating guide](continuous_play_runbook.md).
