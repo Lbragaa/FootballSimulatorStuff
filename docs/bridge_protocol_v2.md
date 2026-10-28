@@ -1,5 +1,34 @@
 # Private phone bridge protocol 2
 
+## Final streamlined gameplay commands (0.10.0)
+
+The user intentionally replaced per-batch independent approval with a revocable,
+career-scoped standing delegation. [Play instructions](play.md) supersede the
+manual-only procedure for enabled ordinary play. All commands retain closed
+schemas, pinned GitHub identity, exact career/head/sequence and stable UUIDs.
+
+| Command | Args | Purpose |
+| --- | --- | --- |
+| `enable_automatic_gameplay` | `confirmation: ENABLE_AUTOMATIC_GAMEPLAY` | Explicit once-per-career standing opt-in |
+| `disable_automatic_gameplay` | none | Stop future automatic advancement |
+| `automatic_status` | none | Inspect standing mode |
+| `continue_gameplay` | none | Narration first; otherwise one next-day batch when enabled, then pregame |
+| `advance_next_batch` | none | Explicit next chronological batch; refuses to bypass existing narration |
+| `play_prepared_batch` | preparation UUID, exact manifest SHA256 | Resume an already prepared batch under enabled delegation |
+
+All except status require the control scope. No authenticator, copied hash or
+GitHub-mobile approval is required in ordinary play. Delegated proofs use
+`career-automatic-gameplay-1` / `automatic-gameplay-operation-1`, never pretend
+to be OTP proofs, and retain the existing lineage authorization/verification/
+acceptance process. Each operation commits its exact statements and standing
+grant before effects; replay/recovery retains original seeds and receipts.
+
+Disabling affects future operations; already committed work resumes its original
+decision rather than being rerolled. The next batch boundary is the earliest
+pending date at 23:59, including all earlier eligible fixtures and financial
+obligations. Unresolved dependencies still fail closed. Existing manual commands
+and the original procedure below remain as a separate optional path.
+
 `braga-bridge-2` is an opt-in communication extension, not a football engine or
 checkpoint profile. Runtime 0.9.0 uses the existing lineage profile 2. GitHub
 repository `Lbragaa/BragaEraCommandBridge` must remain private, ID `1436541980`.

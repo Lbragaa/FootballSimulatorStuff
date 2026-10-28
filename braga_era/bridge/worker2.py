@@ -24,7 +24,14 @@ def replace_signed(path, value, key):
         f.write(encode(lineage.signed(value, key)))
         f.flush()
         os.fsync(f.fileno())
-    temporary.replace(path)
+    for attempt in range(5):
+        try:
+            temporary.replace(path)
+            break
+        except PermissionError:
+            if attempt == 4:
+                raise
+            time.sleep(0.05 * (attempt + 1))
 
 
 class Worker2(Worker):
@@ -33,10 +40,11 @@ class Worker2(Worker):
     public_protocol = protocol2.PROTOCOL
     result_keys = protocol2.RESULT_KEYS
 
-    def __init__(self, *args, controls=None, roundups=None, **kwargs):
+    def __init__(self, *args, controls=None, roundups=None, automatic=None, **kwargs):
         kwargs.setdefault("scopes", ("read", "narration", "admin", "control"))
         super().__init__(*args, **kwargs)
         self.controls = controls
+        self.automatic = automatic
         self.roundups = roundups or Roundups(self.career, self.path.parent / "roundups")
 
     def capabilities(self):
@@ -49,14 +57,45 @@ class Worker2(Worker):
                            and "control" in human.get("scopes", []) and "control" in self.scopes)
             except (OSError, ValueError, KeyError, TypeError):
                 pass  # Missing control approval must not prevent ordinary reading.
-        return {"execution_enabled": enabled, "acceptance_enabled": enabled}
+        auto = False
+        if enabled and self.automatic is not None:
+            auto = self.automatic.mode()["enabled"]
+        return {"execution_enabled": enabled, "acceptance_enabled": enabled, "automatic_gameplay": auto}
+
+    def valid_head(self, request):
+        if super().valid_head(request):
+            return True
+        return bool(self.automatic and request["command"] in
+                    {"continue_gameplay", "advance_next_batch", "play_prepared_batch"}
+                    and self.automatic.resumable(request))
 
     def dispatch(self, c, row, request):
         name, args = request["command"], request["args"]
+        if name in {"enable_automatic_gameplay", "disable_automatic_gameplay", "automatic_status",
+                    "continue_gameplay", "advance_next_batch", "play_prepared_batch"}:
+            if self.automatic is None or not self.capabilities()["execution_enabled"]:
+                raise ValueError("Automatic gameplay is not configured for this career")
+            actor = self.transport.issue(row["source"])["user"]
+            if actor.get("id") != self.controls.gate.context["human_id"]:
+                raise ValueError("Pinned commissioner identity required")
+            if name == "automatic_status":
+                return {"automatic_gameplay": self.automatic.mode()["enabled"], "career": self.career.career}
+            if name in {"enable_automatic_gameplay", "disable_automatic_gameplay"}:
+                return self.automatic.set_mode(name == "enable_automatic_gameplay", request, row["source"])
+            prepared = (args["preparation_id"], args["manifest_sha256"]) if name == "play_prepared_batch" else None
+            try:
+                return self.automatic.play(request, prepared=prepared)
+            except ValueError:
+                if self.automatic._path(request).exists():
+                    raise RuntimeError("Original automatic gameplay commitment retained for recovery") from None
+                raise
         if name == "roundup":
             try:
-                return self.roundups.run(request["request_id"], request["expected_checkpoint"],
-                                        args["fixtures"], detailed=args["detailed"])
+                result = self.roundups.run(request["request_id"], request["expected_checkpoint"],
+                                          args["fixtures"], detailed=args["detailed"])
+                if self.automatic and args["detailed"]:
+                    self.automatic.focus(args["detailed"][0])
+                return result
             except ValueError:
                 path = self.roundups.directory / (request["request_id"] + ".json")
                 if path.exists():
@@ -87,6 +126,8 @@ class Worker2(Worker):
                 raise ValueError("Wrong exact manifest hash")
             return controls.request_confirmation(action, pid, request["request_id"], row["source"])
         result = super().dispatch(c, row, request)
+        if self.automatic and name.startswith("narrate_"):
+            self.automatic.focus(args["fixture"])
         if request["protocol"] == protocol2.PROTOCOL and name.startswith("narrate_"):
             pages = result["pages"]
             presentation = compact_events([e for page in pages for e in page["events"]])

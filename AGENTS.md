@@ -1,5 +1,14 @@
 # THE BRAGA ERA — durable engineering instructions
 
+## Final playable workflow — supersedes ordinary per-batch OTP requirements
+
+- The user's FINAL TASK intentionally authorizes career-specific automatic gameplay, replacing three independent authenticator confirmations during ordinary play. Keep the manual flow available when automatic mode is disabled, but never demand OTPs, hashes, PowerShell or Codex for enabled ordinary gameplay. GitHub account identity is the deliberately accepted remote trust boundary; do not claim independent human cryptographic approval for delegated operations.
+- `enable_automatic_gameplay` requires explicit opt-in for the exact career; the signed standing grant is logged. `disable_automatic_gameplay` stops future automatic advancement. `continue_gameplay` consumes existing narration first and cannot simulate additional matches while unrevealed narration waits. With no narration and enabled mode, prepare/authorize/execute/independently verify/accept exactly the next chronological end-of-day batch using existing lineage APIs. No arbitrary code, remote paths, seed selection or calendar skips.
+- Delegated receipts have their own profile and provenance. They are not fabricated OTP approvals. Original seeds/claims/statements and the accepted immediate parent remain stable through interruption. Resume an acceptance committed before its response without re-executing football or accepting twice.
+- Existing TEST career `task04c-phone-test-v1` was preserved. Pending challenge issue #9 was explicitly cancelled with no proof; the original prepared manifest `e52c2bd50330081ffae7c8589899701db8feac76847434061e68d55ffd27874c` is reused. Preserve its sealed cancellation and original records; never reset the ledger.
+- The final task authorizes preparing the official runtime for play after TEST validation, but authorizes NO official match execution or official successor acceptance during development. Official setup must remain at exact 046C v2 with automatic mode OFF until the user's subsequent explicit ChatGPT activation/gameplay request. Preserve original six protected hashes and the 2027-09-26 23:30 official clock.
+- Finish and merge PR #9 ordinarily after successful checks, per the FINAL TASK; no new development roadmap/branch/framework/dashboard. Use the existing standalone Windows Python runtime outside Codex/OneDrive for ordinary operation. Never expose credentials, signing keys, raw databases or future results. See `docs/play.md` and `docs/final_playable_report.md`.
+
 ## Task 04C phone operations
 
 - Task 04B PR #8 was ordinarily merged as `51f3223b9d0bc0175b23e7630330bcdc439d352b` after the human verified normal iPhone issue #6 creation and retrieval of worker comment `6480460530` (event 13 only). Task 04C uses `codex/task-04c-phone-operations`; leave its PR open. No official match, Save 047, production provisioning/seed, acceptance or canonical clock advance is authorized.

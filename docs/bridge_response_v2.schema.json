@@ -95,6 +95,7 @@
             "annual_incremental_commitments_cents": {},
             "as_of": {},
             "authority_active": {},
+            "automatic_gameplay": {},
             "away": {},
             "basis": {},
             "batch_state": {},
@@ -134,6 +135,7 @@
             "on_field_states": {},
             "original_delivery": {},
             "pages": {},
+            "phase": {},
             "policy_sha256": {},
             "postmatch_available": {},
             "prematch": {},
@@ -148,6 +150,7 @@
             "review": {},
             "scope": {},
             "seed_policy": {},
+            "simulation_advanced": {},
             "source_page_sha256s": {},
             "standings": {},
             "summaries": {},
@@ -157,6 +160,9 @@
             "validation_only": {},
             "world_policy": {}
           }
+        },
+        "automatic_gameplay": {
+          "type": "boolean"
         }
       }
     },

@@ -152,6 +152,8 @@ class HumanGate:
             row = c.execute("SELECT * FROM challenges WHERE id=?", (request_id,)).fetchone()
             if not row or row["issue"] != issue:
                 raise ValueError("Unknown exact-issue challenge")
+            if row["state"] == "cancelled":
+                raise ValueError("Challenge explicitly cancelled; no approval exists")
             statement = json.loads(row["statement"])
             if row["result"] is not None:
                 return json.loads(row["result"])
@@ -199,6 +201,22 @@ class HumanGate:
             # Durable proof is committed BEFORE the external lineage transaction.
             result = perform(statement, proof)
             c.execute("UPDATE challenges SET state='completed',result=? WHERE id=?", (encode(result), request_id))
+            self._seal(c)
+            return result
+
+    def cancel_unconfirmed(self, request_id, instruction_sha256):
+        """Explicit operator cancellation; retain original statement and no proof."""
+        if not re.fullmatch(r"[0-9a-f]{64}", instruction_sha256):
+            raise ValueError("Cancellation instruction provenance required")
+        with self.access() as c:
+            row = c.execute("SELECT * FROM challenges WHERE id=?", (request_id,)).fetchone()
+            if not row or row["proof"] or row["state"] not in ("awaiting_human", "expired", "cancelled"):
+                raise ValueError("A committed approval cannot be cancelled or rewritten")
+            result = {"cancelled": True, "approval_recorded": False,
+                      "superseding_instruction_sha256": instruction_sha256}
+            if row["state"] == "cancelled" and json.loads(row["result"]) != result:
+                raise ValueError("Cancellation provenance differs")
+            c.execute("UPDATE challenges SET state='cancelled',result=? WHERE id=?", (encode(result), request_id))
             self._seal(c)
             return result
 

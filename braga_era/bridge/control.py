@@ -192,6 +192,24 @@ class Controls:
             or document.get("statement_sha256") != digest(statement)
             or document.get("human_id") != self.gate.context["human_id"]):
             raise ValueError("Independent exact-action human proof required")
+        return self._perform_validated(statement)
+
+    def perform_delegated(self, statement, grant, operation):
+        """Separate user-opted-in delegation; never impersonates a human OTP."""
+        g = lineage.check_signed(grant, self.career.key)
+        p = lineage.check_signed(operation, self.career.key)
+        if (g.get("profile") != "career-automatic-gameplay-1" or not g.get("enabled")
+            or g.get("career") != self.career.career or g.get("test_only") is not self.career.test_only
+            or g.get("repository_id") != self.gate.context["repository_id"]
+            or g.get("human_id") != self.gate.context["human_id"]
+            or g.get("scope") != "next_chronological_batches"
+            or p.get("profile") != "automatic-gameplay-operation-1"
+            or p.get("delegation_sha256") != digest(grant)
+            or p.get("statement_sha256") != digest(statement)):
+            raise ValueError("Exact logged automatic-gameplay delegation required")
+        return self._perform_validated(statement)
+
+    def _perform_validated(self, statement):
         who, policy_hash = self.trusted()
         pid, action = statement["preparation_id"], statement["action"]
         manifest = self.manifest(pid)

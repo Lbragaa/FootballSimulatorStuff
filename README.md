@@ -1,5 +1,13 @@
 # THE BRAGA ERA
 
+**Play from normal iPhone ChatGPT:** [short instructions](docs/play.md).
+Version 0.10.0 adds explicit, revocable career automatic gameplay. Once enabled,
+“Hikari, continue THE BRAGA ERA” consumes stored narration first and advances only
+when no narration waits. It uses the existing deterministic engine and verified
+checkpoint process, without everyday hashes, authenticator codes or Codex.
+See [final verification](docs/final_playable_report.md). No official match is
+executed or accepted during this development task.
+
 Task 04C (0.9.0) adds opt-in exact-action human confirmation, existing-lineage
 control operations, stored-result roundups and compact narration. Read the
 [Task 04C evidence](docs/task04c_report.md), [v2 protocol](docs/bridge_protocol_v2.md),

@@ -6,6 +6,12 @@ from . import protocol as v1
 
 PROTOCOL = "braga-bridge-2"
 COMMANDS = {
+    "enable_automatic_gameplay": {"confirmation": "auto_consent"},
+    "disable_automatic_gameplay": {},
+    "automatic_status": {},
+    "continue_gameplay": {},
+    "advance_next_batch": {},
+    "play_prepared_batch": {"preparation_id": "uuid", "manifest_sha256": "hash"},
     "prepare_control_batch": {"until": "boundary"},
     "inspect_control_batch": {"preparation_id": "uuid"},
     "request_authorize_batch": {"preparation_id": "uuid", "manifest_sha256": "hash"},
@@ -15,7 +21,7 @@ COMMANDS = {
     "roundup": {"fixtures": "fixtures", "detailed": "fixtures"},
 }
 RESULT_KEYS = v1.RESULT_KEYS | set(
-    "control_profile policy_sha256 configurations_sha256 career_seed_sha256 seed_policy preparation_id batch_state review candidate confirmation summaries held_for_detail next_events on_field_states presentation source_page_sha256s".split()
+    "control_profile policy_sha256 configurations_sha256 career_seed_sha256 seed_policy preparation_id batch_state review candidate confirmation summaries held_for_detail next_events on_field_states presentation source_page_sha256s automatic_gameplay phase simulation_advanced".split()
 )
 
 
@@ -55,6 +61,8 @@ def parse(body):
         elif kind == "boundary":
             v1.parse(json.dumps({**request, "protocol": v1.PROTOCOL,
                                  "command": "prepare_batch", "args": {"until": value}}))
+        elif kind == "auto_consent" and value != "ENABLE_AUTOMATIC_GAMEPLAY":
+            raise ValueError("Explicit career-specific automatic mode opt-in required")
     if name == "roundup" and (not request["args"]["fixtures"]
                              or set(request["args"]["fixtures"]) & set(request["args"]["detailed"])):
         raise ValueError("Explicit non-overlapping summary/detail selection required")
@@ -62,6 +70,8 @@ def parse(body):
 
 
 def role(command):
+    if command == "automatic_status":
+        return "read"
     return "narration" if command == "roundup" else "control" if command in COMMANDS else v1.role(command)
 
 
@@ -71,6 +81,7 @@ def schema():
         branch["properties"]["protocol"] = {"const": PROTOCOL}
     example = deepcopy(base["oneOf"][0])
     types = {
+        "auto_consent": {"const": "ENABLE_AUTOMATIC_GAMEPLAY"},
         "boundary": {"type": "string", "pattern": r"^2027-\d{2}-\d{2} 23:59$"},
         "uuid": {"type": "string", "format": "uuid"},
         "hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
@@ -94,5 +105,6 @@ def response_schema():
     properties["protocol"] = {"const": PROTOCOL}
     properties["execution_enabled"] = {"type": "boolean"}
     properties["acceptance_enabled"] = {"type": "boolean"}
+    properties["automatic_gameplay"] = {"type": "boolean"}
     properties["result"]["properties"] = {k: {} for k in sorted(RESULT_KEYS)}
     return value

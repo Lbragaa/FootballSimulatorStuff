@@ -1,5 +1,10 @@
 # Hikari phone procedure — protocol 2
 
+**The FINAL TASK supersedes the per-batch confirmation procedure below for
+opted-in ordinary gameplay. Follow [Play](play.md).** The historical manual
+procedure remains available after automatic gameplay is disabled; it is not
+required during enabled ordinary play.
+
 Use normal ChatGPT's GitHub connection to the private command repository. The
 worker is local Python; GitHub is transport. No Codex session, OpenAI API, terminal
 or file handoff is needed for ordinary read/narration after one-time setup.

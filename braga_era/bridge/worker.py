@@ -88,6 +88,9 @@ class Worker:
     def after_requests(self, connection):
         """Optional versioned extension; v1 never processes human approvals."""
 
+    def valid_head(self, request):
+        return self.career.identity()["checkpoint"] == request["expected_checkpoint"]
+
     def __init__(
         self,
         transport,
@@ -343,10 +346,7 @@ class Worker:
         self.save(c)
         if not row["response"]:
             try:
-                if (
-                    self.career.identity()["checkpoint"]
-                    != request["expected_checkpoint"]
-                ):
+                if not self.valid_head(request):
                     raise ValueError("Stale checkpoint")
                 result = self.dispatch(c, row, request)
                 if set(result) - self.result_keys:

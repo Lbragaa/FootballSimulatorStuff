@@ -30,10 +30,12 @@ def config(path):
         "poll_seconds",
         "production_binding_approved",
     }
-    if set(v) - required - {"root_parent", "protocol", "control"} or not required <= set(v):
+    if set(v) - required - {"root_parent", "protocol", "control", "automatic_directory"} or not required <= set(v):
         raise ValueError("Bridge configuration fields")
     if v.get("protocol", "braga-bridge-1") not in {"braga-bridge-1", "braga-bridge-2"}:
         raise ValueError("Unsupported bridge protocol")
+    if "automatic_directory" in v and (v.get("protocol") != "braga-bridge-2" or not Path(v["automatic_directory"]).is_absolute()):
+        raise ValueError("Locally configured absolute automatic journal required")
     if (
         type(v["test_only"]) is not bool
         or type(v["production_binding_approved"]) is not bool
@@ -104,7 +106,13 @@ def build(v, token):
     transport = GitHub(v["repository"], v["repository_id"], v["worker_id"], token)
     if v.get("protocol") == "braga-bridge-2":
         from .worker2 import Worker2
-        return Worker2(transport, career, v["ledger"], v["requesters"], controls=build_controls(v, career))
+        controls = build_controls(v, career)
+        automatic = None
+        if controls and "automatic_directory" in v:
+            from .automatic import Automatic
+            automatic = Automatic(controls, v["automatic_directory"])
+            automatic.mode()  # never recreate a lost standing delegation.
+        return Worker2(transport, career, v["ledger"], v["requesters"], controls=controls, automatic=automatic)
     return Worker(transport, career, v["ledger"], v["requesters"])
 
 
