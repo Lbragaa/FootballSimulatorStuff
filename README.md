@@ -1,11 +1,21 @@
 # THE BRAGA ERA
 
+Task 04C (0.9.0) adds opt-in exact-action human confirmation, existing-lineage
+control operations, stored-result roundups and compact narration. Read the
+[Task 04C evidence](docs/task04c_report.md), [v2 protocol](docs/bridge_protocol_v2.md),
+[Hikari procedure](docs/bridge_hikari_v2.md) and
+[one-time setup/production checklist](docs/phone_official_operations.md).
+Official play is not authorized: the actual accepted world remains 046C v2,
+September 26, 2027 at 23:30. Production provisioning/binding is separate from
+software or policy approval. Check the report for pending live rehearsal gates.
+
 Task 04B adds a standard-library private GitHub Issues ↔ local Python bridge.
 See the [bridge report](docs/task04b_report.md),
 [protocol](docs/bridge_protocol.md), [Windows setup](docs/bridge_windows.md) and
 [Hikari phone instructions](docs/bridge_hikari.md). It exposes inspection,
 review preparation and signed-cursor narration; execution/acceptance remain
-disabled. Check the report for completed mobile tests and remaining setup gates.
+disabled in v1. The human verified the private iPhone command/worker/reply path,
+and PR #8 was ordinarily merged. Physical sleep/login checks remain distinct.
 
 The merged implementation is awaiting human pre-gameplay decisions. Start with
 the [final preparation report](docs/final_pregameplay_report.md),

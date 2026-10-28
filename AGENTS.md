@@ -1,5 +1,14 @@
 # THE BRAGA ERA — durable engineering instructions
 
+## Task 04C phone operations
+
+- Task 04B PR #8 was ordinarily merged as `51f3223b9d0bc0175b23e7630330bcdc439d352b` after the human verified normal iPhone issue #6 creation and retrieval of worker comment `6480460530` (event 13 only). Task 04C uses `codex/task-04c-phone-operations`; leave its PR open. No official match, Save 047, production provisioning/seed, acceptance or canonical clock advance is authorized.
+- `braga-bridge-2` / `bridge-control-2` is separate from frozen v1 transport and uses existing lineage APIs. A command issue requests a review challenge, never human consent. Authorization, execution and acceptance require distinct exact-action challenges and direct, unedited pinned-human GitHub comments with the separately enrolled authenticator. Never accept assistant-created general chat as independent consent. One active challenge per career is mandatory: ordinary TOTP codes do not encode transaction hashes.
+- Human proofs are durable before effects; resume original proofs, claims, seeds, output directories and acceptance receipts after crashes. Read/narration privileges remain independent of missing control policy/authenticator/production privileges. Existing v1 replies and the sealed inbox storage format remain compatible; never reset an established ledger or gate to recover.
+- TEST-only setup/enrollment helper cannot provision production. Enrollment secrets appear only in an interactive local human terminal, never tool output/chat/GitHub/source control. No production key is created or relocated. Production requires separately approved trusted authority, signed policy/control receipt, enrollment and explicit binding. Provisional model-policy approval alone authorizes none of these actions.
+- `roundup` consumes only existing signed pages of selected earliest-group fixtures. Hold human-selected detailed matches and Vasco (`club:15`, not Fluminense `club:5`); no simulation or future-group jump. Compact presentation is lossless and hash-referenced; canonical events/old signed deliveries stay unchanged.
+- TEST-ONLY Windows login startup was explicitly approved and verified through manual task launch; physical reboot/login and sleep/wake are not thereby proven. The installed frozen worker stays separate from editable sources. Read `docs/task04c_report.md`, `docs/bridge_protocol_v2.md`, `docs/bridge_hikari_v2.md` and `docs/phone_official_operations.md` before changing controls or bindings.
+
 ## Task 04B phone bridge
 
 - Task 04B authorizes the communication integration on `codex/task-04b-phone-bridge`; no football model retuning, official execution or production authority provisioning. The dedicated command repository is PRIVATE `Lbragaa/BragaEraCommandBridge`, ID `1436541980`. Never use public FootballSimulatorStuff issues as gameplay transport.

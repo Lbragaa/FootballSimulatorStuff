@@ -77,6 +77,17 @@ def safe_output(value):
 
 
 class Worker:
+    parse_request = staticmethod(parse)
+    command_role = staticmethod(role)
+    public_protocol = PROTOCOL
+    result_keys = RESULT_KEYS
+
+    def capabilities(self):
+        return {"execution_enabled": False, "acceptance_enabled": False}
+
+    def after_requests(self, connection):
+        """Optional versioned extension; v1 never processes human approvals."""
+
     def __init__(
         self,
         transport,
@@ -100,7 +111,7 @@ class Worker:
         )
         self.path.parent.mkdir(parents=True, exist_ok=True)
         if not self.path.exists():
-            with sqlite3.connect(self.path) as c:
+            with closing(sqlite3.connect(self.path)) as c, c:
                 c.executescript(DDL)
                 c.execute("INSERT INTO meta VALUES(1,1,?,'')", (self.context,))
                 seal(c, self.career.key)
@@ -112,7 +123,7 @@ class Worker:
     def envelope(self, request, source, status, result, next_sequence):
         doc = {
             "domain": "bridge-delivery-1",
-            "protocol": PROTOCOL,
+            "protocol": request["protocol"],
             "repository_id": self.transport.repository_id,
             "worker_id": self.transport.worker_id,
             "request_id": request["request_id"],
@@ -125,8 +136,8 @@ class Worker:
             "status": status,
             "next_sequence": next_sequence,
             "result": result,
-            "execution_enabled": False,
-            "acceptance_enabled": False,
+            **(self.capabilities() if request["protocol"] != PROTOCOL else
+               {"execution_enabled": False, "acceptance_enabled": False}),
         }
         return {
             "response": doc,
@@ -280,14 +291,14 @@ class Worker:
         ):
             return
         try:
-            request = parse(issue["body"])
+            request = self.parse_request(issue["body"])
         except (ValueError, TypeError, KeyError, RecursionError):
             return
         if issue["title"] != "[BRAGA] " + request["request_id"]:
             return
         if (
-            role(request["command"]) not in self.scopes
-            or role(request["command"]) not in allowed["scopes"]
+            self.command_role(request["command"]) not in self.scopes
+            or self.command_role(request["command"]) not in allowed["scopes"]
         ):
             return
         if request["career"] != self.career.career:
@@ -338,7 +349,7 @@ class Worker:
                 ):
                     raise ValueError("Stale checkpoint")
                 result = self.dispatch(c, row, request)
-                if set(result) - RESULT_KEYS:
+                if set(result) - self.result_keys:
                     raise ValueError("Unexpected public result shape")
                 safe_output(result)
                 status = "completed"
@@ -384,12 +395,12 @@ class Worker:
         if not allowed or actor.get("login") != allowed["login"]:
             return
         try:
-            live = parse(current.get("body"))
+            live = self.parse_request(current.get("body"))
         except (ValueError, TypeError, RecursionError):
             return
         if (
             digest(live) != delivery["sha"]
-            or role(live["command"]) not in allowed["scopes"]
+            or self.command_role(live["command"]) not in allowed["scopes"]
         ):
             return
         response = json.loads(row["response"])
@@ -434,6 +445,7 @@ class Worker:
                 self.deliver(c, row[0])
             for issue in sorted(self.transport.issues(), key=lambda x: x["number"]):
                 self.process(c, issue)
+            self.after_requests(c)
             result = {
                 "next_sequence": c.execute("SELECT next_sequence FROM meta").fetchone()[
                     0
@@ -445,13 +457,12 @@ class Worker:
             if hasattr(self.transport, "status"):
                 status = {
                     "domain": "bridge-status-1",
-                    "protocol": PROTOCOL,
+                    "protocol": self.public_protocol,
                     **self.career.identity(),
                     **result,
                     "worker_id": self.transport.worker_id,
                     "repository_id": self.transport.repository_id,
-                    "execution_enabled": False,
-                    "acceptance_enabled": False,
+                    **self.capabilities(),
                     "recent_requests": [
                         {
                             "request_id": r[0],
