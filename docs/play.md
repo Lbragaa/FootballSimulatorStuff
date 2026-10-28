@@ -24,6 +24,9 @@ wanted. Hikari must use actual worker outputs only, with no invented outcomes.
 2. Use the existing strict JSON envelope and a fresh UUID for each new command:
    `protocol`, `request_id`, `sequence`, `career`, `expected_checkpoint`, `command`,
    `args`. Title `[BRAGA] <UUID>`. Do not edit the issue body after creation.
+   Within the same turn, use the last matching reply's `next_sequence`; status #1
+   can briefly lag comment delivery. After an advance, use the reply's returned
+   `accepted_checkpoint` as the next parent. Never reuse an older status value.
 3. On the user's explicit first opt-in, send `enable_automatic_gameplay` with
    `{"confirmation":"ENABLE_AUTOMATIC_GAMEPLAY"}`. This binds standing authority
    to the advertised career. Do not enable it merely because software is ready.

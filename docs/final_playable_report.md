@@ -47,7 +47,8 @@ The earlier normal iPhone send/read proof remains issue #6; final streamlined
 tests use that same actual connected GitHub command channel and persistent worker.
 The broad local suite passed 336 tests in 1045.05 seconds before the final
 preview/detail-selection projection checks; the affected 17 focused tests passed
-afterward. Final source CI contains 339 tests on each supported Windows/Linux
+afterward. The complete final bridge suite passed 102 tests in 13.37 seconds.
+Final source CI contains 339 tests on each supported Windows/Linux
 Python 3.11–3.13 job. [PR #9 checks](https://github.com/Lbragaa/FootballSimulatorStuff/pull/9/checks)
 are the merge gate; all six jobs must pass before the authorized ordinary merge.
 Engine/world golden checks remain unchanged. No baseline hash/test was weakened.
