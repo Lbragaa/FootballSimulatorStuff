@@ -106,6 +106,8 @@ class Worker2(Worker):
         if name in protocol2.COMMANDS:
             if not self.capabilities()["execution_enabled"]:
                 raise ValueError("Separately approved control runtime required")
+            if name in CONTROL_ACTIONS and self.automatic and self.automatic.mode()["enabled"]:
+                raise ValueError("Disable automatic gameplay before starting a manual approval flow")
             controls = self.controls
             if name == "prepare_control_batch":
                 return {**controls.prepare(request["request_id"], args["until"]),

@@ -144,6 +144,9 @@ class Automatic:
                         manifest = self.controls.manifest(pid)
                         if digest(manifest) != expected:
                             raise ValueError("Wrong prepared manifest")
+                        boundary = min(e["kickoff"] for e in events)[:10] + " 23:59"
+                        if manifest["until"] != boundary:
+                            raise ValueError("Automatic delegation permits only the next chronological day")
                     else:
                         if not events:
                             return {"phase": "season_complete", "simulation_advanced": False, "next_events": []}

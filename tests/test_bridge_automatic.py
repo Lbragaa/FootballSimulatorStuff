@@ -55,6 +55,17 @@ def test_disabled_mode_cannot_advance(auto):
         assert c.execute('SELECT count(*) FROM batches').fetchone()[0]==0
 
 
+def test_prepared_batch_cannot_expand_automatic_scope_to_later_dates(auto):
+    auto.set_mode(True,req(auto.career,'enable_automatic_gameplay',1,confirmation='ENABLE_AUTOMATIC_GAMEPLAY'),10)
+    pid=str(uuid4())
+    summary=auto.controls.prepare(pid,'2027-10-03 23:59')
+    with pytest.raises(ValueError,match='next chronological day'):
+        auto.play(req(auto.career,'play_prepared_batch',2,preparation_id=pid,manifest_sha256=summary['manifest_sha256']),
+                  prepared=(pid,summary['manifest_sha256']))
+    with lineage.access(auto.career.registry,auto.career.key) as (c,t):
+        assert c.execute('SELECT count(*) FROM batches').fetchone()[0]==0
+
+
 def test_pending_manual_challenge_is_cancelled_not_forged(auto):
     c=auto.controls
     pid=str(uuid4()); c.prepare(pid,"2027-09-30 23:59")

@@ -118,3 +118,21 @@ def test_control_scope_revocation_before_confirmation_preserves_authority(tmp_pa
     Worker2(transport, controls.career, worker.path, people, controls=controls).poll()
     with lineage.access(controls.career.registry, controls.career.key) as (c, t):
         assert c.execute("SELECT count(*) FROM batches").fetchone()[0] == 0
+
+
+def test_automatic_and_manual_approval_flows_do_not_overlap(tmp_path, controls):
+    from braga_era.bridge.automatic import Automatic
+    auto=Automatic(controls,tmp_path/'automatic')
+    auto.initialize()
+    auto.set_mode(True,req(controls.career,'enable_automatic_gameplay',1,confirmation='ENABLE_AUTOMATIC_GAMEPLAY'),1)
+    transport=Transport()
+    worker=Worker2(transport,controls.career,tmp_path/'ledger.sqlite',users(),controls=controls,automatic=auto)
+    prep=transport.add(req(controls.career,'prepare_control_batch',1,until='2027-09-30 23:59'))
+    worker.poll()
+    result=transport.result(prep)['response']['result']
+    challenge=transport.add(req(controls.career,'request_authorize_batch',2,
+        preparation_id=result['preparation_id'],manifest_sha256=result['manifest_sha256']))
+    worker.poll()
+    assert transport.result(challenge)['response']['status']=='refused'
+    with controls.gate.access() as c:
+        assert c.execute('SELECT count(*) FROM challenges').fetchone()[0]==0
