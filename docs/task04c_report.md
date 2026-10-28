@@ -1,5 +1,10 @@
 # Task 04C — phone operations and safe control
 
+**Final task update:** the user intentionally replaced ordinary per-batch OTPs
+with explicit career automatic mode. See [final delivery](final_playable_report.md)
+and [Play](play.md). The progress report below is retained as historical context;
+its pending three-confirmation flow is superseded for enabled ordinary play.
+
 **In progress: v2 phone rehearsal and final CI remain acceptance gates.** No
 production provisioning, official match, Save 047, official seed or canonical
 clock advancement is authorized or performed. Accepted 046C v2 remains at

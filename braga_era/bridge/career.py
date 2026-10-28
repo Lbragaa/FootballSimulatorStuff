@@ -129,6 +129,11 @@ class Career:
             {
                 "club_key": p["club_key"],
                 "formation": p["formation"],
+                "coach": p["coach"],
+                "defensive_shape": p["defensive_shape"],
+                "risk": p["risk"],
+                "roles": p["roles"],
+                "rationale": p["rationale"],
                 "starters": [
                     {"id": i, "name": name}
                     for i, name in zip(p["starters"], p["starting_names"], strict=True)

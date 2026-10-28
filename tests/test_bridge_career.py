@@ -54,6 +54,9 @@ def test_preview_filters_seeds_and_does_not_touch_accepted_bytes(actual):
     safe_output(preview)
     assert "seed_commitment" not in preview
     assert all(len(team["starters"]) == 11 for team in preview["lineups"])
+    assert all(team["coach"] and team["defensive_shape"] and team["risk"]
+               for team in preview["lineups"])
+    assert all("substitution_minutes" not in team for team in preview["lineups"])
     assert all(
         type(p["id"]) is int and p["name"]
         for team in preview["lineups"]

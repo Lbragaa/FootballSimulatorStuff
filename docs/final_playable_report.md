@@ -35,25 +35,46 @@ Issue #10 logged TEST automatic opt-in. Issue #11 processed the SAME prepared
 verification/restoration and acceptance, without OTPs. TEST successor:
 `201ca42746f209710a5fda6fa6a5bc0e2dcd3efdc7b0891be43b29511541d755`.
 Issue #12 returned stored event 1 with `simulation_advanced=false`; issue #13
-stopped exactly at HALF_TIME with postmatch data unavailable. Issue #14 requests
-15 other-fixture summaries while holding the selected game for detail.
+stopped exactly at HALF_TIME with postmatch data unavailable. Issue #14 returned
+15 other-fixture summaries while holding the selected game for detail. Issue #15
+reached the final whistle and only then released postmatch data. Reopening #11
+retained its single identical reply and one accepted successor. Issue #16 disabled
+automatic mode; #17 then returned `manual_approval_required` without simulating
+R26. Exactly 16 execution receipts, one paid month end and one TEST successor
+remain. No prepared manifest, seed, ledger or existing result was replaced.
 
-Remaining verification/evidence is recorded before final merge: roundup/full-time
-completion, duplicate/restart checks, final test/CI results and official ready
-runtime inspection. The earlier normal iPhone send/read proof remains issue #6;
-the final streamlined tests use the same actual connected GitHub command channel.
+The earlier normal iPhone send/read proof remains issue #6; final streamlined
+tests use that same actual connected GitHub command channel and persistent worker.
+The broad local suite passed 336 tests in 1045.05 seconds before the final
+preview/detail-selection projection checks; the affected 17 focused tests passed
+afterward. Final source CI contains 337 tests on each supported Windows/Linux
+Python 3.11–3.13 job. [PR #9 checks](https://github.com/Lbragaa/FootballSimulatorStuff/pull/9/checks)
+are the merge gate; all six jobs must pass before the authorized ordinary merge.
+Engine/world golden checks remain unchanged. No baseline hash/test was weakened.
 
 ## Runtime and preservation
 
 The final wheel uses an existing standalone Python installation, outside Codex's
 cache and OneDrive. Python 3.14.3 independently replayed the complete accepted TEST
 checkpoint successfully, in addition to supported CI Python 3.11–3.13 checks.
-The user's already approved login task is reused for the final runtime.
+The already approved login task is enabled at least privilege and running the
+standalone runtime. Task-driven restart was verified; physical reboot/sleep was
+not performed and is not claimed.
 
-Official readiness means a separate root-based official authority/configuration,
-not a relabeled TEST world. The accepted root bytes and real 046C approval/catalog
-are never rewritten. Actual official games begin only after the user's later
-explicit phone opt-in and gameplay request. No new extensive setup is required.
+After a separate explicit setup-only approval from the human, a private signing
+key, once-only seed commitment, root-based official registry, policy receipt and
+private recovery copies were prepared under the user's non-synced private folder.
+ACLs restrict the career directory to that Windows user and SYSTEM. No secret,
+database or archive is published to GitHub. The mode remains OFF; the registry
+contains zero batches and zero accepted successors. The prior TEST world was
+never promoted or relabeled.
+
+Official issue #18 is read-only: the background worker returned root SHA256
+`27eb5d94478c2539b28085e669675e184ab2842be3d7ab1549864f2a422b6cf7`, generation 0,
+clock `2027-09-26 23:30`, mode off and `test_only=false`. All six protected
+original/archive/accepted DB/approval/registry hashes remain unchanged. Actual
+official games begin only after the user's later explicit phone opt-in/gameplay
+request. No further setup procedure is needed for ordinary play.
 
 Read [Play](play.md). The single first-use sentence explicitly opts in; later
 “continue” resumes ordinary play. GitHub account trust is the user's chosen
