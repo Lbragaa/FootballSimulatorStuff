@@ -1,6 +1,12 @@
 # THE BRAGA ERA
 
 **Play from normal iPhone ChatGPT:** [short instructions](docs/play.md).
+Version 0.12.0 adds read-only [historical results](docs/historical_results.md)
+across existing league, cup, continental and archived-final sources, including
+records predating the bridge. Episodes now show the rodada's scores and relevant
+other competition results after Vasco's final whistle, before standings. Unknown
+legacy facts and transport omissions stay explicit. No engine outcomes change.
+
 Version 0.11.0 adds `play_next_episode`: one private issue returns a complete Vasco
 match/rodada or a significant competition milestone. It processes earlier world
 commitments internally using the existing deterministic engine, independent

@@ -141,6 +141,10 @@ class Episode:
         return {"score": summary["score"], "resolution": summary["resolution"], "team_stats": stats,
                 "assessment_basis": "Recorded manager choices and narrated events; Hikari may describe, never invent quotations."}
 
+    def results_sections(self, op, budget):
+        from .historical import HistoricalResults
+        return HistoricalResults(self.career).episode(op, budget)
+
     def run(self, request):
         self.auto.controls.trusted()
         path = self.path(request)
@@ -174,7 +178,7 @@ class Episode:
                 if prior_deliveries:
                     _, prior_path, prior = max(prior_deliveries, key=lambda row: row[0])
                     if prior["response"]["episode_type"] == "progress_bound":
-                        for field in ("baseline", "league_baseline", "target", "round", "target_done"):
+                        for field in ("baseline", "league_baseline", "target", "round", "target_done", "report_pending"):
                             if field in prior:
                                 op[field] = prior[field]
                         op["continuation_of"] = prior_path.stem
@@ -220,6 +224,9 @@ class Episode:
                     "recovery": {"episode_id": request["request_id"], "resumable": reason in {"progress_bound", "blocker", "automatic_disabled"},
                                  "retry": "Same issue/UUID returns this exact delivery; a new continue resumes durable world/cursors."},
                     "timings_seconds": {k: round(v, 3) for k, v in op["timings"].items()}}
+                additions, op['report_pending'] = self.results_sections(op, max(1000, min(14000, 53000-len(encode(response).encode()))))
+                index = next((i for i,s in enumerate(sections) if s['section'] in {'league_table','round_pending','next_agenda'}), len(sections))
+                sections[index:index] = additions
                 if len(encode(response).encode()) > 55000:
                     raise RuntimeError("Episode response bound: original journal retained")
                 response = json.loads(encode(response))  # normalize integer mapping keys before first delivery/retry.

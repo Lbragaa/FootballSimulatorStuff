@@ -92,6 +92,10 @@ class Worker2(Worker):
 
     def dispatch(self, c, row, request):
         name, args = request["command"], request["args"]
+        if name == 'historical_results':
+            from .historical import HistoricalResults
+            return {'historical_results': HistoricalResults(self.career).query(args),
+                    'accepted_checkpoint': self.career.identity()['checkpoint']}
         if name in {"enable_automatic_gameplay", "disable_automatic_gameplay", "automatic_status",
                     "continue_gameplay", "advance_next_batch", "play_prepared_batch", "play_next_episode"}:
             if self.automatic is None or not self.capabilities()["execution_enabled"]:

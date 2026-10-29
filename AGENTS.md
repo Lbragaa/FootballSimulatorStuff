@@ -1,5 +1,29 @@
 # THE BRAGA ERA — durable engineering instructions
 
+## Complete historical reporting (supersedes ordinary other-score silence)
+
+- `historical_results` is a protocol-2 READ command independent of automatic
+  gameplay/controls. Authenticate a registered accepted parent, open its database
+  read-only and project existing native/forward records. Never run simulation,
+  narration, cursor updates or a new archive to answer historical questions.
+- Use `braga_era/results.py` and `bridge/historical.py`: deduplicate source mirrors,
+  preserve club identities, retain unknown dates/scores, and take qualifiers from
+  recorded tie/final decisions. Never reconstruct scores from tables or prose.
+  Native fixtures, CDB legs/brackets, continental group/knockout rows and
+  world_finals have different schemas. See docs/historical_results.md.
+- Signed historical continuation tokens pin accepted checkpoint, filters, offset
+  and Vasco reveal visibility. They are not narration cursors. A reply's outer
+  accepted_checkpoint is the current command head; its historical_results object
+  identifies the pinned reporting snapshot. No new credentials/delegation.
+- New episodes show all ten round scores plus relevant other-competition legs,
+  aggregates and confirmed qualifiers AFTER Vasco's final whistle/statistics and
+  BEFORE standings. Partial rounds and omitted results are explicit and carry a
+  bounded historical retrieval page. No stage-completion requirement for reading
+  an already completed leg. Cached old deliveries remain byte-compatible.
+- Preserve uninhibited chronological Vasco narration: no unseen Vasco final,
+  winner or later event leaks through results or tie aggregates. Development
+  validates disconnected clones only; never advance production to test reporting.
+
 ## Career episode mode (supersedes old single-day ordinary-client instructions)
 
 - The commissioner explicitly requests `play_next_episode` as the default for

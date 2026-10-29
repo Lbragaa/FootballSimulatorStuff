@@ -1,5 +1,28 @@
 # Private phone bridge protocol 2
 
+## Historical results and episode reporting (0.12.0)
+
+`historical_results` uses read scope and optional closed arguments documented in
+[the historical-results guide](historical_results.md). It is routed before
+control/automatic commands and remains available without control configuration
+or enabled gameplay. Existing envelope/identity/head/sequence validation and
+signed response format are unchanged. The response wraps `historical_results`
+(snapshot metadata, matches, ties, coverage, selection, pagination, limitations
+or a structured error) plus the current OUTER `accepted_checkpoint`.
+
+Opaque HMAC continuation tokens bind exact accepted snapshot, filters, offset,
+career/mode and reveal visibility. Registered old snapshots may be read after a
+newer acceptance. No narration API or cursor/session writer is called. Unknown
+scores remain null; no candidate/private diagnostic file is a reporting source.
+
+New episodes insert `episode_results` after narration/fulltime and before tables.
+It includes round matches (with complete/pending distinction), relevant other
+results and available tie decisions. `omitted`/`omitted_ties`/`exhaustive` and
+pinned `retrieve_all`/`retrieve_round` commands disclose transport truncation.
+`results_deferred` keeps ordinary other results after an unfinished Vasco
+narration; deferred IDs carry over a bounded continuation. Existing signed pages,
+old cached episode replies and legacy commands retain their bytes/behavior.
+
 ## Career episodes (0.11.0)
 
 `play_next_episode` has exactly `{}` arguments and control scope. It needs no new

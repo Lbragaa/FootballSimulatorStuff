@@ -980,6 +980,113 @@
           "const": "braga-bridge-2"
         },
         "command": {
+          "const": "historical_results"
+        },
+        "request_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "career": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,80}$"
+        },
+        "expected_checkpoint": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "args": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "competition": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            },
+            "stage": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            },
+            "club": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            },
+            "season": {
+              "type": "integer",
+              "minimum": 1900,
+              "maximum": 2200
+            },
+            "round": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 99
+            },
+            "leg": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 2
+            },
+            "recent": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 500
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            },
+            "date": {
+              "type": "string",
+              "format": "date",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "date_from": {
+              "type": "string",
+              "format": "date",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "date_to": {
+              "type": "string",
+              "format": "date",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "include_pending": {
+              "type": "boolean"
+            },
+            "cursor": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 4096
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "request_id",
+        "sequence",
+        "career",
+        "expected_checkpoint",
+        "command",
+        "args"
+      ],
+      "properties": {
+        "protocol": {
+          "const": "braga-bridge-2"
+        },
+        "command": {
           "const": "advance_next_batch"
         },
         "request_id": {

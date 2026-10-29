@@ -40,11 +40,15 @@ Hikari must use actual worker outputs only, with no invented outcomes.
    batches until Vasco's match/rodada, a major milestone, or a real blocker.
 5. Render `presentation` **in array order**, even if a JSON viewer alphabetizes
    object keys: prematch/recorded lineups → chronological timeline → final
-   whistle → fulltime/statistics/brief assessment → completed table → next
+   whistle → fulltime/statistics/brief assessment → round/other results → completed table → next
    fixture. Narrate each goal BEFORE saying its updated score. No opening
    full-time headline, winner, recap, statistics or later-goal hints. Halftime is
    part of the same commentary. Resume interrupted timelines at their first
-   returned event. Default other games to silence, not individual score lists.
+   returned event. Show `episode_results`: all ten round fixtures/scores, then
+   relevant other-competition legs/aggregates and recorded qualifiers. Do not
+   repeat the complete Vasco narration. Mark pending fixtures and missing scores
+   honestly; a partial round is not complete. If `exhaustive=false`, state the
+   omitted counts and offer `retrieve_all` / `retrieve_round` historical pages.
    A `milestone_report` consolidates actual ties, aggregates, penalties,
    qualifiers and established draws; never invent pairings or early continental
    berths. `round_pending` explicitly means no final rodada table is available.
@@ -67,6 +71,32 @@ Hikari must use actual worker outputs only, with no invented outcomes.
 9. If offline or interrupted, keep the SAME issue/UUID. Retry/read its original
    reply instead of creating replacement simulations. A new conversation reads
    #1/recent delivery comments and resumes the same cursor and career.
+
+## Ask about any recorded historical result
+
+Use **`historical_results`** (read-only; no automatic-gameplay consent needed).
+Read [the argument/reference guide](historical_results.md). Examples of `args`:
+
+```json
+{"competition":"Brasileirão","season":2027,"round":29,"limit":50}
+{"competition":"Libertadores","season":2027,"stage":"QF","leg":1,"date_from":"2027-10-01","date_to":"2027-10-31"}
+{"competition":"Copa do Brasil","season":2027,"stage":"QF","limit":50}
+{"club":"Vasco","season":2027,"recent":10}
+{"club":"Flamengo","season":2027,"limit":50}
+{"date_from":"2027-10-01","date_to":"2027-10-31","limit":50}
+```
+
+An empty `{}` returns a first page and the recorded competition/season coverage.
+Use `include_pending:true` to distinguish pending fixtures from completed ones.
+When `has_more=true`, create the next normal request with
+`{"cursor":"<unchanged next_cursor>"}`. Fetch ALL pages before claiming an entire
+season/selection was shown. Pagination pins its original accepted snapshot; use
+the reply's OUTER current accepted_checkpoint for the next request envelope.
+The nested historical_results.accepted_checkpoint describes the reporting data.
+Each page has match source IDs/hashes, score availability and tied aggregate/
+penalty orientation. Do not invent unavailable results. Historical queries never
+consume commentary or move a narration cursor. An unfinished Vasco narration
+withholds that score/qualifier; requesting it cannot bypass its final whistle.
 
 An episode is bounded to 35 calendar days, 16 verified batches, 120 revealed
 fixtures, 256 signed pages, a 30 KB running presentation and 15 minutes between

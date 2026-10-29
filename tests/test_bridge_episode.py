@@ -57,6 +57,7 @@ def world(controls, tmp_path, monkeypatch):
         return p
     monkeypatch.setattr(episode,'_page',page)
     monkeypatch.setattr(episode,'final_stats',lambda f,s:s)
+    monkeypatch.setattr(episode,'results_sections',lambda op,budget:([],[]))
     return SimpleNamespace(ep=episode,auto=auto,s=s,batches=batches,head=head,pages=pages,cursors=cursors,fixtures=fixtures)
 
 
