@@ -1,3 +1,3 @@
 """The Braga Era: preserved history and isolated headless match simulations."""
 
-__version__ = "0.10.0"
+__version__ = "0.12.0"

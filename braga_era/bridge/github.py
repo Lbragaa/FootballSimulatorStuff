@@ -2,6 +2,7 @@
 
 import json
 import re
+import time
 from urllib.request import Request, build_opener, HTTPRedirectHandler
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
@@ -27,6 +28,9 @@ class GitHub:
         )
         self.token = token
         self.opener = build_opener(NoRedirect())
+        self.timings = {"polling": 0.0, "posting": 0.0}
+        self.rate_remaining, self.rate_reset = None, None
+        self._status_body = None
 
     def call(self, suffix, method="GET", data=None, *, account=False, graphql=False):
         path = (
@@ -46,8 +50,12 @@ class GitHub:
                 "User-Agent": "braga-local-bridge/1",
             },
         )
+        started = time.perf_counter()
         try:
             with self.opener.open(request, timeout=30) as response:
+                remaining, reset = response.headers.get("X-RateLimit-Remaining"), response.headers.get("X-RateLimit-Reset")
+                if remaining is not None and reset is not None:
+                    self.rate_remaining, self.rate_reset = int(remaining), int(reset)
                 raw = response.read(2_000_001)
                 if len(raw) > 2_000_000:
                     raise TransportError("GitHub response size")
@@ -55,6 +63,18 @@ class GitHub:
         except (HTTPError, URLError, TimeoutError, OSError) as error:
             # Never echo credentials, requests, private responses, or HTTP bodies.
             raise TransportError("GitHub unavailable; retry original request") from None
+        finally:
+            kind = "posting" if method != "GET" and not graphql else "polling"
+            self.timings[kind] += time.perf_counter() - started
+
+    def polling_delay(self, configured):
+        # Idle polling needs at least three REST calls; reserve headroom for
+        # actual issue/comment validation and response posting. Never speed up
+        # into rate exhaustion on a shared fine-grained PAT budget.
+        if self.rate_remaining is None or self.rate_reset is None:
+            return configured
+        remaining = max(1, self.rate_remaining - 200)
+        return max(configured, min(300, 4 * max(0, self.rate_reset-time.time()) / remaining))
 
     def privacy(self):
         repo = self.call("")
@@ -127,12 +147,17 @@ class GitHub:
         )
 
     def status(self, value):
+        body = json.dumps(value, sort_keys=True, separators=(",", ":"))
+        # poll() already validates repository/account each cycle. An identical
+        # status needs no write/read cycle; no gameplay request is skipped.
+        if body == self._status_body:
+            return
         self.privacy()
         current = self.call("/issues/1")
         if current.get("user", {}).get("id") != self.worker_id or not current.get(
             "title", ""
         ).startswith("[BRAGA STATUS]"):
             raise TransportError("Reserved status issue identity")
-        body = json.dumps(value, sort_keys=True, separators=(",", ":"))
         if current.get("body") != body:
             self.call("/issues/1", "PATCH", {"body": body})
+        self._status_body = body

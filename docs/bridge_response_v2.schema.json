@@ -111,6 +111,7 @@
             "delivery_id": {},
             "eligibility_exclusions": {},
             "engine": {},
+            "episode_type": {},
             "error": {},
             "events": {},
             "execution_authorized": {},
@@ -120,6 +121,7 @@
             "fixtures": {},
             "generation": {},
             "held_for_detail": {},
+            "historical_results": {},
             "home": {},
             "immediate_parent_sha256": {},
             "key": {},
@@ -141,8 +143,10 @@
             "prematch": {},
             "preparation_id": {},
             "presentation": {},
+            "presentation_rule": {},
             "profile": {},
             "reason": {},
+            "recovery": {},
             "restricted_cash_cents": {},
             "resume_existing_delivery": {},
             "revealed_cash_cents": {},
@@ -155,10 +159,12 @@
             "standings": {},
             "summaries": {},
             "test_only": {},
+            "timings_seconds": {},
             "unknown_team_news": {},
             "until": {},
             "validation_only": {},
-            "world_policy": {}
+            "world_policy": {},
+            "world_progress": {}
           }
         },
         "automatic_gameplay": {
