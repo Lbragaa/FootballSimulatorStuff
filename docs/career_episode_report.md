@@ -97,6 +97,13 @@ as a TEST authority or promotable successor. Key bytes are read into memory only
 not copied to the rehearsal or report. Clone accepted paths are redirected to
 copied immutable packages. No rehearsal output is posted to GitHub or copied back.
 
+A separate fresh clone injected a real interruption immediately after acceptance
+and resumed the exact same episode request: **187.827 s wall time**, **15,836 B**,
+**9 ms cached repeat**. The recovered and uninterrupted worlds were identical by
+full world fingerprint and every fixture/result receipt hash: **52 total
+receipts, one paid month-end** in both. This includes inherited accepted history;
+there was no duplicated payroll, fixture or altered result after recovery.
+
 | Episode | Earlier flow, minimum issues/replies | New issues/replies | Local processing | Body |
 | --- | ---: | ---: | ---: | ---: |
 | Next Vasco match plus complete R27 | 6 / 6 | 1 / 1 | 197.439 s | 15,809 B |
@@ -132,6 +139,15 @@ with a conservative header-based rate-budget backoff up to 300 seconds. Identica
 status bodies avoid repeated read/write cycles; repository/account validation
 still occurs at every poll and before effects. No paid/always-on service is added.
 
+After installation, private **issue #31** was a harmless
+`inspect_accepted_checkpoint` command at the existing next sequence (14). The
+background worker returned comment **6486828625**, retained the same accepted
+checkpoint/clock and enabled delegation, and advertised next sequence 15. No
+official simulation or acceptance occurred. Its delivery measured **5.061 s**:
+**2.965 s GitHub reads**, **2.083 s posting/acknowledgment**. This measures worker
+delivery operations, not an invented complete mobile UI latency. No physical
+reboot or sleep test is claimed in this development session.
+
 ## Automated verification and deployment
 
 The full local regression run passed **350 tests in 1,070.59 s** while the episode
@@ -153,6 +169,15 @@ ledger, identity, active delegation and accepted world are retained. The private
 README mirrors [bridge_private_readme.md](bridge_private_readme.md). Current
 cross-platform CI and installation evidence are recorded in the PR and local
 ignored verification report, not inferred from earlier green runs.
+
+Installed worker: **0.11.0**, frozen wheel SHA256
+`84cc796a1be1bcfef43b2111392fe3bbfc682053866562df2a8b4a001c98b7dc`.
+Every installed Python source matched both the wheel and reviewed working tree.
+The existing login task was enabled/running after upgrade. The private README
+was updated as commit `55eb8b5dd33ff80a238f9c7d2e1b7050bcb9cbf6`.
+PR: [#10](https://github.com/Lbragaa/FootballSimulatorStuff/pull/10), open for review.
+The six Windows/Linux Python 3.11–3.13 jobs were still running when this evidence
+was written; their outcome must be read from the PR, not assumed green.
 
 Ordinary gameplay needs only: **“Hikari, continue THE BRAGA ERA.”** The PC must
 remain online. Verified simulation can still take several minutes; this upgrade

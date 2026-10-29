@@ -33,6 +33,8 @@ def clone(source_config, target, resume=False):
     target = Path(target).resolve()
     if source == target or source in target.parents or target.exists() and not resume:
         raise ValueError('Use a fresh separate private rehearsal directory')
+    if resume and not (target/'REHEARSAL.json').is_file():
+        raise ValueError('Resume requires an existing disconnected rehearsal marker')
     target.mkdir(parents=True, exist_ok=resume)
     original = build(spec, '')
     key = original.career.key  # memory only; no GitHub call, token or key copy.
@@ -73,7 +75,7 @@ def clone(source_config, target, resume=False):
     if focus.exists() and not resume: shutil.copyfile(focus, auto.directory/'focus.json')
     marker = {'scope':'NONCANONICAL DISCONNECTED REHEARSAL - NEVER PROMOTE', 'source_checkpoint':baseline['accepted_checkpoint'],
               'source_registry_sha256':file_sha256(Path(spec['registry'])), 'no_network':True, 'no_key_copy':True}
-    if not (target/'REHEARSAL.json').exists(): (target/'REHEARSAL.json').write_text(encode(marker))
+    if not (target/'REHEARSAL.json').exists(): (target/'REHEARSAL.json').write_text(encode(marker),encoding='utf-8')
     return Episode(auto), original, baseline
 
 
@@ -126,7 +128,7 @@ def main():
                      'legacy_requests_lower_bound':journal['batches']+len(groups)+split_groups,
                      'legacy_basis':'one advance per day + one request per earliest narration group; split held Vasco/other summaries; excludes previews and additional size-limited delivery calls',
                      'sections':[s['section'] for s in result['presentation']]})
-        (a.output/f'PRIVATE-NONCANONICAL-episode-{i+1}.json').write_text(encode(result))
+        (a.output/f'PRIVATE-NONCANONICAL-episode-{i+1}.json').write_text(encode(result),encoding='utf-8')
         print(encode(rows[-1]),flush=True)
         if result['episode_type'] in {'blocker','progress_bound','automatic_disabled','season_complete'}:break
     assert original.career.inspect()==baseline, 'Official career moved during rehearsal; investigate separately'
@@ -134,7 +136,7 @@ def main():
         assert c.execute('SELECT count(*) FROM batches WHERE state!=?',('accepted',)).fetchone()[0]==0
     report={'scope':'NONCANONICAL DISCONNECTED REHEARSAL','official_state_unchanged':True,
             'source_checkpoint':baseline['accepted_checkpoint'],'episodes':rows}
-    (a.output/'benchmark.json').write_text(encode(report))
+    (a.output/'benchmark.json').write_text(encode(report),encoding='utf-8')
 
 
 if __name__=='__main__':main()
