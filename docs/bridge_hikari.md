@@ -1,5 +1,10 @@
 # Hikari: phone conversation instructions
 
+These are the preserved v1 instructions. When status #1 advertises
+`braga-bridge-2`, use [Hikari v2](bridge_hikari_v2.md). V1 itself still cannot
+authorize/execute/accept. The real iPhone round trip was verified under Task 04C;
+see [the updated evidence](task04b_report.md).
+
 Use the installed **GitHub** connection in normal ChatGPT. Do not open a Codex
 task, call an OpenAI API, run a terminal, invent a football outcome or ask the
 commissioner to handle a file for routine play.

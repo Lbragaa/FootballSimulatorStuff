@@ -30,8 +30,12 @@ def config(path):
         "poll_seconds",
         "production_binding_approved",
     }
-    if set(v) - required - {"root_parent"} or not required <= set(v):
+    if set(v) - required - {"root_parent", "protocol", "control", "automatic_directory"} or not required <= set(v):
         raise ValueError("Bridge configuration fields")
+    if v.get("protocol", "braga-bridge-1") not in {"braga-bridge-1", "braga-bridge-2"}:
+        raise ValueError("Unsupported bridge protocol")
+    if "automatic_directory" in v and (v.get("protocol") != "braga-bridge-2" or not Path(v["automatic_directory"]).is_absolute()):
+        raise ValueError("Locally configured absolute automatic journal required")
     if (
         type(v["test_only"]) is not bool
         or type(v["production_binding_approved"]) is not bool
@@ -47,14 +51,50 @@ def config(path):
     for name in ("registry", "key_file", "ledger", "root_parent"):
         if name in v and not Path(v[name]).is_absolute():
             raise ValueError("Use absolute local paths")
+    allowed_scopes = {"read", "narration", "admin"}
+    if v.get("protocol") == "braga-bridge-2":
+        allowed_scopes.add("control")
     for identity, entry in v["requesters"].items():
         if (
             not identity.isdigit()
             or set(entry) != {"login", "scopes"}
-            or not set(entry["scopes"]) <= {"read", "narration", "admin"}
+            or not set(entry["scopes"]) <= allowed_scopes
         ):
             raise ValueError("Requester scope")
+    if "control" in v:
+        spec = v["control"]
+        paths = {"store", "directory", "policy_receipt", "human_gate", "authenticator_file"}
+        if (v.get("protocol") != "braga-bridge-2" or not isinstance(spec, dict)
+            or set(spec) != paths | {"enabled", "production_binding_approved", "human_id", "human_login"}
+            or any(not Path(spec[k]).is_absolute() for k in paths)
+            or type(spec["enabled"]) is not bool or type(spec["production_binding_approved"]) is not bool
+            or type(spec["human_id"]) is not int or spec["human_id"] <= 0
+            or not isinstance(spec["human_login"], str)):
+            raise ValueError("Explicit local control configuration required")
     return v
+
+
+def build_controls(v, career, *, strict=False):
+    spec = v.get("control")
+    if not spec or not spec["enabled"]:
+        return None
+    try:
+        from .approval import HumanGate, PROFILE as HUMAN
+        from .control import Controls
+        gate = HumanGate(spec["human_gate"], career.key, Path(spec["authenticator_file"]).read_bytes(),
+                         {"profile": HUMAN, "career": career.career, "test_only": career.test_only,
+                          "repository_id": v["repository_id"], "human_id": spec["human_id"],
+                          "human_login": spec["human_login"]})
+        controls = Controls(career, spec["store"], spec["directory"], spec["policy_receipt"], gate,
+                            enabled=spec["enabled"], production_binding_approved=spec["production_binding_approved"])
+        controls.trusted()
+        with gate.access(), controls.access():
+            pass
+        return controls
+    except (OSError, ValueError, sqlite3.Error, KeyError, TypeError):
+        if strict:
+            raise
+        return None  # Read/narration never inherit missing control privileges.
 
 
 def build(v, token):
@@ -64,6 +104,15 @@ def build(v, token):
     if "root_parent" in v:
         career.root_parent = Path(v["root_parent"])
     transport = GitHub(v["repository"], v["repository_id"], v["worker_id"], token)
+    if v.get("protocol") == "braga-bridge-2":
+        from .worker2 import Worker2
+        controls = build_controls(v, career)
+        automatic = None
+        if controls and "automatic_directory" in v:
+            from .automatic import Automatic
+            automatic = Automatic(controls, v["automatic_directory"])
+            automatic.mode()  # never recreate a lost standing delegation.
+        return Worker2(transport, career, v["ledger"], v["requesters"], controls=controls, automatic=automatic)
     return Worker(transport, career, v["ledger"], v["requesters"])
 
 

@@ -1,0 +1,187 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "response",
+    "authentication"
+  ],
+  "properties": {
+    "response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "domain",
+        "protocol",
+        "request_id",
+        "request_sha256",
+        "career",
+        "expected_checkpoint",
+        "repository_id",
+        "worker_id",
+        "sequence",
+        "source_issue",
+        "next_sequence",
+        "test_only",
+        "execution_enabled",
+        "acceptance_enabled",
+        "status",
+        "result"
+      ],
+      "properties": {
+        "domain": {
+          "const": "bridge-delivery-1"
+        },
+        "protocol": {
+          "const": "braga-bridge-2"
+        },
+        "request_id": {
+          "type": "string"
+        },
+        "request_sha256": {
+          "type": "string"
+        },
+        "career": {
+          "type": "string"
+        },
+        "expected_checkpoint": {
+          "type": "string"
+        },
+        "repository_id": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "worker_id": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "source_issue": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "next_sequence": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "test_only": {
+          "type": "boolean"
+        },
+        "execution_enabled": {
+          "type": "boolean"
+        },
+        "acceptance_enabled": {
+          "type": "boolean"
+        },
+        "status": {
+          "enum": [
+            "completed",
+            "refused"
+          ]
+        },
+        "result": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "acceptance_authorized": {},
+            "accepted": {},
+            "accepted_cash_cents": {},
+            "accepted_checkpoint": {},
+            "accepted_clock": {},
+            "accrued_unpaid_cents": {},
+            "annual_incremental_commitments_cents": {},
+            "as_of": {},
+            "authority_active": {},
+            "automatic_gameplay": {},
+            "away": {},
+            "basis": {},
+            "batch_state": {},
+            "boundary_reached": {},
+            "budgets": {},
+            "candidate": {},
+            "career": {},
+            "career_seed_sha256": {},
+            "checkpoint_sha256": {},
+            "configurations_sha256": {},
+            "confirmation": {},
+            "control_profile": {},
+            "delivery_id": {},
+            "eligibility_exclusions": {},
+            "engine": {},
+            "error": {},
+            "events": {},
+            "execution_authorized": {},
+            "execution_id": {},
+            "fixture": {},
+            "fixture_key": {},
+            "fixtures": {},
+            "generation": {},
+            "held_for_detail": {},
+            "home": {},
+            "immediate_parent_sha256": {},
+            "key": {},
+            "kickoff": {},
+            "kind": {},
+            "lineups": {},
+            "lineups_available": {},
+            "manifest_sha256": {},
+            "next_events": {},
+            "obligations": {},
+            "official_execution_authorized": {},
+            "ok": {},
+            "on_field_states": {},
+            "original_delivery": {},
+            "pages": {},
+            "phase": {},
+            "policy_sha256": {},
+            "postmatch_available": {},
+            "prematch": {},
+            "preparation_id": {},
+            "presentation": {},
+            "profile": {},
+            "reason": {},
+            "restricted_cash_cents": {},
+            "resume_existing_delivery": {},
+            "revealed_cash_cents": {},
+            "revealed_paid_periods": {},
+            "review": {},
+            "scope": {},
+            "seed_policy": {},
+            "simulation_advanced": {},
+            "source_page_sha256s": {},
+            "standings": {},
+            "summaries": {},
+            "test_only": {},
+            "unknown_team_news": {},
+            "until": {},
+            "validation_only": {},
+            "world_policy": {}
+          }
+        },
+        "automatic_gameplay": {
+          "type": "boolean"
+        }
+      }
+    },
+    "authentication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "algorithm",
+        "signature"
+      ],
+      "properties": {
+        "algorithm": {
+          "const": "HMAC-SHA256/local-audit"
+        },
+        "signature": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    }
+  }
+}

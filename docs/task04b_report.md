@@ -1,5 +1,18 @@
 # Task 04B — private phone gameplay bridge
 
+**Acceptance update under Task 04C (October 28, 2026):** normal iPhone ChatGPT
+created private issue #6, request `9d6b2f84-3f45-4d90-a6c8-75b9e1240e63`, sequence 4,
+and the human confirmed retrieval/narration of worker comment `6480460530`.
+It delivered only stored event 13 (`SECOND_HALF_KICKOFF`), advancing the next
+request sequence to 5. The repository-scoped PAT was stored through the hidden
+Windows prompt; the frozen 0.8.0 persistent worker processed it. Restart through
+the opted-in least-privilege login task and reopening the unchanged issue retained
+one comment, one event and sequence 5. Physical sleep/reboot/login was not tested.
+CI passed 287 tests on all six supported Windows/Linux Python combinations.
+PR #8 was normally merged as `51f3223b9d0bc0175b23e7630330bcdc439d352b`.
+The remaining-gates text below is the original Task 04B report, retained as history;
+see [Task 04C](task04c_report.md) for current development and acceptance status.
+
 **TEST-ONLY integration. Production execution/acceptance disabled.** This report
 distinguishes implemented/tested behavior from the human setup/mobile checks
 still pending. No official fixture, Save 047, production authority, key relocation
