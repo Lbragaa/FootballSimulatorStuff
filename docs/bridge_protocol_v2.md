@@ -1,5 +1,33 @@
 # Private phone bridge protocol 2
 
+## Career episodes (0.11.0)
+
+`play_next_episode` has exactly `{}` arguments and control scope. It needs no new
+opt-in or credential: existing revocable career delegation applies. The command
+returns `episode_type`, `presentation` (an ORDERED section array),
+`presentation_rule`, `world_progress`, `accepted_checkpoint`, `recovery` and
+`timings_seconds`. A score appears only in a `fulltime` section after the final
+timeline/whistle, or inside a concluded competition milestone. No result appears
+in the opening metadata. See [Play](play.md) for exact Hikari rendering rules.
+
+Signed local `career-episode-1` journals commit each internal UUID/page ID before
+effects. Child batch UUIDs derive from the episode UUID and batch index, never
+outcomes or clocks. Each child uses the unchanged automatic operation and lineage
+verification/acceptance. A page committed before a crash is retrieved by the same
+signed page ID. Acceptance committed before the episode journal update resumes
+that exact child and immediate parent. The original bridge inbox/outbox makes
+the final response immutable and retries idempotent, including uncertain POSTs.
+Known committed rule blockers retain the original child; a later continue adopts
+that commitment after correction rather than claiming a replacement seed.
+
+Already completed stages are the request's baseline, so a new conversation does
+not replay an old R16 milestone. Round tables require every recorded fixture of
+that round final AND fully revealed; a later second Vasco match is a stop fence.
+Mathematical title/relegation notices use recorded 38-round/17th-20th rules and
+strict point inequalities; contingent continental places are never invented.
+All old commands, signatures, stored issues, sequences and page receipts remain
+compatible. Episode bounds and recovery instructions are in [Play](play.md).
+
 ## Final streamlined gameplay commands (0.10.0)
 
 The user intentionally replaced per-batch independent approval with a revocable,

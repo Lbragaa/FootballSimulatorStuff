@@ -1,12 +1,16 @@
 # THE BRAGA ERA
 
 **Play from normal iPhone ChatGPT:** [short instructions](docs/play.md).
-Version 0.10.0 adds explicit, revocable career automatic gameplay. Once enabled,
-“Hikari, continue THE BRAGA ERA” consumes stored narration first and advances only
-when no narration waits. It uses the existing deterministic engine and verified
-checkpoint process, without everyday hashes, authenticator codes or Codex.
-See [final verification](docs/final_playable_report.md). No official match is
-executed or accepted during this development task.
+Version 0.11.0 adds `play_next_episode`: one private issue returns a complete Vasco
+match/rodada or a significant competition milestone. It processes earlier world
+commitments internally using the existing deterministic engine, independent
+replay and atomic acceptance. Recorded lineups and chronological events precede
+the final score and table. No extra setup, everyday approvals or Codex is needed.
+See [episode evidence](docs/career_episode_report.md). Official gameplay is active;
+this development task tests only disconnected clones and does not advance it.
+
+The sections below describe earlier development stages and their historical
+authorization limits; obtain CURRENT accepted state from private status #1.
 
 Task 04C (0.9.0) adds opt-in exact-action human confirmation, existing-lineage
 control operations, stored-result roundups and compact narration. Read the

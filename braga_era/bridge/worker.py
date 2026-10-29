@@ -88,6 +88,19 @@ class Worker:
     def after_requests(self, connection):
         """Optional versioned extension; v1 never processes human approvals."""
 
+    def request_claimed(self, connection, request):
+        """Optional progress publication, after the durable inbox claim."""
+
+    def status_document(self, c):
+        return {"domain": "bridge-status-1", "protocol": self.public_protocol,
+                **self.career.identity(),
+                "next_sequence": c.execute("SELECT next_sequence FROM meta").fetchone()[0],
+                "completed_requests": c.execute("SELECT count(*) FROM requests WHERE response IS NOT NULL").fetchone()[0],
+                "worker_id": self.transport.worker_id, "repository_id": self.transport.repository_id,
+                **self.capabilities(),
+                "recent_requests": [{"request_id": r[0], "sequence": r[1], "status": r[2], "issue": r[3]}
+                    for r in c.execute("SELECT id,sequence,status,source FROM requests ORDER BY sequence DESC LIMIT 10")]}
+
     def valid_head(self, request):
         return self.career.identity()["checkpoint"] == request["expected_checkpoint"]
 
@@ -345,6 +358,7 @@ class Worker:
         )
         self.save(c)
         if not row["response"]:
+            self.request_claimed(c, request)
             try:
                 if not self.valid_head(request):
                     raise ValueError("Stale checkpoint")
@@ -455,26 +469,7 @@ class Worker:
                 ).fetchone()[0],
             }
             if hasattr(self.transport, "status"):
-                status = {
-                    "domain": "bridge-status-1",
-                    "protocol": self.public_protocol,
-                    **self.career.identity(),
-                    **result,
-                    "worker_id": self.transport.worker_id,
-                    "repository_id": self.transport.repository_id,
-                    **self.capabilities(),
-                    "recent_requests": [
-                        {
-                            "request_id": r[0],
-                            "sequence": r[1],
-                            "status": r[2],
-                            "issue": r[3],
-                        }
-                        for r in c.execute(
-                            "SELECT id,sequence,status,source FROM requests ORDER BY sequence DESC LIMIT 10"
-                        )
-                    ],
-                }
+                status = self.status_document(c)
                 self.transport.status(
                     {"status": status, "signature": sign(self.career.key, status)}
                 )

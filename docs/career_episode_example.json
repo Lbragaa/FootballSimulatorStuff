@@ -1,0 +1,20 @@
+{
+  "example_scope": "STRUCTURE EXAMPLE FROM AUTOMATED TEST DATA, NOT A CAREER RESULT",
+  "episode_type": "vasco_match",
+  "presentation": [
+    {"section": "prematch", "data": {"fixture_key": "league:3", "home": "Vasco", "away": "TEST opponent", "lineups": [], "note": "Real responses include the recorded autonomous XI, bench, coach and choices."}},
+    {"section": "vasco_timeline", "fixture": "league:3", "events": [
+      {"sequence": 1, "kind": "KICKOFF", "details": {}},
+      {"sequence": 2, "kind": "GOAL", "details": {}},
+      {"sequence": 3, "kind": "HALF_TIME", "details": {}},
+      {"sequence": 4, "kind": "SECOND_HALF_KICKOFF", "details": {}},
+      {"sequence": 5, "kind": "FINAL_WHISTLE", "details": {}}
+    ]},
+    {"section": "fulltime", "fixture": "league:3", "data": {"score": [1, 0], "resolution": {}}},
+    {"section": "league_table", "round": "R27", "complete": true, "note": "Real responses carry all 20 ranked clubs with points, played, W/D/L, GF, GA and GD."},
+    {"section": "next_agenda", "data": [], "next_vasco": null}
+  ],
+  "presentation_rule": "Render sections in order. Tell the goal before its score, final scoreboard after the whistle. Never lead with the winner.",
+  "world_progress": {"batches": 4, "fixtures_revealed": 4},
+  "accepted_checkpoint": "TEST EXAMPLE ONLY"
+}

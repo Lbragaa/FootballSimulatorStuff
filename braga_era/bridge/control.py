@@ -10,6 +10,7 @@ import hmac
 import json
 from pathlib import Path
 import sqlite3
+import time
 from uuid import UUID
 
 from .. import lineage
@@ -23,6 +24,15 @@ OPERATIONS = ["authorize_batch", "execute_batch", "accept_candidate"]
 
 
 class Controls:
+    def measure(self, name, function, *args, **kwargs):
+        started = time.perf_counter()
+        try:
+            return function(*args, **kwargs)
+        finally:
+            metric = getattr(self, "metric", None)
+            if metric:
+                metric(name, time.perf_counter() - started)
+
     def __init__(self, career, store, directory, policy_receipt, gate, *, enabled=False,
                  production_binding_approved=False):
         self.career, self.gate = career, gate
@@ -106,7 +116,7 @@ class Controls:
                 if manifest["until"] != until:
                     raise ValueError("Preparation UUID reused with changed boundary")
             else:
-                manifest = self.career.prepare(until, request_id)
+                manifest = self.measure("manifest_preparation", self.career.prepare, until, request_id)
                 c.execute("INSERT INTO preparations VALUES(?,?)", (request_id, encode(manifest)))
                 self._seal(c)
         return self.summary(manifest)
@@ -242,7 +252,7 @@ class Controls:
         if action == "execute_batch":
             if not row or row["state"] not in ("authorized", "executing", "candidate"):
                 raise ValueError("Missing exact execution authorization")
-            lineage.execute(self.career.registry, self.career.key, manifest["execution_id"], self._destination(pid))
+            self.measure("simulation_and_export", lineage.execute, self.career.registry, self.career.key, manifest["execution_id"], self._destination(pid))
             return self.verify(pid)
         if not row or row["state"] != "candidate":
             raise ValueError("Missing candidate")
@@ -250,7 +260,7 @@ class Controls:
         if statement["candidate"] != candidate or statement["target_sha256"] != candidate["checkpoint_sha256"]:
             raise ValueError("Changed candidate or validation")
         decision = lineage.acceptance_template(self.career.registry, self.career.key, self._destination(pid))
-        lineage.accept(self.career.registry, self.career.key, self._destination(pid),
+        self.measure("acceptance", lineage.accept, self.career.registry, self.career.key, self._destination(pid),
                        decision, lineage.sign(self.career.key, decision))
         return {"accepted": True, "checkpoint_sha256": candidate["checkpoint_sha256"], "test_only": who["test_only"]}
 
@@ -262,7 +272,7 @@ class Controls:
         if not row or row["state"] not in ("candidate", "accepted") or Path(row["directory"]) != destination:
             raise ValueError("No locally registered exact candidate")
         with lineage.access(self.career.registry, self.career.key) as (c, t):
-            verified = lineage.verify_payload(destination / "payload", t, self.career.key)
+            verified = self.measure("independent_verification_restoration", lineage.verify_payload, destination / "payload", t, self.career.key)
             package_hash = file_sha256(destination / "checkpoint.zip")
             if verified["checkpoint_sha256"] != row["checkpoint"] or package_hash != row["package_sha"]:
                 raise ValueError("Registered candidate/package differs")

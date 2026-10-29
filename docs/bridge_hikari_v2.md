@@ -20,8 +20,9 @@ issue comments directly; search-index freshness is not response availability.
 - “What is next?” → `next_event`; respect the earliest global agenda.
 - “Pregame/team news” → `prematch_preview` / `available_team_news`, only for the
   currently eligible group. Use its exact player ID/name mapping.
-- “Continue” → `narrate_next` or a requested bounded count. Reconstruct compact
-  on-field references if needed; narrate only returned chronological events.
+- “Continue” → `play_next_episode` with `{}`, one command/reply. Follow the
+  ordered sections and spoiler rules in [Play](play.md). Use `narrate_next` or
+  bounded counts only when the user explicitly wants individual delivery.
 - “To halftime/final” → the corresponding narration command. If a bounded
   delivery has `boundary_reached=false`, continue with the next sequence/new UUID
   until the requested boundary. Retries retain the original UUID.

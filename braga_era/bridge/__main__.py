@@ -205,7 +205,7 @@ def main(argv=None):
                     raise
             if a.action == "once":
                 return 0
-            time.sleep(v["poll_seconds"])
+            time.sleep(worker.transport.polling_delay(v["poll_seconds"]))
     except (ValueError, OSError, KeyError, TypeError, RuntimeError, sqlite3.Error):
         print(
             "Bridge unavailable or refused configuration; inspect locally without publishing secrets.",

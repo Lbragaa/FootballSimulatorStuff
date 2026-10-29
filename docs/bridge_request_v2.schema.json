@@ -936,6 +936,50 @@
           "const": "braga-bridge-2"
         },
         "command": {
+          "const": "play_next_episode"
+        },
+        "request_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "career": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,80}$"
+        },
+        "expected_checkpoint": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "args": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [],
+          "properties": {}
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "request_id",
+        "sequence",
+        "career",
+        "expected_checkpoint",
+        "command",
+        "args"
+      ],
+      "properties": {
+        "protocol": {
+          "const": "braga-bridge-2"
+        },
+        "command": {
           "const": "advance_next_batch"
         },
         "request_id": {

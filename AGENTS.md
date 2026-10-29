@@ -1,5 +1,30 @@
 # THE BRAGA ERA — durable engineering instructions
 
+## Career episode mode (supersedes old single-day ordinary-client instructions)
+
+- The commissioner explicitly requests `play_next_episode` as the default for
+  ordinary Hikari continuation. Existing official automatic mode is already
+  enabled; discover current career/head/sequence from private status #1, never
+  hardcode an old 046C/generation/date as the live head. Original root bytes and
+  every accepted successor remain immutable. Development advances disconnected
+  rehearsals only, never the actual official career.
+- Keep one remote issue/reply per bounded episode, existing automatic delegation,
+  exact child manifests, stable seeds, independent replay/restoration and atomic
+  acceptance. Signed episode journals precommit deterministic child UUIDs and
+  page IDs. Resume original operations after crashes; never replace commitments.
+- Process stored narration first; unrelated fixtures may be consumed silently.
+  Stop after one complete Vasco match/rodada, newly concluded significant stage,
+  mathematical league milestone or genuine dependency. No second Vasco fixture.
+  Already completed stages form the initial baseline. Never invent draws/berths.
+- The ordered presentation ARRAY is essential: prematch, chronological events,
+  whistle, fulltime, table, next fixture. No final scores in front-loaded metadata
+  or goal score snapshots. Luan Braga remains autonomous. Ordinary unrelated
+  scores are omitted. A table is final only after all that round's fixtures have
+  final receipts and fully revealed cursors. See docs/play.md and the episode
+  report. Legacy commands/manual controls retain their existing behavior.
+- Install the tested frozen wheel in the existing standalone Windows worker,
+  preserving its config/ledger/keys/delegation/startup. No new setup or approvals.
+
 ## Final playable workflow — supersedes ordinary per-batch OTP requirements
 
 - The user's FINAL TASK intentionally authorizes career-specific automatic gameplay, replacing three independent authenticator confirmations during ordinary play. Keep the manual flow available when automatic mode is disabled, but never demand OTPs, hashes, PowerShell or Codex for enabled ordinary gameplay. GitHub account identity is the deliberately accepted remote trust boundary; do not claim independent human cryptographic approval for delegated operations.

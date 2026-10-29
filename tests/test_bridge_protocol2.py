@@ -22,7 +22,7 @@ def test_closed_v2_and_legacy_compatibility():
         if command == "roundup":
             args["detailed"] = []
         assert protocol2.parse(json.dumps(v2(command, **args)))["command"] == command
-    assert len(protocol2.schema()["oneOf"]) == 28
+    assert len(protocol2.schema()["oneOf"]) == 29
     assert not {"execute", "accept", "provision", "confirm", "sign"} & protocol2.COMMANDS.keys()
 
 
