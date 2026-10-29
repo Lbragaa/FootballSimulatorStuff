@@ -40,9 +40,12 @@ def parse(body):
         raise ValueError("Unsupported protocol")
     name = request.get("command")
     if name == 'historical_results':
-        from ..results import validate_filters
+        if not isinstance(request.get('args'), dict):
+            raise ValueError('Historical filter object required')
         v1.parse(json.dumps({**request, "protocol": v1.PROTOCOL, "command": "inspect_career", "args": {}}))
-        validate_filters(request['args'])
+        # The same closed filter validator runs BEFORE any read in query().
+        # An authenticated recognized request gets a useful typed filter error
+        # instead of silently disappearing. Invalid headers stay unclaimable.
         return request
     if isinstance(name, str) and name in v1.COMMANDS:
         v1.parse(json.dumps({**request, "protocol": v1.PROTOCOL}))

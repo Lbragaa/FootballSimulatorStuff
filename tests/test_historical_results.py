@@ -220,3 +220,20 @@ def test_activated_reservations_not_duplicate_pending_fixtures(records):
     p=projection(records)
     assert 'lib:reserve:QF:L1' not in p.records
     assert p.select({'competition':'Libertadores','stage':'QF','include_pending':True})[1]['recorded_pending']==1
+
+
+def test_authenticated_unsupported_filter_returns_meaningful_read_only_reply(controls,tmp_path):
+    from braga_era.bridge.worker2 import Worker2
+    from test_bridge import Transport,REQUESTERS
+    from test_bridge_worker2 import req
+    transport=Transport();career=controls.career
+    worker=Worker2(transport,career,tmp_path/'bridge'/'ledger.sqlite',REQUESTERS)
+    before=file_sha256(career.registry)
+    for sequence,args,code in ((1,{'arbitrary_sql':'DELETE FROM fixtures'},'UNSUPPORTED_FILTER'),
+                               (2,{'competition':'not recorded'},'UNKNOWN_COMPETITION'),
+                               (3,{'date':'2027-02-30'},'INVALID_DATE')):
+        issue=transport.add(req(career,'historical_results',sequence,**args))
+        worker.poll()
+        result=transport.result(issue)['response']['result']['historical_results']
+        assert result['read_only'] and result['error']['code']==code
+    assert file_sha256(career.registry)==before
