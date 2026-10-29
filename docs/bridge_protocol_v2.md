@@ -29,8 +29,9 @@ old cached episode replies and legacy commands retain their bytes/behavior.
 opt-in or credential: existing revocable career delegation applies. The command
 returns `episode_type`, `presentation` (an ORDERED section array),
 `presentation_rule`, `world_progress`, `accepted_checkpoint`, `recovery` and
-`timings_seconds`. A score appears only in a `fulltime` section after the final
-timeline/whistle, or inside a concluded competition milestone. No result appears
+`timings_seconds`. Vasco's score follows the final timeline/whistle in `fulltime`;
+version 0.12 adds other scores in the subsequent `episode_results` section.
+A prior concluded competition milestone may report its results. No score appears
 in the opening metadata. See [Play](play.md) for exact Hikari rendering rules.
 
 Signed local `career-episode-1` journals commit each internal UUID/page ID before

@@ -150,3 +150,31 @@ Automated regression evidence, disconnected episode rehearsals, installed wheel
 hash and private transport acceptance results are recorded with the task/PR and
 ignored local verification artifacts. Cross-platform CI must be read from its
 actual current run; an earlier green episode build is not proof of this revision.
+
+Verification on October 29, 2026:
+
+- Final bridge/reporting regression run: **141 passed**; focused results/protocol/
+  episode checks: **48 passed**. The full local run had **374 passed** and one
+  WinError 5 directory-rename denial in the unchanged legacy sandbox test under
+  OneDrive. Its isolated rerun outside OneDrive, together with final reporting
+  tests, had **20 passed**. No engine, baseline or validation rule was changed to
+  resolve that environmental failure. The final collection contains 378 tests.
+- Three disconnected episodes passed: a cup milestone with four leg results;
+  a Vasco round with all ten scores plus eight other-competition legs; another
+  Vasco round with all ten scores. Results followed final whistle/statistics and
+  preceded standings. R29 remained retrievable after newer rehearsal rounds.
+- Private bridge issues **36 / 37 / 38**, comments **6508420677 / 6508436339 /
+  6508474030**, verified respectively all ten R29 scores (including Vasco 2–2
+  Flamengo), four Libertadores QF first legs while the ties remained unfinished,
+  and eight CDB QF legs with Cruzeiro, Fortaleza, Flamengo and Athletico-PR as the
+  recorded semifinalists. These were strictly read-only requests.
+- Installed worker **0.12.0**, final wheel SHA256
+  `8be71715cbb4b8d7cf0e9ba0f4bf25926476806a0dcf552bde82b33e89270b4d`.
+  Installed code matched the frozen wheel and reviewed sources. Existing login
+  startup/task, configuration, signing key, credential, delegation, registry,
+  accepted database and narration progress were retained. No official match or
+  successor acceptance was executed during development or installation.
+- The ChatGPT-facing private README was updated (commit
+  `8ed5c256e9e2da4ee660be208b460391dcd3856c`). The existing episode PR #10 carries
+  this reporting extension and remains open. New Windows/Linux Python 3.11–3.13
+  CI was still running when this evidence was recorded; read current PR checks.
