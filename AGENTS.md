@@ -1,5 +1,24 @@
 # THE BRAGA ERA — durable engineering instructions
 
+## Multi-season execution prototype
+
+- `braga_era/multiseason` implements `DEV-MULTISEASON-2` only. Read
+  `docs/multiseason_execution_report.md`. Keep its explicit additive schema,
+  TEST-only migration statements, signed exact-retry operations, pre-draw
+  simultaneous commitments, full independent replay and portable size bounds.
+- The current-parent 417-fixture rehearsal covers ACCESS, full league and scoped
+  R16-entry CDB only. It uses eight proposed fictional access clubs and explicit
+  hypothetical income. Neither these assumptions nor the incomplete ecosystem
+  are approved canonically. Do not call this 2028-ready or deploy it.
+- Native history and inherited club identities stay immutable. Future player
+  overlays retain historical snapshots/IDs. Do not spend unknown club budgets,
+  unlabelled revenue, restricted reserves or implicit future owner capital.
+- Existing canonical JSON bytes are frozen contracts. Encoder option reuse is
+  byte-equivalent; it must never become a cache of inputs or verification success.
+- The registered production lineage/phone worker remains unchanged and cannot
+  accept this DEV profile. No production keys, registry, accepted files, worker,
+  command sequence or fictional clock may be modified during development.
+
 ## Multi-season foundation (development only)
 
 - Read `docs/season_2028_implementation_plan.md` and

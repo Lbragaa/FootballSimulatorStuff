@@ -1,5 +1,11 @@
 # Canonical schema guide
 
+`DEV-MULTISEASON-2` has an explicit separate additive migration in
+`braga_era/multiseason/schema.py`. It namespaces editions/fixtures/qualifications,
+archives prior state, versions contracts and records signed transactional
+operations. It is not registered for official acceptance. See the
+[implementation and tested limits](multiseason_execution_report.md).
+
 Multi-season foundation: no canonical migration. `braga_era/seasons.py` creates
 only a nonpromotable development directory: unchanged authenticated
 `parent.sqlite`, manifest, and a separate `season.sqlite` with `season_cycles`,

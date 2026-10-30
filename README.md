@@ -1,5 +1,13 @@
 # THE BRAGA ERA
 
+[Multi-season execution](docs/multiseason_execution_report.md) now includes a
+TEST-only edition migration, qualified entry/scheduling and same-engine match
+execution, a conservative transfer/payroll prototype, and independently restored
+417-fixture development progression into 2029 preparation. The complete 2028
+ecosystem and production bridge are **not ready**. A measured byte-equivalent
+serialization optimization reduced the instrumented regression workload by 7%.
+Production runtime and career remain unchanged.
+
 Multi-season development begins with an [incremental implementation plan](docs/season_2028_implementation_plan.md),
 [measured performance baseline](docs/performance_optimization_plan.md) and isolated
 season-lifecycle/archive rehearsals. Generic 38-round schedule drafts are

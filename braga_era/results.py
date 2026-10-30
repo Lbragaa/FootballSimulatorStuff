@@ -21,6 +21,11 @@ COMPETITIONS = {
     'LIB': ('Copa Libertadores', ('libertadores', 'copa libertadores', 'lib')),
     'SULA': ('Copa Sul-Americana', ('sudamericana', 'sul americana', 'copa sul americana', 'sula')),
     'CARIOCA': ('Campeonato Carioca', ('carioca', 'campeonato carioca')),
+    'SERIE_B': ('Brasileirão Série B', ('serie b','brasileirao serie b')),
+    'SUPERCOPA': ('Supercopa do Brasil', ('supercopa','supercopa do brasil')),
+    'RECOPA': ('Recopa Sul-Americana', ('recopa','recopa sul americana')),
+    'ACCESS': ('Prospective access qualification', ('access','prospective access qualification')),
+    'STATE': ('Proposed state championship', ('state','proposed state championship')),
 }
 
 
@@ -231,6 +236,24 @@ class Projection:
             seasons = {r['season'] for r in self.records.values() if r['tie_id'] == t['key']}
             self.ties[t['key']] = self.tie(t['key'], t['competition'], next(iter(seasons)) if len(seasons) == 1 else None, t['stage'], t['club_a'], t['club_b'],
                 [t['aggregate_a'], t['aggregate_b']], t['winner'], t['status'], 'world_ties')
+        editions={e['id']:e for e in self.rows('ms_editions')}
+        executions={e['fixture']:e for e in self.rows('ms_executions')}
+        entries=Counter(r['edition'] for r in self.rows('ms_entries'))
+        for f in self.rows('ms_fixtures'):
+            e=editions[f['edition']];execution=executions.get(f['key'])
+            source={'table':'ms_fixtures','id':f['key'],'edition':e['id'],'profile':'DEV-MULTISEASON-2'}
+            resolution=None
+            if execution and execution['result_sha256']:
+                import json
+                receipts[f['key']]=execution['result_sha256'];source['result_sha256']=execution['result_sha256']
+                resolution=json.loads(execution['result_json'])['resolution']
+            phase='LEAGUE' if e['format']=='league' else {2:'FINAL',4:'SF',8:'QF',16:'R16',32:'R32'}.get(entries[e['id']]//2**(int(f['stage'][1:])-1),f['stage'])
+            self.add(f['key'],e['competition'],e['season'],f['kickoff'],f['home'],f['away'],[f['home_goals'],f['away_goals']],f['status'],source,
+                     phase=phase,number=f['round'] if e['format']=='league' else None,leg=f['round'] if f['tie_key'] else None,tie=f['tie_key'],resolution=resolution)
+        for t in self.rows('ms_ties'):
+            e=editions[t['edition']]
+            phase={2:'FINAL',4:'SF',8:'QF',16:'R16',32:'R32'}.get(entries[e['id']]//2**(t['stage']-1),str(t['stage']))
+            self.ties[t['key']]=self.tie(t['key'],e['competition'],e['season'],phase,t['club_a'],t['club_b'],None,t['winner'],'final' if t['winner'] else 'scheduled','ms_ties')
         # Partial and final aggregates from recorded scores, never from standings.
         for key, t in self.ties.items():
             legs = [r for r in self.records.values() if r['tie_id'] == key]
