@@ -1,5 +1,12 @@
 # Implemented multi-season development execution
 
+Continuation: [working group-stage and query optimization evidence](group_stage_continuation.md)
+adds a real-engine 24-group-match + five-knockout-match test through a champion,
+recorded LIB third-place cross-entry evidence, and 17.9% lower wall time for an
+identical team-loading workload. The prior 285-operation/417-fixture rehearsal
+still replays to the same hash. These additions do not complete continental
+preliminaries, allocations, SULA playoffs or the full ecosystem described below.
+
 This extends PR #11 beyond planning. It is **not 2028-ready** and is not installed
 in the production worker. No official match, acceptance, migration, key change,
 registry change or fictional-clock advance was performed.
