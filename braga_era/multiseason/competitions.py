@@ -9,7 +9,7 @@ import random
 from ..history import canonical_json as encode, digest
 from ..seasons import double_round_robin
 
-COMPETITIONS={'LEAGUE','SERIE_B','ACCESS','CDB','CARIOCA','STATE','LIB','SULA','SUPERCOPA','RECOPA'}
+COMPETITIONS={'LEAGUE','SERIE_B','ACCESS','CDB','CARIOCA','STATE','LIB','SULA','SUPERCOPA','RECOPA','LIB_PRE1','LIB_PRE2','LIB_PRE3'}
 
 
 def required(args, fields):
@@ -68,6 +68,12 @@ def qualification(c,a):
         if a['competition']!='SULA' or e['competition']!='LIB' or source['position']!=3:
             raise ValueError('This proposed cross-entry route is only Libertadores third place to Sul-Americana')
         if table(c,e['id'],source['group'])[source['position']-1]['club']!=a['club']:raise ValueError('Group qualification identifies another club')
+    elif kind=='preliminary_loser':
+        required(source,'type edition')
+        e=c.execute('SELECT * FROM ms_editions WHERE id=?',(source['edition'],)).fetchone()
+        tie=c.execute('SELECT * FROM ms_ties WHERE edition=? AND (club_a=? OR club_b=?)',(source['edition'],a['club'],a['club'])).fetchone()
+        if a['competition']!='SULA' or not e or e['competition']!='LIB_PRE3' or e['season']!=a['season'] or e['state']!='completed' or not tie or not tie['winner'] or tie['winner']==a['club']:
+            raise ValueError('Only recorded third-preliminary losers can transfer')
     elif kind=='legacy_champion':
         required(source,'type competition')
         allowed={'RECOPA':{'LIB','SULA'},'SUPERCOPA':{'LEAGUE','CDB'},'LIB':{'LIB','SULA'},'CDB':{'CDB'}}
@@ -93,9 +99,10 @@ def qualification(c,a):
             raise ValueError('Qualification source edition is not completed or adjacent')
         if kind=='edition_champion':winner=edition['champion']
         elif kind=='edition_qualifier':
-            if edition['format']!='qualification' or a['club'] not in {r[0] for r in c.execute('SELECT winner FROM ms_ties WHERE edition=?',(edition['id'],))}:
+            if edition['format'] not in {'qualification','qualifier_ties'} or a['club'] not in {r[0] for r in c.execute('SELECT winner FROM ms_ties WHERE edition=?',(edition['id'],))}:
                 raise ValueError('Club did not win a recorded access qualification tie')
             winner=a['club']
+            if edition['format']=='qualifier_ties' and a['competition']!={'LIB_PRE1':'LIB_PRE2','LIB_PRE2':'LIB_PRE3','LIB_PRE3':'LIB'}[edition['competition']]:raise ValueError('Preliminary dependency cannot be skipped')
         else:
             if edition['format']!='league' or type(source['position']) is not int or not 1<=source['position']<=len(standings(c,edition['id'])):raise ValueError('Invalid source standing')
             winner=standings(c,edition['id'])[source['position']-1]['club']
@@ -113,7 +120,7 @@ def qualification(c,a):
 
 def edition(c,a):
     required(a,'competition season format clubs rules')
-    if a['competition'] not in COMPETITIONS or a['format'] not in {'league','knockout','qualification','groups_knockout','sula_cross_playoffs'}:raise ValueError('Unsupported competition format')
+    if a['competition'] not in COMPETITIONS or a['format'] not in {'league','knockout','qualification','qualifier_ties','groups_knockout','sula_cross_playoffs'}:raise ValueError('Unsupported competition format')
     if not c.execute("SELECT 1 FROM ms_seasons WHERE season=? AND state='preparing'",(a['season'],)).fetchone():raise ValueError('Season not prepared')
     clubs=a['clubs'];rules=a['rules']
     if (not isinstance(clubs,list) or len(clubs)<2 or len(set(clubs))!=len(clubs)
@@ -125,6 +132,7 @@ def edition(c,a):
     if a['competition']=='ACCESS' and a['format']!='qualification':raise ValueError('Access promotion uses the declared four-tie qualification format')
     if a['format']=='knockout' and len(clubs)&(len(clubs)-1):raise ValueError('Knockout entry count must be a power of two')
     if a['format']=='qualification' and (a['competition']!='ACCESS' or len(clubs)!=8):raise ValueError('Prospective access requires eight clubs and four qualifying ties')
+    if a['format']=='qualifier_ties' and (a['competition'] not in {'LIB_PRE1','LIB_PRE2','LIB_PRE3'} or len(clubs)!={'LIB_PRE1':6,'LIB_PRE2':16,'LIB_PRE3':8}[a['competition']] or rules['legs']!=2):raise ValueError('Invalid continental preliminary stage size or legs')
     if a['format']=='groups_knockout' and (a['competition'] not in {'LIB','SULA'} or len(clubs)<8 or len(clubs)>32 or len(clubs)&(len(clubs)-1)):
         raise ValueError('Group prototype requires 8/16/32 continental entrants')
     if a['format']=='sula_cross_playoffs' and (a['competition']!='SULA' or len(clubs)!=32 or rules['legs']!=2 or rules['final_legs']!=1):raise ValueError('SULA cross-playoff format requires 32 group entrants, two-legged ties and single final')
@@ -190,7 +198,7 @@ def schedule(c,a):
     else:
         ties=[dict(r) for r in c.execute('SELECT * FROM ms_ties WHERE edition=? ORDER BY stage,key',(e['id'],))]
         if ties:
-            if e['format']=='qualification':raise ValueError('Access qualification has no invented later championship round')
+            if e['format'] in {'qualification','qualifier_ties'}:raise ValueError('Qualification has no invented later championship round')
             last=max(t['stage'] for t in ties);previous=[t for t in ties if t['stage']==last]
             if any(not t['winner'] for t in previous):raise ValueError('Previous knockout stage unresolved')
             entries=[t['winner'] for t in previous]
@@ -225,10 +233,11 @@ def close_edition(c,a):
     if e['format']=='league':
         if len(fixtures)!=n*(n-1):raise ValueError('Incomplete league inventory')
         table=standings(c,e['id']);winner=table[0]['club']
-    elif e['format']=='qualification':
+    elif e['format'] in {'qualification','qualifier_ties'}:
         ties=c.execute('SELECT * FROM ms_ties WHERE edition=? ORDER BY key',(e['id'],)).fetchall()
         rules=json.loads(e['rules_json'])
-        if len(ties)!=4 or len(fixtures)!=4*rules['legs'] or any(not t['winner'] for t in ties):raise ValueError('Incomplete access qualification process')
+        expected_ties=4 if e['format']=='qualification' else n//2
+        if len(ties)!=expected_ties or len(fixtures)!=expected_ties*rules['legs'] or any(not t['winner'] for t in ties):raise ValueError('Incomplete access qualification process')
         winner=None;table=None
     elif e['format']=='sula_cross_playoffs':
         ties=c.execute('SELECT * FROM ms_ties WHERE edition=? ORDER BY stage DESC,key',(e['id'],)).fetchall()
@@ -241,5 +250,5 @@ def close_edition(c,a):
         if len(ties)!=knockout_n-1 or len(fixtures)!=expected or any(not t['winner'] for t in ties):raise ValueError('Incomplete knockout path')
         winner=ties[0]['winner'];table=None
     c.execute("UPDATE ms_editions SET state='completed',champion=? WHERE id=?",(winner,e['id']))
-    qualifiers=[r[0] for r in c.execute('SELECT winner FROM ms_ties WHERE edition=? ORDER BY key',(e['id'],))] if e['format']=='qualification' else None
+    qualifiers=[r[0] for r in c.execute('SELECT winner FROM ms_ties WHERE edition=? ORDER BY key',(e['id'],))] if e['format'] in {'qualification','qualifier_ties'} else None
     return {'edition':e['id'],'champion':winner,'standings':table,'qualifiers':qualifiers,'test_only':True}

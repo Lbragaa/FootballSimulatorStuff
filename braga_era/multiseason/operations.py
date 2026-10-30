@@ -61,6 +61,31 @@ def apply(c,kind,a):
     if kind=='qualify':return qualification(c,a)
     if kind=='edition':return edition(c,a)
     if kind=='schedule':return schedule(c,a)
+    if kind=='schedule_country_groups':
+        required(a,'edition start deadline')
+        from .continental_policy import draw
+        from .competitions import insert_fixture
+        from ..seasons import double_round_robin
+        from datetime import datetime,timedelta
+        e=c.execute('SELECT * FROM ms_editions WHERE id=?',(a['edition'],)).fetchone()
+        if not e or e['state']!='planned' or e['format'] not in {'groups_knockout','sula_cross_playoffs'}:raise ValueError('Unscheduled continental main stage required')
+        entries=c.execute('SELECT x.*,w.country,w.strength FROM ms_entries x JOIN world_clubs w ON w.key=x.club WHERE x.edition=? ORDER BY w.strength DESC,x.club',(e['id'],)).fetchall()
+        if len(entries)!=32 or any(not r['country'] for r in entries):raise ValueError('32 entries with recorded countries required; unknown nationality cannot be invented')
+        pots=[[r['club'] for r in entries[i:i+8]] for i in range(0,32,8)]
+        countries={r['club']:r['country'] for r in entries};exceptions=[]
+        for r in entries:
+            source=json.loads(r['evidence_json'])
+            if source.get('type')=='edition_qualifier':
+                parent=c.execute('SELECT competition FROM ms_editions WHERE id=?',(source['edition'],)).fetchone()
+                if parent and parent[0]=='LIB_PRE3':exceptions.append(r['club'])
+        seed=c.execute('SELECT seed FROM ms_meta').fetchone()[0]
+        groups=draw(pots,countries,seed,preliminary_exceptions=exceptions)
+        for name,clubs in groups.items():
+            for f in double_round_robin(clubs,season=e['season'],competition=e['competition']):
+                when=(datetime.fromisoformat(a['start'])+timedelta(days=7*(f['round']-1))).isoformat(sep=' ',timespec='minutes')
+                insert_fixture(c,e['id'],name,f['round'],None,f['home'],f['away'],when,a['deadline'])
+        c.execute("UPDATE ms_editions SET state='active' WHERE id=?",(e['id'],))
+        return {'edition':e['id'],'policy':'country-pots-1','groups':groups,'preliminary_exceptions':exceptions,'scheduled':96}
     if kind=='claim_group':
         from .execution import claim
         return claim(c,a)

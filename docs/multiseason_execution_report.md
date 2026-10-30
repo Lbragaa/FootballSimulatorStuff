@@ -1,5 +1,9 @@
 # Implemented multi-season development execution
 
+Latest entry work: [preliminary progression and country-draw evidence](continental_entry_report.md)
+adds 30 simulated preliminary fixtures, route checks and fail-closed country
+scheduling. It does not claim a fully sourced, unified continental rehearsal.
+
 Latest: [266-fixture continental main-stage proof](continental_main_stage_report.md)
 adds SULA cross-playoffs, group-winner byes, R16 home orientation and independently
 restored full-sized group/knockout paths. Allocations/preliminaries/country draws

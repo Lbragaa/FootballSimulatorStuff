@@ -240,3 +240,18 @@ def test_bounded_continuation_finishes_same_round_not_next_vasco(world,monkeypat
     assert result['episode_type']=='vasco_match'
     assert any(s['section']=='league_table' for s in result['presentation'])
     assert not any(s['section']=='vasco_timeline' for s in result['presentation'])
+
+
+@pytest.mark.parametrize('exit_type',['blocker','automatic_disabled'])
+def test_same_round_survives_other_resumable_exits(world,monkeypatch,exit_type):
+    monkeypatch.setattr('braga_era.bridge.episode.MAX_PAGES',7)
+    first_request=request(world)
+    first=world.ep.run(first_request)
+    assert any(s['section']=='fulltime' for s in first['presentation'])
+    # Disconnected signed-journal fixture for the equivalent interrupted state.
+    path=world.ep.path(first_request);op=world.auto._read(path)
+    op['response']['episode_type']=exit_type;world.auto._save(path,op)
+    monkeypatch.setattr('braga_era.bridge.episode.MAX_PAGES',256)
+    result=world.ep.run(req(world.auto.career,'play_next_episode',3))
+    assert any(s['section']=='league_table' for s in result['presentation'])
+    assert not any(s['section']=='vasco_timeline' for s in result['presentation'])
