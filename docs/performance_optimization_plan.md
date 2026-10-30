@@ -1,5 +1,17 @@
 # Verified-pipeline performance plan
 
+## Implemented optimization
+
+`history.canonical_json` now reuses the immutable configuration of one standard
+`JSONEncoder`; every traversal remains fresh. No values, fingerprints, authority
+decisions or successful validations are cached. Exact byte/exception/cycle/thread
+tests pass. Paired microbenchmark: 1.50× median CPU throughput. The identical
+fixed-seed 16-fixture pipeline took 190.278 seconds versus 204.688 (7.04% less
+instrumented wall time), independently restored with the **same** semantic hash.
+Single instrumented runs are not a general episode-latency guarantee. See
+[numerical comparison](validation/encoding_optimization.json). The installed
+production runtime is unchanged.
+
 ## Measured starting point
 
 On 2026-10-29 a read-only extraction of 17 existing durable episode timing records
