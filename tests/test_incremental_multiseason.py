@@ -1,5 +1,6 @@
 """A signed parent attestation must never hide tampering or replace old replay."""
 from concurrent.futures import ThreadPoolExecutor
+from contextlib import closing
 import json
 import shutil
 import sqlite3
@@ -58,13 +59,13 @@ def test_child_crash_exact_retry_full_replay_and_portable_restore(sealed_parent,
 def test_tampering_cannot_publish_or_reinterpret_parent(sealed_parent,tmp_path,defect):
     target=tmp_path/'child';incremental.create(sealed_parent,target,KEY)
     if defect=='parent_bytes':
-        with sqlite3.connect(target/'parent/snapshot/database.sqlite') as c:c.execute("UPDATE ms_fixtures SET home_goals=99")
+        with closing(sqlite3.connect(target/'parent/snapshot/database.sqlite')) as c,c:c.execute("UPDATE ms_fixtures SET home_goals=99")
     elif defect=='seal_signature':
         path=target/'parent/seal.json';value=json.loads(path.read_text());value['signature']='0'*64;path.write_text(json.dumps(value))
     elif defect=='child_history':
-        with sqlite3.connect(target/'child/database.sqlite') as c:c.execute("UPDATE ms_fixtures SET home_goals=99")
+        with closing(sqlite3.connect(target/'child/database.sqlite')) as c,c:c.execute("UPDATE ms_fixtures SET home_goals=99")
     elif defect=='operation_prefix':
-        with sqlite3.connect(target/'child/database.sqlite') as c:c.execute("UPDATE ms_operations SET args_json='{}' WHERE sequence=1")
+        with closing(sqlite3.connect(target/'child/database.sqlite')) as c,c:c.execute("UPDATE ms_operations SET args_json='{}' WHERE sequence=1")
     else:(target/'child/TEST-secret.key').write_text('deliberate fake private file; must never export')
     with pytest.raises(ValueError):incremental.export(target,tmp_path/'must-not-publish',KEY)
     assert not (tmp_path/'must-not-publish').exists()
