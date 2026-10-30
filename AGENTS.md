@@ -2,6 +2,12 @@
 
 ## Multi-season execution prototype
 
+- `continental-entry-development-1` connects country/source evidence and actual
+  preliminary winners through both continental finals. Read
+  `docs/continental_joined_report.md`. Its 312-fixture proof uses explicit
+  fictional test clubs/administrative scenarios, not approved official entries
+  or invented historical national scores. Preserve earlier DEV draw behavior.
+
 - Group membership is the committed country-draw receipt cross-checked against
   stored fixtures, or stored fixtures for legacy generic draws. Never rerun a
   shuffle from a read path or inspect an uncommitted group draw. See

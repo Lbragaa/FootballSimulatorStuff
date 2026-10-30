@@ -52,7 +52,7 @@ def claim(c,a):
             aggregate_before=tuple(prior),progression='Regulation engine; separately validated edition ET/penalties'),
             common,notes=('NONCANONICAL proposed multi-season edition',))
         seeds=commit_seeds(snap,config,digest({'seed':meta['seed'],'fixture':f['key'],'policy':'career-stable-per-fixture-1'}))
-        data={'snapshot':asdict(snap),'rules':asdict(Rules(e['competition'],extra_time=single and decisive,penalties=decisive)),
+        data={'snapshot':asdict(snap),'rules':asdict(Rules(e['competition'],extra_time=single and decisive and e['competition']!='SULA_PRE',penalties=decisive)),
               'prior':prior,'neutral':bool(single and rules['neutral_final'])}
         c.execute('INSERT INTO ms_executions VALUES(?,?,?,?,?,?,?)',(f['key'],encode(data),digest(data),encode(asdict(seeds)),encode(asdict(config)),None,None))
         c.execute("UPDATE ms_fixtures SET status='claimed' WHERE key=?",(f['key'],))

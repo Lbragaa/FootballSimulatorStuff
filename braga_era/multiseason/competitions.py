@@ -9,7 +9,7 @@ import random
 from ..history import canonical_json as encode, digest
 from ..seasons import double_round_robin
 
-COMPETITIONS={'LEAGUE','SERIE_B','ACCESS','CDB','CARIOCA','STATE','LIB','SULA','SUPERCOPA','RECOPA','LIB_PRE1','LIB_PRE2','LIB_PRE3'}
+COMPETITIONS={'LEAGUE','SERIE_B','ACCESS','CDB','CARIOCA','STATE','LIB','SULA','SUPERCOPA','RECOPA','LIB_PRE1','LIB_PRE2','LIB_PRE3','SULA_PRE'}
 
 
 def required(args, fields):
@@ -102,7 +102,7 @@ def qualification(c,a):
             if edition['format'] not in {'qualification','qualifier_ties'} or a['club'] not in {r[0] for r in c.execute('SELECT winner FROM ms_ties WHERE edition=?',(edition['id'],))}:
                 raise ValueError('Club did not win a recorded access qualification tie')
             winner=a['club']
-            if edition['format']=='qualifier_ties' and a['competition']!={'LIB_PRE1':'LIB_PRE2','LIB_PRE2':'LIB_PRE3','LIB_PRE3':'LIB'}[edition['competition']]:raise ValueError('Preliminary dependency cannot be skipped')
+            if edition['format']=='qualifier_ties' and a['competition']!={'LIB_PRE1':'LIB_PRE2','LIB_PRE2':'LIB_PRE3','LIB_PRE3':'LIB','SULA_PRE':'SULA'}[edition['competition']]:raise ValueError('Preliminary dependency cannot be skipped')
         else:
             if edition['format']!='league' or type(source['position']) is not int or not 1<=source['position']<=len(standings(c,edition['id'])):raise ValueError('Invalid source standing')
             winner=standings(c,edition['id'])[source['position']-1]['club']
@@ -132,7 +132,9 @@ def edition(c,a):
     if a['competition']=='ACCESS' and a['format']!='qualification':raise ValueError('Access promotion uses the declared four-tie qualification format')
     if a['format']=='knockout' and len(clubs)&(len(clubs)-1):raise ValueError('Knockout entry count must be a power of two')
     if a['format']=='qualification' and (a['competition']!='ACCESS' or len(clubs)!=8):raise ValueError('Prospective access requires eight clubs and four qualifying ties')
-    if a['format']=='qualifier_ties' and (a['competition'] not in {'LIB_PRE1','LIB_PRE2','LIB_PRE3'} or len(clubs)!={'LIB_PRE1':6,'LIB_PRE2':16,'LIB_PRE3':8}[a['competition']] or rules['legs']!=2):raise ValueError('Invalid continental preliminary stage size or legs')
+    if a['format']=='qualifier_ties' and (a['competition'] not in {'LIB_PRE1','LIB_PRE2','LIB_PRE3','SULA_PRE'} or len(clubs)!={'LIB_PRE1':6,'LIB_PRE2':16,'LIB_PRE3':8,'SULA_PRE':32}[a['competition']] or rules['legs']!=(1 if a['competition']=='SULA_PRE' else 2)):
+        raise ValueError('Invalid continental preliminary stage size or legs')
+    if a['competition']=='SULA_PRE' and (a['format']!='qualifier_ties' or rules['neutral_final']):raise ValueError('SULA national preliminary uses single home matches and direct penalties')
     if a['format']=='groups_knockout' and (a['competition'] not in {'LIB','SULA'} or len(clubs)<8 or len(clubs)>32 or len(clubs)&(len(clubs)-1)):
         raise ValueError('Group prototype requires 8/16/32 continental entrants')
     if a['format']=='sula_cross_playoffs' and (a['competition']!='SULA' or len(clubs)!=32 or rules['legs']!=2 or rules['final_legs']!=1):raise ValueError('SULA cross-playoff format requires 32 group entrants, two-legged ties and single final')
@@ -181,6 +183,9 @@ def schedule(c,a):
     if not e or e['state'] not in {'planned','active'}:raise ValueError('Edition not schedulable')
     entries=[r[0] for r in c.execute('SELECT club FROM ms_entries WHERE edition=? ORDER BY club',(e['id'],))]
     start=datetime.fromisoformat(a['start'])
+    if e['competition']=='SULA_PRE':
+        from .continental_entry import schedule_sula_pre
+        return schedule_sula_pre(c,e,a['start'],a['deadline'])
     if e['format']=='sula_cross_playoffs':
         from .sudamericana import schedule as schedule_sula
         return schedule_sula(c,e,a['start'],a['deadline'])
@@ -211,7 +216,10 @@ def schedule(c,a):
                 entries=qualifiers(c,e['id'])
         commitment={'edition':e['id'],'stage':stage,'qualified_pool':sorted(entries),
                     'policy':'committed-open-draw-1','seed':c.execute('SELECT seed FROM ms_meta').fetchone()[0]}
-        random.Random(int(digest(commitment),16)).shuffle(entries)
+        from .continental_entry import preliminary_entries
+        paired=preliminary_entries(c,e,entries)
+        if paired is None:random.Random(int(digest(commitment),16)).shuffle(entries)
+        else:entries=paired
         rules=json.loads(e['rules_json']);legs=rules['final_legs'] if len(entries)==2 else rules['legs']
         for i in range(0,len(entries),2):
             home,away=entries[i:i+2];tie=f"{e['id']}:S{stage}:{i//2+1}"

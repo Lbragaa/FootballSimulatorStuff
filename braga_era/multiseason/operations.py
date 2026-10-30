@@ -63,6 +63,9 @@ def apply(c,kind,a):
         c.execute('INSERT INTO ms_pools VALUES(?,?,?,?,?)',(a['id'],a['season'],a['competition'],encode(sorted(a['clubs'])),a['reason']))
         return {'pool':a['id'],'proposed':True,'historical_results_created':False}
     if kind=='qualify':return qualification(c,a)
+    if kind=='commit_continental_entry':
+        from .continental_entry import commit
+        return commit(c,a)
     if kind=='edition':return edition(c,a)
     if kind=='schedule':return schedule(c,a)
     if kind=='schedule_country_groups':

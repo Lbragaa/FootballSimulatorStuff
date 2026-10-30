@@ -1,5 +1,10 @@
 # Implemented multi-season development execution
 
+Latest integration: [joined continental entry-to-finals proof](continental_joined_report.md)
+connects versioned country evidence, all preliminary stages and both main stages
+on one disconnected world: **312 real-engine fixtures**, independently restored.
+Its explicitly synthetic entry scenario is not official qualification evidence.
+
 Latest audit: [committed group-draw correction](committed_draw_report.md)
 fixes a real pool-accessor inconsistency without regenerating fixtures or scores.
 Country-draw receipts and stored fixture memberships now agree across reads,

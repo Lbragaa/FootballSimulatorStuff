@@ -25,6 +25,10 @@ COMPETITIONS = {
     'SUPERCOPA': ('Supercopa do Brasil', ('supercopa','supercopa do brasil')),
     'RECOPA': ('Recopa Sul-Americana', ('recopa','recopa sul americana')),
     'ACCESS': ('Prospective access qualification', ('access','prospective access qualification')),
+    'SULA_PRE': ('Copa Sul-Americana national preliminary', ('sula pre','sula_pre')),
+    'LIB_PRE1': ('Copa Libertadores first preliminary', ('lib pre1','lib_pre1')),
+    'LIB_PRE2': ('Copa Libertadores second preliminary', ('lib pre2','lib_pre2')),
+    'LIB_PRE3': ('Copa Libertadores third preliminary', ('lib pre3','lib_pre3')),
     'STATE': ('Proposed state championship', ('state','proposed state championship')),
 }
 
