@@ -8,6 +8,9 @@ Latest integration: [joined continental entry-to-finals proof](continental_joine
 connects versioned country evidence, all preliminary stages and both main stages
 on one disconnected world: **312 real-engine fixtures**, independently restored.
 Its explicitly synthetic entry scenario is not official qualification evidence.
+The V2 proposal adds seeded LIB R16 pairings and shared preliminary/main-stage
+suspension counters while preserving exact V1 replay. All 312 scores are exposed
+through the existing historical projection, including the national preliminary.
 
 Latest audit: [committed group-draw correction](committed_draw_report.md)
 fixes a real pool-accessor inconsistency without regenerating fixtures or scores.

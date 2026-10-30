@@ -8,7 +8,8 @@ from ..history import canonical_json as encode,digest
 from .continental_policy import ALLOCATIONS
 from .competitions import club,required,standings,brazilian
 
-POLICY='continental-entry-development-1'
+LEGACY_POLICY='continental-entry-development-1'
+POLICY='continental-entry-development-2'
 SULA_SLOTS={country:6 if country in {'BRA','ARG'} else 4 for country in ALLOCATIONS}
 
 
@@ -83,7 +84,7 @@ def titleholder(c,season,source):
 
 def commit(c,a):
     required(a,'season policy national_evidence champions')
-    if a['policy']!=POLICY or not c.execute("SELECT 1 FROM ms_seasons WHERE season=? AND state='preparing'",(a['season'],)).fetchone():
+    if a['policy'] not in {LEGACY_POLICY,POLICY} or not c.execute("SELECT 1 FROM ms_seasons WHERE season=? AND state='preparing'",(a['season'],)).fetchone():
         raise ValueError('Prepared season and explicit supported DEV intake policy required')
     if c.execute("SELECT 1 FROM ms_qualifications WHERE season=? AND competition IN ('LIB','SULA','LIB_PRE1','LIB_PRE2','LIB_PRE3','SULA_PRE') LIMIT 1",(a['season'],)).fetchone():
         raise ValueError('Continental intake already committed or competing qualifications exist; resume the original request')
@@ -119,9 +120,9 @@ def commit(c,a):
             used.add(key)
     if len(entries)!=91 or len({r['club'] for r in entries})!=91:raise ValueError('Continental intake inventory collision')
     for row in entries:
-        source={'type':'continental_entry','policy':POLICY,'evidence_sha256':source_hash,**row}
+        source={'type':'continental_entry','policy':a['policy'],'evidence_sha256':source_hash,**row}
         c.execute('INSERT INTO ms_qualifications VALUES(?,?,?,?,?)',(f"{row['competition']}:{a['season']}:{row['club']}",a['season'],row['competition'],row['club'],encode(source)))
-    return {'policy':POLICY,'season':a['season'],'evidence_sha256':source_hash,'entries':entries,'test_only':True,'canonical_policy_approved':False}
+    return {'policy':a['policy'],'season':a['season'],'evidence_sha256':source_hash,'entries':entries,'test_only':True,'canonical_policy_approved':False}
 
 
 def schedule_sula_pre(c,e,start,deadline):
@@ -135,26 +136,41 @@ def schedule_sula_pre(c,e,start,deadline):
     if set(countries)!=expected or any(len(g)!=4 for g in countries.values()):raise ValueError('SULA preliminary requires four entries in each of eight countries')
     seed=c.execute('SELECT seed FROM ms_meta').fetchone()[0];draw={}
     for country,clubs in sorted(countries.items()):
-        random.Random(int(digest({'seed':seed,'edition':e['id'],'country':country,'clubs':clubs,'policy':POLICY}),16)).shuffle(clubs)
+        random.Random(int(digest({'seed':seed,'edition':e['id'],'country':country,'clubs':clubs,'policy':LEGACY_POLICY}),16)).shuffle(clubs)
         draw[country]=clubs
         for i in (0,2):
             home,away=clubs[i:i+2];key=f"{e['id']}:{country}:{i//2+1}"
             c.execute('INSERT INTO ms_ties VALUES(?,?,?,?,?,NULL)',(key,e['id'],1,home,away))
             insert_fixture(c,e['id'],'NATIONAL_PRE',1,key,home,away,start,deadline)
     c.execute("UPDATE ms_editions SET state='active' WHERE id=?",(e['id'],))
-    return {'edition':e['id'],'policy':POLICY,'country_draws':draw,'scheduled':16}
+    return {'edition':e['id'],'policy':LEGACY_POLICY,'country_draws':draw,'scheduled':16}
+
+
+def intake_version(c,season):
+    for row in c.execute("SELECT response_json FROM ms_operations WHERE kind='commit_continental_entry' ORDER BY sequence"):
+        receipt=json.loads(row[0])
+        if receipt['season']==season:return receipt['policy']
+    return None
+
+
+def discipline_edition(edition,policy):
+    """V2 campaign counters span preliminary editions; V1 stays byte-compatible."""
+    if policy==POLICY:
+        competition=edition['competition']
+        if competition in {'LIB_PRE1','LIB_PRE2','LIB_PRE3'}:return f"LIB:{edition['season']}"
+        if competition=='SULA_PRE':return f"SULA:{edition['season']}"
+    return edition['id']
 
 
 def preliminary_entries(c,e,entries):
     """New intake only: strength pots, committed seed, no same-country pairing."""
-    if e['competition'] not in {'LIB_PRE1','LIB_PRE2','LIB_PRE3'} or not any(
-        json.loads(r[0])['season']==e['season'] for r in c.execute("SELECT response_json FROM ms_operations WHERE kind='commit_continental_entry'")):
+    if e['competition'] not in {'LIB_PRE1','LIB_PRE2','LIB_PRE3'} or intake_version(c,e['season']) is None:
         return None
     import random
     ranked=sorted(entries,key=lambda k:(-c.execute('SELECT strength FROM world_clubs WHERE key=?',(k,)).fetchone()[0],k))
     half=len(ranked)//2;seeded=ranked[:half];unseeded=ranked[half:]
     seed=c.execute('SELECT seed FROM ms_meta').fetchone()[0]
-    random.Random(int(digest({'seed':seed,'edition':e['id'],'pots':[seeded,unseeded],'policy':POLICY}),16)).shuffle(unseeded)
+    random.Random(int(digest({'seed':seed,'edition':e['id'],'pots':[seeded,unseeded],'policy':LEGACY_POLICY}),16)).shuffle(unseeded)
     countries={k:country_of(c,k) for k in entries}
     if any(v not in ALLOCATIONS for v in countries.values()):raise ValueError('Preliminary draw nationality unavailable')
     nodes=0
@@ -171,3 +187,22 @@ def preliminary_entries(c,e,entries):
     result=match(0,unseeded)
     if result is None:raise ValueError('No feasible preliminary seeded country draw; constraints not relaxed')
     return result  # Seeded clubs host the return leg.
+
+
+def lib_round16_entries(c,e,entries):
+    """V2 only: actual group winners host returns against actual runners-up.
+
+    Proposed R16 has no country/rematch prohibition. V1 remains the open draw.
+    """
+    if e['competition']!='LIB' or e['format']!='groups_knockout' or intake_version(c,e['season'])!=POLICY:
+        return None
+    if c.execute('SELECT 1 FROM ms_ties WHERE edition=?',(e['id'],)).fetchone():return None
+    from .groups import pools,table
+    import random
+    rankings=[table(c,e['id'],name) for name in sorted(pools(c,e['id']))]
+    winners=sorted(t[0]['club'] for t in rankings);runners=sorted(t[1]['club'] for t in rankings)
+    if len(winners)!=8 or len(set(winners+runners))!=16 or set(winners+runners)!=set(entries):
+        raise ValueError('LIB R16 requires the exact eight recorded winner/runner-up pots')
+    seed=c.execute('SELECT seed FROM ms_meta').fetchone()[0]
+    random.Random(int(digest({'seed':seed,'edition':e['id'],'winners':winners,'runners':runners,'policy':'lib-r16-group-winner-pots-1'}),16)).shuffle(runners)
+    return [club for pair in zip(runners,winners) for club in pair]

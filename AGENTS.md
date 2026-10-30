@@ -7,11 +7,15 @@
   independently replays again. Do not replace staging replay with a cached source
   verdict. See `docs/continental_export_performance.md` for the paired benchmark.
 
-- `continental-entry-development-1` connects country/source evidence and actual
+- `continental-entry-development-2` connects country/source evidence and actual
   preliminary winners through both continental finals. Read
   `docs/continental_joined_report.md`. Its 312-fixture proof uses explicit
   fictional test clubs/administrative scenarios, not approved official entries
-  or invented historical national scores. Preserve earlier DEV draw behavior.
+  or invented historical national scores. V2 seeds LIB R16 by recorded group
+  winners/runners-up. Preserve V1 open-draw replay and frozen preliminary/SULA
+  draw streams; never regenerate an earlier completed development result.
+  V2 preliminary/main-stage sanctions share the same tournament-year counter;
+  persist that counter choice in execution inputs and preserve V1 counters.
 
 - Group membership is the committed country-draw receipt cross-checked against
   stored fixtures, or stored fixtures for legacy generic draws. Never rerun a

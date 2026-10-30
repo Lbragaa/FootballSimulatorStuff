@@ -35,6 +35,10 @@ def claim(c,a):
                    'clock':meta['clock'],'parent':meta['parent_sha256']})
     for f in rows:
         e=c.execute('SELECT * FROM ms_editions WHERE id=?',(f['edition'],)).fetchone()
+        discipline=e['id']
+        if e['competition'] in {'LIB_PRE1','LIB_PRE2','LIB_PRE3','SULA_PRE'}:
+            from .continental_entry import discipline_edition,intake_version
+            discipline=discipline_edition(e,intake_version(c,e['season']))
         rules=json.loads(e['rules_json']);decisive=False;prior=[0,0];single=False
         if f['tie_key']:
             legs=c.execute('SELECT * FROM ms_fixtures WHERE tie_key=? ORDER BY round',(f['tie_key'],)).fetchall()
@@ -47,13 +51,14 @@ def claim(c,a):
                         prior[1]+=g['away_goals'] if g['away']==f['away'] else g['home_goals']
             single=len(legs)==1
         config=configuration(policy,final=bool(single and rules['neutral_final']))
-        snap=Snapshot(f['key'],f['kickoff'],meta['clock'],team_at(c,f['home'],e['id'],first,policy),
-            team_at(c,f['away'],e['id'],first,policy),CompetitionRules(e['competition'],e['season'],
+        snap=Snapshot(f['key'],f['kickoff'],meta['clock'],team_at(c,f['home'],discipline,first,policy),
+            team_at(c,f['away'],discipline,first,policy),CompetitionRules(e['competition'],e['season'],
             aggregate_before=tuple(prior),progression='Regulation engine; separately validated edition ET/penalties'),
             common,notes=('NONCANONICAL proposed multi-season edition',))
         seeds=commit_seeds(snap,config,digest({'seed':meta['seed'],'fixture':f['key'],'policy':'career-stable-per-fixture-1'}))
         data={'snapshot':asdict(snap),'rules':asdict(Rules(e['competition'],extra_time=single and decisive and e['competition']!='SULA_PRE',penalties=decisive)),
               'prior':prior,'neutral':bool(single and rules['neutral_final'])}
+        if discipline!=e['id']:data['discipline_competition']=discipline
         c.execute('INSERT INTO ms_executions VALUES(?,?,?,?,?,?,?)',(f['key'],encode(data),digest(data),encode(asdict(seeds)),encode(asdict(config)),None,None))
         c.execute("UPDATE ms_fixtures SET status='claimed' WHERE key=?",(f['key'],))
     return {'kickoff':first,'committed_fixtures':[f['key'] for f in rows],'common_pre_kickoff_sha256':common}
@@ -79,7 +84,7 @@ def play(c,a):
         c.execute("UPDATE ms_fixtures SET status='final',home_goals=?,away_goals=?,winner=? WHERE key=?",(*bundle['score'],bundle['resolution']['winner'],f['key']))
         if f['tie_key'] and bundle['resolution']['winner']:
             c.execute('UPDATE ms_ties SET winner=? WHERE key=?',(bundle['resolution']['winner'],f['tie_key']))
-        apply_players(c,{'key':f['key'],'competition':f['edition'],'home':f['home'],'away':f['away'],'kickoff':f['kickoff']},snap,bundle,policy)
+        apply_players(c,{'key':f['key'],'competition':data.get('discipline_competition',f['edition']),'home':f['home'],'away':f['away'],'kickoff':f['kickoff']},snap,bundle,policy)
         finish=(datetime.fromisoformat(f['kickoff'])+timedelta(seconds=bundle['duration_seconds'])).isoformat(sep=' ',timespec='seconds')
         end=max(end or finish,finish);applied.append({'fixture':f['key'],'result_sha256':digest(bundle)})
     c.execute('UPDATE ms_meta SET clock=?',(end,))

@@ -61,6 +61,9 @@ def test_country_intake_through_both_finals_in_one_world(candidate,tmp_path,monk
         preliminary_inputs=c.execute("SELECT x.input_json FROM ms_executions x JOIN ms_fixtures f ON f.key=x.fixture WHERE f.edition='SULA_PRE:2028'").fetchall()
         assert len(preliminary_inputs)==16
         assert all(json.loads(r[0])['rules']['extra_time'] is False for r in preliminary_inputs)
+        assert all(json.loads(r[0])['discipline_competition']=='SULA:2028' for r in preliminary_inputs)
+        lib_pre_inputs=c.execute("SELECT x.input_json FROM ms_executions x JOIN ms_fixtures f ON f.key=x.fixture WHERE f.edition LIKE 'LIB_PRE%:2028'").fetchall()
+        assert len(lib_pre_inputs)==30 and all(json.loads(r[0])['discipline_competition']=='LIB:2028' for r in lib_pre_inputs)
     for club in losers:cmd(candidate,'qualify',season=2028,competition='SULA',club=club,source={'type':'preliminary_loser','edition':'LIB_PRE3:2028'})
     assert len(entries('LIB'))==len(entries('SULA'))==32
     for comp,format in [('LIB','groups_knockout'),('SULA','sula_cross_playoffs')]:
@@ -94,11 +97,19 @@ def test_country_intake_through_both_finals_in_one_world(candidate,tmp_path,monk
         advance(candidate,KEY,request_id=str(uuid4()),max_groups=1 if step==4 else 2)
     for comp in ('LIB','SULA'):assert cmd(candidate,'close_edition',edition=comp+':2028')['champion']
     with connect_read_only(candidate/'database.sqlite') as c:
+        from braga_era.multiseason.groups import pools,table
+        group_winners={table(c,'LIB:2028',name)[0]['club'] for name in pools(c,'LIB:2028')}
+        assert {r[0] for r in c.execute("SELECT club_b FROM ms_ties WHERE edition='LIB:2028' AND stage=1")}==group_winners
         counts={r[0]:r[1] for r in c.execute("SELECT edition,count(*) FROM ms_fixtures WHERE status='final' GROUP BY edition")}
         assert counts=={'LIB_PRE1:2028':6,'LIB_PRE2:2028':16,'LIB_PRE3:2028':8,'SULA_PRE:2028':16,'LIB:2028':125,'SULA:2028':141}
         assert c.execute("SELECT count(*) FROM ms_entries WHERE edition='SULA:2028' AND route='LIB_GROUP_THIRD'").fetchone()[0]==8
         assert c.execute('SELECT count(*) FROM ms_executions WHERE result_sha256 IS NOT NULL').fetchone()[0]==312
         assert not c.execute("SELECT 1 FROM ms_fixtures WHERE status!='final'").fetchone()
+        from braga_era.results import Projection
+        projection=Projection(c)
+        assert all(r[0] in projection.records and projection.records[r[0]]['score'] is not None for r in c.execute('SELECT key FROM ms_fixtures'))
+        assert Counter(r['competition_id'] for r in projection.records.values() if r['season']==2028)=={'LIB':155,'SULA':157}
+        assert sum(r['season']==2028 and r['competition_id']=='SULA' and r['stage']=='NATIONAL_PRE' for r in projection.records.values())==16
     verified=store.validate(candidate,KEY)
     package=tmp_path/'continental-entry-to-finals';store.export(candidate,package,KEY)
     restored=store.restore(package,tmp_path/'restored',KEY)
@@ -123,6 +134,24 @@ def test_recorded_brazilian_league_and_cup_evidence_is_read_only(candidate):
         assert ordered[0]==c.execute("SELECT club_key FROM world_champions WHERE competition='CDB'").fetchone()[0]
         with pytest.raises(ValueError,match='cup route'):ranking(c,'BRA',2028,{'type':'edition_table','edition':'LEAGUE:2027'})
     assert before==file_sha256(candidate/'database.sqlite')
+
+
+def test_campaign_suspension_survives_preliminary_stage_boundary(candidate):
+    import sqlite3
+    from braga_era.multiseason.continental_entry import discipline_edition,LEGACY_POLICY
+    from braga_era.world.players import team_at
+    from braga_era.world.policy import ReadinessPolicy
+    # Deliberate unit-only state fixture, never an authenticated operation/save.
+    with sqlite3.connect(candidate/'database.sqlite') as c:
+        c.row_factory=sqlite3.Row;policy=ReadinessPolicy()
+        player=next(p for p in team_at(c,'club:15','LIB:2028','2028-01-06 16:00',policy).players if p.eligible)
+        c.execute('INSERT OR REPLACE INTO world_discipline VALUES(?,?,0,1)',(player.id,'LIB:2028'))
+        for comp in ('LIB_PRE1','LIB_PRE2','LIB_PRE3','LIB'):
+            edition={'id':comp+':2028','competition':comp,'season':2028}
+            bucket=discipline_edition(edition,POLICY)
+            assert bucket=='LIB:2028'
+            assert not next(p for p in team_at(c,'club:15',bucket,'2028-01-06 16:00',policy).players if p.id==player.id).eligible
+            assert discipline_edition(edition,LEGACY_POLICY)==edition['id']
 
 
 @pytest.mark.parametrize('defect',[None,'missing_country','duplicate_title','wrong_country','short_depth','duplicate_club','unsupported_policy','false_title','future_table'])

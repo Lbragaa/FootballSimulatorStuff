@@ -216,8 +216,9 @@ def schedule(c,a):
                 entries=qualifiers(c,e['id'])
         commitment={'edition':e['id'],'stage':stage,'qualified_pool':sorted(entries),
                     'policy':'committed-open-draw-1','seed':c.execute('SELECT seed FROM ms_meta').fetchone()[0]}
-        from .continental_entry import preliminary_entries
+        from .continental_entry import preliminary_entries,lib_round16_entries
         paired=preliminary_entries(c,e,entries)
+        if paired is None:paired=lib_round16_entries(c,e,entries)
         if paired is None:random.Random(int(digest(commitment),16)).shuffle(entries)
         else:entries=paired
         rules=json.loads(e['rules_json']);legs=rules['final_legs'] if len(entries)==2 else rules['legs']

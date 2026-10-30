@@ -25,10 +25,6 @@ COMPETITIONS = {
     'SUPERCOPA': ('Supercopa do Brasil', ('supercopa','supercopa do brasil')),
     'RECOPA': ('Recopa Sul-Americana', ('recopa','recopa sul americana')),
     'ACCESS': ('Prospective access qualification', ('access','prospective access qualification')),
-    'SULA_PRE': ('Copa Sul-Americana national preliminary', ('sula pre','sula_pre')),
-    'LIB_PRE1': ('Copa Libertadores first preliminary', ('lib pre1','lib_pre1')),
-    'LIB_PRE2': ('Copa Libertadores second preliminary', ('lib pre2','lib_pre2')),
-    'LIB_PRE3': ('Copa Libertadores third preliminary', ('lib pre3','lib_pre3')),
     'STATE': ('Proposed state championship', ('state','proposed state championship')),
 }
 
@@ -53,6 +49,7 @@ def stage(value):
         'R32': ('r32', 'fase 5 32 clubes', 'round of 32'),
         'PO': ('po', 'playoffs', 'playoff', 'play offs'),
         'GROUP': ('group', 'groups', 'group stage', 'fase de grupos'),
+        'NATIONAL_PRE': ('national pre','national preliminary','national qualifying'),
     }.items():
         if normalized in aliases:
             return name
@@ -256,16 +253,26 @@ class Projection:
                 receipts[f['key']]=execution['result_sha256'];source['result_sha256']=execution['result_sha256']
                 resolution=json.loads(execution['result_json'])['resolution']
             knockout_entries=16 if e['format']=='sula_cross_playoffs' else entries[e['id']]//2 if e['format']=='groups_knockout' else entries[e['id']]
-            phase='GROUP' if f['stage'].startswith('GROUP:') else 'PO' if f['stage']=='PO' else 'LEAGUE' if e['format']=='league' else {2:'FINAL',4:'SF',8:'QF',16:'R16',32:'R32'}.get(knockout_entries//2**(int(f['stage'][1:])-1),f['stage'])
+            numbered=re.fullmatch(r'S([1-9][0-9]*)',f['stage'])
+            if f['stage'].startswith('GROUP:'):phase='GROUP'
+            elif f['stage']=='PO':phase='PO'
+            elif e['format']=='league':phase='LEAGUE'
+            elif numbered and int(numbered[1])<=16:
+                phase={2:'FINAL',4:'SF',8:'QF',16:'R16',32:'R32'}.get(knockout_entries//2**(int(numbered[1])-1),f['stage'])
+            else:phase=f['stage']
             if e['competition'].startswith('LIB_PRE'):phase=e['competition'].replace('LIB_','')
-            self.add(f['key'],'LIB' if e['competition'].startswith('LIB_PRE') else e['competition'],e['season'],f['kickoff'],f['home'],f['away'],[f['home_goals'],f['away_goals']],f['status'],source,
+            if e['competition']=='SULA_PRE':phase='NATIONAL_PRE'
+            comp='LIB' if e['competition'].startswith('LIB_PRE') else 'SULA' if e['competition']=='SULA_PRE' else e['competition']
+            self.add(f['key'],comp,e['season'],f['kickoff'],f['home'],f['away'],[f['home_goals'],f['away_goals']],f['status'],source,
                      phase=phase,number=f['round'] if e['format']=='league' or f['stage'].startswith('GROUP:') else None,leg=f['round'] if f['tie_key'] else None,tie=f['tie_key'],resolution=resolution)
         for t in self.rows('ms_ties'):
             e=editions[t['edition']]
             size=16 if e['format']=='sula_cross_playoffs' else entries[e['id']]//2 if e['format']=='groups_knockout' else entries[e['id']]
             phase='PO' if e['format']=='sula_cross_playoffs' and t['stage']==0 else {2:'FINAL',4:'SF',8:'QF',16:'R16',32:'R32'}.get(size//2**(t['stage']-1),str(t['stage']))
             if e['competition'].startswith('LIB_PRE'):phase=e['competition'].replace('LIB_','')
-            self.ties[t['key']]=self.tie(t['key'],'LIB' if e['competition'].startswith('LIB_PRE') else e['competition'],e['season'],phase,t['club_a'],t['club_b'],None,t['winner'],'final' if t['winner'] else 'scheduled','ms_ties')
+            if e['competition']=='SULA_PRE':phase='NATIONAL_PRE'
+            comp='LIB' if e['competition'].startswith('LIB_PRE') else 'SULA' if e['competition']=='SULA_PRE' else e['competition']
+            self.ties[t['key']]=self.tie(t['key'],comp,e['season'],phase,t['club_a'],t['club_b'],None,t['winner'],'final' if t['winner'] else 'scheduled','ms_ties')
         # Partial and final aggregates from recorded scores, never from standings.
         for key, t in self.ties.items():
             legs = [r for r in self.records.values() if r['tie_id'] == key]

@@ -8,7 +8,8 @@ or declaration that 2028 is playable.
 
 `commit_continental_entry` commits exact `season`, `policy`, `national_evidence`
 and `champions` inputs through the existing signed, transactional operation API.
-Policy `continental-entry-development-1` validates persistent identities,
+Policies `continental-entry-development-1` and `continental-entry-development-2`
+validate persistent identities,
 countries, source editions/title decisions, unique routes and replacement depth.
 An exact request retry returns its original receipt; another intake cannot
 replace existing season qualifications. All entry provenance remains in signed
@@ -37,6 +38,18 @@ country, with direct penalties on ties. Their sixteen actual winners plus four
 LIB PRE3 losers complete the 32-club SULA groups. Eight LIB group thirds then
 transfer into SULA playoffs; SULA group winners retain their byes. Existing main
 stage adapters resolve both finals and retain champions and historical results.
+Version 2 pairs actual LIB group winners against actual runners-up in R16, with
+group winners hosting the return leg. Its named committed draw permits country
+and group rematches. Version 1 retains its earlier open LIB draw so completed
+development demonstrations remain independently replayable. Preliminary and
+SULA draw streams remain frozen at their existing version; this is a forward
+competition-policy change, not a regulation-engine retune or historical reroll.
+Version 2 also stores a single LIB campaign suspension counter through PRE1,
+PRE2, PRE3 and the main stage, and a single SULA counter through its preliminary
+and main stage. Execution commitments retain that counter identity for recovery.
+LIB and SULA counters remain separate under this proposal; cross-tournament
+disciplinary transfer/reset choices still require commissioner review. Fitness,
+injuries and form continue through the shared elapsed-time player state.
 No regulation engine probabilities, existing seeds or completed scores change.
 
 ## Actual joined rehearsal
@@ -62,13 +75,13 @@ The mechanism test uses a compressed January–April calendar respecting the
 existing rest/blackout checks; it is not the proposed full 2028 domestic and
 continental calendar or an approval of continental finals in April.
 
-The first complete selection passed 11 tests in 380.49 seconds, including all
+The version-1 complete selection passed 11 tests in 380.49 seconds, including all
 312 matches, independent replay, export and restoration. Subsequent evidence
 tests also checked read-only Brazilian league/cup projection. Negative cases
 cover missing sources, duplicate titles/clubs, wrong countries, insufficient
 replacement depth, unsupported policies and false historical title claims.
 The existing 24-test preliminary/historical compatibility selection passed.
-The final 12-test selection passed in 281.63 seconds, including an injected
+The version-1 12-test selection passed in 281.63 seconds, including an injected
 crash after a main-stage simultaneous group committed, exact-request resumption,
 unchanged prior result hashes/payroll and independent restoration. All 312
 result hashes matched the uninterrupted run (aggregate commitment
@@ -80,17 +93,26 @@ Final-head cross-platform CI must be checked separately. The subsequent
 [paired export benchmark](continental_export_performance.md) preserved every
 portable byte while reducing the complete verification/export/restore workload.
 
+The final version-2 campaign selection passed **13 tests in 233.51 seconds**,
+including all 312 matches, seeded LIB R16 return-leg hosts, campaign counters,
+after-commit interruption, exact-request resumption and independent restoration.
+A fresh process independently replayed the old version-1 world to its unchanged
+`e01c1b6c9923ffbfbb7732772bd6ff5df52a0fdc211008d0699101a719a711b8` hash.
+Historical projection was checked against all 312 completed records: **155 LIB
+and 157 SULA**, including national preliminaries. This exposed and fixed a
+reporting parser that assumed every nongroup stage had an `S<number>` label.
+The existing 20-test historical suite passed after the correction.
+
 ## Remaining activation blockers
 
 This is not the full requested shared domestic/continental 2028 world. Full Copa
 do Brasil entry, state formats, reusable Série B, domestic calendar integration,
 comprehensive autonomous offseason, repeated 2029 gameplay and season-aware
 production authority/bridge still need implementation and a combined rehearsal.
-LIB's main-stage knockout currently inherits the existing committed open draw;
-group-winner-seeded LIB R16 pairing is not implemented. Country/pot restrictions
-in this proof apply to preliminary/group draws, with SULA's existing winner byes
-and R16 return-leg hosts retained. This proposed open LIB draw must be reviewed
-or replaced by a new version before claiming a settled official format.
+Both intake versions and their proposed draws require policy review before
+official activation. Version 2 supplies group-winner-seeded LIB R16 pairing;
+version 1 exists for exact historical development replay, not as an undisclosed
+substitute for the newer proposal.
 Actual foreign qualification evidence or explicitly accepted administrative
 decisions remains required for the existing career. No scenario has been approved.
 The rehearsal timings are not performance comparisons; the separate paired
