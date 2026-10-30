@@ -1,5 +1,10 @@
 # Implemented multi-season development execution
 
+Latest audit: [committed group-draw correction](committed_draw_report.md)
+fixes a real pool-accessor inconsistency without regenerating fixtures or scores.
+Country-draw receipts and stored fixture memberships now agree across reads,
+qualification, replay and restoration. This is not a full integrated 2028 claim.
+
 Latest entry work: [preliminary progression and country-draw evidence](continental_entry_report.md)
 adds 30 simulated preliminary fixtures, route checks and fail-closed country
 scheduling. It does not claim a fully sourced, unified continental rehearsal.

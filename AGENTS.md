@@ -2,6 +2,11 @@
 
 ## Multi-season execution prototype
 
+- Group membership is the committed country-draw receipt cross-checked against
+  stored fixtures, or stored fixtures for legacy generic draws. Never rerun a
+  shuffle from a read path or inspect an uncommitted group draw. See
+  `docs/committed_draw_report.md`; keep old signed operation responses unchanged.
+
 - `braga_era/multiseason` implements `DEV-MULTISEASON-2` only. Read
   `docs/multiseason_execution_report.md`. Keep its explicit additive schema,
   TEST-only migration statements, signed exact-retry operations, pre-draw

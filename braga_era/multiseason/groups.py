@@ -3,16 +3,42 @@ from datetime import datetime,timedelta
 import random
 from ..history import digest
 from ..seasons import double_round_robin
+import json
+
+
+def recorded(c,edition):
+    rows=c.execute("SELECT stage,home,away FROM ms_fixtures WHERE edition=? AND stage LIKE 'GROUP:%' ORDER BY stage,key",(edition,)).fetchall()
+    if not rows:return None
+    groups={};seen={}
+    for r in rows:
+        groups.setdefault(r['stage'],set()).update((r['home'],r['away']))
+    for name,clubs in groups.items():
+        if len(clubs)!=4:raise ValueError('Committed group membership is not four distinct clubs')
+        for club in clubs:
+            if club in seen:raise ValueError('Club appears in multiple committed groups')
+            seen[club]=name
+        pairs=[(r['home'],r['away']) for r in rows if r['stage']==name]
+        expected={(home,away) for home in clubs for away in clubs if home!=away}
+        if len(pairs)!=12 or set(pairs)!=expected:raise ValueError('Committed group fixture inventory differs from draw')
+    # Country draws already have immutable signed operation receipts. Use that
+    # actual draw, and cross-check fixtures rather than rerunning any shuffle.
+    for op in c.execute("SELECT args_json,response_json FROM ms_operations WHERE kind='schedule_country_groups' ORDER BY sequence"):
+        if json.loads(op['args_json']).get('edition')!=edition:continue
+        draw=json.loads(op['response_json'])['groups']
+        if (not isinstance(draw,dict) or any(not isinstance(v,list) or len(v)!=4 or any(not isinstance(k,str) for k in v) or len(set(v))!=4 for v in draw.values())
+            or {k:set(v) for k,v in draw.items()}!=groups):raise ValueError('Draw receipt and committed fixtures disagree')
+        return draw
+    return {name:sorted(clubs) for name,clubs in groups.items()}
 
 
 def pools(c,edition):
-    e=c.execute('SELECT format FROM ms_editions WHERE id=?',(edition,)).fetchone()
-    if e and e[0]=='sula_cross_playoffs':
-        recorded=c.execute("SELECT stage,home,away FROM ms_fixtures WHERE edition=? AND stage LIKE 'GROUP:%' ORDER BY stage,key",(edition,)).fetchall()
-        if recorded:
-            groups={}
-            for r in recorded:groups.setdefault(r['stage'],set()).update((r['home'],r['away']))
-            return {k:sorted(v) for k,v in groups.items()}
+    committed=recorded(c,edition)
+    if committed is not None:return committed
+    raise ValueError('Group draw has not been committed')
+
+
+def _planned(c,edition):
+    """Private generator input, never a published/inspectable group draw."""
     clubs=[r[0] for r in c.execute('SELECT club FROM ms_entries WHERE edition=? ORDER BY club',(edition,))]
     seed=c.execute('SELECT seed FROM ms_meta').fetchone()[0]
     random.Random(int(digest({'seed':seed,'edition':edition,'policy':'four-club-groups-1','entries':clubs}),16)).shuffle(clubs)
@@ -20,6 +46,8 @@ def pools(c,edition):
 
 
 def table(c,edition,group,*,require_complete=True):
+    membership=recorded(c,edition)
+    if membership is None or group not in membership:raise ValueError('Unknown committed group')
     fixtures=c.execute('SELECT * FROM ms_fixtures WHERE edition=? AND stage=? ORDER BY key',(edition,group)).fetchall()
     if len(fixtures)!=12 or require_complete and any(r['status']!='final' for r in fixtures):
         raise ValueError('Group inventory or results incomplete')
@@ -35,7 +63,7 @@ def table(c,edition,group,*,require_complete=True):
 
 def schedule(c,e,start,deadline):
     from .competitions import insert_fixture
-    for name,clubs in pools(c,e['id']).items():
+    for name,clubs in _planned(c,e['id']).items():
         for f in double_round_robin(clubs,season=e['season'],competition=e['competition']):
             when=(datetime.fromisoformat(start)+timedelta(days=7*(f['round']-1))).isoformat(sep=' ',timespec='minutes')
             insert_fixture(c,e['id'],name,f['round'],None,f['home'],f['away'],when,deadline)

@@ -27,8 +27,11 @@ def apply(c,kind,a):
             raise ValueError('Exact next season requires archived predecessor')
         c.execute("INSERT INTO ms_seasons VALUES(?,'preparing',NULL)",(a['season'],))
         return {'season':a['season'],'state':'preparing','official_activation':False}
-    if kind=='register_fictional_club':
-        required(a,'name strength dated')
+    if kind in {'register_fictional_club','register_fictional_club_country'}:
+        required(a,'name strength dated' if kind=='register_fictional_club' else 'name strength dated country')
+        country=a.get('country','BRA')
+        from .continental_policy import ALLOCATIONS
+        if not isinstance(country,str) or country not in ALLOCATIONS:raise ValueError('Explicit supported fictional club country required')
         from .market import advance_time
         from ..world.rosters import alias,modeled_squad
         from ..world.policy import WorldPolicy
@@ -36,9 +39,10 @@ def apply(c,kind,a):
         if not isinstance(a['name'],str) or not a['name'].startswith('Fictional ') or not 10<=len(a['name'])<=80 or type(a['strength']) not in (int,float) or not 50<=a['strength']<=80:
             raise ValueError('Explicit fictional identity and bounded strength prior required')
         advance_time(c,a['dated']+' 00:00:00')
-        key='modeled-ms:'+digest({'name':alias(a['name']),'country':'BRA'})[:16]
+        key='modeled-ms:'+digest({'name':alias(a['name']),'country':country})[:16]
         provenance={'source':'proposed forward fictional access-club registration','effective':a['dated'],'canonical':False,'wages':'unknown; not asserted as zero','roster_policy':'fictional-squads-1.0.0'}
-        c.execute('INSERT INTO world_clubs VALUES(?,?,?,?,?,?,?,?)',(key,a['name'],alias(a['name']),None,'BRA',a['strength'],0,encode(provenance)))
+        if country!='BRA':provenance={**provenance,'source':'proposed forward fictional international-club registration','country':country}
+        c.execute('INSERT INTO world_clubs VALUES(?,?,?,?,?,?,?,?)',(key,a['name'],alias(a['name']),None,country,a['strength'],0,encode(provenance)))
         for p in modeled_squad(key,a['name'],a['strength'],WorldPolicy()):
             c.execute('INSERT INTO world_players VALUES(?,?,?,?,?,?)',(p.id,key,None,1,encode(asdict(p)),encode(provenance)))
             state={'fitness':p.fitness,'morale':p.morale,'form':p.form,'observed_at':a['dated']+' 00:00:00','last_played':None,

@@ -237,6 +237,10 @@ class Projection:
             self.ties[t['key']] = self.tie(t['key'], t['competition'], next(iter(seasons)) if len(seasons) == 1 else None, t['stage'], t['club_a'], t['club_b'],
                 [t['aggregate_a'], t['aggregate_b']], t['winner'], t['status'], 'world_ties')
         editions={e['id']:e for e in self.rows('ms_editions')}
+        for e in editions.values():
+            if e['format'] in {'groups_knockout','sula_cross_playoffs'}:
+                from .multiseason.groups import recorded
+                recorded(self.db,e['id'])
         executions={e['fixture']:e for e in self.rows('ms_executions')}
         entries=Counter(r['edition'] for r in self.rows('ms_entries'))
         for f in self.rows('ms_fixtures'):
