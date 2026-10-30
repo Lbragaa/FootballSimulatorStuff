@@ -30,6 +30,20 @@ jobs:
       - run: python -m pytest --junitxml output/ci-tests.xml
         env:
           BRAGA_LINEAGE_TEST_CHAIN: output/ci-lineage
+      - name: Shared NONCANONICAL 2028 season and recorded 2029 transition
+        if: matrix.os == 'ubuntu-latest' && matrix.python == '3.12'
+        run: |
+          python -m tools.rehearse_domestic_season --db output/ci-season/database.sqlite --output output/ci-shared-2028 --continental
+          python -m tools.rehearse_domestic_transition --package output/ci-shared-2028/portable --output output/ci-shared-2029
+          python -m tools.benchmark_incremental_multiseason --parent-package output/ci-shared-2028/portable --child output/ci-shared-2029/world --output output/ci-incremental-2029
+      - uses: actions/upload-artifact@v4
+        if: matrix.os == 'ubuntu-latest' && matrix.python == '3.12'
+        with:
+          name: NONCANONICAL-shared-multiseason-evidence
+          path: |
+            output/ci-shared-2028/report.json
+            output/ci-shared-2029/report.json
+            output/ci-incremental-2029/report.json
       - uses: actions/upload-artifact@v4
         with:
           name: TEST-ONLY-continuous-report-${{ matrix.os }}-py${{ matrix.python }}
