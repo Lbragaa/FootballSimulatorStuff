@@ -1,5 +1,10 @@
 # Implemented multi-season development execution
 
+Latest: [266-fixture continental main-stage proof](continental_main_stage_report.md)
+adds SULA cross-playoffs, group-winner byes, R16 home orientation and independently
+restored full-sized group/knockout paths. Allocations/preliminaries/country draws
+are still missing; the older limitations below describe their respective stages.
+
 Continuation: [working group-stage and query optimization evidence](group_stage_continuation.md)
 adds a real-engine 24-group-match + five-knockout-match test through a champion,
 recorded LIB third-place cross-entry evidence, and 17.9% lower wall time for an

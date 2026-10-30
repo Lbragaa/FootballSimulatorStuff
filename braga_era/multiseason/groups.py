@@ -6,6 +6,13 @@ from ..seasons import double_round_robin
 
 
 def pools(c,edition):
+    e=c.execute('SELECT format FROM ms_editions WHERE id=?',(edition,)).fetchone()
+    if e and e[0]=='sula_cross_playoffs':
+        recorded=c.execute("SELECT stage,home,away FROM ms_fixtures WHERE edition=? AND stage LIKE 'GROUP:%' ORDER BY stage,key",(edition,)).fetchall()
+        if recorded:
+            groups={}
+            for r in recorded:groups.setdefault(r['stage'],set()).update((r['home'],r['away']))
+            return {k:sorted(v) for k,v in groups.items()}
     clubs=[r[0] for r in c.execute('SELECT club FROM ms_entries WHERE edition=? ORDER BY club',(edition,))]
     seed=c.execute('SELECT seed FROM ms_meta').fetchone()[0]
     random.Random(int(digest({'seed':seed,'edition':edition,'policy':'four-club-groups-1','entries':clubs}),16)).shuffle(clubs)

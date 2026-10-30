@@ -113,7 +113,7 @@ def qualification(c,a):
 
 def edition(c,a):
     required(a,'competition season format clubs rules')
-    if a['competition'] not in COMPETITIONS or a['format'] not in {'league','knockout','qualification','groups_knockout'}:raise ValueError('Unsupported competition format')
+    if a['competition'] not in COMPETITIONS or a['format'] not in {'league','knockout','qualification','groups_knockout','sula_cross_playoffs'}:raise ValueError('Unsupported competition format')
     if not c.execute("SELECT 1 FROM ms_seasons WHERE season=? AND state='preparing'",(a['season'],)).fetchone():raise ValueError('Season not prepared')
     clubs=a['clubs'];rules=a['rules']
     if (not isinstance(clubs,list) or len(clubs)<2 or len(set(clubs))!=len(clubs)
@@ -127,6 +127,7 @@ def edition(c,a):
     if a['format']=='qualification' and (a['competition']!='ACCESS' or len(clubs)!=8):raise ValueError('Prospective access requires eight clubs and four qualifying ties')
     if a['format']=='groups_knockout' and (a['competition'] not in {'LIB','SULA'} or len(clubs)<8 or len(clubs)>32 or len(clubs)&(len(clubs)-1)):
         raise ValueError('Group prototype requires 8/16/32 continental entrants')
+    if a['format']=='sula_cross_playoffs' and (a['competition']!='SULA' or len(clubs)!=32 or rules['legs']!=2 or rules['final_legs']!=1):raise ValueError('SULA cross-playoff format requires 32 group entrants, two-legged ties and single final')
     key=f"{a['competition']}:{a['season']}"
     c.execute('INSERT INTO ms_editions VALUES(?,?,?,?,?,?,NULL)',(key,a['competition'],a['season'],a['format'],encode(rules),'planned'))
     routes=[]
@@ -172,6 +173,9 @@ def schedule(c,a):
     if not e or e['state'] not in {'planned','active'}:raise ValueError('Edition not schedulable')
     entries=[r[0] for r in c.execute('SELECT club FROM ms_entries WHERE edition=? ORDER BY club',(e['id'],))]
     start=datetime.fromisoformat(a['start'])
+    if e['format']=='sula_cross_playoffs':
+        from .sudamericana import schedule as schedule_sula
+        return schedule_sula(c,e,a['start'],a['deadline'])
     if e['format']=='groups_knockout' and e['state']=='planned':
         from .groups import schedule as schedule_groups
         schedule_groups(c,e,a['start'],a['deadline'])
@@ -226,6 +230,10 @@ def close_edition(c,a):
         rules=json.loads(e['rules_json'])
         if len(ties)!=4 or len(fixtures)!=4*rules['legs'] or any(not t['winner'] for t in ties):raise ValueError('Incomplete access qualification process')
         winner=None;table=None
+    elif e['format']=='sula_cross_playoffs':
+        ties=c.execute('SELECT * FROM ms_ties WHERE edition=? ORDER BY stage DESC,key',(e['id'],)).fetchall()
+        if len(fixtures)!=141 or len(ties)!=23 or any(not t['winner'] for t in ties):raise ValueError('Incomplete SULA group/playoff/knockout path')
+        winner=ties[0]['winner'];table=None
     else:
         ties=c.execute('SELECT * FROM ms_ties WHERE edition=? ORDER BY stage DESC,key',(e['id'],)).fetchall()
         rules=json.loads(e['rules_json']);knockout_n=n//2 if e['format']=='groups_knockout' else n
