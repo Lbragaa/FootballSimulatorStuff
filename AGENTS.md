@@ -1,5 +1,22 @@
 # THE BRAGA ERA — durable engineering instructions
 
+## Multi-season foundation (development only)
+
+- Read `docs/season_2028_implementation_plan.md` and
+  `docs/performance_optimization_plan.md`. `braga_era/seasons.py` is an isolated
+  DEV sidecar, not an official migration/profile or a second engine. Authenticate
+  the current parent through `AcceptedSource.career`; never assume root046C.
+- Rehearsals retain parent bytes and every inherited table, validate closure and
+  journal exact transitions, and stop at offseason_preparation. Do not mark an
+  ungenerated season ready. Undated round-robin drafts supply neither qualified
+  participants nor approved calendar dates. Missing Série B evidence is a policy
+  blocker, not permission to invent past matches/promoted clubs.
+- No production worker install, authority modification, policy approval or 2028
+  activation is authorized by this foundation. Preserve existing seed/profile
+  verification. Performance measurements never justify skipping replay. Use
+  explicit disposable temp roots if Windows sandbox TEMP/OneDrive denies rename;
+  do not weaken atomic publication or baseline hashes to make tests pass.
+
 ## Complete historical reporting (supersedes ordinary other-score silence)
 
 - `historical_results` is a protocol-2 READ command independent of automatic

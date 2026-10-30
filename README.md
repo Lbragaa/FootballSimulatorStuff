@@ -1,5 +1,11 @@
 # THE BRAGA ERA
 
+Multi-season development begins with an [incremental implementation plan](docs/season_2028_implementation_plan.md),
+[measured performance baseline](docs/performance_optimization_plan.md) and isolated
+season-lifecycle/archive rehearsals. Generic 38-round schedule drafts are
+implemented; qualified 2028 participants, playable calendars and official
+activation remain gated. This branch does not change the installed phone worker.
+
 **Play from normal iPhone ChatGPT:** [short instructions](docs/play.md).
 Version 0.12.0 adds read-only [historical results](docs/historical_results.md)
 across existing league, cup, continental and archived-final sources, including
