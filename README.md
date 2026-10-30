@@ -8,6 +8,14 @@ ecosystem and production bridge are **not ready**. A measured byte-equivalent
 serialization optimization reduced the instrumented regression workload by 7%.
 Production runtime and career remain unchanged.
 
+The [joined continental proof](docs/continental_joined_report.md) now connects
+country-entry evidence and preliminary rounds through both finals: 312 simulated
+fixtures on one disconnected world, with identical results after crash recovery.
+Its synthetic qualification scenario is not approved official entry data.
+The [paired export optimization](docs/continental_export_performance.md) reduced
+development verification/export/restoration time by 19.15%, with byte-identical
+portable files. This is not a production episode-latency measurement.
+
 Multi-season development begins with an [incremental implementation plan](docs/season_2028_implementation_plan.md),
 [measured performance baseline](docs/performance_optimization_plan.md) and isolated
 season-lifecycle/archive rehearsals. Generic 38-round schedule drafts are

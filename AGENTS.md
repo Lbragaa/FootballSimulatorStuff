@@ -2,6 +2,11 @@
 
 ## Multi-season execution prototype
 
+- DEV export pins authenticated source fingerprints and fully independently
+  replays the copied staging package before atomic publication. Restoration
+  independently replays again. Do not replace staging replay with a cached source
+  verdict. See `docs/continental_export_performance.md` for the paired benchmark.
+
 - `continental-entry-development-1` connects country/source evidence and actual
   preliminary winners through both continental finals. Read
   `docs/continental_joined_report.md`. Its 312-fixture proof uses explicit

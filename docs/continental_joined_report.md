@@ -76,7 +76,9 @@ result hashes matched the uninterrupted run (aggregate commitment
 The worlds have different operation UUIDs and therefore different journal/world
 hashes; no claim is made that those distinct journals have identical bytes.
 Each database was 124,461,056 bytes and each portable directory 208,235,473 bytes.
-Final-head cross-platform CI must be checked separately.
+Final-head cross-platform CI must be checked separately. The subsequent
+[paired export benchmark](continental_export_performance.md) preserved every
+portable byte while reducing the complete verification/export/restore workload.
 
 ## Remaining activation blockers
 
@@ -84,8 +86,13 @@ This is not the full requested shared domestic/continental 2028 world. Full Copa
 do Brasil entry, state formats, reusable Série B, domestic calendar integration,
 comprehensive autonomous offseason, repeated 2029 gameplay and season-aware
 production authority/bridge still need implementation and a combined rehearsal.
+LIB's main-stage knockout currently inherits the existing committed open draw;
+group-winner-seeded LIB R16 pairing is not implemented. Country/pot restrictions
+in this proof apply to preliminary/group draws, with SULA's existing winner byes
+and R16 return-leg hosts retained. This proposed open LIB draw must be reviewed
+or replaced by a new version before claiming a settled official format.
 Actual foreign qualification evidence or explicitly accepted administrative
 decisions remains required for the existing career. No scenario has been approved.
-No new performance improvement is claimed; these are verification timings, not
-identical-workload before/after benchmarks. No worker, authority, key, production
+The rehearsal timings are not performance comparisons; the separate paired
+benchmark provides the measured export improvement. No worker, authority, key, production
 registry, accepted checkpoint or official fictional clock was modified.

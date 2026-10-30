@@ -1,5 +1,9 @@
 # Implemented multi-season development execution
 
+Latest performance: [verified export optimization](continental_export_performance.md)
+reduced a paired 312-fixture verification/export/restore workload from 176.754 to
+142.912 seconds (19.15%), with byte-identical portable files and independent replay.
+
 Latest integration: [joined continental entry-to-finals proof](continental_joined_report.md)
 connects versioned country evidence, all preliminary stages and both main stages
 on one disconnected world: **312 real-engine fixtures**, independently restored.

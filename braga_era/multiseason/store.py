@@ -175,10 +175,14 @@ def export(directory, destination, test_key):
     directory=Path(directory)
     if sum((directory/n).stat().st_size for n in ('parent.sqlite','database.sqlite','development.json'))>MAX_PACKAGE_BYTES:
         raise ValueError('Multi-season package exceeds the 2 GiB development bound; explicit archive compaction policy required')
-    report=validate(directory,test_key)
+    # Authenticate source/history/signatures and pin its complete fingerprint.
+    # The copied staging package is then independently replayed before atomic
+    # publication. Replaying the same source as well duplicates that proof.
+    before=validate(directory,test_key,replay=False)
     with staged_directory(Path(destination)) as stage:
         for name in ('parent.sqlite','database.sqlite','development.json'):shutil.copyfile(directory/name,stage/name)
-        if validate(stage,test_key)!=report:raise ValueError('Candidate changed during export')
+        report=validate(stage,test_key)
+        if report!={**before,'independent_replay':True}:raise ValueError('Candidate changed during export')
         write_json(stage/'verification.json',report)
         write_json(stage/'manifest.json',manifest_for(stage))
     return report
