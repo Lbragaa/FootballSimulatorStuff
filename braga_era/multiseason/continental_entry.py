@@ -41,7 +41,7 @@ def ranking(c,country,season,evidence):
         clubs=[r['club'] for r in standings(c,e['id'])]
         if kind=='edition_league_and_cup':
             cup=c.execute('SELECT * FROM ms_editions WHERE id=?',(evidence['cup_edition'],)).fetchone()
-            if not cup or cup['competition']!=('CDB' if country=='BRA' else 'STATE') or cup['season']!=season-1 or cup['state']!='completed' or cup['format']!='knockout' or not cup['champion'] or country_of(c,cup['champion'])!=country:
+            if not cup or cup['competition']!=('CDB' if country=='BRA' else 'STATE') or cup['season']!=season-1 or cup['state']!='completed' or cup['format'] not in {'knockout','cdb_128'} or not cup['champion'] or country_of(c,cup['champion'])!=country:
                 raise ValueError('Recorded adjacent domestic cup champion required')
             clubs=[cup['champion']]+[key for key in clubs if key!=cup['champion']]
     elif kind=='legacy_league_and_cup':
@@ -206,3 +206,30 @@ def lib_round16_entries(c,e,entries):
     seed=c.execute('SELECT seed FROM ms_meta').fetchone()[0]
     random.Random(int(digest({'seed':seed,'edition':e['id'],'winners':winners,'runners':runners,'policy':'lib-r16-group-winner-pots-1'}),16)).shuffle(runners)
     return [club for pair in zip(runners,winners) for club in pair]
+
+
+def activate(c,a):
+    """Calendar orchestration only; reuse recorded qualification/edition APIs."""
+    required(a,'season competition')
+    if intake_version(c,a['season']) not in {LEGACY_POLICY,POLICY}:raise ValueError('Committed continental entry required')
+    comp=a['competition'];year=a['season']
+    if comp not in {'LIB_PRE1','LIB_PRE2','LIB_PRE3','SULA_PRE','LIB','SULA'}:raise ValueError('Unsupported continental activation')
+    from .competitions import qualification,edition
+    def qualify_from(parent,kind):
+        e=c.execute("SELECT * FROM ms_editions WHERE id=? AND state='completed'",(f'{parent}:{year}',)).fetchone()
+        if not e:raise ValueError('Continental activation waits for completed '+parent)
+        for tie in c.execute('SELECT * FROM ms_ties WHERE edition=? ORDER BY key',(e['id'],)):
+            key=tie['winner'] if kind=='edition_qualifier' else tie['club_b'] if tie['winner']==tie['club_a'] else tie['club_a']
+            source={'type':kind,'edition':e['id']}
+            existing=c.execute('SELECT source_json FROM ms_qualifications WHERE season=? AND competition=? AND club=?',(year,comp,key)).fetchone()
+            if existing:
+                if json.loads(existing[0])!=source:raise ValueError('Conflicting recorded continental route')
+            else:qualification(c,{'season':year,'competition':comp,'club':key,'source':source})
+    if comp=='LIB_PRE2':qualify_from('LIB_PRE1','edition_qualifier')
+    if comp=='LIB_PRE3':qualify_from('LIB_PRE2','edition_qualifier')
+    if comp=='LIB':qualify_from('LIB_PRE3','edition_qualifier')
+    if comp=='SULA':
+        qualify_from('SULA_PRE','edition_qualifier');qualify_from('LIB_PRE3','preliminary_loser')
+    clubs=[r[0] for r in c.execute('SELECT club FROM ms_qualifications WHERE competition=? AND season=? ORDER BY club',(comp,year))]
+    format='groups_knockout' if comp=='LIB' else 'sula_cross_playoffs' if comp=='SULA' else 'qualifier_ties'
+    return edition(c,{'competition':comp,'season':year,'format':format,'clubs':clubs,'rules':{'legs':1 if comp=='SULA_PRE' else 2,'final_legs':1,'neutral_final':comp in {'LIB','SULA'}}})

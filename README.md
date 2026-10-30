@@ -1,5 +1,12 @@
 # THE BRAGA ERA
 
+Latest development: [one shared 2028 calendar](docs/domestic_calendar_report.md)
+completed 1,341 domestic/continental test fixtures and a recorded 48-match 2029
+continuation. [Immediate-parent TEST verification](docs/incremental_multiseason_performance.md)
+reduced paired validation wall time by 50.19%. Full state qualification,
+offseason/economics and official season activation remain incomplete. No
+production career migration or deployment is part of this work.
+
 [Multi-season execution](docs/multiseason_execution_report.md) now includes a
 TEST-only edition migration, qualified entry/scheduling and same-engine match
 execution, a conservative transfer/payroll prototype, and independently restored

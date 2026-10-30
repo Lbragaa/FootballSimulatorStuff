@@ -22,7 +22,7 @@ def recorded(c,edition):
         if len(pairs)!=12 or set(pairs)!=expected:raise ValueError('Committed group fixture inventory differs from draw')
     # Country draws already have immutable signed operation receipts. Use that
     # actual draw, and cross-check fixtures rather than rerunning any shuffle.
-    for op in c.execute("SELECT args_json,response_json FROM ms_operations WHERE kind='schedule_country_groups' ORDER BY sequence"):
+    for op in c.execute("SELECT args_json,response_json FROM ms_operations WHERE kind IN ('schedule_country_groups','schedule_calendar_country_groups') ORDER BY sequence"):
         if json.loads(op['args_json']).get('edition')!=edition:continue
         draw=json.loads(op['response_json'])['groups']
         if (not isinstance(draw,dict) or any(not isinstance(v,list) or len(v)!=4 or any(not isinstance(k,str) for k in v) or len(set(v))!=4 for v in draw.values())

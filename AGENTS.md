@@ -2,6 +2,23 @@
 
 ## Multi-season execution prototype
 
+- Shared domestic development now has full 128-entry CDB match progression,
+  Carioca12, recorded Supercopa/Recopa and reusable 20/20/8 national movement.
+  Read `docs/domestic_calendar_report.md`: the one-world 1,341-fixture rehearsal
+  does not include full non-RJ state calendars or complete offseason/economics.
+  Initial missing 2027 B/state inputs remain explicit administrative scenarios;
+  never describe them as historical sporting results. No production activation.
+- Season calendar reservations, venues and international-window assumptions are
+  committed before fixtures. Fail on rest/venue/dependency conflicts; never relax
+  them silently. Transaction-local calendar caching must not cross connections
+  or independent replay. The separate `schedule_calendar_country_groups` opcode
+  infers BRA from recorded league membership without changing frozen draw ops.
+- `DEV-MULTISEASON-INCREMENTAL-1` is a distinct TEST-only signed-parent-attestation
+  profile. Full parent replay occurs at sealing; child validation replays the
+  suffix and compares every table. Disclose the trusted signing-key boundary,
+  one-time sealing cost and duplicated snapshot storage. Preserve the original
+  full-root verifier and all outcome hashes. No production registry/worker use.
+
 - DEV export pins authenticated source fingerprints and fully independently
   replays the copied staging package before atomic publication. Restoration
   independently replays again. Do not replace staging replay with a cached source

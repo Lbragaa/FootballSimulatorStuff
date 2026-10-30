@@ -5,6 +5,16 @@ from .competitions import required,club,qualification,edition,schedule,close_edi
 
 
 def apply(c,kind,a):
+    if kind in {'schedule','schedule_country_groups','schedule_calendar_country_groups'}:
+        from .calendar import scope
+        with scope(c):return _apply(c,kind,a)
+    return _apply(c,kind,a)
+
+
+def _apply(c,kind,a):
+    if kind=='commit_season_calendar':
+        from .calendar import commit
+        return commit(c,a)
     if kind=='begin_run':
         required(a,'id max_groups')
         from uuid import UUID
@@ -66,9 +76,24 @@ def apply(c,kind,a):
     if kind=='commit_continental_entry':
         from .continental_entry import commit
         return commit(c,a)
+    if kind=='activate_continental_edition':
+        from .continental_entry import activate
+        return activate(c,a)
+    if kind=='create_domestic_edition':
+        from .domestic import create
+        return create(c,a)
+    if kind=='create_supercup':
+        from .domestic import create_supercup
+        return create_supercup(c,a)
+    if kind=='register_divisions':
+        from .divisions import register
+        return register(c,a)
+    if kind=='carry_division_bans':
+        from .divisions import carry_bans
+        return carry_bans(c,a)
     if kind=='edition':return edition(c,a)
     if kind=='schedule':return schedule(c,a)
-    if kind=='schedule_country_groups':
+    if kind in {'schedule_country_groups','schedule_calendar_country_groups'}:
         required(a,'edition start deadline')
         from .continental_policy import draw
         from .competitions import insert_fixture
@@ -77,9 +102,15 @@ def apply(c,kind,a):
         e=c.execute('SELECT * FROM ms_editions WHERE id=?',(a['edition'],)).fetchone()
         if not e or e['state']!='planned' or e['format'] not in {'groups_knockout','sula_cross_playoffs'}:raise ValueError('Unscheduled continental main stage required')
         entries=c.execute('SELECT x.*,w.country,w.strength FROM ms_entries x JOIN world_clubs w ON w.key=x.club WHERE x.edition=? ORDER BY w.strength DESC,x.club',(e['id'],)).fetchall()
-        if len(entries)!=32 or any(not r['country'] for r in entries):raise ValueError('32 entries with recorded countries required; unknown nationality cannot be invented')
+        countries={r['club']:r['country'] for r in entries}
+        if kind=='schedule_calendar_country_groups':
+            from .continental_entry import country_of
+            from .calendar import current
+            if current(c) is None:raise ValueError('Explicit shared calendar required for documentary country inference')
+            countries={r['club']:country_of(c,r['club']) for r in entries}
+        if len(entries)!=32 or any(not value for value in countries.values()):raise ValueError('32 entries with recorded countries required; unknown nationality cannot be invented')
         pots=[[r['club'] for r in entries[i:i+8]] for i in range(0,32,8)]
-        countries={r['club']:r['country'] for r in entries};exceptions=[]
+        exceptions=[]
         for r in entries:
             source=json.loads(r['evidence_json'])
             if source.get('type')=='edition_qualifier':
@@ -92,7 +123,7 @@ def apply(c,kind,a):
                 when=(datetime.fromisoformat(a['start'])+timedelta(days=7*(f['round']-1))).isoformat(sep=' ',timespec='minutes')
                 insert_fixture(c,e['id'],name,f['round'],None,f['home'],f['away'],when,a['deadline'])
         c.execute("UPDATE ms_editions SET state='active' WHERE id=?",(e['id'],))
-        return {'edition':e['id'],'policy':'country-pots-1','groups':groups,'preliminary_exceptions':exceptions,'scheduled':96}
+        return {'edition':e['id'],'policy':'country-pots-1' if kind=='schedule_country_groups' else 'calendar-country-evidence-1','groups':groups,'preliminary_exceptions':exceptions,'scheduled':96}
     if kind=='claim_group':
         from .execution import claim
         return claim(c,a)

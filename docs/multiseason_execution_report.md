@@ -1,5 +1,14 @@
 # Implemented multi-season development execution
 
+**Current implementation:** [shared domestic/continental season](domestic_calendar_report.md)
+completed **1,341 fixtures across 14 editions** in one 2028 world, then retained
+the same national clubs and played 48 matches in 2029. Full replay/restoration
+passed. The [separate incremental TEST profile](incremental_multiseason_performance.md)
+halved paired validation wall time while retaining exact logical state. Complete
+state qualification, offseason/economics and production transition remain open;
+this is not a claim of official 2028 readiness. Sections below describe earlier,
+narrower milestones and their original boundaries.
+
 Latest performance: [verified export optimization](continental_export_performance.md)
 reduced a paired 312-fixture verification/export/restore workload from 176.754 to
 142.912 seconds (19.15%), with byte-identical portable files and independent replay.

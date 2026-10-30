@@ -1,0 +1,131 @@
+{
+  "scope": "NONCANONICAL DEVELOPMENT TEST",
+  "shared_2028": {
+    "scope": "NONCANONICAL DEVELOPMENT TEST",
+    "source_unchanged": true,
+    "fixture_counts": {
+      "ACCESS:2028": 8,
+      "CARIOCA:2028": 45,
+      "CDB:2028": 157,
+      "LEAGUE:2028": 380,
+      "LIB:2028": 125,
+      "LIB_PRE1:2028": 6,
+      "LIB_PRE2:2028": 16,
+      "LIB_PRE3:2028": 8,
+      "LOWER:2028": 56,
+      "RECOPA:2028": 2,
+      "SERIE_B:2028": 380,
+      "SULA:2028": 141,
+      "SULA_PRE:2028": 16,
+      "SUPERCOPA:2028": 1
+    },
+    "verification": {
+      "profile": "DEV-MULTISEASON-2",
+      "ok": true,
+      "test_only": true,
+      "acceptance_eligible": false,
+      "operations": 527,
+      "world_sha256": "e1b0056c457106bb7728e801068f7bd1bf4fafbb01fb4f8b75ee6ad34573f1ec",
+      "independent_replay": true
+    },
+    "elapsed_seconds": 617.4868922000023,
+    "domestic_and_continental_integrated": true,
+    "complete_all_competition_2028": false,
+    "blockers": [
+      "Remaining non-RJ state calendars not yet included",
+      "Complete all-club finances/offseason and production season-aware authority remain unimplemented"
+    ],
+    "production_modified": false,
+    "reconciliation": {
+      "season": 2028,
+      "scope": "NONCANONICAL DEVELOPMENT TEST",
+      "fixture_counts": {
+        "ACCESS:2028": 8,
+        "SUPERCOPA:2028": 1,
+        "CARIOCA:2028": 45,
+        "RECOPA:2028": 2,
+        "LIB_PRE1:2028": 6,
+        "CDB:2028": 157,
+        "LIB_PRE2:2028": 16,
+        "LIB_PRE3:2028": 8,
+        "LEAGUE:2028": 380,
+        "LOWER:2028": 56,
+        "SERIE_B:2028": 380,
+        "SULA_PRE:2028": 16,
+        "LIB:2028": 125,
+        "SULA:2028": 141
+      },
+      "all_fixtures_final": true,
+      "club_rest_and_venue_checks": true,
+      "calendar_policies": [
+        "shared-season-calendar-development-1"
+      ],
+      "league_tables": {
+        "LEAGUE:2028": {
+          "clubs": 20,
+          "fixtures": 380,
+          "standings_reconcile": true
+        },
+        "SERIE_B:2028": {
+          "clubs": 20,
+          "fixtures": 380,
+          "standings_reconcile": true
+        },
+        "LOWER:2028": {
+          "clubs": 8,
+          "fixtures": 56,
+          "standings_reconcile": true
+        }
+      },
+      "recorded_accounts": {
+        "club:15": {
+          "opening_cents": 2333533333,
+          "ledger_movement_through_year_cents": 1434000000,
+          "year_end_cash_cents": 3767533333,
+          "reserve_cents": 1600000000
+        }
+      },
+      "paid_periods": [
+        "2028-01",
+        "2028-02",
+        "2028-03",
+        "2028-04",
+        "2028-05",
+        "2028-06",
+        "2028-07",
+        "2028-08",
+        "2028-09",
+        "2028-10",
+        "2028-11",
+        "2028-12"
+      ],
+      "unknown_club_finances": "not asserted as zero or reconciled by this report",
+      "production_modified": false
+    }
+  },
+  "recorded_2029_transition": {
+    "scope": "NONCANONICAL DEVELOPMENT TEST",
+    "new_clubs_created": false,
+    "recorded_division_movement": true,
+    "2029_completed_fixture_counts": {
+      "LEAGUE:2029": 20,
+      "LOWER:2029": 8,
+      "SERIE_B:2029": 20
+    },
+    "all_2028_results_and_receipts_unchanged": true,
+    "source_package_unchanged": true,
+    "verification": {
+      "profile": "DEV-MULTISEASON-2",
+      "ok": true,
+      "test_only": true,
+      "acceptance_eligible": false,
+      "operations": 549,
+      "world_sha256": "b73395d6702474667ccd3ac106ca075a45d16d432a637f29684c0bd8cb9916dd",
+      "independent_replay": true
+    },
+    "elapsed_seconds": 715.7392052000068,
+    "complete_2029_ecosystem": false,
+    "production_modified": false
+  },
+  "ready_for_official_2028": false
+}

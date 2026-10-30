@@ -15,8 +15,11 @@ def next_event(directory,key):
 def event_from_connection(c):
     fixture=c.execute("SELECT kickoff,status FROM ms_fixtures WHERE status!='final' ORDER BY kickoff,key LIMIT 1").fetchone()
     obligation=next_obligation(c)
-    if obligation and (not fixture or obligation['kickoff']<=fixture['kickoff']):return obligation
-    return {'kind':'match_group','kickoff':fixture['kickoff'],'status':fixture['status']} if fixture else None
+    ordinary=obligation if obligation and (not fixture or obligation['kickoff']<=fixture['kickoff']) else {'kind':'match_group','kickoff':fixture['kickoff'],'status':fixture['status']} if fixture else None
+    from .calendar import event
+    administrative=event(c)
+    if administrative and (not ordinary or administrative['kickoff']<=ordinary['kickoff']):return administrative
+    return ordinary
 
 
 def completed_groups(c,request_id):
@@ -45,10 +48,13 @@ def advance(directory,key,*,request_id,max_groups=10):
         event=next_event(directory,key)
         if not event:break
         stem=f'{request_id}:{event["kind"]}:{event["kickoff"]}'
+        if event['kind']=='competition_stage':stem+=':'+event['edition']+':'+event['action']
         def execute(kind,args):return run(directory,key,str(uuid5(NAMESPACE_URL,stem+':'+kind)),kind,args)
         if event['kind']=='payroll':execute('pay_month',{'period':event['period']})
         elif event['kind']=='loan_return':execute('return_loan',{'loan':event['loan'],'dated':event['dated']})
         elif event['kind']=='proposed_income':execute('receive_income',{'income':event['income']})
+        elif event['kind']=='competition_stage':execute(event['action'],event['args'])
+        elif event['kind']=='calendar_blocker':raise ValueError(event['reason'])
         else:
             if event['status']=='scheduled':execute('claim_group',{'kickoff':event['kickoff']})
             execute('play_group',{'kickoff':event['kickoff']});completed+=1

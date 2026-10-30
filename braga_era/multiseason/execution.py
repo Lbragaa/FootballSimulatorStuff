@@ -50,14 +50,19 @@ def claim(c,a):
                         prior[0]+=g['home_goals'] if g['home']==f['home'] else g['away_goals']
                         prior[1]+=g['away_goals'] if g['away']==f['away'] else g['home_goals']
             single=len(legs)==1
-        config=configuration(policy,final=bool(single and rules['neutral_final']))
+        extra_time=single and decisive and e['competition']!='SULA_PRE'
+        neutral=bool(single and rules['neutral_final'])
+        from .domestic import FORMATS,match_policy
+        if e['format'] in FORMATS:
+            match=match_policy(e,f,single,decisive);neutral=match['neutral'];extra_time=match['extra_time']
+        config=configuration(policy,final=neutral)
         snap=Snapshot(f['key'],f['kickoff'],meta['clock'],team_at(c,f['home'],discipline,first,policy),
             team_at(c,f['away'],discipline,first,policy),CompetitionRules(e['competition'],e['season'],
             aggregate_before=tuple(prior),progression='Regulation engine; separately validated edition ET/penalties'),
             common,notes=('NONCANONICAL proposed multi-season edition',))
         seeds=commit_seeds(snap,config,digest({'seed':meta['seed'],'fixture':f['key'],'policy':'career-stable-per-fixture-1'}))
-        data={'snapshot':asdict(snap),'rules':asdict(Rules(e['competition'],extra_time=single and decisive and e['competition']!='SULA_PRE',penalties=decisive)),
-              'prior':prior,'neutral':bool(single and rules['neutral_final'])}
+        data={'snapshot':asdict(snap),'rules':asdict(Rules(e['competition'],extra_time=extra_time,penalties=decisive)),
+              'prior':prior,'neutral':neutral}
         if discipline!=e['id']:data['discipline_competition']=discipline
         c.execute('INSERT INTO ms_executions VALUES(?,?,?,?,?,?,?)',(f['key'],encode(data),digest(data),encode(asdict(seeds)),encode(asdict(config)),None,None))
         c.execute("UPDATE ms_fixtures SET status='claimed' WHERE key=?",(f['key'],))

@@ -10,6 +10,8 @@ from ..history import canonical_json as encode, digest
 from ..seasons import double_round_robin
 
 COMPETITIONS={'LEAGUE','SERIE_B','ACCESS','CDB','CARIOCA','STATE','LIB','SULA','SUPERCOPA','RECOPA','LIB_PRE1','LIB_PRE2','LIB_PRE3','SULA_PRE'}
+COMPETITIONS.update('STATE_'+uf for uf in ('SP','MG','RS','PR','SC','GO','CE','BA','PE','PA','RN','AL','MA','PB','PI','AM','SE','DF','MT','MS','ES','RO','TO','AC','AP','RR'))
+COMPETITIONS.update({'LOWER','REGION_NE','REGION_N','REGION_CO','REGION_SS','NATIONAL_QUALIFIER'})
 
 
 def required(args, fields):
@@ -48,7 +50,7 @@ def qualification(c,a):
     required(a,'season competition club source');club(c,a['club'])
     if type(a['season']) is not int or not 2028<=a['season']<=2200 or a['competition'] not in COMPETITIONS:
         raise ValueError('Unsupported edition or competition')
-    if a['competition'] in {'LEAGUE','SERIE_B','ACCESS','CDB','CARIOCA','STATE','SUPERCOPA'} and not brazilian(c,a['club']):
+    if a['competition'] not in {'LIB','SULA','LIB_PRE1','LIB_PRE2','LIB_PRE3','SULA_PRE','RECOPA'} and not brazilian(c,a['club']):
         raise ValueError('Domestic entry lacks recorded or explicit fictional Brazilian identity')
     source=a['source']
     if not isinstance(source,dict):raise ValueError('Qualification evidence required')
@@ -152,11 +154,15 @@ def edition(c,a):
     return {'edition':key,'participants':len(clubs),'format':a['format'],'proposed':True}
 
 
-def free_slot(c,home,away,start,deadline):
+def free_slot(c,home,away,start,deadline,*,edition=None,stage=None,round=None):
     start=datetime.fromisoformat(start);end=datetime.fromisoformat(deadline)
     if start.tzinfo or end.tzinfo:raise ValueError('Naive fictional calendar required')
     clock=datetime.fromisoformat(c.execute('SELECT clock FROM ms_meta').fetchone()[0])
     if start<=clock:raise ValueError('Cannot schedule behind the inherited clock')
+    if edition is not None:
+        from .calendar import slot
+        reserved=slot(c,home,away,start,end,edition,stage,round)
+        if reserved is not None:return reserved
     occupied=[datetime.fromisoformat(r[0]) for r in c.execute('SELECT kickoff FROM ms_fixtures WHERE home IN (?,?) OR away IN (?,?)',(home,away,home,away))]
     occupied += [datetime.fromisoformat(r[0]) for r in c.execute("SELECT kickoff FROM world_fixtures WHERE status='final' AND (home IN (?,?) OR away IN (?,?))",(home,away,home,away))]
     global_groups={datetime.fromisoformat(r[0]) for r in c.execute('SELECT DISTINCT kickoff FROM ms_fixtures')}
@@ -170,7 +176,7 @@ def free_slot(c,home,away,start,deadline):
 
 
 def insert_fixture(c,edition,stage,number,tie,home,away,start,deadline):
-    kickoff=free_slot(c,home,away,start,deadline)
+    kickoff=free_slot(c,home,away,start,deadline,edition=edition,stage=stage,round=number)
     key=f"ms:{edition}:{stage}:{number}:{home}:{away}"
     c.execute('INSERT INTO ms_fixtures VALUES(?,?,?,?,?,?,?,?,?,?,?,?)',
               (key,edition,stage,number,tie,home,away,kickoff,'scheduled',None,None,None))
@@ -183,6 +189,8 @@ def schedule(c,a):
     if not e or e['state'] not in {'planned','active'}:raise ValueError('Edition not schedulable')
     entries=[r[0] for r in c.execute('SELECT club FROM ms_entries WHERE edition=? ORDER BY club',(e['id'],))]
     start=datetime.fromisoformat(a['start'])
+    from .domestic import FORMATS,schedule as domestic_schedule
+    if e['format'] in FORMATS:return domestic_schedule(c,e,a['start'],a['deadline'])
     if e['competition']=='SULA_PRE':
         from .continental_entry import schedule_sula_pre
         return schedule_sula_pre(c,e,a['start'],a['deadline'])
@@ -196,7 +204,7 @@ def schedule(c,a):
         return {'edition':e['id'],'stage':'GROUP','scheduled':len(entries)*3}
     if e['format']=='league':
         if e['state']!='planned':raise ValueError('League already scheduled')
-        for f in double_round_robin(entries,season=e['season'],competition=e['competition']):
+        for f in double_round_robin(entries,season=e['season'],competition=e['competition'].replace('_','')):
             when=(start+timedelta(days=7*(f['round']-1))).isoformat(sep=' ',timespec='minutes')
             insert_fixture(c,e['id'],'LEAGUE',f['round'],None,f['home'],f['away'],when,a['deadline'])
         stage=0
@@ -236,6 +244,8 @@ def close_edition(c,a):
     required(a,'edition')
     e=c.execute('SELECT * FROM ms_editions WHERE id=?',(a['edition'],)).fetchone()
     if not e or e['state']!='active':raise ValueError('Edition not active')
+    from .domestic import FORMATS,close as close_domestic
+    if e['format'] in FORMATS:return close_domestic(c,e)
     fixtures=c.execute('SELECT * FROM ms_fixtures WHERE edition=?',(e['id'],)).fetchall()
     if not fixtures or any(f['status']!='final' for f in fixtures):raise ValueError('Edition has incomplete fixtures')
     n=c.execute('SELECT count(*) FROM ms_entries WHERE edition=?',(e['id'],)).fetchone()[0]
