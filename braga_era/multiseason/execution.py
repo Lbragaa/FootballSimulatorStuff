@@ -36,7 +36,7 @@ def claim(c,a):
     for f in rows:
         e=c.execute('SELECT * FROM ms_editions WHERE id=?',(f['edition'],)).fetchone()
         rules=json.loads(e['rules_json']);decisive=False;prior=[0,0];single=False
-        if e['format'] in {'knockout','qualification'}:
+        if f['tie_key']:
             legs=c.execute('SELECT * FROM ms_fixtures WHERE tie_key=? ORDER BY round',(f['tie_key'],)).fetchall()
             decisive=f['round']==max(g['round'] for g in legs)
             if decisive:

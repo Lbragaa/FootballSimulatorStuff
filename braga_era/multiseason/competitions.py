@@ -59,6 +59,15 @@ def qualification(c,a):
         if not pool or (pool['season'],pool['competition'])!=(a['season'],a['competition']) or a['club'] not in json.loads(pool['clubs_json']):
             raise ValueError('Club not in declared proposed pool')
         if a['competition']=='LEAGUE':raise ValueError('Série A entry requires recorded survival or promotion, never a proposed pool')
+    elif kind=='group_position':
+        required(source,'type edition group position')
+        from .groups import table
+        e=c.execute('SELECT * FROM ms_editions WHERE id=?',(source['edition'],)).fetchone()
+        if not e or e['format']!='groups_knockout' or e['season']!=a['season'] or type(source['position']) is not int or not 1<=source['position']<=4:
+            raise ValueError('Invalid completed group qualification source')
+        if a['competition']!='SULA' or e['competition']!='LIB' or source['position']!=3:
+            raise ValueError('This proposed cross-entry route is only Libertadores third place to Sul-Americana')
+        if table(c,e['id'],source['group'])[source['position']-1]['club']!=a['club']:raise ValueError('Group qualification identifies another club')
     elif kind=='legacy_champion':
         required(source,'type competition')
         allowed={'RECOPA':{'LIB','SULA'},'SUPERCOPA':{'LEAGUE','CDB'},'LIB':{'LIB','SULA'},'CDB':{'CDB'}}
@@ -104,7 +113,7 @@ def qualification(c,a):
 
 def edition(c,a):
     required(a,'competition season format clubs rules')
-    if a['competition'] not in COMPETITIONS or a['format'] not in {'league','knockout','qualification'}:raise ValueError('Unsupported competition format')
+    if a['competition'] not in COMPETITIONS or a['format'] not in {'league','knockout','qualification','groups_knockout'}:raise ValueError('Unsupported competition format')
     if not c.execute("SELECT 1 FROM ms_seasons WHERE season=? AND state='preparing'",(a['season'],)).fetchone():raise ValueError('Season not prepared')
     clubs=a['clubs'];rules=a['rules']
     if (not isinstance(clubs,list) or len(clubs)<2 or len(set(clubs))!=len(clubs)
@@ -116,6 +125,8 @@ def edition(c,a):
     if a['competition']=='ACCESS' and a['format']!='qualification':raise ValueError('Access promotion uses the declared four-tie qualification format')
     if a['format']=='knockout' and len(clubs)&(len(clubs)-1):raise ValueError('Knockout entry count must be a power of two')
     if a['format']=='qualification' and (a['competition']!='ACCESS' or len(clubs)!=8):raise ValueError('Prospective access requires eight clubs and four qualifying ties')
+    if a['format']=='groups_knockout' and (a['competition'] not in {'LIB','SULA'} or len(clubs)<8 or len(clubs)>32 or len(clubs)&(len(clubs)-1)):
+        raise ValueError('Group prototype requires 8/16/32 continental entrants')
     key=f"{a['competition']}:{a['season']}"
     c.execute('INSERT INTO ms_editions VALUES(?,?,?,?,?,?,NULL)',(key,a['competition'],a['season'],a['format'],encode(rules),'planned'))
     routes=[]
@@ -161,6 +172,11 @@ def schedule(c,a):
     if not e or e['state'] not in {'planned','active'}:raise ValueError('Edition not schedulable')
     entries=[r[0] for r in c.execute('SELECT club FROM ms_entries WHERE edition=? ORDER BY club',(e['id'],))]
     start=datetime.fromisoformat(a['start'])
+    if e['format']=='groups_knockout' and e['state']=='planned':
+        from .groups import schedule as schedule_groups
+        schedule_groups(c,e,a['start'],a['deadline'])
+        c.execute("UPDATE ms_editions SET state='active' WHERE id=?",(e['id'],))
+        return {'edition':e['id'],'stage':'GROUP','scheduled':len(entries)*3}
     if e['format']=='league':
         if e['state']!='planned':raise ValueError('League already scheduled')
         for f in double_round_robin(entries,season=e['season'],competition=e['competition']):
@@ -176,7 +192,11 @@ def schedule(c,a):
             entries=[t['winner'] for t in previous]
             if len(entries)==1:raise ValueError('Final already completed')
             stage=last+1
-        else:stage=1
+        else:
+            stage=1
+            if e['format']=='groups_knockout':
+                from .groups import qualifiers
+                entries=qualifiers(c,e['id'])
         commitment={'edition':e['id'],'stage':stage,'qualified_pool':sorted(entries),
                     'policy':'committed-open-draw-1','seed':c.execute('SELECT seed FROM ms_meta').fetchone()[0]}
         random.Random(int(digest(commitment),16)).shuffle(entries)
@@ -208,8 +228,9 @@ def close_edition(c,a):
         winner=None;table=None
     else:
         ties=c.execute('SELECT * FROM ms_ties WHERE edition=? ORDER BY stage DESC,key',(e['id'],)).fetchall()
-        rules=json.loads(e['rules_json']);expected=(n-2)*rules['legs']+rules['final_legs']
-        if len(ties)!=n-1 or len(fixtures)!=expected or any(not t['winner'] for t in ties):raise ValueError('Incomplete knockout path')
+        rules=json.loads(e['rules_json']);knockout_n=n//2 if e['format']=='groups_knockout' else n
+        expected=(knockout_n-2)*rules['legs']+rules['final_legs']+(n*3 if e['format']=='groups_knockout' else 0)
+        if len(ties)!=knockout_n-1 or len(fixtures)!=expected or any(not t['winner'] for t in ties):raise ValueError('Incomplete knockout path')
         winner=ties[0]['winner'];table=None
     c.execute("UPDATE ms_editions SET state='completed',champion=? WHERE id=?",(winner,e['id']))
     qualifiers=[r[0] for r in c.execute('SELECT winner FROM ms_ties WHERE edition=? ORDER BY key',(e['id'],))] if e['format']=='qualification' else None

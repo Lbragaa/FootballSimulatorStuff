@@ -247,12 +247,14 @@ class Projection:
                 import json
                 receipts[f['key']]=execution['result_sha256'];source['result_sha256']=execution['result_sha256']
                 resolution=json.loads(execution['result_json'])['resolution']
-            phase='LEAGUE' if e['format']=='league' else {2:'FINAL',4:'SF',8:'QF',16:'R16',32:'R32'}.get(entries[e['id']]//2**(int(f['stage'][1:])-1),f['stage'])
+            knockout_entries=entries[e['id']]//2 if e['format']=='groups_knockout' else entries[e['id']]
+            phase='GROUP' if f['stage'].startswith('GROUP:') else 'LEAGUE' if e['format']=='league' else {2:'FINAL',4:'SF',8:'QF',16:'R16',32:'R32'}.get(knockout_entries//2**(int(f['stage'][1:])-1),f['stage'])
             self.add(f['key'],e['competition'],e['season'],f['kickoff'],f['home'],f['away'],[f['home_goals'],f['away_goals']],f['status'],source,
                      phase=phase,number=f['round'] if e['format']=='league' else None,leg=f['round'] if f['tie_key'] else None,tie=f['tie_key'],resolution=resolution)
         for t in self.rows('ms_ties'):
             e=editions[t['edition']]
-            phase={2:'FINAL',4:'SF',8:'QF',16:'R16',32:'R32'}.get(entries[e['id']]//2**(t['stage']-1),str(t['stage']))
+            size=entries[e['id']]//2 if e['format']=='groups_knockout' else entries[e['id']]
+            phase={2:'FINAL',4:'SF',8:'QF',16:'R16',32:'R32'}.get(size//2**(t['stage']-1),str(t['stage']))
             self.ties[t['key']]=self.tie(t['key'],e['competition'],e['season'],phase,t['club_a'],t['club_b'],None,t['winner'],'final' if t['winner'] else 'scheduled','ms_ties')
         # Partial and final aggregates from recorded scores, never from standings.
         for key, t in self.ties.items():
