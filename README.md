@@ -1,5 +1,39 @@
 # THE BRAGA ERA
 
+Development now includes a [285-club autonomous offseason](docs/offseason_integration_report.md)
+integrated with the existing shared 2028 season. Transfers, contracts, loans,
+youth, retirement and explicit hypothetical finances are TEST-only; no production
+season activation, installed worker replacement or policy approval is included.
+
+Latest development: [one shared 2028 calendar](docs/domestic_calendar_report.md)
+completed 1,341 domestic/continental test fixtures and a recorded 48-match 2029
+continuation. [Immediate-parent TEST verification](docs/incremental_multiseason_performance.md)
+reduced paired validation wall time by 50.19%. Full state qualification,
+offseason/economics and official season activation remain incomplete. No
+production career migration or deployment is part of this work.
+
+[Multi-season execution](docs/multiseason_execution_report.md) now includes a
+TEST-only edition migration, qualified entry/scheduling and same-engine match
+execution, a conservative transfer/payroll prototype, and independently restored
+417-fixture development progression into 2029 preparation. The complete 2028
+ecosystem and production bridge are **not ready**. A measured byte-equivalent
+serialization optimization reduced the instrumented regression workload by 7%.
+Production runtime and career remain unchanged.
+
+The [joined continental proof](docs/continental_joined_report.md) now connects
+country-entry evidence and preliminary rounds through both finals: 312 simulated
+fixtures on one disconnected world, with identical results after crash recovery.
+Its synthetic qualification scenario is not approved official entry data.
+The [paired export optimization](docs/continental_export_performance.md) reduced
+development verification/export/restoration time by 19.15%, with byte-identical
+portable files. This is not a production episode-latency measurement.
+
+Multi-season development begins with an [incremental implementation plan](docs/season_2028_implementation_plan.md),
+[measured performance baseline](docs/performance_optimization_plan.md) and isolated
+season-lifecycle/archive rehearsals. Generic 38-round schedule drafts are
+implemented; qualified 2028 participants, playable calendars and official
+activation remain gated. This branch does not change the installed phone worker.
+
 **Play from normal iPhone ChatGPT:** [short instructions](docs/play.md).
 Version 0.12.0 adds read-only [historical results](docs/historical_results.md)
 across existing league, cup, continental and archived-final sources, including

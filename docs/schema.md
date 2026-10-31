@@ -1,5 +1,17 @@
 # Canonical schema guide
 
+`DEV-MULTISEASON-2` has an explicit separate additive migration in
+`braga_era/multiseason/schema.py`. It namespaces editions/fixtures/qualifications,
+archives prior state, versions contracts and records signed transactional
+operations. It is not registered for official acceptance. See the
+[implementation and tested limits](multiseason_execution_report.md).
+
+Multi-season foundation: no canonical migration. `braga_era/seasons.py` creates
+only a nonpromotable development directory: unchanged authenticated
+`parent.sqlite`, manifest, and a separate `season.sqlite` with `season_cycles`,
+`season_transitions` and `season_archives`. Existing authority/save profiles do
+not accept it. See [design and migration boundaries](season_2028_implementation_plan.md).
+
 Task 03C leaves canonical schema unchanged. Explicit readiness policies add `world_blobs` (verified content-addressed journal values), `world_draws` (pre-draw commitments/pairings), and `world_champions` (completed-final/ranking evidence). The separate authority registry has authority, batches, signed decisions, unique parent/fixture and obligation claims, and accepted candidate hashes. It is never installed into accepted 046C. See [readiness report](task03c_report.md).
 
 Task 03B adds a separate development-only world schema on copies of exact 046C v2; accepted schema/data are unchanged. Its 16 tables are explicitly enumerated in `braga_era/world/schema.py`: world info, clubs, players, player state, discipline, training, fixtures, ties, batches, executions, receipts, events, performances, obligations, operations and cursors. See [world architecture](world_integration.md) for mapping and limitations. Legacy `world_finals`/`world_final_events` are historical tables, not part of that additive inventory. Forward detailed statistics live in the normalized world layer while native fixture/leg/status/standing mirrors are updated under the development profile.

@@ -21,6 +21,13 @@ COMPETITIONS = {
     'LIB': ('Copa Libertadores', ('libertadores', 'copa libertadores', 'lib')),
     'SULA': ('Copa Sul-Americana', ('sudamericana', 'sul americana', 'copa sul americana', 'sula')),
     'CARIOCA': ('Campeonato Carioca', ('carioca', 'campeonato carioca')),
+    'SERIE_B': ('Brasileirão Série B', ('serie b','brasileirao serie b')),
+    'SUPERCOPA': ('Supercopa do Brasil', ('supercopa','supercopa do brasil')),
+    'RECOPA': ('Recopa Sul-Americana', ('recopa','recopa sul americana')),
+    'ACCESS': ('Prospective access qualification', ('access','prospective access qualification')),
+    'LOWER': ('Proposed lower-division league', ('lower','lower division','proposed lower division league')),
+    'STATE_SP': ('Proposed SP state qualifier', ('state sp','sp state qualifier','proposed sp state qualifier')),
+    'STATE': ('Proposed state championship', ('state','proposed state championship')),
 }
 
 
@@ -44,6 +51,7 @@ def stage(value):
         'R32': ('r32', 'fase 5 32 clubes', 'round of 32'),
         'PO': ('po', 'playoffs', 'playoff', 'play offs'),
         'GROUP': ('group', 'groups', 'group stage', 'fase de grupos'),
+        'NATIONAL_PRE': ('national pre','national preliminary','national qualifying'),
     }.items():
         if normalized in aliases:
             return name
@@ -231,6 +239,52 @@ class Projection:
             seasons = {r['season'] for r in self.records.values() if r['tie_id'] == t['key']}
             self.ties[t['key']] = self.tie(t['key'], t['competition'], next(iter(seasons)) if len(seasons) == 1 else None, t['stage'], t['club_a'], t['club_b'],
                 [t['aggregate_a'], t['aggregate_b']], t['winner'], t['status'], 'world_ties')
+        editions={e['id']:e for e in self.rows('ms_editions')}
+        for e in editions.values():
+            if e['format'] in {'groups_knockout','sula_cross_playoffs'}:
+                from .multiseason.groups import recorded
+                recorded(self.db,e['id'])
+            if e['format']=='carioca_12':
+                from .multiseason.domestic import recorded_pools
+                recorded_pools(self.db,e)
+        executions={e['fixture']:e for e in self.rows('ms_executions')}
+        entries=Counter(r['edition'] for r in self.rows('ms_entries'))
+        for f in self.rows('ms_fixtures'):
+            e=editions[f['edition']];execution=executions.get(f['key'])
+            source={'table':'ms_fixtures','id':f['key'],'edition':e['id'],'profile':'DEV-MULTISEASON-2'}
+            resolution=None
+            if execution and execution['result_sha256']:
+                import json
+                receipts[f['key']]=execution['result_sha256'];source['result_sha256']=execution['result_sha256']
+                resolution=json.loads(execution['result_json'])['resolution']
+            knockout_entries=16 if e['format']=='sula_cross_playoffs' else entries[e['id']]//2 if e['format']=='groups_knockout' else entries[e['id']]
+            numbered=re.fullmatch(r'S([1-9][0-9]*)',f['stage'])
+            if f['stage'].startswith('GROUP:'):phase='GROUP'
+            elif f['stage']=='PO':phase='PO'
+            elif e['format']=='league':phase='LEAGUE'
+            elif numbered and int(numbered[1])<=16:
+                phase={2:'FINAL',4:'SF',8:'QF',16:'R16',32:'R32'}.get(knockout_entries//2**(int(numbered[1])-1),f['stage'])
+            else:phase=f['stage']
+            if e['competition'].startswith('LIB_PRE'):phase=e['competition'].replace('LIB_','')
+            if e['competition']=='SULA_PRE':phase='NATIONAL_PRE'
+            if e['format'] in {'cdb_128','carioca_12','state_knockout','domestic_supercup'}:
+                from .multiseason.domestic import stage_label
+                phase=stage_label(e['format'],f['stage'],entries[e['id']])
+            comp='LIB' if e['competition'].startswith('LIB_PRE') else 'SULA' if e['competition']=='SULA_PRE' else e['competition']
+            self.add(f['key'],comp,e['season'],f['kickoff'],f['home'],f['away'],[f['home_goals'],f['away_goals']],f['status'],source,
+                     phase=phase,number=f['round'] if e['format']=='league' or f['stage'].startswith('GROUP:') else None,leg=f['round'] if f['tie_key'] else None,tie=f['tie_key'],resolution=resolution)
+        for t in self.rows('ms_ties'):
+            e=editions[t['edition']]
+            size=16 if e['format']=='sula_cross_playoffs' else entries[e['id']]//2 if e['format']=='groups_knockout' else entries[e['id']]
+            phase='PO' if e['format']=='sula_cross_playoffs' and t['stage']==0 else {2:'FINAL',4:'SF',8:'QF',16:'R16',32:'R32'}.get(size//2**(t['stage']-1),str(t['stage']))
+            if e['competition'].startswith('LIB_PRE'):phase=e['competition'].replace('LIB_','')
+            if e['competition']=='SULA_PRE':phase='NATIONAL_PRE'
+            if e['format'] in {'cdb_128','carioca_12','state_knockout','domestic_supercup'}:
+                from .multiseason.domestic import stage_label
+                prefix='C' if e['format']=='cdb_128' else 'K'
+                phase=stage_label(e['format'],prefix+str(t['stage']),entries[e['id']])
+            comp='LIB' if e['competition'].startswith('LIB_PRE') else 'SULA' if e['competition']=='SULA_PRE' else e['competition']
+            self.ties[t['key']]=self.tie(t['key'],comp,e['season'],phase,t['club_a'],t['club_b'],None,t['winner'],'final' if t['winner'] else 'scheduled','ms_ties')
         # Partial and final aggregates from recorded scores, never from standings.
         for key, t in self.ties.items():
             legs = [r for r in self.records.values() if r['tie_id'] == key]

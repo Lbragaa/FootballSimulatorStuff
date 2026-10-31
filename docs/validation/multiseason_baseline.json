@@ -1,0 +1,231 @@
+{
+  "scope": "NONCANONICAL DEVELOPMENT TEST",
+  "benchmark": "dev-first-group-1",
+  "parent_sha256": "27eb5d94478c2539b28085e669675e184ab2842be3d7ab1549864f2a422b6cf7",
+  "seed_policy": "fixed-before-results",
+  "stages": {
+    "world_initialization": {
+      "wall_seconds": 6.712727,
+      "cpu_seconds": 6.6875
+    },
+    "first_simultaneous_group_including_audits": {
+      "wall_seconds": 32.43515,
+      "cpu_seconds": 31.71875
+    },
+    "export_including_independent_validation": {
+      "wall_seconds": 114.640069,
+      "cpu_seconds": 113.578125
+    },
+    "independent_restoration": {
+      "wall_seconds": 50.899699,
+      "cpu_seconds": 50.515625
+    }
+  },
+  "sqlite_execute_calls": {
+    "PRAGMA": 5716,
+    "SELECT": 206845,
+    "INSERT": 57440,
+    "UPDATE": 2396,
+    "BEGIN": 91
+  },
+  "queries_by_stage": {
+    "world_initialization": {
+      "PRAGMA": 93,
+      "SELECT": 17347,
+      "INSERT": 9521,
+      "UPDATE": 3
+    },
+    "first_simultaneous_group_including_audits": {
+      "PRAGMA": 1239,
+      "SELECT": 24626,
+      "INSERT": 4839,
+      "UPDATE": 596,
+      "BEGIN": 22
+    },
+    "export_including_independent_validation": {
+      "PRAGMA": 2941,
+      "SELECT": 112972,
+      "INSERT": 28720,
+      "UPDATE": 1198,
+      "BEGIN": 46
+    },
+    "independent_restoration": {
+      "PRAGMA": 1441,
+      "SELECT": 51719,
+      "INSERT": 14360,
+      "UPDATE": 599,
+      "BEGIN": 23
+    }
+  },
+  "top_functions": [
+    {
+      "function": "braga_era/checkpoints.py:242:verify_checkpoint",
+      "calls": 3,
+      "self_seconds": 0.0352,
+      "cumulative_seconds": 155.270749
+    },
+    {
+      "function": "braga_era/world/packages.py:42:verify_directory",
+      "calls": 3,
+      "self_seconds": 0.556583,
+      "cumulative_seconds": 155.125578
+    },
+    {
+      "function": "braga_era/world/runner.py:367:advance",
+      "calls": 4,
+      "self_seconds": 0.019496,
+      "cumulative_seconds": 131.863325
+    },
+    {
+      "function": "braga_era/history.py:7:canonical_json",
+      "calls": 3067383,
+      "self_seconds": 1.7102,
+      "cumulative_seconds": 116.191606
+    },
+    {
+      "function": "braga_era/world/packages.py:163:export_world",
+      "calls": 1,
+      "self_seconds": 0.001662,
+      "cumulative_seconds": 114.639983
+    },
+    {
+      "function": "braga_era/checkpoints.py:292:export_checkpoint",
+      "calls": 1,
+      "self_seconds": 0.001042,
+      "cumulative_seconds": 105.083432
+    },
+    {
+      "function": "braga_era/checkpoints.py:325:restore_checkpoint",
+      "calls": 2,
+      "self_seconds": 0.001311,
+      "cumulative_seconds": 102.496095
+    },
+    {
+      "function": "braga_era/world/audit.py:15:audit",
+      "calls": 20,
+      "self_seconds": 1.340971,
+      "cumulative_seconds": 99.618682
+    },
+    {
+      "function": "braga_era/history.py:19:table_fingerprint",
+      "calls": 3621,
+      "self_seconds": 0.035719,
+      "cumulative_seconds": 74.375689
+    },
+    {
+      "function": "braga_era/history.py:23:<genexpr>",
+      "calls": 1726767,
+      "self_seconds": 8.538252,
+      "cumulative_seconds": 70.070636
+    },
+    {
+      "function": "braga_era/checkpoints.py:351:verify_archive",
+      "calls": 1,
+      "self_seconds": 0.001087,
+      "cumulative_seconds": 51.605769
+    },
+    {
+      "function": "braga_era/world/runner.py:189:simulate_pending",
+      "calls": 4,
+      "self_seconds": 0.042681,
+      "cumulative_seconds": 44.556201
+    },
+    {
+      "function": "braga_era/world/storage.py:91:transaction",
+      "calls": 182,
+      "self_seconds": 0.367311,
+      "cumulative_seconds": 40.236386
+    },
+    {
+      "function": "braga_era/migrations.py:43:rows_by_key",
+      "calls": 5630,
+      "self_seconds": 14.451246,
+      "cumulative_seconds": 39.526646
+    },
+    {
+      "function": "braga_era/world/storage.py:43:captured",
+      "calls": 206,
+      "self_seconds": 0.087291,
+      "cumulative_seconds": 37.828718
+    },
+    {
+      "function": "braga_era/world/knockout_v2.py:444:validate_bundle",
+      "calls": 256,
+      "self_seconds": 0.939942,
+      "cumulative_seconds": 28.441175
+    },
+    {
+      "function": "braga_era/world/storage.py:52:journal",
+      "calls": 95,
+      "self_seconds": 0.316372,
+      "cumulative_seconds": 28.193579
+    },
+    {
+      "function": "braga_era/world/storage.py:173:create",
+      "calls": 4,
+      "self_seconds": 0.020936,
+      "cumulative_seconds": 27.421147
+    },
+    {
+      "function": "braga_era/world/runner.py:245:apply_batch",
+      "calls": 4,
+      "self_seconds": 0.096845,
+      "cumulative_seconds": 26.431219
+    },
+    {
+      "function": "braga_era/history.py:11:digest",
+      "calls": 182393,
+      "self_seconds": 0.49215,
+      "cumulative_seconds": 25.443682
+    },
+    {
+      "function": "braga_era/world/audit.py:268:verify_journal",
+      "calls": 16,
+      "self_seconds": 2.444082,
+      "cumulative_seconds": 24.456845
+    },
+    {
+      "function": "braga_era/world/packages.py:38:fingerprints",
+      "calls": 9,
+      "self_seconds": 0.064423,
+      "cumulative_seconds": 17.064936
+    },
+    {
+      "function": "braga_era/engine/validation.py:67:validate_match",
+      "calls": 256,
+      "self_seconds": 5.45217,
+      "cumulative_seconds": 13.518386
+    },
+    {
+      "function": "braga_era/world/runner.py:119:claim",
+      "calls": 4,
+      "self_seconds": 0.006807,
+      "cumulative_seconds": 10.691278
+    },
+    {
+      "function": "braga_era/world/knockout_v2.py:375:resolve",
+      "calls": 320,
+      "self_seconds": 0.034046,
+      "cumulative_seconds": 9.834748
+    }
+  ],
+  "python_peak_traced_bytes": 60744509,
+  "archive_bytes": 2830657,
+  "world_database_bytes": 15708160,
+  "fixtures": 16,
+  "world_sha256": "b6e0b5aa16a5184d096205e3a6848a77fd6479670e8981b00b4191d93d71d66e",
+  "restored_equivalent": true,
+  "original_unchanged": true,
+  "limits": [
+    "cProfile/tracemalloc add overhead; not a live episode latency measurement",
+    "execute call counts include PRAGMA/control statements and exclude direct cursor calls",
+    "no OS disk-I/O counters; memory measures Python allocations only",
+    "no GitHub polling, authority acceptance or narration in this DEV baseline"
+  ],
+  "environment": {
+    "platform": "Windows",
+    "python": "3.12.14",
+    "instrumentation": "cProfile + tracemalloc; standard-library SQLite execute counters",
+    "storage": "OneDrive workspace; results are not production latency"
+  }
+}

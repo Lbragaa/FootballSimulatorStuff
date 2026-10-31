@@ -1,5 +1,119 @@
 # THE BRAGA ERA — durable engineering instructions
 
+## Local storage budget
+
+- Do not accumulate rehearsal databases under `.codex/visualizations`, `.tmp`,
+  or `C:\Users\luanc\BragaEra`. Local pytest case copies are disposable and now
+  clean up by default; use `BRAGA_DISCARD_TEST_COPIES=0` only while debugging,
+  then remove that explicitly owned test root. Prefer CI for full matrix runs.
+- Important prior DEV checkpoints were compressed and verified byte-for-byte in
+  ignored `output/development-archives/`; `archive-index.json` records member
+  SHA256s and former locations. Preserve these compact copies. Extract only a
+  needed checkpoint into a fresh temporary directory and clean it up afterward;
+  never retain simultaneous working/exported/restored duplicates by default.
+- Preserve `C:\Users\luanc\BragaEra\career` and `runtime`, the exact original
+  handoff/accepted 046 artifacts, key/credential stores and official history.
+  Never upload raw career databases, authority registries or keys to GitHub.
+  GitHub holds source, safe reports and CI evidence, not the private live save.
+
+## Multi-season execution prototype
+
+- `autonomous-offseason-development-1` is an opt-in TEST extension installed by
+  signed `install_offseason` migration 2. Its six extra tables/indexes must match
+  the exact extension DDL and installation receipt. Never change migration 1 or
+  legacy replay. Read `docs/offseason_integration_report.md`; economics, modeled
+  ages, youth and retirement are forward proposals, not historical facts.
+- Verified offseason 2028 hash is
+  `a9029c0fa2e89896ba5f3c99257128c1417739b04b39d4406318e6d92c0fc93d`
+  (1,341 fixtures); second-offseason/48-match 2029 hash is
+  `e3727f533da284e6ea76f1d9b1be70b7132bafbe950e030105d24d6425861366`.
+  Keep these artifacts immutable; future outcome-affecting model revisions need
+  a new proposed version. Neither financial/age policy nor production activation
+  is approved. Rolling authority and season-aware phone play remain unfinished.
+- The all-club offseason test changes future squads but preserves the frozen
+  no-offseason 1,341 and 312-match artifacts. Preserve all accepted native IDs,
+  archived #196, fixtures and seed commitments. Vasco gets no opening capital or
+  replenished fee/wage authority. All hypothetical income/liquidity is explicit.
+- Multi-loan returns need distinct durable child IDs. Failed/same requests must
+  resume original decisions; never retry a refused negotiation with a new seed.
+  Guarantee/reserve failures roll back; never silently fund a club or release
+  future guaranteed wages. Production authority/worker/bridge stay unchanged.
+
+- Shared domestic development now has full 128-entry CDB match progression,
+  Carioca12, recorded Supercopa/Recopa and reusable 20/20/8 national movement.
+  Read `docs/domestic_calendar_report.md`: the one-world 1,341-fixture rehearsal
+  does not include full non-RJ state calendars or complete offseason/economics.
+  Initial missing 2027 B/state inputs remain explicit administrative scenarios;
+  never describe them as historical sporting results. No production activation.
+- Season calendar reservations, venues and international-window assumptions are
+  committed before fixtures. Fail on rest/venue/dependency conflicts; never relax
+  them silently. Transaction-local calendar caching must not cross connections
+  or independent replay. The separate `schedule_calendar_country_groups` opcode
+  infers BRA from recorded league membership without changing frozen draw ops.
+- Calendar-only country draws retain every successful old result; an exhausted
+  uncommitted V1 search may use the explicit `country-pots-feasibility-2` solver
+  with the same inputs/seed and an added receipt field. Never replace a settled
+  draw or relax country/pot constraints to repair a scheduling failure.
+- `DEV-MULTISEASON-INCREMENTAL-1` is a distinct TEST-only signed-parent-attestation
+  profile. Full parent replay occurs at sealing; child validation replays the
+  suffix and compares every table. Disclose the trusted signing-key boundary,
+  one-time sealing cost and duplicated snapshot storage. Preserve the original
+  full-root verifier and all outcome hashes. No production registry/worker use.
+
+- DEV export pins authenticated source fingerprints and fully independently
+  replays the copied staging package before atomic publication. Restoration
+  independently replays again. Do not replace staging replay with a cached source
+  verdict. See `docs/continental_export_performance.md` for the paired benchmark.
+
+- `continental-entry-development-2` connects country/source evidence and actual
+  preliminary winners through both continental finals. Read
+  `docs/continental_joined_report.md`. Its 312-fixture proof uses explicit
+  fictional test clubs/administrative scenarios, not approved official entries
+  or invented historical national scores. V2 seeds LIB R16 by recorded group
+  winners/runners-up. Preserve V1 open-draw replay and frozen preliminary/SULA
+  draw streams; never regenerate an earlier completed development result.
+  V2 preliminary/main-stage sanctions share the same tournament-year counter;
+  persist that counter choice in execution inputs and preserve V1 counters.
+
+- Group membership is the committed country-draw receipt cross-checked against
+  stored fixtures, or stored fixtures for legacy generic draws. Never rerun a
+  shuffle from a read path or inspect an uncommitted group draw. See
+  `docs/committed_draw_report.md`; keep old signed operation responses unchanged.
+
+- `braga_era/multiseason` implements `DEV-MULTISEASON-2` only. Read
+  `docs/multiseason_execution_report.md`. Keep its explicit additive schema,
+  TEST-only migration statements, signed exact-retry operations, pre-draw
+  simultaneous commitments, full independent replay and portable size bounds.
+- The current-parent 417-fixture rehearsal covers ACCESS, full league and scoped
+  R16-entry CDB only. It uses eight proposed fictional access clubs and explicit
+  hypothetical income. Neither these assumptions nor the incomplete ecosystem
+  are approved canonically. Do not call this 2028-ready or deploy it.
+- Native history and inherited club identities stay immutable. Future player
+  overlays retain historical snapshots/IDs. Do not spend unknown club budgets,
+  unlabelled revenue, restricted reserves or implicit future owner capital.
+- Existing canonical JSON bytes are frozen contracts. Encoder option reuse is
+  byte-equivalent; it must never become a cache of inputs or verification success.
+- The registered production lineage/phone worker remains unchanged and cannot
+  accept this DEV profile. No production keys, registry, accepted files, worker,
+  command sequence or fictional clock may be modified during development.
+
+## Multi-season foundation (development only)
+
+- Read `docs/season_2028_implementation_plan.md` and
+  `docs/performance_optimization_plan.md`. `braga_era/seasons.py` is an isolated
+  DEV sidecar, not an official migration/profile or a second engine. Authenticate
+  the current parent through `AcceptedSource.career`; never assume root046C.
+- Rehearsals retain parent bytes and every inherited table, validate closure and
+  journal exact transitions, and stop at offseason_preparation. Do not mark an
+  ungenerated season ready. Undated round-robin drafts supply neither qualified
+  participants nor approved calendar dates. Missing Série B evidence is a policy
+  blocker, not permission to invent past matches/promoted clubs.
+- No production worker install, authority modification, policy approval or 2028
+  activation is authorized by this foundation. Preserve existing seed/profile
+  verification. Performance measurements never justify skipping replay. Use
+  explicit disposable temp roots if Windows sandbox TEMP/OneDrive denies rename;
+  do not weaken atomic publication or baseline hashes to make tests pass.
+
 ## Complete historical reporting (supersedes ordinary other-score silence)
 
 - `historical_results` is a protocol-2 READ command independent of automatic

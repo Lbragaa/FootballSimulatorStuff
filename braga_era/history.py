@@ -3,9 +3,13 @@ import hashlib
 from importlib.resources import files
 import json
 
+# JSONEncoder.encode creates fresh per-call traversal state. Reuse only its
+# immutable options, never serialized values or successful validation results.
+_CANONICAL_ENCODER = json.JSONEncoder(ensure_ascii=False, sort_keys=True,
+                                    separators=(",", ":"), allow_nan=False)
 
 def canonical_json(value) -> str:
-    return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"), allow_nan=False)
+    return _CANONICAL_ENCODER.encode(value)
 
 
 def digest(value) -> str:

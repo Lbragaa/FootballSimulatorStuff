@@ -1,0 +1,64 @@
+{
+  "scope": "NONCANONICAL DEVELOPMENT TEST",
+  "prior_accepted_results_preserved": true,
+  "independent_2027_completion": true,
+  "editions": [
+    {
+      "competition": "ACCESS",
+      "season": 2028,
+      "state": "completed",
+      "champion_recorded": false
+    },
+    {
+      "competition": "CDB",
+      "season": 2028,
+      "state": "completed",
+      "champion_recorded": true
+    },
+    {
+      "competition": "LEAGUE",
+      "season": 2028,
+      "state": "completed",
+      "champion_recorded": true
+    }
+  ],
+  "season_states": [
+    [
+      2027,
+      "archived"
+    ],
+    [
+      2028,
+      "archived"
+    ],
+    [
+      2029,
+      "preparing"
+    ]
+  ],
+  "completed_new_fixtures": 417,
+  "replay": {
+    "profile": "DEV-MULTISEASON-2",
+    "ok": true,
+    "test_only": true,
+    "acceptance_eligible": false,
+    "operations": 285,
+    "world_sha256": "c59dd50e1f502168f7af2abc9f1d26f43aaf85871563ad001553c6e17f0b13da",
+    "independent_replay": true
+  },
+  "portable_restored": true,
+  "blocker": null,
+  "modelled_monthly_income_cents": 300000000,
+  "not_2028_ready": true,
+  "unsupported_full_ecosystem": [
+    "continental groups/allocations and cross-entry",
+    "full CDB early entry",
+    "state federation ecosystem",
+    "S\u00e9rie B full season",
+    "full-club economics",
+    "youth/retirement and competing-offer market",
+    "production authority/bridge profile"
+  ],
+  "production_files_unchanged": true,
+  "scope_note": "Limited ACCESS + full league + R16-entry cup prototype. Not a full 2028 ecosystem or production-ready profile."
+}
