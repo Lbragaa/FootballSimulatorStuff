@@ -1,4 +1,8 @@
 from pathlib import Path
+import gc
+import os
+import shutil
+import warnings
 
 import pytest
 
@@ -15,6 +19,20 @@ def isolated_registry(monkeypatch, tmp_path):
         "BRAGA_ERA_REGISTRY", str(tmp_path / "no-canonical-registry.json")
     )
     monkeypatch.delenv("BRAGA_ERA_DB", raising=False)
+
+
+@pytest.fixture(autouse=True)
+def discard_ci_disposable_copies(tmp_path,tmp_path_factory):
+    yield
+    if os.environ.get('BRAGA_DISCARD_TEST_COPIES')!='1' or not tmp_path.exists():return
+    target=tmp_path.resolve();base=tmp_path_factory.getbasetemp().resolve()
+    if target.parent!=base or not target.name.startswith('test_'):raise ValueError('Unsafe pytest cleanup target')
+    gc.collect()
+    try:shutil.rmtree(target)
+    except PermissionError as error:
+        # A Windows diagnostic handle may outlive test teardown. Preserve it;
+        # never kill processes or broaden the deletion target to recover space.
+        warnings.warn('Retained a locked disposable test copy: '+str(error),ResourceWarning)
 
 
 @pytest.fixture(scope="session")

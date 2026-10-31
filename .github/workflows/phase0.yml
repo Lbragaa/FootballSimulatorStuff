@@ -27,15 +27,23 @@ jobs:
       - run: python tools/verify_lineage_demo.py output/ci-lineage --reference docs/validation/task03d_rehearsal.json
       - run: python tools/stress_season.py --db output/ci-accepted/database.sqlite --output output/ci-season --seed task03c-final-a-fixed-v1 --no-package
       - run: python tools/verify_season.py output/ci-season --reference docs/validation/task03c_season.json
-      - run: python -m pytest --junitxml output/ci-tests.xml
+      - run: python -m pytest --basetemp output/ci-test-copies --junitxml output/ci-tests.xml
         env:
           BRAGA_LINEAGE_TEST_CHAIN: output/ci-lineage
+          BRAGA_DISCARD_TEST_COPIES: '1'
+      - run: python tools/cleanup_ci_test_copies.py
       - name: Shared NONCANONICAL 2028 season and recorded 2029 transition
         if: matrix.os == 'ubuntu-latest' && matrix.python == '3.12'
         run: |
           python -m tools.rehearse_domestic_season --db output/ci-season/database.sqlite --output output/ci-shared-2028 --continental
           python -m tools.rehearse_domestic_transition --package output/ci-shared-2028/portable --output output/ci-shared-2029
           python -m tools.benchmark_incremental_multiseason --parent-package output/ci-shared-2028/portable --child output/ci-shared-2029/world --output output/ci-incremental-2029
+      - name: Autonomous offseason across the established shared calendar
+        if: matrix.os == 'ubuntu-latest' && matrix.python == '3.12'
+        run: |
+          python -m tools.rehearse_domestic_season --db output/ci-season/database.sqlite --output output/ci-offseason-2028 --continental --offseason
+          python -m tools.rehearse_domestic_transition --package output/ci-offseason-2028/portable --output output/ci-offseason-2029 --offseason
+          python -m tools.benchmark_offseason_payroll --db output/ci-offseason-2028/world/database.sqlite --output output/ci-offseason-payroll.json
       - uses: actions/upload-artifact@v4
         if: matrix.os == 'ubuntu-latest' && matrix.python == '3.12'
         with:
@@ -44,6 +52,9 @@ jobs:
             output/ci-shared-2028/report.json
             output/ci-shared-2029/report.json
             output/ci-incremental-2029/report.json
+            output/ci-offseason-2028/report.json
+            output/ci-offseason-2029/report.json
+            output/ci-offseason-payroll.json
       - uses: actions/upload-artifact@v4
         with:
           name: TEST-ONLY-continuous-report-${{ matrix.os }}-py${{ matrix.python }}
