@@ -1,0 +1,142 @@
+{
+  "scope": "NONCANONICAL DEVELOPMENT TEST",
+  "production_modified": false,
+  "2028": {
+    "source_unchanged": true,
+    "fixture_counts": {
+      "ACCESS:2028": 8,
+      "CARIOCA:2028": 45,
+      "CDB:2028": 157,
+      "LEAGUE:2028": 380,
+      "LIB:2028": 125,
+      "LIB_PRE1:2028": 6,
+      "LIB_PRE2:2028": 16,
+      "LIB_PRE3:2028": 8,
+      "LOWER:2028": 56,
+      "RECOPA:2028": 2,
+      "SERIE_B:2028": 380,
+      "SULA:2028": 141,
+      "SULA_PRE:2028": 16,
+      "SUPERCOPA:2028": 1
+    },
+    "offseason": {
+      "canonical_approval": false,
+      "clubs_planned": 285,
+      "developed": 7230,
+      "policy": "autonomous-offseason-development-1",
+      "production_authorized": false,
+      "rejected": 70,
+      "retired": 111,
+      "season": 2028,
+      "signed": 78,
+      "youth": 570
+    },
+    "decision_counts": {
+      "loan": 15,
+      "offer_rejected": 70,
+      "offer_submitted": 570,
+      "purchase": 63,
+      "release": 27,
+      "retirement": 111,
+      "squad_plan": 285,
+      "youth_intake": 570
+    },
+    "transfers": {
+      "loan": 15,
+      "purchase": 63
+    },
+    "finance": {
+      "accounts_reconciled": 285,
+      "payroll_periods": 12,
+      "installments_paid": 78,
+      "bonuses_triggered": 16,
+      "loans_returned": 15,
+      "registration_owner_mismatches": 0
+    },
+    "verification": {
+      "profile": "DEV-MULTISEASON-2",
+      "ok": true,
+      "test_only": true,
+      "acceptance_eligible": false,
+      "operations": 544,
+      "world_sha256": "a9029c0fa2e89896ba5f3c99257128c1417739b04b39d4406318e6d92c0fc93d",
+      "independent_replay": true
+    },
+    "independent_restoration": true,
+    "resumed_process_seconds_not_total_lifecycle": 719.9993720999992,
+    "preserved_first_attempt_match_inputs_seeds_and_results": 778
+  },
+  "prior_frozen_hashes": {
+    "no_offseason_1341": "e1b0056c457106bb7728e801068f7bd1bf4fafbb01fb4f8b75ee6ad34573f1ec",
+    "continental_312": "f4664a5c222af8576b8f582befc27269ab5e300f675a4efab94b35bb5eb72fef"
+  },
+  "not_2028_ready": true,
+  "blockers": [
+    "Non-RJ state/federation qualification",
+    "Commissioner approval/calibration of economic, age and market assumptions",
+    "Production season authority, rolling verified lineage and season-aware phone episodes",
+    "Full 2029 ecosystem repetition"
+  ],
+  "2029": {
+    "scope": "NONCANONICAL DEVELOPMENT TEST",
+    "new_clubs_created": false,
+    "recorded_division_movement": true,
+    "2029_completed_fixture_counts": {
+      "LEAGUE:2029": 20,
+      "LOWER:2029": 8,
+      "SERIE_B:2029": 20
+    },
+    "all_2028_results_and_receipts_unchanged": true,
+    "source_package_unchanged": true,
+    "verification": {
+      "profile": "DEV-MULTISEASON-2",
+      "ok": true,
+      "test_only": true,
+      "acceptance_eligible": false,
+      "operations": 566,
+      "world_sha256": "e3727f533da284e6ea76f1d9b1be70b7132bafbe950e030105d24d6425861366",
+      "independent_replay": true
+    },
+    "elapsed_seconds": 244.2856969000004,
+    "complete_2029_ecosystem": false,
+    "production_modified": false,
+    "offseason": {
+      "canonical_approval": false,
+      "clubs_planned": 285,
+      "developed": 7665,
+      "policy": "autonomous-offseason-development-1",
+      "production_authorized": false,
+      "rejected": 59,
+      "retired": 135,
+      "season": 2029,
+      "signed": 96,
+      "youth": 570
+    },
+    "decision_counts": {
+      "expiry": 3913,
+      "loan": 3,
+      "offer_rejected": 56,
+      "offer_submitted": 568,
+      "purchase": 93,
+      "registration_contingency": 1,
+      "registration_offer_rejected": 3,
+      "renewal": 5835,
+      "retirement": 135,
+      "squad_plan": 285,
+      "youth_intake": 570
+    },
+    "transfers": {
+      "loan": 3,
+      "purchase": 93
+    },
+    "free_agent_purchases": 9,
+    "independent_restoration": true,
+    "elapsed_seconds_is_final_resume_not_total_lifecycle": true
+  },
+  "artifact_sizes_bytes": {
+    "2028_database": 303788032,
+    "2029_database_after_48_fixtures": 338612224,
+    "2028_portable_directory": 387562453,
+    "2029_portable_directory": 422386645
+  }
+}

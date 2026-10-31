@@ -2,6 +2,27 @@
 
 ## Multi-season execution prototype
 
+- `autonomous-offseason-development-1` is an opt-in TEST extension installed by
+  signed `install_offseason` migration 2. Its six extra tables/indexes must match
+  the exact extension DDL and installation receipt. Never change migration 1 or
+  legacy replay. Read `docs/offseason_integration_report.md`; economics, modeled
+  ages, youth and retirement are forward proposals, not historical facts.
+- Verified offseason 2028 hash is
+  `a9029c0fa2e89896ba5f3c99257128c1417739b04b39d4406318e6d92c0fc93d`
+  (1,341 fixtures); second-offseason/48-match 2029 hash is
+  `e3727f533da284e6ea76f1d9b1be70b7132bafbe950e030105d24d6425861366`.
+  Keep these artifacts immutable; future outcome-affecting model revisions need
+  a new proposed version. Neither financial/age policy nor production activation
+  is approved. Rolling authority and season-aware phone play remain unfinished.
+- The all-club offseason test changes future squads but preserves the frozen
+  no-offseason 1,341 and 312-match artifacts. Preserve all accepted native IDs,
+  archived #196, fixtures and seed commitments. Vasco gets no opening capital or
+  replenished fee/wage authority. All hypothetical income/liquidity is explicit.
+- Multi-loan returns need distinct durable child IDs. Failed/same requests must
+  resume original decisions; never retry a refused negotiation with a new seed.
+  Guarantee/reserve failures roll back; never silently fund a club or release
+  future guaranteed wages. Production authority/worker/bridge stay unchanged.
+
 - Shared domestic development now has full 128-entry CDB match progression,
   Carioca12, recorded Supercopa/Recopa and reusable 20/20/8 national movement.
   Read `docs/domestic_calendar_report.md`: the one-world 1,341-fixture rehearsal

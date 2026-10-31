@@ -1,5 +1,10 @@
 # Immediate-parent development verification
 
+The subsequent [offseason integration](offseason_integration_report.md) measured
+a separate payroll query optimization on identical all-club inputs: 23,322
+SELECTs versus six, with byte-equivalent cent totals. That is not a rolling
+checkpoint lifecycle or phone episode benchmark. The limitations below remain.
+
 `DEV-MULTISEASON-INCREMENTAL-1` is a separate, nonpromotable TEST profile. Existing
 full-history verification/export behavior and production profiles are unchanged.
 

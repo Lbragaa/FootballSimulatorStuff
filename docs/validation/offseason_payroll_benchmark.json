@@ -1,0 +1,19 @@
+{
+  "scope": "NONCANONICAL DEVELOPMENT TEST",
+  "timings": {
+    "prior_per_contract_queries": {
+      "wall_seconds": 1.171898599999622,
+      "cpu_seconds": 1.15625,
+      "select_queries": 23322
+    },
+    "batched_loan_query": {
+      "wall_seconds": 1.0326224000000366,
+      "cpu_seconds": 1.03125,
+      "select_queries": 6
+    }
+  },
+  "identical_payroll_sha256": "aabab7ffb3ef05f27c00ae75fe56506b7cbaa7b4e7b8fa31c52c0b07c22c8fca",
+  "source_unchanged": true,
+  "production_modified": false,
+  "limitations": "One paired read-only payroll workload, not full episode or successor-lifecycle timing; both use identical annulled-contract rules."
+}

@@ -1,5 +1,10 @@
 # Implemented multi-season development execution
 
+Newest milestone: [autonomous offseason integration](offseason_integration_report.md)
+adds an opt-in second migration and all-club market/economic scenarios to the
+established 1,341-match calendar. It remains a TEST-only policy, with production
+transition/bridge authority and economic calibration still outstanding.
+
 **Current implementation:** [shared domestic/continental season](domestic_calendar_report.md)
 completed **1,341 fixtures across 14 editions** in one 2028 world, then retained
 the same national clubs and played 48 matches in 2029. Full replay/restoration

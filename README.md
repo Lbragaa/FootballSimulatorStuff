@@ -1,5 +1,10 @@
 # THE BRAGA ERA
 
+Development now includes a [285-club autonomous offseason](docs/offseason_integration_report.md)
+integrated with the existing shared 2028 season. Transfers, contracts, loans,
+youth, retirement and explicit hypothetical finances are TEST-only; no production
+season activation, installed worker replacement or policy approval is included.
+
 Latest development: [one shared 2028 calendar](docs/domestic_calendar_report.md)
 completed 1,341 domestic/continental test fixtures and a recorded 48-match 2029
 continuation. [Immediate-parent TEST verification](docs/incremental_multiseason_performance.md)
