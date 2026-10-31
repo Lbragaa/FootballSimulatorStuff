@@ -13,6 +13,10 @@
   them silently. Transaction-local calendar caching must not cross connections
   or independent replay. The separate `schedule_calendar_country_groups` opcode
   infers BRA from recorded league membership without changing frozen draw ops.
+- Calendar-only country draws retain every successful old result; an exhausted
+  uncommitted V1 search may use the explicit `country-pots-feasibility-2` solver
+  with the same inputs/seed and an added receipt field. Never replace a settled
+  draw or relax country/pot constraints to repair a scheduling failure.
 - `DEV-MULTISEASON-INCREMENTAL-1` is a distinct TEST-only signed-parent-attestation
   profile. Full parent replay occurs at sealing; child validation replays the
   suffix and compares every table. Disclose the trusted signing-key boundary,

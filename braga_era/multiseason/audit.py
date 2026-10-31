@@ -28,6 +28,7 @@ def season(c,year):
             occupied[venue(c,calendar,f['edition'],f['stage'],f['home'])].append(when)
         if any((b-a).total_seconds()<3*3600 for starts in occupied.values() for a,b in zip(sorted(starts),sorted(starts)[1:])):raise ValueError('Shared venue overlap')
         actual.append(calendar['policy'])
+    if len(actual)!=1:raise ValueError('Shared-season audit requires exactly one committed year calendar')
     tables={}
     for e in c.execute("SELECT * FROM ms_editions WHERE season=? AND format='league'",(year,)):
         table=standings(c,e['id']);n=len(table)

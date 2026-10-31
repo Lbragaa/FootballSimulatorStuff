@@ -117,13 +117,19 @@ def _apply(c,kind,a):
                 parent=c.execute('SELECT competition FROM ms_editions WHERE id=?',(source['edition'],)).fetchone()
                 if parent and parent[0]=='LIB_PRE3':exceptions.append(r['club'])
         seed=c.execute('SELECT seed FROM ms_meta').fetchone()[0]
-        groups=draw(pots,countries,seed,preliminary_exceptions=exceptions)
+        fallback=False
+        if kind=='schedule_calendar_country_groups':
+            from .continental_policy import calendar_draw
+            groups,fallback=calendar_draw(pots,countries,seed,preliminary_exceptions=exceptions)
+        else:groups=draw(pots,countries,seed,preliminary_exceptions=exceptions)
         for name,clubs in groups.items():
             for f in double_round_robin(clubs,season=e['season'],competition=e['competition']):
                 when=(datetime.fromisoformat(a['start'])+timedelta(days=7*(f['round']-1))).isoformat(sep=' ',timespec='minutes')
                 insert_fixture(c,e['id'],name,f['round'],None,f['home'],f['away'],when,a['deadline'])
         c.execute("UPDATE ms_editions SET state='active' WHERE id=?",(e['id'],))
-        return {'edition':e['id'],'policy':'country-pots-1' if kind=='schedule_country_groups' else 'calendar-country-evidence-1','groups':groups,'preliminary_exceptions':exceptions,'scheduled':96}
+        response={'edition':e['id'],'policy':'country-pots-1' if kind=='schedule_country_groups' else 'calendar-country-evidence-1','groups':groups,'preliminary_exceptions':exceptions,'scheduled':96}
+        if fallback:response['draw_solver']='country-pots-feasibility-2'
+        return response
     if kind=='claim_group':
         from .execution import claim
         return claim(c,a)

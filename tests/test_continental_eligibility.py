@@ -5,7 +5,7 @@ from test_multiseason import candidate,parent,cmd,KEY
 from braga_era.db import connect_read_only
 from braga_era.multiseason import store
 from braga_era.multiseason.agenda import advance
-from braga_era.multiseason.continental_policy import ALLOCATIONS,allocate,draw
+from braga_era.multiseason.continental_policy import ALLOCATIONS,allocate,draw,calendar_draw
 
 
 def test_country_allocations_overlap_and_shortage():
@@ -24,6 +24,40 @@ def test_country_draw_reproducible_and_never_relaxes_constraints():
     assert groups==draw(pots,countries,'fixed-before-draw')
     assert all(len({countries[k] for k in g})==4 for g in groups.values())
     with pytest.raises(ValueError,match='feasible|bound'):draw(pots,{k:'BRA' for k in countries},'fixed-before-draw')
+
+
+def test_calendar_fallback_is_versioned_feasible_and_preserves_success(monkeypatch):
+    import braga_era.multiseason.continental_policy as policy
+    countries={f'{country}-{pot}':country for pot in range(4) for country in list(ALLOCATIONS)[:8]}
+    pots=[[f'{country}-{pot}' for country in list(ALLOCATIONS)[:8]] for pot in range(4)]
+    original=draw(pots,countries,'fixed-before-draw')
+    assert calendar_draw(pots,countries,'fixed-before-draw')==(original,False)
+    # Deterministic old-solver exhaustion is an algorithm failure, not permission
+    # to choose new inputs, weaken country constraints or change any result.
+    def exhausted(*args,**kwargs):raise ValueError('Country draw search bound reached; no constraints relaxed')
+    monkeypatch.setattr(policy,'draw',exhausted)
+    groups,fallback=calendar_draw(pots,countries,'fixed-before-draw')
+    assert fallback and calendar_draw(pots,countries,'fixed-before-draw')==(groups,True)
+    assert set(k for g in groups.values() for k in g)==set(countries)
+    assert all(len(g)==4 and len({countries[k] for k in g})==4 for g in groups.values())
+    assert all(len(set(g)&set(p))==1 for g in groups.values() for p in pots)
+    with pytest.raises(ValueError,match='feasible|bound'):
+        calendar_draw(pots,{k:'BRA' for k in countries},'fixed-before-draw')
+
+
+def test_real_search_exhaustion_uses_same_committed_inputs():
+    # This four-country pot cycle has a valid assignment, but V1 explores many
+    # equivalent branches before finding the required country alignment.
+    pots=[[f'{country}:{pot}:{i}' for country in pair for i in range(4)]
+          for pot,pair in enumerate([('BRA','ARG'),('BOL','CHI'),('BRA','BOL'),('ARG','CHI')])]
+    countries={club:club.split(':')[0] for p in pots for club in p}
+    seed='adversarial-country-placement-0'
+    with pytest.raises(ValueError,match='search bound'):draw(pots,countries,seed)
+    groups,fallback=calendar_draw(pots,countries,seed)
+    assert fallback and calendar_draw(pots,countries,seed)==(groups,True)
+    assert all(len({countries[k] for k in g})==4 for g in groups.values())
+    assert all(len(set(g)&set(p))==1 for g in groups.values() for p in pots)
+    assert sorted(k for g in groups.values() for k in g)==sorted(countries)
 
 
 def test_three_preliminary_rounds_use_actual_winners(candidate,tmp_path):

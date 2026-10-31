@@ -66,7 +66,8 @@ Full federation quotas, replacement and national ranking selection remain missin
 Carioca commits two strength-balanced groups in entries **and** the signed
 creation receipt. All 36 cross-group fixtures must match those pools. Top four
 per group enter single QFs, two-leg SFs and a neutral single final: 45 matches.
-Ties use direct penalties. The
+QF/SF ties use direct penalties; the proposed single final uses extra time then
+penalties. The
 [FERJ format announcement](https://fferj.com.br/noticias/carioca-2026--clubes-aprovam-regulamento)
 informs the 12-club/two-group/ten-date proposal; this game's exact forward rules
 still require review. Clubs cannot enter two state federations in one season.
@@ -139,3 +140,15 @@ test JSON evidence is uploaded by the new steps; no keys or databases.
 Baseline `05a6861` passed all six jobs in
 [run 75](https://github.com/Lbragaa/FootballSimulatorStuff/actions/runs/41108359761).
 That success does not certify subsequent changes; new-head CI must be checked.
+
+Run 79 executed **471 tests successfully on all six platforms**. Five jobs
+finished successfully; Ubuntu 3.12 then exposed a real additional rehearsal
+failure: the legacy country-draw search exhausted its bound. The calendar-only
+forward extension now first preserves every successful old draw verbatim, then
+uses `country-pots-feasibility-2` only on an unsuccessful/uncommitted search.
+That bounded solver fixes first-pot symmetry, selects the most constrained club,
+and checks pot matching and future country capacity before branching. It records
+the fallback version in the draw receipt, uses the same committed pool/seed,
+and never relaxes country restrictions. Frozen `schedule_country_groups` stays
+unchanged. A real adversarial pot-cycle regression proves old-search exhaustion
+and deterministic feasible completion, with no injected football results.
