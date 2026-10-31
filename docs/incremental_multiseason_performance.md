@@ -44,9 +44,22 @@ cost is separate. It is not a full-pipeline paired improvement or measured phone
 episode latency. Earlier 7.04%, 17.9% and 19.15% results cover different workloads
 and cannot be added to it.
 
+For a single new parent/child pair, sealing plus suffix validation costs more
+than the measured full-history validation alone. The current prototype seals
+normal DEV packages; it does not yet cheaply roll a verified child into the next
+trusted parent. That rolling attestation/registered-chain work is still required
+before claiming a continuous-career latency improvement. The result establishes
+suffix verification equivalence and its isolated cost, not a cheaper complete
+successor lifecycle.
+
 Storage is a real tradeoff: sealed parent 315,997,354 bytes; incremental portable
 directory 644,750,518 bytes. These are uncompressed directories, not ZIP sizes.
 The profile duplicates snapshots and is **not** a package-growth optimization.
+Observed normal-profile growth was 83,759,104 database bytes at completed 2027,
+232,222,720 after the 1,341-match 2028 world, and 244,977,664 after 48 more 2029
+matches. Normal portable directories were 315,997,152 and 328,752,096 bytes at
+those last two boundaries. Full 2029 storage and multi-year compaction were not
+measured or implemented.
 Aggregate process peak resident memory was 567,762,944 bytes; it is not a
 per-phase measurement. More seasons and repeated statistical samples remain
 needed to establish scalability.

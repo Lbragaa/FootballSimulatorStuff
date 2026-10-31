@@ -58,6 +58,9 @@ def test_real_search_exhaustion_uses_same_committed_inputs():
     assert all(len({countries[k] for k in g})==4 for g in groups.values())
     assert all(len(set(g)&set(p))==1 for g in groups.values() for p in pots)
     assert sorted(k for g in groups.values() for k in g)==sorted(countries)
+    exception=pots[-1][-1];countries={**countries,exception:'BRA'}
+    groups,fallback=calendar_draw(pots,countries,seed,preliminary_exceptions=[exception])
+    assert fallback and all(len({countries[k] for k in g if k!=exception})==len([k for k in g if k!=exception]) for g in groups.values())
 
 
 def test_three_preliminary_rounds_use_actual_winners(candidate,tmp_path):

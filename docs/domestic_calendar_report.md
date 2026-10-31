@@ -152,3 +152,15 @@ the fallback version in the draw receipt, uses the same committed pool/seed,
 and never relaxes country restrictions. Frozen `schedule_country_groups` stays
 unchanged. A real adversarial pot-cycle regression proves old-search exhaustion
 and deterministic feasible completion, with no injected football results.
+
+The focused post-fix run passed **25 tests in 353.36 seconds**, with zero failures,
+errors or skips. The real adversarial draw and preliminary exception were also
+rechecked together (three tests, 3.75 seconds). A newly generated golden 2027
+fixture then completed the same 1,341-match shared season, strict reconciliation,
+full independent replay/export and separate restoration in **651.079 seconds**.
+Its world hash remains exactly
+`e1b0056c457106bb7728e801068f7bd1bf4fafbb01fb4f8b75ee6ad34573f1ec`.
+This is compatibility/reproduction evidence, not a paired speedup measurement.
+[Safe post-fix evidence](validation/shared_2028_ci_repair.json) records the exact
+scope. [Replacement CI](https://github.com/Lbragaa/FootballSimulatorStuff/actions/runs/41205751497)
+was still running when these local results were recorded; it is not claimed green.
