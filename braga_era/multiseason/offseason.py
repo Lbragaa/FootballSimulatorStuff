@@ -260,7 +260,7 @@ def move(c,pid,buyer,dated,fee,new_wage,kind='purchase',loan_end=None):
     obligation(c,identity+':bonus',buyer,None,f'{year}-12-21 23:59:00',new_wage//2,-1,'performance_bonus',{'player':pid,'appearances':10,'policy':POLICY})
     if kind=='loan':
         con=c.execute("SELECT * FROM ms_contracts WHERE player=? AND status='active'",(pid,)).fetchone()
-        if not con:raise ValueError('Loan requires an owned wage contract')
+        if not con or con['club']!=seller or con['ends']<loan_end or con['wage_cents']!=new_wage:raise ValueError('Loan requires an owned wage contract covering its full term and exact wage')
         c.execute('INSERT INTO ms_loans VALUES(?,?,?,?,?,?,?,\'active\')',(identity,pid,seller,buyer,dated,loan_end,10000))
         detail.update(option_fee_cents=fee*4,owner_wage_cents=con['wage_cents'],loan_end=loan_end)
     else:contract(c,pid,buyer,dated,f'{year+2}-12-31',new_wage,detail)
@@ -286,6 +286,7 @@ def run(c,a):
         con=c.execute("SELECT * FROM ms_contracts WHERE player=? AND status='active'",(p['id'],)).fetchone()
         lifecycle=c.execute('SELECT status FROM ms_lifecycle WHERE player=?',(p['id'],)).fetchone()[0]
         if con:
+            if con['club']!=key:continue # borrower cannot renew/replace the owner's contract
             if con['ends'][:4]==str(year) and rng(c,'renewal',year,p['id']).random()<.7:
                 contract(c,p['id'],key,dated,f'{year+2}-12-31',con['wage_cents'],{'policy':POLICY,'renewal':'same known wage'})
                 note(c,year,key,p['id'],'renewal',{'wage_cents':con['wage_cents']})

@@ -16,7 +16,7 @@ from tools.rehearse_domestic_season import KEY,plans
 
 def run(package,output,*,with_offseason=False):
     start=time.perf_counter();package=Path(package);output=Path(output);target=output/'world'
-    original={p.name:file_sha256(p) for p in package.iterdir()}
+    source_files={p.name:file_sha256(p) for p in package.iterdir()}
     if not target.exists():store.restore(package,target,KEY)
     def command(kind,**args):return store.run(target,KEY,str(uuid5(NAMESPACE_URL,'recorded-2029-transition-1:'+kind+':'+digest(args))),kind,args)
     with connect_read_only(target/'database.sqlite') as c:
@@ -29,8 +29,8 @@ def run(package,output,*,with_offseason=False):
         from braga_era.multiseason.offseason import POLICY as OFFSEASON,development_economics
         with connect_read_only(target/'database.sqlite') as c:
             originals=[json.loads(r[0]) for r in c.execute("SELECT args_json FROM ms_operations WHERE kind='configure_offseason'")]
-            original=next((r for r in originals if r['season']==2029),None)
-            economics=original['economics'] if original else development_economics(c,2029)
+            original_config=next((r for r in originals if r['season']==2029),None)
+            economics=original_config['economics'] if original_config else development_economics(c,2029)
         command('configure_offseason',season=2029,dated='2029-01-01',policy=OFFSEASON,economics=economics)
         command('settle_economics',dated='2029-01-01 00:00:00')
         offseason=command('run_offseason',season=2029,dated='2029-01-01',policy=OFFSEASON)
@@ -61,7 +61,7 @@ def run(package,output,*,with_offseason=False):
     report=store.validate(target,KEY)
     if not (output/'portable').exists():store.export(target,output/'portable',KEY)
     if not (output/'restored').exists():store.restore(output/'portable',output/'restored',KEY)
-    assert original=={p.name:file_sha256(p) for p in package.iterdir()}
+    assert source_files=={p.name:file_sha256(p) for p in package.iterdir()}
     result={'scope':'NONCANONICAL DEVELOPMENT TEST','new_clubs_created':False,'recorded_division_movement':True,'2029_completed_fixture_counts':counts,'all_2028_results_and_receipts_unchanged':True,'source_package_unchanged':True,'verification':report,'elapsed_seconds':time.perf_counter()-start,'complete_2029_ecosystem':False,'production_modified':False}
     result['offseason']=offseason
     (output/'report.json').write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8');return result
