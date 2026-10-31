@@ -40,10 +40,17 @@ def season(c,year):
         tables[e['id']]={'clubs':n,'fixtures':len(games),'standings_reconcile':True}
     accounts={}
     archived_accounts={r['club']:r for r in json.loads(state['archive_json'])['finances']}
+    configured=set()
+    for op in c.execute("SELECT args_json FROM ms_operations WHERE kind='configure_offseason'"):
+        configured.update(json.loads(op[0])['economics'])
     for account in c.execute('SELECT * FROM ms_accounts'):
         opening=None
         for op in c.execute("SELECT args_json,response_json FROM ms_operations WHERE kind='open_recorded_account'"):
             if json.loads(op[0])['club']==account['club']:opening=json.loads(op[1])['recognized_cash_cents'];break
+        if opening is None and account['club'] in configured and json.loads(account['provenance_json']).get('unknown_actual_balance') is True:
+            # Signed scenario setup excludes unknown wealth from recognized
+            # opening cash; explicit TEST liquidity is separately in the ledger.
+            opening=0
         if opening is None:raise ValueError('Account has no authenticated opening operation')
         movement=c.execute('SELECT coalesce(sum(amount_cents),0) FROM ms_ledger WHERE club=?',(account['club'],)).fetchone()[0]
         if opening+movement!=account['cash_cents'] or account['cash_cents']<account['reserve_cents']:raise ValueError('Cash/ledger/reserve reconciliation differs')

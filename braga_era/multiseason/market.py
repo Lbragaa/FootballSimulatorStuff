@@ -47,9 +47,12 @@ def debit(c,key,amount,dated,category,identity,evidence):
 def payroll_detail(c,period):
     year,month=map(int,period.split('-'));days=calendar.monthrange(year,month)[1]
     amounts={}
+    loans_by_player={}
+    for loan in c.execute('SELECT * FROM ms_loans ORDER BY player,starts'):loans_by_player.setdefault(loan['player'],[]).append(dict(loan))
     for row in c.execute('SELECT * FROM ms_contracts ORDER BY id'):
+        if row['status']=='annulled':continue
         start,end=date.fromisoformat(row['starts']),date.fromisoformat(row['ends'])
-        loans=[dict(r) for r in c.execute('SELECT * FROM ms_loans WHERE player=? ORDER BY starts',(row['player'],))]
+        loans=loans_by_player.get(row['player'],[])
         for d in range(1,days+1):
             day=date(year,month,d)
             if not start<=day<=end:continue
@@ -81,6 +84,9 @@ def next_obligation(c):
         events.append({'kind':'loan_return','kickoff':dated+' 00:00:00','loan':loan['id'],'dated':dated})
     for row in c.execute("SELECT * FROM ms_income WHERE status='proposed'"):
         events.append({'kind':'proposed_income','kickoff':row['due'],'income':row['id']})
+    from .offseason import next_obligation as economic_obligation
+    economic=economic_obligation(c)
+    if economic:events.append(economic)
     return min(events,key=lambda x:(x['kickoff'],encode(x))) if events else None
 
 
@@ -184,6 +190,8 @@ def apply(c,kind,a):
         attrs=json.loads(player['attributes_json']);attrs['club_key']=loan['owner']
         c.execute('UPDATE world_players SET club_key=?,attributes_json=? WHERE id=?',(loan['owner'],encode(attrs),loan['player']))
         c.execute("UPDATE ms_loans SET status='returned' WHERE id=?",(loan['id'],))
+        from .offseason import installed
+        if installed(c):c.execute("INSERT OR REPLACE INTO ms_registrations VALUES(?,?,?,'registered')",(int(a['dated'][:4]),loan['player'],loan['owner']))
         return {'loan':loan['id'],'returned_to':loan['owner'],'player':loan['player']}
     if kind=='pay_month':
         required(a,'period');year,month=map(int,a['period'].split('-'))

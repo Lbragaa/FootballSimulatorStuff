@@ -12,6 +12,9 @@ def apply(c,kind,a):
 
 
 def _apply(c,kind,a):
+    if kind in {'install_offseason','configure_offseason','run_offseason','settle_economics','release_player','exercise_loan_option','reconcile_registrations'}:
+        from . import offseason
+        return offseason.apply(c,kind,a)
     if kind=='commit_season_calendar':
         from .calendar import commit
         return commit(c,a)
@@ -149,6 +152,8 @@ def _apply(c,kind,a):
         missing=unpaid_periods(c,a['season'])
         if missing:raise ValueError('Contract-backed payroll periods not settled: '+','.join(missing))
         if c.execute("SELECT 1 FROM ms_income WHERE substr(due,1,4)=? AND status!='applied'",(str(a['season']),)).fetchone():raise ValueError('Proposed financial obligations remain pending')
+        from .offseason import installed
+        if installed(c) and c.execute("SELECT 1 FROM ms_obligations WHERE substr(due,1,4)=? AND status='pending'",(str(a['season']),)).fetchone():raise ValueError('Offseason financial or contractual obligations remain pending')
         snapshot={'editions':editions,'standings':{r['id']:standings(c,r['id']) for r in editions if r['format']=='league'},
                   'contracts':[dict(r) for r in c.execute('SELECT * FROM ms_contracts ORDER BY id')],
                   'finances':[dict(r) for r in c.execute('SELECT * FROM ms_accounts ORDER BY club')],

@@ -14,7 +14,7 @@ from braga_era.multiseason.calendar import POLICY as CALENDAR
 from tools.rehearse_domestic_season import KEY,plans
 
 
-def run(package,output):
+def run(package,output,*,with_offseason=False):
     start=time.perf_counter();package=Path(package);output=Path(output);target=output/'world'
     original={p.name:file_sha256(p) for p in package.iterdir()}
     if not target.exists():store.restore(package,target,KEY)
@@ -24,8 +24,20 @@ def run(package,output):
         protected=[tuple(r) for r in c.execute("SELECT key,home_goals,away_goals,winner,status FROM ms_fixtures WHERE edition LIKE '%:2028' ORDER BY key")]
         receipts=[tuple(r) for r in c.execute("SELECT fixture,result_sha256 FROM ms_executions WHERE fixture LIKE 'ms:%:2028:%' ORDER BY fixture")]
     command('prepare_season',season=2029)
-    command('propose_income',club='club:15',season=2029,monthly_cents=300000000,reason='Same explicit TEST incremental known-payroll scenario; not approved native revenue')
-    command('continue_modeled_registrations',season=2029);command('evolve',season=2029)
+    offseason=None
+    if with_offseason:
+        from braga_era.multiseason.offseason import POLICY as OFFSEASON,development_economics
+        with connect_read_only(target/'database.sqlite') as c:
+            originals=[json.loads(r[0]) for r in c.execute("SELECT args_json FROM ms_operations WHERE kind='configure_offseason'")]
+            original=next((r for r in originals if r['season']==2029),None)
+            economics=original['economics'] if original else development_economics(c,2029)
+        command('configure_offseason',season=2029,dated='2029-01-01',policy=OFFSEASON,economics=economics)
+        command('settle_economics',dated='2029-01-01 00:00:00')
+        offseason=command('run_offseason',season=2029,dated='2029-01-01',policy=OFFSEASON)
+        print('NONCANONICAL second offseason',offseason,flush=True)
+    else:
+        command('propose_income',club='club:15',season=2029,monthly_cents=300000000,reason='Same explicit TEST incremental known-payroll scenario; not approved native revenue')
+        command('continue_modeled_registrations',season=2029);command('evolve',season=2029)
     command('carry_discipline',season=2029,policy='carry-unserved-bans-reset-yellows-1')
     registered=command('register_divisions',season=2029,policy=POLICY,initial_b=[],initial_lower=[])
     moved=registered['divisions']
@@ -45,14 +57,16 @@ def run(package,output):
         assert receipts==[tuple(r) for r in c.execute("SELECT fixture,result_sha256 FROM ms_executions WHERE fixture LIKE 'ms:%:2028:%' ORDER BY fixture")]
         counts=dict(c.execute("SELECT edition,count(*) FROM ms_fixtures WHERE edition LIKE '%:2029' AND status='final' GROUP BY edition"))
         assert counts=={'LEAGUE:2029':20,'SERIE_B:2029':20,'LOWER:2029':8}
+    if with_offseason:command('reconcile_registrations',season=2029)
     report=store.validate(target,KEY)
     if not (output/'portable').exists():store.export(target,output/'portable',KEY)
     if not (output/'restored').exists():store.restore(output/'portable',output/'restored',KEY)
     assert original=={p.name:file_sha256(p) for p in package.iterdir()}
     result={'scope':'NONCANONICAL DEVELOPMENT TEST','new_clubs_created':False,'recorded_division_movement':True,'2029_completed_fixture_counts':counts,'all_2028_results_and_receipts_unchanged':True,'source_package_unchanged':True,'verification':report,'elapsed_seconds':time.perf_counter()-start,'complete_2029_ecosystem':False,'production_modified':False}
+    result['offseason']=offseason
     (output/'report.json').write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8');return result
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--package',type=Path,required=True);p.add_argument('--output',type=Path,required=True)
-    a=p.parse_args();print(json.dumps(run(a.package,a.output),indent=2))
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--package',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--offseason',action='store_true')
+    a=p.parse_args();print(json.dumps(run(a.package,a.output,with_offseason=a.offseason),indent=2))

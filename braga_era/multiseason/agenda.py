@@ -48,11 +48,13 @@ def advance(directory,key,*,request_id,max_groups=10):
         event=next_event(directory,key)
         if not event:break
         stem=f'{request_id}:{event["kind"]}:{event["kickoff"]}'
+        if event['kind']=='loan_return':stem+=':'+event['loan']
         if event['kind']=='competition_stage':stem+=':'+event['edition']+':'+event['action']
         def execute(kind,args):return run(directory,key,str(uuid5(NAMESPACE_URL,stem+':'+kind)),kind,args)
         if event['kind']=='payroll':execute('pay_month',{'period':event['period']})
         elif event['kind']=='loan_return':execute('return_loan',{'loan':event['loan'],'dated':event['dated']})
         elif event['kind']=='proposed_income':execute('receive_income',{'income':event['income']})
+        elif event['kind']=='economic_due':execute('settle_economics',{'dated':event['kickoff']})
         elif event['kind']=='competition_stage':execute(event['action'],event['args'])
         elif event['kind']=='calendar_blocker':raise ValueError(event['reason'])
         else:

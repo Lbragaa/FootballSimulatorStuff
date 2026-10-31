@@ -137,7 +137,10 @@ def validate(directory, test_key, *, replay=True):
             raise ValueError('Incomplete claimed group cannot be a validated checkpoint')
         inherited=fingerprints(parent)
         expected=fingerprints(c)
-        if set(expected)!=set(inherited)|TABLES:raise ValueError('Unexpected migration table inventory')
+        from . import offseason
+        extension=offseason.installed(c)
+        extra=offseason.TABLES if extension else frozenset()
+        if set(expected)!=set(inherited)|TABLES|extra:raise ValueError('Unexpected migration table inventory')
         for table in set(inherited)-MUTABLE_INHERITED:
             if expected[table]!=inherited[table]:raise ValueError('Protected historical table changed: '+table)
         for row in parent.execute('SELECT * FROM world_clubs'):
@@ -146,11 +149,17 @@ def validate(directory, test_key, *, replay=True):
         # A schema fingerprint is needed too: adding a trigger/index is not harmless.
         with closing(sqlite3.connect(':memory:')) as schema:
             schema.executescript(DDL)
+            if extension:schema.executescript(offseason.DDL)
             objects=lambda db:{r[0]:tuple(r) for r in db.execute("SELECT name,type,sql FROM sqlite_master WHERE sql IS NOT NULL AND name NOT LIKE 'sqlite_%'")}
             if objects(c)!={**objects(parent),**objects(schema)}:raise ValueError('Unexpected multi-season schema change')
         migration=c.execute('SELECT * FROM ms_migrations').fetchall()
-        if [tuple(r) for r in migration]!=[(VERSION,digest(DDL),marker['parent']['database_sha256'])]:raise ValueError('Migration commitment differs')
+        versions=[(VERSION,digest(DDL),marker['parent']['database_sha256'])]
+        if extension:versions.append((2,digest(offseason.DDL),marker['parent']['database_sha256']))
+        if sorted(tuple(r) for r in migration)!=versions:raise ValueError('Migration commitment differs')
         operations=[dict(r) for r in c.execute('SELECT * FROM ms_operations ORDER BY sequence')]
+        if extension:
+            installs=[r for r in operations if r['kind']=='install_offseason']
+            if len(installs)!=1 or json.loads(installs[0]['args_json'])!={'policy':offseason.POLICY} or json.loads(installs[0]['response_json']).get('ddl_sha256')!=digest(offseason.DDL):raise ValueError('Offseason schema lacks its exact committed migration')
         previous=digest(marker['decision'])
         for number,row in enumerate(operations,1):
             doc={'request_id':row['request_id'],'kind':row['kind'],'args':json.loads(row['args_json']),

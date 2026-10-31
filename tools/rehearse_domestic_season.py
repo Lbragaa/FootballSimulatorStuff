@@ -61,7 +61,7 @@ def plans(year,include_continental=False):
     return calendar,international
 
 
-def run(source_path,output,*,seed='domestic-year-fixed-before-simulation-1',include_continental=False):
+def run(source_path,output,*,seed='domestic-year-fixed-before-simulation-1',include_continental=False,with_offseason=False):
     start=time.perf_counter();source_path=Path(source_path);output=Path(output)
     with connect_read_only(source_path) as c:
         if c.execute('SELECT scope FROM world_info').fetchone()[0]!='NONCANONICAL DEVELOPMENT TEST':raise ValueError('Only a disconnected NONCANONICAL completed 2027 source is permitted')
@@ -75,8 +75,9 @@ def run(source_path,output,*,seed='domestic-year-fixed-before-simulation-1',incl
         if marker['seed']!=seed or marker['parent']['database_sha256']!=parent_hash:raise ValueError('Cannot replace an existing rehearsal parent or seed')
     def command(kind,**args):return store.run(target,KEY,str(uuid5(NAMESPACE_URL,'domestic-year-1:'+seed+':'+kind+':'+digest(args))),kind,args)
     command('prepare_season',season=2028);command('open_recorded_account',club='club:15')
-    command('propose_income',club='club:15',season=2028,monthly_cents=300000000,reason='Hypothetical TEST incremental operating-income scenario for known contracts; not real revenue, owner capital or approved finances')
-    command('evolve',season=2028);command('continue_modeled_registrations',season=2028)
+    if not with_offseason:
+        command('propose_income',club='club:15',season=2028,monthly_cents=300000000,reason='Hypothetical TEST incremental operating-income scenario for known contracts; not real revenue, owner capital or approved finances')
+        command('evolve',season=2028);command('continue_modeled_registrations',season=2028)
     command('carry_discipline',season=2028,policy='carry-unserved-bans-reset-yellows-1')
     def register(prefix,n):return [command('register_fictional_club',name=f'Fictional {prefix} {i:03}',strength=60+i%15,dated='2028-01-01')['club'] for i in range(n)]
     pool=register('Domestic State Entrant',108);access=register('Initial Access Entrant',8);b=register('Initial B Entrant',12);lower=register('Lower Path Entrant',8)
@@ -90,6 +91,17 @@ def run(source_path,output,*,seed='domestic-year-fixed-before-simulation-1',incl
             national[country]={**scenario('Explicit foreign entry-order scenario; missing historical national results remain unknown'),'clubs':clubs}
         with connect_read_only(target/'database.sqlite') as c:champions=[{'competition':comp,'club':c.execute('SELECT club_key FROM world_champions WHERE competition=?',(comp,)).fetchone()[0],'evidence':{'type':'legacy_champion'}} for comp in ('LIB','SULA')]
         command('commit_continental_entry',season=2028,policy=ENTRY,national_evidence=national,champions=champions)
+    offseason=None
+    if with_offseason:
+        from braga_era.multiseason.offseason import POLICY as OFFSEASON,development_economics
+        command('install_offseason',policy=OFFSEASON)
+        with connect_read_only(target/'database.sqlite') as c:
+            original=c.execute("SELECT args_json FROM ms_operations WHERE kind='configure_offseason' ORDER BY sequence LIMIT 1").fetchone()
+            economics=json.loads(original[0])['economics'] if original else development_economics(c,2028)
+        command('configure_offseason',season=2028,dated='2028-01-01',policy=OFFSEASON,economics=economics)
+        command('settle_economics',dated='2028-01-01 00:00:00')
+        offseason=command('run_offseason',season=2028,dated='2028-01-01',policy=OFFSEASON)
+        print('NONCANONICAL autonomous offseason',offseason,flush=True)
     command('propose_pool',id='initial-access',season=2028,competition='ACCESS',clubs=access,reason='Explicit prospective 2028 transition, not fabricated 2027 Série B results')
     for key in access:command('qualify',season=2028,competition='ACCESS',club=key,source={'type':'proposed_pool','pool':'initial-access'})
     command('edition',competition='ACCESS',season=2028,format='qualification',clubs=access,rules={'legs':2,'final_legs':1,'neutral_final':False})
@@ -133,6 +145,7 @@ def run(source_path,output,*,seed='domestic-year-fixed-before-simulation-1',incl
         print('verified engine fixtures persisted',count,'next kind',result['next_event']['kind'] if result['next_event'] else None,flush=True)
     else:raise ValueError('Season exceeded bounded agenda runs')
     required_competitions=[key.rsplit(':',1)[0] for key in calendar]
+    if with_offseason:command('reconcile_registrations',season=2028)
     command('archive_season',season=2028,required_competitions=required_competitions)
     verification=store.validate(target,KEY)
     package=output/'portable'
@@ -147,11 +160,14 @@ def run(source_path,output,*,seed='domestic-year-fixed-before-simulation-1',incl
     if sum(counts.values())!=expected or any(e['state']!='completed' for e in championships):raise ValueError('Incomplete declared competition inventory')
     report={'scope':'NONCANONICAL DEVELOPMENT TEST','source_unchanged':file_sha256(source_path)==parent_hash,'fixture_counts':counts,'competitions':championships,'verification':verification,'elapsed_seconds':time.perf_counter()-start,'domestic_and_continental_integrated':include_continental,'complete_all_competition_2028':False,'blockers':(['Remaining non-RJ state calendars not yet included'] if include_continental else ['Continental and remaining state calendars not yet included in this scoped domestic run'])+['Complete all-club finances/offseason and production season-aware authority remain unimplemented'],'production_modified':False}
     report['reconciliation']=reconciliation
+    report['offseason']=offseason
+    if with_offseason:
+        report['blockers']=['Remaining non-RJ state calendars and full federation qualification remain incomplete','Offseason/economic assumptions require calibration and commissioner policy acceptance','Production season-transition authority and season-aware phone bridge are not implemented']
     if not report['source_unchanged']:raise ValueError('Disconnected source changed')
     output.mkdir(parents=True,exist_ok=True);(output/'report.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
     return report
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--db',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--continental',action='store_true')
-    a=p.parse_args();print(json.dumps(run(a.db,a.output,include_continental=a.continental),indent=2))
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--db',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--continental',action='store_true');p.add_argument('--offseason',action='store_true')
+    a=p.parse_args();print(json.dumps(run(a.db,a.output,include_continental=a.continental,with_offseason=a.offseason,seed='offseason-integrated-fixed-1' if a.offseason else 'domestic-year-fixed-before-simulation-1'),indent=2))
