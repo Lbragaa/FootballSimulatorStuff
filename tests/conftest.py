@@ -22,9 +22,11 @@ def isolated_registry(monkeypatch, tmp_path):
 
 
 @pytest.fixture(autouse=True)
-def discard_ci_disposable_copies(tmp_path,tmp_path_factory):
+def discard_disposable_copies(tmp_path,tmp_path_factory):
     yield
-    if os.environ.get('BRAGA_DISCARD_TEST_COPIES')!='1' or not tmp_path.exists():return
+    # Local full suites otherwise accumulate tens of GB of database clones.
+    # Set BRAGA_DISCARD_TEST_COPIES=0 only for an intentional debugging session.
+    if os.environ.get('BRAGA_DISCARD_TEST_COPIES','1')!='1' or not tmp_path.exists():return
     target=tmp_path.resolve();base=tmp_path_factory.getbasetemp().resolve()
     if target.parent!=base or not target.name.startswith('test_'):raise ValueError('Unsafe pytest cleanup target')
     gc.collect()

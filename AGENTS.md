@@ -1,5 +1,21 @@
 # THE BRAGA ERA — durable engineering instructions
 
+## Local storage budget
+
+- Do not accumulate rehearsal databases under `.codex/visualizations`, `.tmp`,
+  or `C:\Users\luanc\BragaEra`. Local pytest case copies are disposable and now
+  clean up by default; use `BRAGA_DISCARD_TEST_COPIES=0` only while debugging,
+  then remove that explicitly owned test root. Prefer CI for full matrix runs.
+- Important prior DEV checkpoints were compressed and verified byte-for-byte in
+  ignored `output/development-archives/`; `archive-index.json` records member
+  SHA256s and former locations. Preserve these compact copies. Extract only a
+  needed checkpoint into a fresh temporary directory and clean it up afterward;
+  never retain simultaneous working/exported/restored duplicates by default.
+- Preserve `C:\Users\luanc\BragaEra\career` and `runtime`, the exact original
+  handoff/accepted 046 artifacts, key/credential stores and official history.
+  Never upload raw career databases, authority registries or keys to GitHub.
+  GitHub holds source, safe reports and CI evidence, not the private live save.
+
 ## Multi-season execution prototype
 
 - `autonomous-offseason-development-1` is an opt-in TEST extension installed by
