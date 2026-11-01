@@ -28,7 +28,8 @@ def policy():
                      "requires_champion": True}
                     for k, n in (("LEAGUE", 380), ("CDB", 61), ("LIB", 125),
                                  ("SULA", 141), ("CARIOCA", 5))]},
-            "migration": store.proposed_policy(), "offseason": POLICY,
+            "migration": store.proposed_policy(), "migration_schema_sha256": digest(store.DDL),
+            "offseason": POLICY,
             "execution_profile": "DEV-MULTISEASON-2", "test_only": True,
             "production_acceptance_enabled": False}
 
@@ -129,6 +130,7 @@ def authorization(manifest):
             'parent_checkpoint': manifest['immediate_parent_sha256'],
             'policy_sha256': digest(manifest['season_policy']),
             'career_seed_sha256': manifest['career_seed_sha256'],
+            'automatic_transition_allowed': False,
             'successor_acceptance_required': True}
 
 

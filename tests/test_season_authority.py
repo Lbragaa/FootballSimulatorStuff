@@ -21,6 +21,12 @@ from test_bridge import Transport, REQUESTERS
 KEY = b'TEST SEASON BOUNDARY SIGNER ONLY!!' * 2
 
 
+def test_policy_commits_migration_schema_and_disables_production():
+    policy = seasons.policy()
+    assert policy['migration_schema_sha256'] == digest(store.DDL)
+    assert policy['test_only'] and not policy['production_acceptance_enabled']
+
+
 @pytest.fixture(scope='module')
 def completed(accepted_path, tmp_path_factory):
     root = tmp_path_factory.mktemp('season-authority')
@@ -188,6 +194,7 @@ def test_bridge_signed_read_retry_with_no_controls(career, tmp_path):
     issue = transport.add(request)
     worker.poll()
     result = transport.result(issue)
+    assert worker.verify_response(result)
     assert result['response']['status'] == 'completed'
     assert result['response']['result']['season_status']['phase'] == 'transition_approval_required'
     assert not result['response']['result']['season_status']['automatic_transition_allowed']

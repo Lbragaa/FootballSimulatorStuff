@@ -10,7 +10,7 @@ PR #11 remains dependent on PR #10.
 
 `braga_era.season_authority.prepare` authenticates the actual current accepted
 parent through `lineage.parent_info`. A closed proposed policy binds recorded
-2027 closure, 2028 migration, engine/model policies, offseason policy, exact
+2027 closure, 2028 migration and its exact DDL hash, engine/model policies, offseason policy, exact
 database and checkpoint hashes, authority epoch, next generation and the
 **existing** career seed hash. No seed argument exists. All covered tournaments
 must be complete, administrative obligations settled and stored narration fully
@@ -62,6 +62,28 @@ to demonstrate phone narration of every 2027 match. Tests then cover exact
 approval, interrupted transactions, claim fencing, seed/policy rejection,
 unrevealed narration, corrupted parents, TEST migration and independent restore,
 and a protocol-2 worker command/reply retry with no controls enabled.
+
+Local verification passed: eight authority integration tests in 934.04s, one
+additional exact-schema policy check, 41 episode/protocol/automatic regressions
+and 29 lifecycle/worker regressions. These sets contain 79 passing tests. Local
+execution used Python 3.14.3 with existing pytest 9.1.1 libraries because the
+development venv's external Python 3.12 base could not import `enum`; neither
+that base installation nor the production runtime was modified. Windows/Linux
+Python 3.11–3.13 verification runs through the existing CI matrix; new-head CI
+is not claimed green while it is still running.
+
+The first integration attempt correctly failed because the fixture assumed
+`world_cursors` existed for undelivered matches. Post-delivery fixture setup now
+uses each actual `world_receipts` result hash and its final recorded event
+sequence. The closure/reveal guard was not weakened, and both attempts used the
+same precommitted TEST career seed. The successful run verifies all 217 forward
+TEST fixtures through the existing lineage path before the transition tests.
+This 934s includes that parent construction and repeated independent replay;
+it is a test lifecycle duration, not an episode/rolling-performance benchmark.
+
+Both runs' raw test databases were disposable and cleaned up. The established
+compressed development archives were neither extracted nor changed. No new
+rehearsal databases are kept in visualizations, `.tmp` or the live career tree.
 
 This is the first coherent authority/bridge boundary, not the full requested
 2028-through-2029 authority rehearsal. Successor registration, exact-hash season
