@@ -71,6 +71,15 @@ is no new whole-season or rolling-performance claim. Previous verified 1,341/
 312/2029 artifacts remain immutable in compressed local development archives.
 No full rehearsal databases are retained or uploaded to GitHub.
 
+Two concrete incompatibilities prevent simply accepting the DEV directory with
+the old production profile: the existing archive format has a 256,000,000-byte
+expanded bound, while the verified offseason 2028 database alone is 303,788,032
+bytes; and current gameplay navigation/standings still use 2027 world fixtures
+and league membership. Both need a new reviewed profile and edition-aware
+integration, not relaxed validation or a larger unversioned size limit. The
+existing `results.Projection` already reads multiseason fixtures/editions and
+should be reused for season-aware reporting.
+
 ## Remaining activation work and decisions
 
 1. Register and independently audit a season-capable continuation profile and
@@ -90,3 +99,16 @@ No full rehearsal databases are retained or uploaded to GitHub.
 6. After all gates and rehearsals pass, obtain separate production migration,
    policy and exact transition authorization/acceptance. No such authorization
    is inferred here from standing 2027 gameplay delegation.
+
+Material policy choices remain unapproved:
+
+| Decision | Alternatives and consequences | Recommendation for review |
+| --- | --- | --- |
+| Missing 2027 access evidence | Documented administrative berths; or prospective ACCESS competition. Neither supplies historical Série B scores. | Choose an explicit one-time transition input, then use recorded division results thereafter. |
+| Non-RJ cup qualification | Extend state competition coverage; or evidenced federation allocation with explicit gaps. | Bound the required federations and source each entrant; block unsupported entry routes. |
+| Club economics | Recorded accounts only (unknown clubs cannot spend); or separately approved modeled opening finances/revenue. | Calibrate club-specific forward scenarios and liabilities; preserve Vasco reserve and authority restrictions. |
+| Unknown ages/youth | Freeze uncertain development; or approve explicit modeled age and academy policies. | Review longitudinal population and quality distributions before approving the model. |
+| Guaranteed releases | Continue refusing them; or approve a compensation/liability mechanism. | Keep refusal until compensation is implemented, funded and tested. |
+| Market timing | Existing bounded January clearing; or daily windows with negotiations and competing offers over time. | Complete and calibrate the richer window before describing it as a full transfer market. |
+
+None of these recommendations is a commissioner decision or execution authority.

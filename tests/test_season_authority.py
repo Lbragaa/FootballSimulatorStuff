@@ -39,7 +39,7 @@ def completed(accepted_path, tmp_path_factory):
         # Fixture starts AFTER existing narration has been delivered. Seal the
         # exact final cursors, never modify the checkpoint/results or create scores.
         with connect_read_only(target/'payload/database.sqlite') as db:
-            cursors = [tuple(r) for r in db.execute('SELECT * FROM world_cursors')]
+            cursors = [tuple(r) for r in db.execute('SELECT fixture_key,result_sha256 FROM world_receipts')]
             maxima = dict(db.execute('SELECT fixture_key,max(sequence) FROM world_events GROUP BY fixture_key'))
         with lineage.access(reg, KEY, True) as (c, trusted):
             c.executemany('INSERT OR REPLACE INTO cursors VALUES(?,?,?)',
@@ -49,6 +49,8 @@ def completed(accepted_path, tmp_path_factory):
                               parent_hash=file_sha256(target/'payload/database.sqlite'))
     finally:
         # This module owns precisely this temporary subtree; no retained DBs.
+        if root.resolve().parent != tmp_path_factory.getbasetemp().resolve() or not root.name.startswith('season-authority'):
+            raise ValueError('Unsafe season authority test cleanup target')
         shutil.rmtree(root)
 
 
