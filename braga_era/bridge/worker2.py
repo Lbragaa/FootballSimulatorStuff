@@ -92,6 +92,9 @@ class Worker2(Worker):
 
     def dispatch(self, c, row, request):
         name, args = request["command"], request["args"]
+        if name == 'season_status':
+            return {'season_status': self.career.season_boundary(),
+                    'accepted_checkpoint': self.career.identity()['checkpoint']}
         if name == 'historical_results':
             from .historical import HistoricalResults
             return {'historical_results': HistoricalResults(self.career).query(args),

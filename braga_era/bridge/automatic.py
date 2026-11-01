@@ -127,6 +127,12 @@ class Automatic:
                 if self.career.identity()["checkpoint"] != request["expected_checkpoint"]:
                     raise ValueError("Stale gameplay parent")
                 events = self.career.play("next")["events"]
+                if not events and hasattr(self.career, 'season_boundary'):
+                    response = {"phase": "season_boundary", "simulation_advanced": False,
+                                "season_status": self.career.season_boundary()}
+                    self._save(path, {"request_id": request["request_id"], "request_sha256": digest(request),
+                                     "head_before": request["expected_checkpoint"], "kind": "season_boundary", "response": response})
+                    return response
                 narration = [e for e in events if e.get("kind") == "narration"]
                 op = {"request_id": request["request_id"], "request_sha256": digest(request),
                       "head_before": request["expected_checkpoint"], "response": None,

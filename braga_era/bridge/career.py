@@ -111,6 +111,10 @@ class Career:
             )
         }
 
+    def season_boundary(self):
+        from ..season_authority import inspect
+        return inspect(self)
+
     def preview(self, fixture, news=False):
         v = self.play("preview", fixture)
         if "lineups_available" in v:

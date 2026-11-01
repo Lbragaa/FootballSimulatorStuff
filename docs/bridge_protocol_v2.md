@@ -1,5 +1,22 @@
 # Private phone bridge protocol 2
 
+## Season boundary (PR #11 development only)
+
+`season_status` has `{}` arguments and read scope. Its signed response contains
+`season_status` plus the current `accepted_checkpoint`, using the unchanged
+identity, UUID, sequence and inbox/outbox rules. It reads the actual registered
+parent and signed narration cursors; no database migration, cursor consumption,
+seed allocation or automatic-mode change occurs. Closure counts contain no
+scores or champion names. Missing history and unrevealed events remain blockers.
+
+With no pending agenda, `play_next_episode` returns `episode_type=season_boundary`
+and an ordered `season_boundary` section. The legacy `continue_gameplay` path
+returns `phase=season_boundary` instead of attempting an empty batch. Replies are
+durable and exact retries preserve them. Standing 2027 delegation never approves
+a new policy. No remote season approval/execute/accept command is introduced.
+The current multiseason executor remains nonpromotable and TEST-only; see
+[season authority implementation](season_authority_report.md).
+
 ## Historical results and episode reporting (0.12.0)
 
 `historical_results` uses read scope and optional closed arguments documented in

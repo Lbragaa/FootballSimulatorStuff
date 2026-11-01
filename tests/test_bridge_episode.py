@@ -64,6 +64,27 @@ def world(controls, tmp_path, monkeypatch):
 def request(world): return req(world.auto.career,'play_next_episode',2)
 
 
+def test_season_boundary_is_durable_and_never_advances(world, monkeypatch):
+    for fixture in world.fixtures:
+        fixture['status'] = 'final'
+        world.s['revealed'].append(fixture['key'])
+    boundary = {'phase': 'transition_approval_required', 'automatic_transition_allowed': False,
+                'production_transition_available': False}
+    monkeypatch.setattr(world.auto.career, 'season_boundary', lambda: boundary, raising=False)
+    r = request(world)
+    result = world.ep.run(r)
+    assert result['episode_type'] == 'season_boundary'
+    assert result['presentation'][0] == {'section': 'season_boundary', 'data': boundary}
+    assert result == world.ep.run(r)
+    assert not world.batches
+    # The legacy automatic entry point must stop at the same boundary too.
+    r = req(world.auto.career, 'continue_gameplay', 3)
+    result = Automatic.play(world.auto, r)
+    assert result['phase'] == 'season_boundary' and not result['simulation_advanced']
+    assert result == Automatic.play(world.auto, r)
+    assert not world.batches
+
+
 def test_one_request_multiple_dates_full_match_and_round(world):
     r=request(world); v=world.ep.run(r)
     assert len(world.batches)==4
@@ -112,7 +133,7 @@ def test_milestone_only_after_all_legs_and_not_repeated(world):
     assert report['ties'][0]['aggregate']==[4,0]
     assert len(report['ties'][0]['legs'])==4
     v2=world.ep.run(req(world.auto.career,'play_next_episode',3))
-    assert v2['episode_type']=='season_complete'
+    assert v2['episode_type']=='season_boundary'
     assert not any(s['section']=='milestone_report' for s in v2['presentation'])
 
 

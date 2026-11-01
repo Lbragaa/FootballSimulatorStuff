@@ -153,6 +153,7 @@
             "revealed_paid_periods": {},
             "review": {},
             "scope": {},
+            "season_status": {},
             "seed_policy": {},
             "simulation_advanced": {},
             "source_page_sha256s": {},

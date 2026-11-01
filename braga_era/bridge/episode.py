@@ -200,7 +200,7 @@ class Episode:
                 # Ordered sections survive canonical JSON sorting of object keys.
                 sections = list(op["presentation"])
                 if report:
-                    sections.append({"section": "milestone_report", "data": report})
+                    sections.append({"section": "season_boundary" if reason == "season_boundary" else "milestone_report", "data": report})
                 if op["target_done"] and op["round"]:
                     state = self.state()
                     round_rows = [f for f in state["fixtures"] if f["competition"] == "LEAGUE" and f["stage"] == op["round"]]
@@ -323,6 +323,8 @@ class Episode:
                 if any(VASCO in (e.get("home"), e.get("away")) and e["key"] != op["target"] for e in events):
                     return "vasco_match", None
             if not events:
+                if hasattr(self.career, 'season_boundary'):
+                    return "season_boundary", self.career.season_boundary()
                 return "season_complete", None
             span = (datetime.fromisoformat(events[0]["kickoff"]).date() - datetime.fromisoformat(op["start"]).date()).days
             if (span > MAX_DAYS or op["batches"] >= MAX_BATCHES or len(op["consumed"]) >= MAX_FIXTURES

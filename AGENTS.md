@@ -18,6 +18,16 @@
 
 ## Multi-season execution prototype
 
+- `season_authority` uses the existing lineage registry/signing key and shared
+  parent claims for exact signed season-policy review. It currently authorizes
+  only TEST migration rehearsals, never production successors. No standing 2027
+  automatic grant approves a season transition. See `docs/season_authority_report.md`.
+  `season_status` is read-only; final reviews require authenticated closure and
+  all stored narration revealed. Empty episodes stop at `season_boundary`.
+  Preserve old accepted profiles/replies; do not relabel DEV candidates or bypass
+  exact successor acceptance. Pending TEST review claims deliberately fence other
+  writers and accepted-head backup until a supported completion path exists.
+
 - `autonomous-offseason-development-1` is an opt-in TEST extension installed by
   signed `install_offseason` migration 2. Its six extra tables/indexes must match
   the exact extension DDL and installation receipt. Never change migration 1 or

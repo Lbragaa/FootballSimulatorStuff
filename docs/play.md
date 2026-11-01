@@ -6,6 +6,14 @@ review/blocker; do not invent 2028 fixtures or send an unsupported transition
 command. Existing continuation and historical retrieval remain available under
 the installed profile. See [development status](multiseason_execution_report.md).
 
+In the PR #11 development implementation, `season_status` is a protocol-2 read
+command with `{}` arguments. It reports authenticated closure counts, pending
+obligations, unrevealed narration and the separate transition-approval boundary.
+It works without automatic mode or control configuration. Ordinary continuation
+stops at `season_boundary` when the agenda ends; it cannot activate 2028. These
+changes are **not installed in the production worker**. A proposed TEST policy
+approval is not successor acceptance or authorization for production migration.
+
 The PC must be online, and its Windows worker starts at login. Codex may be
 closed. Use normal iPhone ChatGPT with the GitHub connection enabled for private
 `Lbragaa/BragaEraCommandBridge`. No routine terminal, files, GitHub-mobile
