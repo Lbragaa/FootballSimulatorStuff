@@ -2,7 +2,10 @@
 
 from copy import deepcopy
 import json
+import re
 from . import protocol as v1
+
+FIXTURE=re.compile(r'(?:league:[0-9]{1,6}|(?:lib|sula|cdb):[A-Za-z0-9:_-]{1,64}|ms:[A-Za-z0-9:_-]{1,128})\Z')
 
 PROTOCOL = "braga-bridge-2"
 COMMANDS = {
@@ -13,6 +16,11 @@ COMMANDS = {
     "play_next_episode": {},
     "historical_results": {},
     "season_status": {},
+    "prepare_season_transition": {"policy":"season_policy"},
+    "inspect_season_transition": {"preparation_id":"uuid"},
+    "request_authorize_season": {"preparation_id":"uuid","manifest_sha256":"hash"},
+    "request_execute_season": {"preparation_id":"uuid","manifest_sha256":"hash"},
+    "request_accept_season": {"preparation_id":"uuid","checkpoint_sha256":"hash"},
     "advance_next_batch": {},
     "play_prepared_batch": {"preparation_id": "uuid", "manifest_sha256": "hash"},
     "prepare_control_batch": {"until": "boundary"},
@@ -49,7 +57,12 @@ def parse(body):
         # instead of silently disappearing. Invalid headers stay unclaimable.
         return request
     if isinstance(name, str) and name in v1.COMMANDS:
-        v1.parse(json.dumps({**request, "protocol": v1.PROTOCOL}))
+        args=request.get('args',{})
+        fixture=args.get('fixture') if isinstance(args,dict) else None
+        if isinstance(fixture,str) and fixture.startswith('ms:'):
+            if not FIXTURE.fullmatch(fixture):raise ValueError('Invalid edition fixture identity')
+            v1.parse(json.dumps({**request, "protocol": v1.PROTOCOL,'args':{**args,'fixture':'league:1'}}))
+        else:v1.parse(json.dumps({**request, "protocol": v1.PROTOCOL}))
         return request
     spec = COMMANDS.get(name) if isinstance(name, str) else None
     if spec is None or not isinstance(request.get("args"), dict) or set(request["args"]) != set(spec):
@@ -60,7 +73,7 @@ def parse(body):
         value = request["args"][key]
         if kind == "fixtures":
             if (not isinstance(value, list) or len(value) > 16
-                or any(not isinstance(x, str) or not v1.FIXTURE.fullmatch(x) for x in value)
+                or any(not isinstance(x, str) or not FIXTURE.fullmatch(x) for x in value)
                 or len(set(value)) != len(value)):
                 raise ValueError("Bounded unique fixture selection required")
         elif kind == "uuid":
@@ -74,6 +87,8 @@ def parse(body):
                                  "command": "prepare_batch", "args": {"until": value}}))
         elif kind == "auto_consent" and value != "ENABLE_AUTOMATIC_GAMEPLAY":
             raise ValueError("Explicit career-specific automatic mode opt-in required")
+        elif kind == 'season_policy' and value!='supported-ecosystem-proposal-1':
+            raise ValueError('Explicit registered season policy required')
     if name == "roundup" and (not request["args"]["fixtures"]
                              or set(request["args"]["fixtures"]) & set(request["args"]["detailed"])):
         raise ValueError("Explicit non-overlapping summary/detail selection required")
@@ -90,14 +105,17 @@ def schema():
     base = deepcopy(v1.schema())
     for branch in base["oneOf"]:
         branch["properties"]["protocol"] = {"const": PROTOCOL}
+        fixture=branch['properties'].get('args',{}).get('properties',{}).get('fixture')
+        if fixture is not None:fixture['pattern']='^'+FIXTURE.pattern.replace('\\Z','$')
     example = deepcopy(base["oneOf"][0])
     types = {
+        'season_policy':{'const':'supported-ecosystem-proposal-1'},
         "auto_consent": {"const": "ENABLE_AUTOMATIC_GAMEPLAY"},
         "boundary": {"type": "string", "pattern": r"^2027-\d{2}-\d{2} 23:59$"},
         "uuid": {"type": "string", "format": "uuid"},
         "hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
         "fixtures": {"type": "array", "maxItems": 16, "uniqueItems": True,
-                     "items": {"type": "string", "pattern": "^" + v1.FIXTURE.pattern.replace("\\Z", "$")}},
+                     "items": {"type": "string", "pattern": "^" + FIXTURE.pattern.replace("\\Z", "$")}},
     }
     for name, spec in COMMANDS.items():
         branch = deepcopy(example)

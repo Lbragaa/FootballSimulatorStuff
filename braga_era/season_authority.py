@@ -81,9 +81,9 @@ def inspect(career):
                 'phase': ('authorized_test_candidate_only' if approved else 'transition_approval_required')
                          if report['ready_to_finalize'] else 'season_not_closed',
                 'policy_sha256': digest(policy()), 'test_policy_authorized': approved,
-                'automatic_transition_allowed': False, 'production_transition_available': False,
+                'automatic_transition_allowed': False, 'production_transition_available': True,
                 'blockers': ([] if report['ready_to_finalize'] else report['blockers']) +
-                    ['production_season_profile_not_registered'],
+                    ['separate_registered_season_policy_approval_required'],
                 'next_action': 'Review a separate exact-parent season policy; existing automatic gameplay grants do not authorize a new season.'}
         if report['ready_to_finalize']:
             from .payroll import financial_statement

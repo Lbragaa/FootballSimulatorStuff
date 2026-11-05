@@ -12,6 +12,9 @@ def apply(c,kind,a):
 
 
 def _apply(c,kind,a):
+    if kind=='declare_club_country':
+        from .continental_entry import declare_country
+        return declare_country(c,a)
     if kind in {'install_offseason','configure_offseason','run_offseason','settle_economics','release_player','exercise_loan_option','reconcile_registrations'}:
         from . import offseason
         return offseason.apply(c,kind,a)
@@ -30,7 +33,7 @@ def _apply(c,kind,a):
         from .agenda import event_from_connection,completed_groups
         row=c.execute('SELECT * FROM ms_runs WHERE id=?',(a['id'],)).fetchone()
         if not row or row['response_json'] is not None:raise ValueError('Missing active run')
-        response={'test_only':True,'groups_completed':completed_groups(c,a['id']),'next_event':event_from_connection(c)}
+        response={'test_only':bool(c.execute('SELECT test_only FROM ms_meta').fetchone()[0]),'groups_completed':completed_groups(c,a['id']),'next_event':event_from_connection(c)}
         c.execute('UPDATE ms_runs SET response_json=? WHERE id=?',(encode(response),a['id']))
         return response
     if kind=='prepare_season':

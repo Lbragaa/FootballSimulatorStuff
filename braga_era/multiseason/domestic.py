@@ -10,6 +10,7 @@ from ..history import digest,canonical_json as encode
 from .competitions import required,club,brazilian,insert_fixture,standings
 
 POLICY='domestic-ecosystem-development-1'
+CONTINUITY_POLICY='domestic-cup-continuity-proposal-2'
 STATES=('SP','RJ','MG','RS','PR','SC','GO','CE','BA','PE','PA','RN','AL','MA','PB','PI','AM','SE','DF','MT','MS','ES','RO','TO','AC','AP','RR')
 STATE_COMPETITIONS={f'STATE_{uf}' for uf in STATES if uf!='RJ'}
 FORMATS={'cdb_128','carioca_12','state_knockout','domestic_supercup'}
@@ -18,7 +19,7 @@ CDB_LEGS={stage:2 if 5<=stage<=8 else 1 for stage in CDB_SIZES}
 CDB_MATCHES=sum(CDB_SIZES[s]//2*CDB_LEGS[s] for s in CDB_SIZES)
 
 
-def evidence(c,season,competition,key,source):
+def evidence(c,season,competition,key,source,policy=POLICY):
     """Validate future entry, retaining unknown 2027 state/B facts as proposals."""
     club(c,key)
     if competition!='RECOPA' and not brazilian(c,key):raise ValueError('Recorded or explicit modeled Brazilian club required')
@@ -28,6 +29,16 @@ def evidence(c,season,competition,key,source):
         required(source,'type id reason')
         if season!=2028 or not all(isinstance(source[x],str) and 3<=len(source[x])<=1000 for x in ('id','reason')):
             raise ValueError('Only the initial 2028 data gap accepts an explicit administrative scenario')
+    elif kind=='prior_cup_repeat_berth':
+        required(source,'type edition position')
+        if policy!=CONTINUITY_POLICY or competition!='CDB' or season<2029:
+            raise ValueError('Explicit repeat cup entry policy required')
+        row=c.execute('SELECT * FROM ms_editions WHERE id=?',(source['edition'],)).fetchone()
+        if not row or row['season']!=season-1 or row['competition']!='CDB' or row['state']!='completed':
+            raise ValueError('Recorded prior cup completion required')
+        ranking=final_order(c,row)
+        if type(source['position']) is not int or not 1<=source['position']<=len(ranking) or ranking[source['position']-1]!=key:
+            raise ValueError('Repeat cup berth does not match recorded sporting order')
     elif kind=='current_serie_a':
         required(source,'type edition')
         if source['edition']!=f'LEAGUE:{season}' or not c.execute('SELECT 1 FROM ms_entries WHERE edition=? AND club=?',(source['edition'],key)).fetchone():
@@ -50,7 +61,7 @@ def evidence(c,season,competition,key,source):
 
 def create(c,a):
     required(a,'season competition policy entrants')
-    if a['policy']!=POLICY or not c.execute("SELECT 1 FROM ms_seasons WHERE season=? AND state='preparing'",(a['season'],)).fetchone():raise ValueError('Preparing season and versioned domestic proposal required')
+    if a['policy'] not in {POLICY,CONTINUITY_POLICY} or not c.execute("SELECT 1 FROM ms_seasons WHERE season=? AND state='preparing'",(a['season'],)).fetchone():raise ValueError('Preparing season and versioned domestic proposal required')
     comp=a['competition'];entrants=a['entrants']
     if comp=='CDB':format='cdb_128';n=128
     elif comp=='CARIOCA':format='carioca_12';n=12
@@ -62,7 +73,7 @@ def create(c,a):
     for entry in entrants:
         required(entry,'club phase source')
         if type(entry['phase']) is not int:raise ValueError('Integer entry phase required')
-        evidence(c,a['season'],comp,entry['club'],entry['source']);keys.append(entry['club'])
+        evidence(c,a['season'],comp,entry['club'],entry['source'],a['policy']);keys.append(entry['club'])
     if len(set(keys))!=n:raise ValueError('Duplicate domestic club identity')
     if comp=='CARIOCA' or comp in STATE_COMPETITIONS:
         for key in keys:
@@ -80,6 +91,7 @@ def create(c,a):
                 if e['phase']==3 and (prior not in {'LOWER','NATIONAL_QUALIFIER','REGION_NE','REGION_N','REGION_CO','REGION_SS'} or e['source']['position']!=1):raise ValueError('CDB third-phase route requires an actual supported regional/access champion')
     elif any(e['phase']!=1 for e in entrants):raise ValueError('State entrants must begin in the group/first stage')
     edition=f'{comp}:{a["season"]}';rules={'legs':2,'final_legs':1,'neutral_final':True,'policy':POLICY}
+    if a['policy']==CONTINUITY_POLICY:rules['entry_policy']=CONTINUITY_POLICY
     c.execute('INSERT INTO ms_editions VALUES(?,?,?,?,?,?,NULL)',(edition,comp,a['season'],format,encode(rules),'planned'))
     groups=None
     if comp=='CARIOCA':
@@ -87,11 +99,11 @@ def create(c,a):
         # Two balanced pots/groups, immutable in entries and signed create receipt.
         groups={'A':ordered[::2],'B':ordered[1::2]}
     for e in sorted(entrants,key=lambda e:e['club']):
-        source={**e,'policy':POLICY}
+        source={**e,'policy':a['policy']}
         if groups:source['pool']=next(g for g in groups if e['club'] in groups[g])
         c.execute('INSERT INTO ms_qualifications VALUES(?,?,?,?,?)',(f'{edition}:{e["club"]}',a['season'],comp,e['club'],encode(source)))
         c.execute('INSERT INTO ms_entries VALUES(?,?,?,?)',(edition,e['club'],'domestic_entry',encode(source)))
-    return {'edition':edition,'policy':POLICY,'format':format,'participants':n,'groups':groups,'test_only':True,'canonical_policy_approved':False}
+    return {'edition':edition,'policy':a['policy'],'format':format,'participants':n,'groups':groups,'test_only':True,'canonical_policy_approved':False}
 
 
 def create_supercup(c,a):

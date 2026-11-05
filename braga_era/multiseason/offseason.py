@@ -33,7 +33,10 @@ def installed(c):return c.execute("SELECT 1 FROM sqlite_master WHERE name='ms_of
 def install(c,a):
     required(a,'policy')
     if a['policy']!=POLICY or installed(c):raise ValueError('Unsupported or already installed offseason migration')
-    if c.execute("SELECT test_only FROM ms_meta").fetchone()[0]!=1:raise ValueError('Offseason is TEST-only')
+    meta=c.execute('SELECT profile,test_only FROM ms_meta').fetchone()
+    if meta['test_only']!=1:
+        from .registered import PROFILE
+        if meta['profile']!=PROFILE:raise ValueError('Offseason requires a registered execution policy')
     for sql in DDL.split(';'):
         if sql.strip():c.execute(sql)
     parent=c.execute('SELECT parent_sha256 FROM ms_meta').fetchone()[0]

@@ -1,4 +1,4 @@
-"""Authenticated TEST-only migrations, transactional commands and full independent replay."""
+"""Versioned signed migrations, transactional commands and full independent replay."""
 from contextlib import closing, contextmanager
 import hmac
 import json
@@ -26,17 +26,25 @@ def proposed_policy():
 
 
 def statement(source, policy, seed):
-    if policy != proposed_policy() or not isinstance(seed,str) or not seed:
+    if not isinstance(seed,str) or not seed:
         raise ValueError("Unsupported proposed policy or missing committed career seed")
-    return {"action":"migrate_development_season", "profile":PROFILE, "test_only":True,
+    profile,ddl,version,test_only,eligible=_configuration(policy)
+    return {"action":"migrate_development_season" if profile==PROFILE else "migrate_registered_season", "profile":profile, "test_only":test_only,
             "parent_checkpoint":source.checkpoint, "parent_sha256":source.database_sha256,
-            "policy_sha256":digest(policy), "seed_sha256":digest(seed), "migration_sha256":digest(DDL)}
+            "policy_sha256":digest(policy), "seed_sha256":digest(seed), "migration_sha256":digest(ddl)}
+
+
+def _configuration(policy):
+    if policy==proposed_policy():return PROFILE,DDL,VERSION,True,False
+    from .registered import configuration
+    return configuration(policy)
 
 
 def create(source, destination, *, seed, policy, decision, signature, test_key):
-    """No production flag exists. A migration decision binds all immutable inputs."""
+    """A closed profile and exact migration decision bind all immutable inputs."""
     if not isinstance(source, AcceptedSource) or decision != statement(source,policy,seed) or not hmac.compare_digest(sign(test_key,decision), signature):
-        raise ValueError("Exact signed TEST-only migration decision required")
+        raise ValueError("Exact signed migration decision required")
+    profile,ddl,version,test_only,eligible=_configuration(policy)
     if file_sha256(source.database) != source.database_sha256:
         raise ValueError("Parent bytes changed")
     # First migrated season must actually be finished, not merely dated December.
@@ -52,13 +60,13 @@ def create(source, destination, *, seed, policy, decision, signature, test_key):
         shutil.copyfile(source.database, stage/'database.sqlite')
         if file_sha256(stage/'parent.sqlite') != source.database_sha256 or file_sha256(stage/'database.sqlite') != source.database_sha256:
             raise ValueError("Parent changed during copy")
-        write_json(stage/'development.json', {"profile":PROFILE,"test_only":True,"acceptance_eligible":False,
+        write_json(stage/'development.json', {"profile":profile,"test_only":test_only,"acceptance_eligible":eligible,
             "parent":baseline,"decision":decision,"signature":signature,"seed":seed,"policy":policy})
         with closing(sqlite3.connect(stage/'database.sqlite')) as c:
-            c.executescript('BEGIN IMMEDIATE;'+DDL)
+            c.executescript('BEGIN IMMEDIATE;'+ddl)
             clock = c.execute('SELECT clock FROM world_info').fetchone()[0]
-            c.execute('INSERT INTO ms_meta VALUES(1,?,?,?,?,?,?,1)',(PROFILE,source.checkpoint,source.database_sha256,encode(policy),seed,clock))
-            c.execute('INSERT INTO ms_migrations VALUES(?,?,?)',(VERSION,digest(DDL),source.database_sha256))
+            c.execute('INSERT INTO ms_meta VALUES(1,?,?,?,?,?,?,?)',(profile,source.checkpoint,source.database_sha256,encode(policy),seed,clock,int(test_only)))
+            c.execute('INSERT INTO ms_migrations VALUES(?,?,?)',(version,digest(ddl),source.database_sha256))
             c.execute('INSERT INTO ms_seasons VALUES(2027,?,?)',('archived',encode({"parent":baseline,"closure":closure})))
             for row in c.execute('SELECT * FROM transfer_contracts').fetchall():
                 player=c.execute('SELECT club_key FROM world_players WHERE id=?',(row[0],)).fetchone()
@@ -72,9 +80,10 @@ def create(source, destination, *, seed, policy, decision, signature, test_key):
 def authenticated(directory, test_key):
     directory=Path(directory).resolve()
     marker=read_json(directory/'development.json')
-    if (marker.get('profile')!=PROFILE or marker.get('test_only') is not True or marker.get('acceptance_eligible') is not False
-        or marker['policy']!=proposed_policy() or not hmac.compare_digest(marker['signature'],sign(test_key,marker['decision']))):
-        raise ValueError('Not an authenticated nonpromotable multi-season candidate')
+    profile,ddl,version,test_only,eligible=_configuration(marker['policy'])
+    if (marker.get('profile')!=profile or marker.get('test_only') is not test_only or marker.get('acceptance_eligible') is not eligible
+        or not hmac.compare_digest(marker['signature'],sign(test_key,marker['decision']))):
+        raise ValueError('Not an authenticated multi-season profile')
     source=AcceptedSource(directory/'parent.sqlite',marker['decision']['parent_checkpoint'],marker['parent']['database_sha256'])
     if (marker['decision']!=statement(source,marker['policy'],marker['seed'])
         or any(Path(str(source.database)+suffix).exists() for suffix in ('-wal','-journal'))
@@ -91,7 +100,7 @@ def connection(directory, test_key):
         c.execute('PRAGMA foreign_keys=ON');c.execute('PRAGMA synchronous=FULL')
         meta=c.execute('SELECT * FROM ms_meta').fetchone()
         if not meta or (meta['profile'],meta['parent_checkpoint'],meta['parent_sha256'],meta['policy_json'],meta['seed'],meta['test_only'])!=(
-            PROFILE,marker['decision']['parent_checkpoint'],marker['parent']['database_sha256'],encode(marker['policy']),marker['seed'],1):
+            marker['profile'],marker['decision']['parent_checkpoint'],marker['parent']['database_sha256'],encode(marker['policy']),marker['seed'],int(marker['test_only'])):
             raise ValueError('Multi-season committed identity changed')
         yield c,marker
 
@@ -129,6 +138,7 @@ def run(directory, test_key, request_id, kind, args, *, crash=None):
 
 def validate(directory, test_key, *, replay=True):
     directory,marker=authenticated(directory,test_key)
+    profile,ddl,version,test_only,eligible=_configuration(marker['policy'])
     if source_manifest(directory/'parent.sqlite')!=marker['parent']:raise ValueError('Archived parent manifest changed')
     with connect_read_only(directory/'database.sqlite') as c, connect_read_only(directory/'parent.sqlite') as parent:
         if c.execute('PRAGMA integrity_check').fetchone()[0]!='ok' or c.execute('PRAGMA foreign_key_check').fetchall():
@@ -148,13 +158,14 @@ def validate(directory, test_key, *, replay=True):
             if child is None or tuple(child)!=tuple(row):raise ValueError('Inherited club identity or strength changed')
         # A schema fingerprint is needed too: adding a trigger/index is not harmless.
         with closing(sqlite3.connect(':memory:')) as schema:
-            schema.executescript(DDL)
+            schema.executescript(ddl)
             if extension:schema.executescript(offseason.DDL)
             objects=lambda db:{r[0]:tuple(r) for r in db.execute("SELECT name,type,sql FROM sqlite_master WHERE sql IS NOT NULL AND name NOT LIKE 'sqlite_%'")}
             if objects(c)!={**objects(parent),**objects(schema)}:raise ValueError('Unexpected multi-season schema change')
         migration=c.execute('SELECT * FROM ms_migrations').fetchall()
-        versions=[(VERSION,digest(DDL),marker['parent']['database_sha256'])]
+        versions=[(version,digest(ddl),marker['parent']['database_sha256'])]
         if extension:versions.append((2,digest(offseason.DDL),marker['parent']['database_sha256']))
+        versions.sort()
         if sorted(tuple(r) for r in migration)!=versions:raise ValueError('Migration commitment differs')
         operations=[dict(r) for r in c.execute('SELECT * FROM ms_operations ORDER BY sequence')]
         if extension:
@@ -175,7 +186,7 @@ def validate(directory, test_key, *, replay=True):
                 if run(target,test_key,row['request_id'],row['kind'],json.loads(row['args_json']))!=json.loads(row['response_json']):raise ValueError('Independent operation response differs')
             with connect_read_only(target/'database.sqlite') as c:
                 if fingerprints(c)!=expected:raise ValueError('Independent multi-season replay differs')
-    return {'profile':PROFILE,'ok':True,'test_only':True,'acceptance_eligible':False,
+    return {'profile':profile,'ok':True,'test_only':test_only,'acceptance_eligible':eligible,
             'operations':len(operations),'world_sha256':digest(expected),'independent_replay':replay}
 
 

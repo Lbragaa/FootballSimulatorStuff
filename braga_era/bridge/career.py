@@ -112,8 +112,28 @@ class Career:
         }
 
     def season_boundary(self):
+        if self.registered_season():
+            from ..season_lineage import current
+            from ..season_gameplay import unrevealed
+            with lineage.access(self.registry,self.key) as (c,t):
+                info,_=current(c,t,self.key)
+                with connect_read_only(info['database']) as db:
+                    rows=[dict(r) for r in db.execute('SELECT id,competition,season,state,champion FROM ms_editions WHERE season=?',(info['season'],))]
+                    hidden=unrevealed(c,info['database'])
+                    if hidden:
+                        for row in rows:row.pop('champion',None)
+                    status=db.execute('SELECT state FROM ms_seasons WHERE season=?',(info['season'],)).fetchone()[0]
+                return {'season':info['season'],'next_season':info['season']+1,'phase':'transition_approval_required' if status=='archived' else 'season_preparation_required',
+                        'competitions':rows,'automatic_transition_allowed':False,'production_transition_available':True,
+                        'unrevealed_matches':len(hidden)}
         from ..season_authority import inspect
         return inspect(self)
+
+    def registered_season(self):
+        from ..season_lineage import is_registered
+        with lineage.access(self.registry,self.key) as (c,t):
+            row=c.execute('SELECT path FROM accepted WHERE checkpoint=?',(t['head'],)).fetchone()
+            return bool(row and is_registered(row[0]))
 
     def preview(self, fixture, news=False):
         v = self.play("preview", fixture)
@@ -191,6 +211,11 @@ class Career:
             row = c.execute(
                 "SELECT path FROM accepted WHERE checkpoint=?", (t["head"],)
             ).fetchone()
+            if self.registered_season():
+                info=lineage.parent_info(c,t,self.key,row[0])
+                with connect_read_only(info['database']) as db:
+                    value=db.execute('SELECT result_json FROM ms_executions WHERE fixture=?',(fixture,)).fetchone()
+                    return bool(value and any(e['kind']==boundary for e in json.loads(value[0])['events'][:cursor['sequence']]))
         with connect_read_only(Path(row[0]) / "payload/database.sqlite") as db:
             result = json.loads(
                 db.execute(

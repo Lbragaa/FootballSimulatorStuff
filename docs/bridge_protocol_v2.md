@@ -13,9 +13,11 @@ With no pending agenda, `play_next_episode` returns `episode_type=season_boundar
 and an ordered `season_boundary` section. The legacy `continue_gameplay` path
 returns `phase=season_boundary` instead of attempting an empty batch. Replies are
 durable and exact retries preserve them. Standing 2027 delegation never approves
-a new policy. No remote season approval/execute/accept command is introduced.
-The current multiseason executor remains nonpromotable and TEST-only; see
-[season authority implementation](season_authority_report.md).
+a new policy. The registered candidate adds five separately gated season-control
+commands documented in [registered season integration](registered_season_integration.md).
+These use the existing exact-action human proofs and separate successor acceptance;
+ordinary delegation cannot authorize a transition. The original DEV executor and
+TEST-review APIs remain nonpromotable. Nothing is installed in production.
 
 ## Historical results and episode reporting (0.12.0)
 

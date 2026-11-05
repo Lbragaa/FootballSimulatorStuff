@@ -93,4 +93,4 @@ def play(c,a):
         finish=(datetime.fromisoformat(f['kickoff'])+timedelta(seconds=bundle['duration_seconds'])).isoformat(sep=' ',timespec='seconds')
         end=max(end or finish,finish);applied.append({'fixture':f['key'],'result_sha256':digest(bundle)})
     c.execute('UPDATE ms_meta SET clock=?',(end,))
-    return {'applied':applied,'clock':end,'test_only':True}
+    return {'applied':applied,'clock':end,'test_only':bool(c.execute('SELECT test_only FROM ms_meta').fetchone()[0])}

@@ -1,5 +1,12 @@
 # Hikari phone procedure — protocol 2
 
+The uninstalled PR #11 candidate adds a [separate season-approval flow](registered_season_integration.md).
+On its explicit `season_boundary`, review the actual final season, prepare the
+versioned transition, then complete separate human authorization, execution and
+exact candidate acceptance. Do not treat “continue” as this approval. After
+acceptance, resume the same ordinary episode command; no new transport or career
+identity is created. Use only capabilities advertised by the running worker.
+
 **The FINAL TASK supersedes the per-batch confirmation procedure below for
 opted-in ordinary gameplay. Follow [Play](play.md).** The historical manual
 procedure remains available after automatic gameplay is disabled; it is not

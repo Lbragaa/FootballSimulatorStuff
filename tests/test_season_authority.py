@@ -3,6 +3,8 @@ from contextlib import closing
 import json
 from pathlib import Path
 import shutil
+import os
+import stat
 from types import SimpleNamespace
 from uuid import uuid4
 
@@ -25,6 +27,75 @@ def test_policy_commits_migration_schema_and_disables_production():
     policy = seasons.policy()
     assert policy['migration_schema_sha256'] == digest(store.DDL)
     assert policy['test_only'] and not policy['production_acceptance_enabled']
+
+
+def test_registered_successor_episode_recovery_and_portability(career, completed, tmp_path):
+    import time
+    from braga_era import season_lineage as registered
+    from braga_era.bridge.approval import HumanGate, PROFILE as HUMAN
+    from braga_era.bridge.control import Controls, PROFILE as CONTROL, OPERATIONS
+    from braga_era.bridge.automatic import Automatic
+    from braga_era.bridge.worker2 import Worker2
+    from test_bridge_worker2 import req, users
+    clubs=['club:1','club:2','club:3','club:15']
+    operations=[{'kind':'continue_modeled_registrations','args':{'season':2028}},
+        {'kind':'propose_pool','args':{'id':'registered-state-2028','season':2028,'competition':'STATE','clubs':clubs,'reason':'Explicit representative bridge scenario; not the full season'}},
+        *[{'kind':'qualify','args':{'season':2028,'competition':'STATE','club':club,'source':{'type':'proposed_pool','pool':'registered-state-2028'}}} for club in clubs],
+        {'kind':'edition','args':{'competition':'STATE','season':2028,'format':'league','clubs':clubs,'rules':{'legs':2,'final_legs':1,'neutral_final':False}}},
+        {'kind':'schedule','args':{'edition':'STATE:2028','start':'2028-01-08 16:00','deadline':'2028-12-21 23:59'}}]
+    request=str(uuid4());m=registered.prepare(career.registry,KEY,request,operations,transition=True,automatic_gameplay=True)
+    before=career.identity()['checkpoint']
+    registered.authorize(career.registry,KEY,m,lineage.signed(registered.authorization(m),KEY))
+    target=tmp_path/'transition'
+    with pytest.raises(RuntimeError,match='after operations'):
+        registered.execute(career.registry,KEY,request,target,crash='after_operations')
+    candidate=registered.execute(career.registry,KEY,request,target)
+    decision=registered.acceptance_template(career.registry,KEY,target)
+    with pytest.raises(ValueError,match='signature'):
+        registered.accept(career.registry,KEY,target,decision,'0'*64)
+    with pytest.raises(RuntimeError,match='after commit'):
+        registered.accept(career.registry,KEY,target,decision,lineage.sign(KEY,decision),crash='after_commit')
+    registered.accept(career.registry,KEY,target,decision,lineage.sign(KEY,decision))
+    assert career.identity()['checkpoint']==candidate['checkpoint_sha256']!=before
+    assert not (target/'world').exists()
+    gate=HumanGate(tmp_path/'human.sqlite',KEY,b'public TEST ONLY secret',
+        {'profile':HUMAN,'career':career.career,'test_only':True,'repository_id':1436541980,
+         'human_id':78325376,'human_login':'Lbragaa'},clock=lambda:1700000000)
+    gate.initialize()
+    with lineage.access(career.registry,KEY) as (c,t):
+        p={'profile':CONTROL,'action':'approve_remote_control_policies','career':career.career,'test_only':True,
+           'authority_key_sha256':t['key_hash'],'policy_sha256':digest(json.loads(t['policy_json'])),
+           'repository_id':1436541980,'human_id':78325376,'human_login':'Lbragaa','operations':OPERATIONS}
+    receipt=tmp_path/'control-policy.json';receipt.write_text(json.dumps(lineage.signed(p,KEY)))
+    controls=Controls(career,tmp_path/'controls.sqlite',tmp_path/'executions',receipt,gate,enabled=True);controls.initialize()
+    auto=Automatic(controls,tmp_path/'automatic');auto.initialize()
+    auto.set_mode(True,req(career,'enable_automatic_gameplay',1,confirmation='ENABLE_AUTOMATIC_GAMEPLAY'),1)
+    transport=Transport();worker=Worker2(transport,career,tmp_path/'bridge.sqlite',users(),controls=controls,automatic=auto)
+    r=req(career,'play_next_episode',1);issue=transport.add(r);worker.poll()
+    response=transport.result(issue);assert worker.verify_response(response)
+    assert response['response']['status']=='completed'
+    episode=response['response']['result'];assert episode['episode_type']=='vasco_match'
+    sections=episode['presentation'];events=[e for s in sections for e in s.get('events',[])]
+    assert events[-1]['kind']=='FINAL_WHISTLE'
+    assert next(i for i,s in enumerate(sections) if s['section']=='fulltime')>max(i for i,s in enumerate(sections) if s['section']=='vasco_timeline')
+    assert all('score' not in e.get('details',{}) for e in events)
+    replay=transport.add(r);worker.poll();assert transport.result(replay)==response
+    with lineage.access(career.registry,KEY) as (c,t):path=Path(c.execute('SELECT path FROM accepted WHERE checkpoint=?',(t['head'],)).fetchone()[0])
+    archive=tmp_path/'career.zip';exported=registered.export(career.registry,KEY,path,archive)
+    restored=registered.restore(career.registry,KEY,archive,tmp_path/'restored')
+    assert restored['independent_restore'] and restored['checkpoint']==career.identity()['checkpoint']
+    assert exported['archive_bytes']<sum(p.stat().st_size for p in (tmp_path/'authority/season-cache').rglob('*.sqlite'))
+    from braga_era.bridge.historical import HistoricalResults
+    original_registry=file_sha256(career.registry)
+    history=HistoricalResults(career).query({'season':2028,'club':'Vasco','limit':10})
+    assert history['matches'] and all(r['season']==2028 for r in history['matches'])
+    assert file_sha256(career.registry)==original_registry
+    backup=tmp_path/'authority-backup';lineage.backup(career.registry,KEY,backup)
+    with pytest.raises(ValueError,match='lost-authority'):
+        lineage.restore_backup(backup,KEY,tmp_path/'refused-backup',expected_test_only=True)
+    recovered=lineage.restore_backup(backup,KEY,tmp_path/'recovered-authority',expected_test_only=True,recover_lost_authority=True)
+    assert lineage.inspect(recovered['registry'],KEY)['accepted_checkpoint']==career.identity()['checkpoint']
+    assert file_sha256(completed.parent/'payload/database.sqlite')==completed.parent_hash
 
 
 @pytest.fixture(scope='module')
@@ -57,7 +128,19 @@ def completed(accepted_path, tmp_path_factory):
         # This module owns precisely this temporary subtree; no retained DBs.
         if root.resolve().parent != tmp_path_factory.getbasetemp().resolve() or not root.name.startswith('season-authority'):
             raise ValueError('Unsafe season authority test cleanup target')
-        shutil.rmtree(root)
+        def readonly_retry(function,path,error):
+            target=Path(path).resolve()
+            if target!=root.resolve() and root.resolve() not in target.parents:raise ValueError('Unsafe readonly cleanup target')
+            if not isinstance(error[1],PermissionError):raise error[1]
+            os.chmod(target,stat.S_IRWXU)
+            function(path)
+        # OneDrive can mark even empty published fixture directories readonly.
+        # Clear only this verified owned subtree before removing its copies.
+        for owned in [root,*root.rglob('*')]:
+            resolved=owned.resolve()
+            if resolved!=root.resolve() and root.resolve() not in resolved.parents:raise ValueError('Redirected cleanup path')
+            os.chmod(owned,stat.S_IRWXU)
+        shutil.rmtree(root,onerror=readonly_retry)
 
 
 @pytest.fixture

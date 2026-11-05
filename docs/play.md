@@ -1,6 +1,6 @@
 # Play THE BRAGA ERA from ChatGPT
 
-The multi-season development prototype is not installed or approved for official
+The multi-season candidate is not installed or approved for official
 play. When the current production season ends, report the worker's actual pending
 review/blocker; do not invent 2028 fixtures or send an unsupported transition
 command. Existing continuation and historical retrieval remain available under
@@ -11,8 +11,12 @@ command with `{}` arguments. It reports authenticated closure counts, pending
 obligations, unrevealed narration and the separate transition-approval boundary.
 It works without automatic mode or control configuration. Ordinary continuation
 stops at `season_boundary` when the agenda ends; it cannot activate 2028. These
-changes are **not installed in the production worker**. A proposed TEST policy
-approval is not successor acceptance or authorization for production migration.
+changes are **not installed in the production worker**. The candidate now has
+registered continuation and separate exact policy/execution/acceptance commands;
+see [the candidate's operational guide](registered_season_integration.md).
+After approved transition and acceptance, the same `play_next_episode` command
+delivers offseason news and season-aware matches/results. A transition is never
+implied by “continue.” No TEST approval authorizes production migration.
 
 The PC must be online, and its Windows worker starts at login. Codex may be
 closed. Use normal iPhone ChatGPT with the GitHub connection enabled for private

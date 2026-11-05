@@ -16,7 +16,21 @@ SULA_SLOTS={country:6 if country in {'BRA','ARG'} else 4 for country in ALLOCATI
 def country_of(c,key):
     club(c,key)
     row=c.execute('SELECT country FROM world_clubs WHERE key=?',(key,)).fetchone()
-    return row[0] or ('BRA' if brazilian(c,key) else None)
+    known=row[0] or ('BRA' if brazilian(c,key) else None)
+    if known:return known
+    evidence=c.execute("SELECT clubs_json FROM ms_pools WHERE id=? AND competition='COUNTRY_EVIDENCE'",('country-evidence:'+key,)).fetchone()
+    return json.loads(evidence[0])['country'] if evidence else None
+
+
+def declare_country(c,a):
+    """Immutable forward declaration; the inherited identity remains untouched."""
+    required(a,'club country season evidence')
+    club(c,a['club']);scenario(a['evidence'])
+    if a['country'] not in ALLOCATIONS or type(a['season']) is not int or not c.execute("SELECT 1 FROM ms_seasons WHERE season=? AND state='preparing'",(a['season'],)).fetchone():
+        raise ValueError('Supported country and preparing season required')
+    if country_of(c,a['club']) is not None:raise ValueError('Known or previously declared country cannot be replaced')
+    c.execute('INSERT INTO ms_pools VALUES(?,?,?,?,?)',('country-evidence:'+a['club'],a['season'],'COUNTRY_EVIDENCE',encode(a),a['evidence']['reason']))
+    return {'club':a['club'],'country':a['country'],'source':'explicit forward administrative proposal','historical_identity_changed':False}
 
 
 def scenario(evidence):

@@ -1,5 +1,10 @@
 # Season authorization boundary — PR #11 development
 
+This document describes the preserved TEST review prototype. Its executable
+successor is now [registered season integration](registered_season_integration.md),
+under a distinct profile with separate exact approvals. Existing prototype
+receipts are preserved; they are not relabeled as registered successors.
+
 This implementation connects season review to the **existing** lineage signer,
 registry, accepted parent, fencing and parent claims. It does not register a
 production multiseason continuation profile. Production keys, worker, accepted

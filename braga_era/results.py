@@ -251,7 +251,7 @@ class Projection:
         entries=Counter(r['edition'] for r in self.rows('ms_entries'))
         for f in self.rows('ms_fixtures'):
             e=editions[f['edition']];execution=executions.get(f['key'])
-            source={'table':'ms_fixtures','id':f['key'],'edition':e['id'],'profile':'DEV-MULTISEASON-2'}
+            source={'table':'ms_fixtures','id':f['key'],'edition':e['id'],'profile':self.rows('ms_meta')[0]['profile']}
             resolution=None
             if execution and execution['result_sha256']:
                 import json

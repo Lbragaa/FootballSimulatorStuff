@@ -18,6 +18,22 @@
 
 ## Multi-season execution prototype
 
+- The new candidate `season-forward-lineage-3` uses the existing signer, registry,
+  parent claims and career seed. Read `docs/registered_season_integration.md`.
+  It migrates a genuinely completed accepted 2027 parent under separate exact
+  policy authorization/execution/acceptance; DEV candidates remain nonpromotable.
+  No automatic 2027 grant approves 2028. New protocol-2 season controls reuse the
+  existing human gate; do not bypass it or advertise them as installed.
+- Registered successors use immutable compressed chunks/Merkle page indexes,
+  signed parent attestations, independent suffix replay/all-table comparison and
+  one materialized head. Full audit remains available. Preserve the shared object
+  pool and ancestor descriptors; delete only authenticated owned scratch/cache
+  trees. Backup restoration retains fencing and lost-authority acknowledgment.
+- Missing champion country uses explicit forward `declare_club_country` evidence,
+  never updates inherited identity. Repeat CDB entries use the separately proposed
+  prior-cup policy, not invented state results. Neither policy is canonically
+  approved. Production registry, worker, finances and checkpoints remain untouched.
+
 - `season_authority` uses the existing lineage registry/signing key and shared
   parent claims for exact signed season-policy review. It currently authorizes
   only TEST migration rehearsals, never production successors. No standing 2027
