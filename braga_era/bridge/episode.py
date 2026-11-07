@@ -177,7 +177,7 @@ class Episode:
                         retained.append((prior_path, prior))
                 if prior_deliveries:
                     _, prior_path, prior = max(prior_deliveries, key=lambda row: row[0])
-                    if prior["response"]["episode_type"] == "progress_bound":
+                    if prior["response"]["episode_type"] in {"progress_bound", "blocker", "automatic_disabled"}:
                         for field in ("baseline", "league_baseline", "target", "round", "target_done", "report_pending"):
                             if field in prior:
                                 op[field] = prior[field]
