@@ -1047,6 +1047,40 @@ def extract(archive, destination):
                 (stage / info.filename).write_bytes(z.read(info))
 
 
+LEGACY_DATABASE_MEMBERS = frozenset({"database.sqlite", "immediate_parent.sqlite", "history_root.sqlite"})
+
+
+def stage_legacy_parent(c, trusted, key, parent, stage, *, require_head=True):
+    """Rehydrate a signed archive in caller-owned scratch without editing the parent."""
+    parent, stage = Path(parent), Path(stage)
+    payload = parent / "payload"
+    if parent.is_symlink() or payload.is_symlink() or not payload.is_dir():
+        raise ValueError("Redirected or missing accepted payload")
+    metadata = read_json(payload / "checkpoint.json")
+    checkpoint = digest(metadata)
+    accepted = c.execute("SELECT path,proof FROM accepted WHERE checkpoint=?", (checkpoint,)).fetchone()
+    if (not accepted or Path(accepted["path"]).resolve() != parent.resolve()
+            or require_head and trusted["head"] != checkpoint):
+        raise ValueError("Unregistered or stale archive parent")
+    archive = parent / "checkpoint.zip"
+    if archive.is_symlink() or file_sha256(archive) != json.loads(accepted["proof"])["package_sha256"]:
+        raise ValueError("Accepted archive bytes do not match the signed proof")
+    staged_archive = stage / "checkpoint.zip"
+    with staged_archive.open("xb") as target, archive.open("rb") as source:
+        shutil.copyfileobj(source, target)
+    restored = stage / "payload"
+    extract(staged_archive, restored)
+    info = parent_info(c, trusted, key, stage, require_head=require_head)
+    expected = read_json(restored / "manifest.json")["files"]
+    actual = manifest_for(payload)["files"]
+    missing = expected.keys() - actual.keys()
+    if ((payload / "manifest.json").read_bytes() != (restored / "manifest.json").read_bytes()
+            or not missing <= LEGACY_DATABASE_MEMBERS
+            or any(expected.get(name) != sha for name, sha in actual.items())):
+        raise ValueError("Accepted payload has changed bytes or missing non-database evidence")
+    return info, sorted(missing)
+
+
 def acceptance_template(registry, key, directory):
     from . import season_lineage
     if season_lineage.is_registered(directory):return season_lineage.acceptance_template(registry,key,directory)

@@ -67,7 +67,7 @@ def acknowledge_test_bulk(c,t,cursors):
     except BaseException:c.rollback();raise
 
 
-def run(root_db,output,*,groups=20,full_year=True):
+def run(root_db,output,*,groups=20,full_year=True, policy='supported-ecosystem-proposal-1'):
     output=Path(output).resolve();output.mkdir(parents=True,exist_ok=True)
     work=output/'work';work.mkdir(exist_ok=True);reg=work/'authority/registry.sqlite'
     resumed_run=reg.exists()
@@ -103,11 +103,11 @@ def run(root_db,output,*,groups=20,full_year=True):
         'repository_id':1436541980,'human_id':78325376,'human_login':'Lbragaa'},clock=lambda:clock[0])
     if not (work/'human.sqlite').exists():gate.initialize()
     with lineage.access(reg,KEY) as (c,t):
-        policy={'profile':CONTROL,'action':'approve_remote_control_policies','career':career.career,'test_only':True,
+        control_policy={'profile':CONTROL,'action':'approve_remote_control_policies','career':career.career,'test_only':True,
                 'authority_key_sha256':t['key_hash'],'policy_sha256':digest(json.loads(t['policy_json'])),
                 'repository_id':1436541980,'human_id':78325376,'human_login':'Lbragaa','operations':OPERATIONS}
     receipt=work/'control-policy.json'
-    if not receipt.exists():receipt.write_text(encode(lineage.signed(policy,KEY)))
+    if not receipt.exists():receipt.write_text(encode(lineage.signed(control_policy,KEY)))
     controls=Controls(career,work/'controls.sqlite',work/'executions',receipt,gate,enabled=True)
     if not controls.store.exists():controls.initialize()
     auto=Automatic(controls,work/'automatic')
@@ -157,7 +157,8 @@ def run(root_db,output,*,groups=20,full_year=True):
     command('enable_automatic_gameplay','enable',confirmation='ENABLE_AUTOMATIC_GAMEPLAY')
     def transition(year):
         before=time.perf_counter();cpu=time.process_time()
-        _,review=command('prepare_season_transition',f'prepare:{year}',policy='supported-ecosystem-proposal-1')
+        tag = f'prepare:{year}' if policy == 'supported-ecosystem-proposal-1' else f'prepare:{year}:{policy}'
+        _,review=command('prepare_season_transition',tag,policy=policy)
         pid=review['preparation_id'];sha=review['manifest_sha256']
         with lineage.access(reg,KEY) as (c,t):resumed=c.execute('SELECT 1 FROM batches WHERE id=?',('season3:'+pid,)).fetchone() is not None
         n,r=command('request_authorize_season',f'authorize:{year}',preparation_id=pid,manifest_sha256=sha);confirm(n,r)
@@ -279,4 +280,6 @@ def run(root_db,output,*,groups=20,full_year=True):
 if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--db',type=Path,required=True);p.add_argument('--output',type=Path,required=True)
     p.add_argument('--groups',type=int,default=20);p.add_argument('--representative-only',action='store_true')
-    a=p.parse_args();print(json.dumps(run(a.db,a.output,groups=a.groups,full_year=not a.representative_only),indent=2))
+    from braga_era.multiseason.lifecycle import SEASON_POLICIES
+    p.add_argument('--policy', choices=SEASON_POLICIES, default='supported-ecosystem-proposal-1')
+    a=p.parse_args();print(json.dumps(run(a.db,a.output,groups=a.groups,full_year=not a.representative_only,policy=a.policy),indent=2))

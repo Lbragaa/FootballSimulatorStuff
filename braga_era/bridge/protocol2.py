@@ -4,6 +4,7 @@ from copy import deepcopy
 import json
 import re
 from . import protocol as v1
+from ..multiseason.lifecycle import SEASON_POLICIES
 
 FIXTURE=re.compile(r'(?:league:[0-9]{1,6}|(?:lib|sula|cdb):[A-Za-z0-9:_-]{1,64}|ms:[A-Za-z0-9:_-]{1,128})\Z')
 
@@ -87,7 +88,7 @@ def parse(body):
                                  "command": "prepare_batch", "args": {"until": value}}))
         elif kind == "auto_consent" and value != "ENABLE_AUTOMATIC_GAMEPLAY":
             raise ValueError("Explicit career-specific automatic mode opt-in required")
-        elif kind == 'season_policy' and value!='supported-ecosystem-proposal-1':
+        elif kind == 'season_policy' and (not isinstance(value, str) or value not in SEASON_POLICIES):
             raise ValueError('Explicit registered season policy required')
     if name == "roundup" and (not request["args"]["fixtures"]
                              or set(request["args"]["fixtures"]) & set(request["args"]["detailed"])):
@@ -109,7 +110,7 @@ def schema():
         if fixture is not None:fixture['pattern']='^'+FIXTURE.pattern.replace('\\Z','$')
     example = deepcopy(base["oneOf"][0])
     types = {
-        'season_policy':{'const':'supported-ecosystem-proposal-1'},
+        'season_policy':{'enum':list(SEASON_POLICIES)},
         "auto_consent": {"const": "ENABLE_AUTOMATIC_GAMEPLAY"},
         "boundary": {"type": "string", "pattern": r"^2027-\d{2}-\d{2} 23:59$"},
         "uuid": {"type": "string", "format": "uuid"},

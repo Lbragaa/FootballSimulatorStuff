@@ -40,6 +40,10 @@ class HistoricalResults:
             if checkpoint!=trusted['head'] and season_lineage.is_registered(parent):
                 temporary=cleanup.enter_context(tempfile.TemporaryDirectory(prefix='.historical-read-',dir=Path(self.career.registry).parent))
                 info=season_lineage.parent_info(c,trusted,self.career.key,parent,require_head=False,cache_directory=Path(temporary)/'world')
+            elif parent.is_dir() and not season_lineage.is_registered(parent) and any(
+                    not (parent / 'payload' / name).is_file() for name in lineage.LEGACY_DATABASE_MEMBERS):
+                temporary = cleanup.enter_context(tempfile.TemporaryDirectory(prefix='.historical-legacy-'))
+                info, _ = lineage.stage_legacy_parent(c, trusted, self.career.key, parent, temporary, require_head=False)
             else:info = lineage.parent_info(c, trusted, self.career.key, parent, require_head=False)
             cursors = {r['fixture']: r['sequence'] for r in c.execute('SELECT * FROM cursors')}
             lineage.check_cursors(c, trusted, self.career.key)

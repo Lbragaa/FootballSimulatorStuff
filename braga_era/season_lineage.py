@@ -170,6 +170,12 @@ def prepare(registry,key,request_id,operations,*,transition=False,automatic_game
                 report=_closure(info,c,t,key)
                 if not report['ready_to_finalize']:raise ValueError('Season closure/reveal is incomplete')
                 year=2028
+            if not t['test_only']:
+                from .multiseason.lifecycle import RELEASE_PROPOSAL, SEASON_POLICIES
+                expected = {'kind': 'lifecycle_following' if registered else 'lifecycle_setup',
+                            'args': {'scenario': SEASON_POLICIES[RELEASE_PROPOSAL][int(registered)]}}
+                if operations != [expected]:
+                    raise ValueError('Production transition requires the explicit release policy proposal')
             operations=[{'kind':'prepare_season','args':{'season':year}}]+operations
         else:
             if not registered:raise ValueError('Explicit season transition required')
@@ -233,23 +239,24 @@ def authorize(registry,key,manifest,approval):
 
 def apply(world,key,manifest):
     from .multiseason.agenda import advance
+    from .multiseason.lifecycle import RELEASE_PROPOSAL, SEASON_POLICIES, setup_2028, setup_following
     for i,op in enumerate(manifest['operations']):
         request=str(uuid5(UUID(manifest['request_id']),f'operation:{i}'))
         if op['kind']=='lifecycle_setup':
-            if op['args']!={'scenario':'full-2028-proposal-1'} or manifest['season']!=2028:
+            rio_alternative = op['args'] == {'scenario': SEASON_POLICIES[RELEASE_PROPOSAL][0]}
+            if manifest['season']!=2028 or not (rio_alternative or op['args']=={'scenario':'full-2028-proposal-1'}):
                 raise ValueError('Unsupported explicit season setup policy')
-            from .multiseason.lifecycle import setup_2028
             def command(kind,**args):
                 return store.run(world,key,str(uuid5(UUID(request),'setup:'+kind+':'+digest(args))),kind,args)
             setup_2028(world,command,lambda n:advance(world,key,
-                request_id=str(uuid5(UUID(request),'bootstrap:'+str(n))),max_groups=1))
+                request_id=str(uuid5(UUID(request),'bootstrap:'+str(n))),max_groups=1),rio_alternative=rio_alternative)
         elif op['kind']=='lifecycle_following':
-            if op['args']!={'scenario':'repeat-season-proposal-1'} or manifest['season']<2029:
+            rio_alternative = op['args'] == {'scenario': SEASON_POLICIES[RELEASE_PROPOSAL][1]}
+            if manifest['season']<2029 or not (rio_alternative or op['args']=={'scenario':'repeat-season-proposal-1'}):
                 raise ValueError('Unsupported repeat season policy')
-            from .multiseason.lifecycle import setup_following
             def command(kind,**args):
                 return store.run(world,key,str(uuid5(UUID(request),'setup:'+kind+':'+digest(args))),kind,args)
-            setup_following(world,command,manifest['season'])
+            setup_following(world,command,manifest['season'],rio_alternative=rio_alternative)
         elif op['kind']=='advance':advance(world,key,request_id=request,**op['args'])
         else:store.run(world,key,request,op['kind'],op['args'])
 

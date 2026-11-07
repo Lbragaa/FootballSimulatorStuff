@@ -1158,7 +1158,10 @@
           ],
           "properties": {
             "policy": {
-              "const": "supported-ecosystem-proposal-1"
+              "enum": [
+                "supported-ecosystem-proposal-1",
+                "supported-ecosystem-rio-venues-2"
+              ]
             }
           }
         }

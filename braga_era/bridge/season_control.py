@@ -2,16 +2,17 @@
 import json
 from .. import lineage,season_lineage
 from ..history import canonical_json as encode,digest
+from ..multiseason.lifecycle import RELEASE_PROPOSAL, RIO_GROUNDS, SEASON_POLICIES
 
 PROFILE='bridge-season-control-3'
-POLICY='supported-ecosystem-proposal-1'
 
 
 class SeasonControls:
     def __init__(self,controls):self.controls=controls;self.career=controls.career
 
     def prepare(self,request_id,policy):
-        if policy!=POLICY:raise ValueError('Explicit supported season policy required')
+        if policy not in SEASON_POLICIES or (not self.career.test_only and policy != RELEASE_PROPOSAL):
+            raise ValueError('Explicit supported season policy required')
         with self.controls.access() as c:
             old=c.execute('SELECT manifest FROM preparations WHERE id=?',(request_id,)).fetchone()
             if old:manifest=json.loads(old[0])
@@ -20,11 +21,14 @@ class SeasonControls:
                     info,_=season_lineage.current(lc,t,self.career.key)
                 first=info.get('profile')!=season_lineage.PROFILE
                 op={'kind':'lifecycle_setup' if first else 'lifecycle_following',
-                    'args':{'scenario':'full-2028-proposal-1' if first else 'repeat-season-proposal-1'}}
+                    'args':{'scenario':SEASON_POLICIES[policy][int(not first)]}}
                 manifest=season_lineage.prepare(self.career.registry,self.career.key,request_id,[op],
                                                transition=True,automatic_gameplay=True)
                 c.execute('INSERT INTO preparations VALUES(?,?)',(request_id,encode(manifest)));self.controls._seal(c)
         if manifest.get('profile')!=season_lineage.PROFILE:raise ValueError('Preparation belongs to another profile')
+        scenario = manifest['operations'][-1]['args'].get('scenario')
+        if scenario not in SEASON_POLICIES[policy]:
+            raise ValueError('Preparation UUID already binds a different season policy')
         return self.summary(manifest)
 
     def manifest(self,identifier):
@@ -41,13 +45,18 @@ class SeasonControls:
                              'accepted':row['state']=='accepted'} if row and row['checkpoint'] else None}
 
     def summary(self,manifest):
-        return {'control_profile':PROFILE,'preparation_id':manifest['request_id'],'manifest_sha256':digest(manifest),
+        result = {'control_profile':PROFILE,'preparation_id':manifest['request_id'],'manifest_sha256':digest(manifest),
                 'policy_sha256':digest(manifest['policy']),'career_seed_sha256':manifest['career_seed_sha256'],
                 'review':{'season':manifest['season'],'automatic_gameplay_after_acceptance':manifest['automatic_gameplay'],
                           'model_versions':manifest['policy'],
                           'initial_execution_scope':'2028 setup includes chronological ACCESS bootstrap football through January 10; later seasons prepare the calendar without playing it.' if manifest['season']==2028 else 'Offseason and calendar preparation; ordinary episodes execute subsequent fixtures.',
                           'explicit_proposals':['modeled economics/ages/youth','missing state/federation and foreign entry evidence'],
                           'historical_results_invented':False,'separate_successor_acceptance_required':True}}
+        if manifest['operations'][-1]['args'].get('scenario') in SEASON_POLICIES[RELEASE_PROPOSAL]:
+            result['review'].update(policy_proposal=RELEASE_PROPOSAL, proposed_rio_venues=RIO_GROUNDS,
+                                    economic_basis='Fictional forward liquidity and operating cashflow; no historical revenue or new Vasco capital',
+                                    qualification_basis='Recorded champions and league results plus prospective modeled admissions for missing competitions')
+        return result
 
     def statement(self,action,identifier):
         who,receipt=self.controls.trusted();m=self.manifest(identifier)

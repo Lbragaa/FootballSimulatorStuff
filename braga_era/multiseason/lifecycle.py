@@ -11,6 +11,22 @@ from .domestic import POLICY as DOMESTIC
 from .divisions import POLICY as DIVISIONS
 from .calendar import POLICY as CALENDAR
 
+SEASON_POLICIES = {
+    "supported-ecosystem-proposal-1": ("full-2028-proposal-1", "repeat-season-proposal-1"),
+    "supported-ecosystem-rio-venues-2": ("full-2028-rio-venues-2", "repeat-season-rio-venues-2"),
+}
+RELEASE_PROPOSAL = "supported-ecosystem-rio-venues-2"
+RIO_GROUNDS = {"Flamengo": "Maracanã", "Fluminense": "Raulino de Oliveira",
+               "Vasco": "São Januário", "Botafogo": "Nilton Santos"}
+
+
+def venue_bindings(db, rio_alternative):
+    rows = db.execute("SELECT key,name FROM world_clubs").fetchall()
+    if rio_alternative and not RIO_GROUNDS.keys() <= {row['name'] for row in rows}:
+        raise ValueError("Rio venue proposal requires the four recorded club identities")
+    return {row['key']: RIO_GROUNDS.get(row['name'], 'Proposed individual ground: ' + row['key'])
+            if rio_alternative else 'TEST assumed individual ground: ' + row['key'] for row in rows}
+
 def scenario(reason):return {'type':'development_administrative_scenario','id':'domestic-year-transition-1','reason':reason}
 
 
@@ -50,7 +66,7 @@ def plans(year,include_continental=False):
 
 
 
-def setup_2028(target, command, advance_group, *, include_continental=True, with_offseason=True):
+def setup_2028(target, command, advance_group, *, include_continental=True, with_offseason=True, rio_alternative=False):
     command('open_recorded_account',club='club:15')
     if not with_offseason:
         command('propose_income',club='club:15',season=2028,monthly_cents=300000000,reason='Hypothetical TEST incremental operating-income scenario for known contracts; not real revenue, owner capital or approved finances')
@@ -106,12 +122,12 @@ def setup_2028(target, command, advance_group, *, include_continental=True, with
     command('edition',competition='ACCESS',season=2028,format='qualification',clubs=access,rules={'legs':2,'final_legs':1,'neutral_final':False})
     with connect_read_only(target/'database.sqlite') as c:
         rio=['club:'+str(r[0]) for r in c.execute("SELECT id FROM clubs WHERE name IN ('Vasco','Flamengo','Fluminense','Botafogo') ORDER BY id")]
-        venue_bindings={r[0]:'TEST assumed individual ground: '+r[0] for r in c.execute('SELECT key FROM world_clubs')}
+        venues = venue_bindings(c, rio_alternative)
     command('create_domestic_edition',season=2028,competition='CARIOCA',policy=DOMESTIC,entrants=[{'club':key,'phase':1,'source':scenario('Proposed RJ membership and fictional forward entrants, not claimed historical registration')} for key in rio+pool[:8]])
     for comp in ('SUPERCOPA','RECOPA'):command('create_supercup',season=2028,competition=comp,policy=DOMESTIC)
     calendar,windows=plans(2028,include_continental)
-    for edition in calendar:venue_bindings['neutral:'+edition]='TEST proposed neutral final: '+edition
-    command('commit_season_calendar',season=2028,policy=CALENDAR,plans=calendar,international_windows=windows,venues=venue_bindings)
+    for edition in calendar:venues['neutral:'+edition]='TEST proposed neutral final: '+edition
+    command('commit_season_calendar',season=2028,policy=CALENDAR,plans=calendar,international_windows=windows,venues=venues)
     # Prior champions are already known: reserve their complete one/two-leg duty
     # before drawing state fixtures. Unknown future winners are never assigned.
     command('schedule',edition='SUPERCOPA:2028',start='2028-01-06 16:00',deadline='2028-01-06 16:00')
@@ -140,7 +156,7 @@ def setup_2028(target, command, advance_group, *, include_continental=True, with
     return {"calendar":calendar,"offseason":offseason}
 
 
-def setup_following(target,command,year):
+def setup_following(target,command,year,*,rio_alternative=False):
     """Repeat the supported ecosystem from recorded prior-season outcomes.
 
     Foreign national order and missing federation inputs remain explicit forward
@@ -180,7 +196,7 @@ def setup_following(target,command,year):
         cup_order=final_order(c,prior_cup)
         early=[club for club in cup_order if club not in league][:108]
         if len(early)!=108:raise ValueError('Repeat CDB entry inventory needs an explicit federation decision')
-        venues={r[0]:'TEST assumed individual ground: '+r[0] for r in c.execute('SELECT key FROM world_clubs')}
+        venues = venue_bindings(c, rio_alternative)
     command('commit_continental_entry',season=year,policy=ENTRY,national_evidence=national,champions=champions)
     command('create_domestic_edition',season=year,competition='CARIOCA',policy=DOMESTIC,
             entrants=[{'club':club,'phase':1,'source':{'type':'edition_finish','edition':f'CARIOCA:{year-1}','position':rio_order.index(club)+1}} for club in rio])
