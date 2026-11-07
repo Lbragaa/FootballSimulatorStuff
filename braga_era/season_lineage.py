@@ -11,6 +11,7 @@ import json
 from pathlib import Path
 import shutil
 import tempfile
+import time
 from uuid import UUID, uuid5
 
 from . import lineage, season_objects as objects
@@ -50,15 +51,25 @@ def validation(meta):
             'world_sha256':meta['world_sha256'],'independent_delta_replay':True}
 
 
+def bind_manifest(m,a,trusted):
+    """Acceptance/validation signatures cannot substitute for execution consent."""
+    if (m['profile']!=PROFILE or a['profile']!=PROFILE or m['career']!=trusted['career']
+        or a['career']!=m['career'] or type(m['test_only']) is not bool
+        or m['test_only']!=bool(trusted['test_only']) or a['test_only'] is not m['test_only']
+        or a['policy']!=policy(bool(trusted['test_only']))
+        or a['immediate_parent_sha256']!=m['immediate_parent_sha256']
+        or a['generation']!=m['generation'] or a['season']!=m['season']
+        or type(m['automatic_gameplay']) is not bool or a['automatic_gameplay'] is not m['automatic_gameplay']
+        or a['career_seed_sha256']!=m['career_seed_sha256'] or m['career_seed_sha256']!=digest(trusted['seed'])
+        or a['seed_policy']!=m['seed_policy'] or m['seed_policy']!=lineage.SEED_POLICY
+        or digest(a)!=m['manifest_sha256']):
+        raise ValueError('Season metadata differs from exact authorized manifest')
+
+
 def verify_node(node, trusted, key):
     m=node['metadata'];a=node['manifest']
-    if (m['profile']!=PROFILE or m['career']!=trusted['career'] or m['test_only']!=bool(trusted['test_only'])
-        or m['career_seed_sha256']!=digest(trusted['seed']) or m['seed_policy']!=lineage.SEED_POLICY
-        or a['policy']!=policy(bool(trusted['test_only'])) or a['profile']!=PROFILE
-        or a['immediate_parent_sha256']!=m['immediate_parent_sha256']
-        or a['career_seed_sha256']!=m['career_seed_sha256'] or a['career']!=m['career']
-        or a['test_only']!=m['test_only'] or digest(a)!=m['manifest_sha256']
-        or lineage.check_signed(node['authorization'],key)!=authorization(a)
+    bind_manifest(m,a,trusted)
+    if (lineage.check_signed(node['authorization'],key)!=authorization(a)
         or lineage.check_signed(node['validation'],key)!=validation(m)
         or lineage.check_signed(node['acceptance'],key)!=lineage.expected_acceptance(m,node['package_sha256'],trusted)):
         raise ValueError('Untrusted season ancestor/authorization')
@@ -85,7 +96,22 @@ def read_package(directory):
     package=read_json(payload/'package.json')
     if read_json(payload/'checkpoint.json')!=package['metadata']:raise ValueError('Season metadata changed')
     if set(package['state'])!=FILES:raise ValueError('Invalid season state inventory')
+    descriptor_binding(package)
     return package
+
+
+def descriptor_binding(package):
+    m=package['metadata']
+    if (set(package['state'])!=FILES or digest(package['state'])!=m['state_sha256']
+        or package['state']['database.sqlite']['sha256']!=m['database_sha256']):
+        raise ValueError('Season state descriptors differ from signed metadata')
+
+
+def replay_matches(database,world_sha256,database_sha256,*,logical_only=False):
+    # Byte identity implies identity of every table, after actual independent
+    # replay. Different SQLite layouts retain the original logical comparison.
+    if not logical_only and file_sha256(database)==database_sha256:return True
+    with connect_read_only(database) as db:return digest(fingerprints(db))==world_sha256
 
 
 def materialize(c, package, target):
@@ -242,9 +268,10 @@ def _start(info,target,key,manifest,seed):
                      signature=lineage.sign(key,decision),test_key=key)
 
 
-def verify_candidate(c,t,key,directory,*,replay=True):
+def verify_candidate(c,t,key,directory,*,replay=True,logical_only=False):
     if replay not in (True,False,'full'):raise ValueError('Unsupported season verification mode')
     package=read_package(directory);m=package['metadata'];a=package['manifest']
+    bind_manifest(m,a,t)
     if lineage.check_signed(package['authorization'],key)!=authorization(a) or a['immediate_parent_sha256']!=t['head']:
         raise ValueError('Untrusted/stale season candidate')
     if digest(a)!=m['manifest_sha256'] or digest(package['state'])!=m['state_sha256']:
@@ -259,17 +286,21 @@ def verify_candidate(c,t,key,directory,*,replay=True):
             raise ValueError('Season candidate state differs')
         if replay is True:
             target=Path(temp)/'replay';_start(info,target,key,a,t['seed']);apply(target,key,a)
-            with connect_read_only(target/'database.sqlite') as db:
-                if digest(fingerprints(db))!=report['world_sha256']:raise ValueError('Independent season suffix replay differs')
+            if not replay_matches(target/'database.sqlite',report['world_sha256'],m['database_sha256'],logical_only=logical_only):
+                raise ValueError('Independent season suffix replay differs')
         with connect_read_only(child/'database.sqlite') as db:
             if db.execute('SELECT max(season) FROM ms_seasons').fetchone()[0]!=m['season']:
                 raise ValueError('Unapproved season activation')
+            if db.execute('SELECT clock FROM ms_meta').fetchone()[0]!=m['clock']:
+                raise ValueError('Season metadata clock differs from recorded state')
     if lineage.check_signed(package['validation'],key)!=validation(m):raise ValueError('Invalid season verification statement')
     return package
 
 
 def execute(registry,key,request_id,directory,*,crash=None):
     directory=Path(directory).resolve()
+    started=time.perf_counter();cpu=time.process_time();timings={}
+    resumed=directory.exists()
     with lineage.access(registry,key,True) as (c,t):
         row=c.execute('SELECT * FROM batches WHERE id=?',('season3:'+request_id,)).fetchone()
         if not row or row['state'] not in {'season_authorized_v3','season_candidate'}:raise ValueError('Season batch not authorized')
@@ -289,9 +320,13 @@ def execute(registry,key,request_id,directory,*,crash=None):
         if not (directory/'payload').exists():
             world=directory/'world'
             if not world.exists():_start(info,world,key,a,t['seed'])
+            before=time.perf_counter()
             apply(world,key,a)
+            timings['simulation_and_operations']=time.perf_counter()-before
             if crash=='after_operations':raise RuntimeError('Injected season crash after operations')
-            report=store.validate(world,key,replay=False)
+            before=time.perf_counter();report=store.validate(world,key,replay=False)
+            timings['structural_validation']=time.perf_counter()-before
+            before=time.perf_counter()
             if info.get('profile')==PROFILE:
                 anchor=info['metadata']['anchor_sha256']
                 old=c.execute('SELECT proof FROM accepted WHERE checkpoint=?',(t['head'],)).fetchone()
@@ -313,11 +348,16 @@ def execute(registry,key,request_id,directory,*,crash=None):
                      'validation':lineage.signed(validation(meta),key)}
             with lineage.staged_directory(directory/'payload') as stage:
                 write_json(stage/'checkpoint.json',meta);write_json(stage/'package.json',package)
+            timings['chunk_export_and_publication']=time.perf_counter()-before
             # The copied, reconstructed exported state is replayed independently.
-        package=verify_candidate(c,t,key,directory)
+        before=time.perf_counter();package=verify_candidate(c,t,key,directory)
+        timings['independent_restoration_and_replay']=time.perf_counter()-before
         if crash=='after_verification':raise RuntimeError('Injected season crash after verification')
         c.execute("UPDATE batches SET state='season_candidate',checkpoint=?,package_sha=? WHERE id=?",
                   (digest(package['metadata']),digest(package),row['id']))
+        # Diagnostics are outside the immutable payload and never trusted as proof.
+        metrics=directory/'execution_metrics.json'
+        if not metrics.exists():write_json(metrics,{'seconds':timings,'wall_seconds':time.perf_counter()-started,'cpu_seconds':time.process_time()-cpu,'resumed_working_copy':resumed})
         return {'checkpoint_sha256':digest(package['metadata']),'package_sha256':digest(package),
                 'independent_delta_replay':True,'acceptance_required':True}
 
@@ -454,6 +494,7 @@ def restore(registry,key,archive,destination,*,full_audit=False):
                         raise ValueError('Unsafe season archive entry')
                     (local_pool/(identity+'.gz')).write_bytes(z.read(entry))
                 package=json.loads(z.read('package.json'));proof=json.loads(z.read('proof.json'))
+            descriptor_binding(package)
             expected=_reachable(c,package,proof)
             if {p.stem for p in local_pool.iterdir()}!=expected:raise ValueError('Season archive inventory differs')
             if digest(package)!=proof['package_sha256'] or proof['metadata']!=package['metadata']:
@@ -471,8 +512,8 @@ def restore(registry,key,archive,destination,*,full_audit=False):
             else:
                 info={'database':world/'parent.sqlite','checkpoint':a['immediate_parent_sha256']}
             target=stage/'independent';_start(info,target,key,a,t['seed']);apply(target,key,a)
-            with connect_read_only(target/'database.sqlite') as db:
-                if digest(fingerprints(db))!=report['world_sha256']:raise ValueError('Independent portable suffix replay differs')
+            if not replay_matches(target/'database.sqlite',report['world_sha256'],m['database_sha256']):
+                raise ValueError('Independent portable suffix replay differs')
             if full_audit:
                 legacy=stage/'legacy';legacy.mkdir()
                 for name,descriptor in anchor['legacy_files'].items():

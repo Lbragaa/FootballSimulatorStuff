@@ -1,0 +1,13 @@
+{
+  "scope": "NONCANONICAL DEVELOPMENT TEST",
+  "result": {
+    "checkpoint": "cb19bf27f8e103676208704f1642593079f993147badf99a6eb7ecae46912eff",
+    "independent_restore": true,
+    "full_history_audit": true
+  },
+  "wall_seconds": 529.975242600005,
+  "cpu_seconds": 488.1875,
+  "fresh_process_peak_memory_bytes": 231321600,
+  "source_archive_bytes": 98054438,
+  "production_modified": false
+}

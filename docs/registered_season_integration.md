@@ -101,8 +101,13 @@ Its domain assertions passed. An initial Windows fixture-cleanup error was
 isolated to readonly OneDrive directories; owned cleanup now handles that case.
 Small chunk-corruption, deduplication and country-preservation tests passed.
 
-The complete registered 2027→2028→2029 rehearsal is still being run. Do not infer
-full season acceptance or production readiness from the component results above.
+The complete registered rehearsal now passed: 1,341 fixtures across 14 editions
+in 2028, a second accepted transition/offseason and 27 completed 2029 fixtures.
+Portable restoration and a separate full-history audit both passed. See the
+[final evidence report](final_multiseason_integration_report.md) for counts,
+timings, storage, exact coverage and outstanding activation decisions.
 The runner uses the actual authority and Worker2 protocol with disconnected TEST
 transport and public TEST credentials. It does not claim a new live iPhone test.
-Safe numerical evidence belongs in the final report, never raw databases/keys.
+Safe numerical evidence is committed under `docs/validation/registered_*`;
+raw databases/registries/keys are not. No production readiness/activation is
+implied by the successful TEST run.

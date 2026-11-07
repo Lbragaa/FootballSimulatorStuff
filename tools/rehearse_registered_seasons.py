@@ -28,12 +28,53 @@ KEY=b'TEST SEASON BOUNDARY SIGNER ONLY!!'*2
 SECRET=b'PUBLIC NONPRODUCTION REHEARSAL AUTHENTICATOR'
 
 
+def retain_evidence(work,output):
+    """One compact private TEST fixture; no key and no raw working DB retained."""
+    import gzip
+    import sqlite3
+    import tempfile
+    import zipfile
+    from contextlib import closing
+    work=Path(work);output=Path(output);target=output/'TEST-portable-evidence.zip'
+    if target.exists():return target
+    with lineage.access(work/'authority/registry.sqlite',KEY) as (c,t):
+        if not t['test_only'] or t['career']!='season-boundary-test':raise ValueError('Public TEST fixture only')
+        with tempfile.TemporaryDirectory(dir=output,prefix='.test-evidence-') as temp:
+            registry=Path(temp)/'registry.sqlite'
+            with closing(sqlite3.connect(registry)) as copied:c.backup(copied)
+            note={'scope':'NONCANONICAL DEVELOPMENT TEST','key_included':False,'career':t['career'],'head':t['head'],
+                  'checkpoint_archive_sha256':file_sha256(work/'TEST-season-checkpoint.zip'),
+                  'registry_sha256':file_sha256(registry),
+                  'restore':'Extract registry.sqlite.gz to a disposable registry, then season_lineage.restore with the public TEST KEY in this runner. No production use.'}
+            temporary=Path(temp)/'evidence.zip'
+            with zipfile.ZipFile(temporary,'w',compression=zipfile.ZIP_STORED) as z:
+                z.write(work/'TEST-season-checkpoint.zip','checkpoint.zip')
+                z.writestr('registry.sqlite.gz',gzip.compress(registry.read_bytes(),mtime=0))
+                z.writestr('NONCANONICAL.json',encode(note))
+            temporary.rename(target)
+    return target
+
+
 def identity(name):return str(uuid5(NAMESPACE_URL,'registered-seasons-rehearsal-1:'+name))
+
+
+def acknowledge_test_bulk(c,t,cursors):
+    if not t['test_only'] or t['career']!='season-boundary-test':raise ValueError('Disconnected TEST bulk delivery only')
+    c.execute('BEGIN IMMEDIATE')
+    try:
+        c.executemany('INSERT OR REPLACE INTO cursors VALUES(?,?,?)',cursors)
+        lineage.seal_cursors(c,t,KEY);c.commit()
+    except BaseException:c.rollback();raise
 
 
 def run(root_db,output,*,groups=20,full_year=True):
     output=Path(output).resolve();output.mkdir(parents=True,exist_ok=True)
     work=output/'work';work.mkdir(exist_ok=True);reg=work/'authority/registry.sqlite'
+    resumed_run=reg.exists()
+    # The desktop Windows sandbox can deny deleting system TEMP directories.
+    # Keep this runner's owned spill files inside its disposable work root.
+    import tempfile
+    scratch=work/'scratch';scratch.mkdir(exist_ok=True);tempfile.tempdir=str(scratch)
     original=file_sha256(root_db);started=time.perf_counter()
     if not reg.exists():lineage.provision(reg,KEY,test_only=True,commissioner='SIMULATED',career_id='season-boundary-test',seed='season-boundary-fixed-v1')
     with lineage.access(reg,KEY) as (c,t):
@@ -54,7 +95,7 @@ def run(root_db,output,*,groups=20,full_year=True):
         if t['head']==digest(json.loads((parent/'payload/checkpoint.json').read_text())):
             with connect_read_only(parent/'payload/database.sqlite') as db:
                 rows=[(r[0],r[1],r[2]) for r in db.execute('SELECT r.fixture_key,r.result_sha256,max(e.sequence) FROM world_receipts r JOIN world_events e ON e.fixture_key=r.fixture_key GROUP BY r.fixture_key,r.result_sha256')]
-            c.executemany('INSERT OR REPLACE INTO cursors VALUES(?,?,?)',rows);lineage.seal_cursors(c,t,KEY)
+            acknowledge_test_bulk(c,t,rows)
     career=Career(reg,KEY,'season-boundary-test',True)
     clock_path=work/'human-clock.json'
     clock=[json.loads(clock_path.read_text()) if clock_path.exists() else 1700000000]
@@ -118,21 +159,26 @@ def run(root_db,output,*,groups=20,full_year=True):
         before=time.perf_counter();cpu=time.process_time()
         _,review=command('prepare_season_transition',f'prepare:{year}',policy='supported-ecosystem-proposal-1')
         pid=review['preparation_id'];sha=review['manifest_sha256']
+        with lineage.access(reg,KEY) as (c,t):resumed=c.execute('SELECT 1 FROM batches WHERE id=?',('season3:'+pid,)).fetchone() is not None
         n,r=command('request_authorize_season',f'authorize:{year}',preparation_id=pid,manifest_sha256=sha);confirm(n,r)
         n,r=command('request_execute_season',f'execute:{year}',preparation_id=pid,manifest_sha256=sha);candidate=confirm(n,r)
         n,r=command('request_accept_season',f'accept:{year}',preparation_id=pid,checkpoint_sha256=candidate['checkpoint_sha256']);confirm(n,r)
-        return {'season':year,'wall_seconds':time.perf_counter()-before,'cpu_seconds':time.process_time()-cpu,'accepted':True}
+        return {'season':year,'wall_seconds':time.perf_counter()-before,'cpu_seconds':time.process_time()-cpu,'accepted':True,
+                'timing_scope':'remaining/resumed control workflow' if resumed else 'fresh control workflow'}
     transitions=[transition(2028)]
     episodes=[]
     for i in range(12):
+        cached=any(json.loads(r['body'])['request_id']==identity(f'episode:2028:{i}') for r in transport.rows.values())
         before=time.perf_counter();_,episode=command('play_next_episode',f'episode:2028:{i}')
-        episodes.append({'episode_type':episode['episode_type'],'wall_seconds':time.perf_counter()-before})
+        episodes.append({'episode_type':episode['episode_type'],'wall_seconds':time.perf_counter()-before,
+                         'timing_scope':'cached/resumed request delivery' if cached else 'new command processing'})
         if episode['episode_type']=='vasco_match':break
     else:raise ValueError('No complete Vasco episode within rehearsal bound')
     counts={};checkpoints=[]
     if full_year:
         for i in range(80):
             with lineage.access(reg,KEY) as (c,t):info,_=seasons.current(c,t,KEY)
+            if info['season']>2028:break
             if next_event(info['world'],KEY) is None:break
             rid=identity(f'full-season:2028:{i}');before=time.perf_counter();cpu=time.process_time()
             with lineage.access(reg,KEY) as (c,t):prior=c.execute('SELECT * FROM batches WHERE id=?',('season3:'+rid,)).fetchone()
@@ -152,23 +198,75 @@ def run(root_db,output,*,groups=20,full_year=True):
         with lineage.access(reg,KEY,True) as (c,t):
             info,_=seasons.current(c,t,KEY)
             with connect_read_only(info['database']) as db:
-                counts=dict(db.execute('SELECT edition,count(*) FROM ms_fixtures GROUP BY edition'))
+                counts=dict(db.execute('SELECT f.edition,count(*) FROM ms_fixtures f JOIN ms_editions e ON e.id=f.edition WHERE e.season=2028 GROUP BY f.edition'))
                 if sum(counts.values())!=1341:raise ValueError('Incomplete integrated 2028 competition count')
                 # Bulk simulation is complementary to the actual phone episode.
                 # Its results are explicitly acknowledged for test season closure.
-                cursors=[tuple(r) for r in db.execute("SELECT fixture,result_sha256,json_array_length(result_json,'$.events') FROM ms_executions WHERE result_json IS NOT NULL")]
-            c.executemany('INSERT OR REPLACE INTO cursors VALUES(?,?,?)',cursors);lineage.seal_cursors(c,t,KEY)
+                cursors=[tuple(r) for r in db.execute("SELECT x.fixture,x.result_sha256,json_array_length(x.result_json,'$.events') FROM ms_executions x JOIN ms_fixtures f ON f.key=x.fixture JOIN ms_editions e ON e.id=f.edition WHERE e.season=2028 AND x.result_json IS NOT NULL")]
+            acknowledge_test_bulk(c,t,cursors)
         _,closed=command('play_next_episode','close:2028')
         if closed['episode_type']!='season_boundary':raise ValueError('Season conclusion did not reach approval boundary')
         transitions.append(transition(2029))
-        _,ep=command('play_next_episode','episode:2029:0');episodes.append({'episode_type':ep['episode_type'],'season':2029})
+        for i in range(12):
+            cached=any(json.loads(r['body'])['request_id']==identity(f'episode:2029:{i}') for r in transport.rows.values())
+            before=time.perf_counter();_,ep=command('play_next_episode',f'episode:2029:{i}')
+            episodes.append({'episode_type':ep['episode_type'],'season':2029,'wall_seconds':time.perf_counter()-before,
+                             'timing_scope':'cached/resumed request delivery' if cached else 'new command processing'})
+            if ep['episode_type']=='vasco_match':break
+            if ep['episode_type']=='blocker':raise ValueError('2029 bridge episode has a real blocker; do not omit it')
+        else:raise ValueError('No complete 2029 Vasco episode within bound')
+        # Measure consecutive real accepted successors with the evolved 2029
+        # world. These are complementary bounded bulk TEST advances, not a claim
+        # that every simulated fixture was narrated through a phone.
+        timing_file=output/'successor-timings.json'
+        measured=json.loads(timing_file.read_text(encoding='utf-8')) if timing_file.exists() else []
+        for i in range(3):
+            rid=identity(f'timed-2029:{i}');target=work/'successors'/rid
+            with lineage.access(reg,KEY) as (c,t):prior=c.execute('SELECT * FROM batches WHERE id=?',('season3:'+rid,)).fetchone()
+            if prior and prior['state']=='accepted':continue
+            before=time.perf_counter();cpu=time.process_time();phase={}
+            mark=time.perf_counter()
+            if prior:m=json.loads(prior['manifest'])
+            else:
+                m=seasons.prepare(reg,KEY,rid,[{'kind':'advance','args':{'max_groups':2}}])
+                seasons.authorize(reg,KEY,m,lineage.signed(seasons.authorization(m),KEY))
+            phase['prepare_authorize']=time.perf_counter()-mark;mark=time.perf_counter()
+            seasons.execute(reg,KEY,rid,target);phase['execute']=time.perf_counter()-mark;mark=time.perf_counter()
+            d=seasons.acceptance_template(reg,KEY,target);seasons.accept(reg,KEY,target,d,lineage.sign(KEY,d))
+            phase['acceptance']=time.perf_counter()-mark
+            with lineage.access(reg,KEY) as (c,t):info,_=seasons.current(c,t,KEY)
+            from tools.benchmark_registered_seasons import peak_memory
+            measured.append({'request_id':rid,'resumed':prior is not None,'wall_seconds':time.perf_counter()-before,
+                             'cpu_seconds':time.process_time()-cpu,'phases_seconds':phase,'process_peak_memory_bytes':peak_memory(),
+                             'execution_metrics':json.loads((target/'execution_metrics.json').read_text(encoding='utf-8')),
+                             'database_bytes':info['package']['state']['database.sqlite']['bytes'],
+                             'object_pool_bytes':sum(p.stat().st_size for p in (work/'authority/season-objects').glob('*.gz'))})
+            timing_file.write_text(json.dumps(measured,indent=2)+'\n',encoding='utf-8')
+        checkpoints+=measured
     with lineage.access(reg,KEY) as (c,t):info,path=seasons.current(c,t,KEY)
-    archive=work/'TEST-season-checkpoint.zip';exported=seasons.export(reg,KEY,path,archive)
+    archive=work/'TEST-season-checkpoint.zip';mark=time.perf_counter()
+    if archive.exists():
+        import zipfile
+        with zipfile.ZipFile(archive) as z:
+            if json.loads(z.read('package.json'))!=info['package']:raise ValueError('Existing export belongs to another accepted successor')
+            exported={'checkpoint':info['checkpoint'],'archive_bytes':archive.stat().st_size,'objects':len(z.infolist())-2,'resumed_original_export':True}
+        export_seconds=None
+    else:
+        exported=seasons.export(reg,KEY,path,archive);export_seconds=time.perf_counter()-mark
+    mark=time.perf_counter()
     restored=seasons.restore(reg,KEY,archive,work/'independent-restoration')
+    restore_seconds=time.perf_counter()-mark
+    retained=retain_evidence(work,output)
     if file_sha256(root_db)!=original or file_sha256(parent/'payload/database.sqlite')!=parent_sha:raise ValueError('Protected source changed')
+    with connect_read_only(info['database']) as db:
+        future=dict(db.execute("SELECT f.edition,count(*) FROM ms_fixtures f JOIN ms_editions e ON e.id=f.edition WHERE e.season=2029 AND f.status='final' GROUP BY f.edition"))
+        offseason_reports=[json.loads(r[0]) for r in db.execute('SELECT summary_json FROM ms_offseasons ORDER BY season')]
     report={'scope':'NONCANONICAL DEVELOPMENT TEST','production_modified':False,'source_unchanged':True,
             '2028_fixture_counts':counts,'transitions':transitions,'phone_episodes':episodes,'rolling_successors':checkpoints,
-            'portable':exported,'restoration':restored,'elapsed_seconds':time.perf_counter()-started,
+            '2029_completed_fixture_counts':future,'offseasons':offseason_reports,
+            'portable':exported,'restoration':restored,'retained_test_evidence_bytes':retained.stat().st_size,'elapsed_seconds':time.perf_counter()-started,
+            'export_wall_seconds':export_seconds,'restoration_wall_seconds':restore_seconds,
+            'elapsed_scope':'final resumed invocation; earlier attempts excluded' if resumed_run else 'entire fresh run',
             'coverage':'Full supported 2028 ecosystem plus representative phone episodes; subsequent 2029 episode, not full 2029 season.'}
     (output/'report.json').write_text(json.dumps(report,indent=2)+'\n')
     # All mutable/test data is under this one explicitly owned subtree.

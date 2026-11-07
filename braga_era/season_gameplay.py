@@ -53,6 +53,28 @@ def table(c,info,edition=None):
             {**r,'id':r['club'],'name':names[r['club']]} for r in standings(db,edition)]}
 
 
+def review(info):
+    """Called only after authenticated closure and fully revealed season results."""
+    with connect_read_only(info['database']) as db:
+        row=db.execute('SELECT state,archive_json FROM ms_seasons WHERE season=?',(info['season'],)).fetchone()
+        if not row or row['state']!='archived':raise ValueError('Archived season required for final review')
+        archive=json.loads(row['archive_json']);names=dict(db.execute('SELECT key,name FROM world_clubs'))
+        players={r['id']:json.loads(r['attributes_json'])['name'] for r in db.execute('SELECT id,attributes_json FROM world_players')}
+        totals={}
+        for raw in db.execute('SELECT x.result_json FROM ms_executions x JOIN ms_fixtures f ON f.key=x.fixture JOIN ms_editions e ON e.id=f.edition WHERE e.season=?',(info['season'],)):
+            for p in json.loads(raw[0])['performances']:
+                if not p['seconds_played']:continue
+                item=totals.setdefault(p['player_id'],{'player':p['player_id'],'name':players[p['player_id']],'appearances':0,'goals':0,'assists':0,'seconds_played':0})
+                for key in ('goals','assists','seconds_played'):item[key]+=p[key]
+                item['appearances']+=1
+        return {'season':info['season'],'complete':True,'source_checkpoint':info['checkpoint'],
+                'tables':{edition:[{**r,'name':names[r['club']]} for r in rows] for edition,rows in archive['standings'].items()},
+                'trophies':[{'competition':e['competition'],'club':e['champion'],'name':names[e['champion']]} for e in archive['editions'] if e['champion'] is not None],
+                'top_scorers':sorted(totals.values(),key=lambda p:(-p['goals'],-p['assists'],p['seconds_played'],p['player']))[:10],
+                'vasco_finances':next(({k:v for k,v in r.items() if k!='provenance_json'} for r in archive['finances'] if r['club']=='club:15'),None),
+                'economics_note':'Recorded ledger under the authorized season policy; no unknown revenue inferred.'}
+
+
 def preview(db,fixture):
     f=db.execute('SELECT * FROM ms_fixtures WHERE key=?',(fixture,)).fetchone()
     if not f:raise ValueError('Unknown edition fixture')
@@ -129,7 +151,7 @@ def gameplay(c,t,key,parent,command,fixture,count,page_id):
 def state(c,info):
     with connect_read_only(info['database']) as db:
         names=dict(db.execute('SELECT key,name FROM world_clubs'))
-        rows=[dict(r) for r in db.execute('SELECT f.*,e.competition,e.season,e.format FROM ms_fixtures f JOIN ms_editions e ON e.id=f.edition WHERE e.season=? ORDER BY kickoff,key',(info['season'],))]
+        rows=[dict(r) for r in db.execute("SELECT f.*,e.competition,e.season,e.format,json_extract(x.result_json,'$.resolution') AS resolution_json FROM ms_fixtures f JOIN ms_editions e ON e.id=f.edition LEFT JOIN ms_executions x ON x.fixture=f.key WHERE e.season=? ORDER BY kickoff,key",(info['season'],))]
         fixtures=[{**r,'stage':'R'+str(r['round']) if r['competition']=='LEAGUE' else r['stage']} for r in rows]
         ties=[]
         for t in db.execute('SELECT t.*,e.competition FROM ms_ties t JOIN ms_editions e ON e.id=t.edition WHERE e.season=?',(info['season'],)):

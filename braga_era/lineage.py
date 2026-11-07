@@ -98,7 +98,8 @@ def staged_directory(destination):
                     stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0
                 ):
                     raise ValueError("Redirected unpublished checkpoint")
-                shutil.rmtree(path)
+                from .season_objects import remove_owned as remove_tree
+                remove_tree(path,destination.parent)
 
         lease.seek(1)
         previous = lease.read()
@@ -1156,6 +1157,15 @@ def publish_json(path, document):
 
 
 def recover_acceptance(registry, key, directory):
+    from . import season_lineage
+    if season_lineage.is_registered(directory):
+        with access(registry,key) as (c,t):
+            meta=read_json(Path(directory)/'payload/checkpoint.json')
+            row=c.execute('SELECT proof FROM accepted WHERE checkpoint=?',(digest(meta),)).fetchone()
+            if not row:raise ValueError('Checkpoint has not been accepted')
+            receipt=json.loads(row[0])['acceptance'];test_only=bool(t['test_only'])
+        result=season_lineage.accept(registry,key,directory,receipt['document'],receipt['signature'])
+        return {**result,'ok':True,'acceptance_restored':True,'test_only':test_only}
     with access(registry, key, True) as (c, trusted):
         directory = Path(directory)
         meta = read_json(directory / "payload/checkpoint.json")

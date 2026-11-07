@@ -247,16 +247,21 @@ class Projection:
             if e['format']=='carioca_12':
                 from .multiseason.domestic import recorded_pools
                 recorded_pools(self.db,e)
-        executions={e['fixture']:e for e in self.rows('ms_executions')}
+        # Accepted state has already been authenticated. Reporting needs only
+        # the result receipt and tie resolution, never full squads/events/stats.
+        # Let SQLite project those fields instead of decoding every past match.
+        executions={e['fixture']:dict(e) for e in self.db.execute(
+            "SELECT fixture,result_sha256,json_extract(result_json,'$.resolution') AS resolution_json FROM ms_executions")} if 'ms_executions' in self.tables else {}
+        ms_profile=self.rows('ms_meta')[0]['profile'] if 'ms_meta' in self.tables else None
         entries=Counter(r['edition'] for r in self.rows('ms_entries'))
         for f in self.rows('ms_fixtures'):
             e=editions[f['edition']];execution=executions.get(f['key'])
-            source={'table':'ms_fixtures','id':f['key'],'edition':e['id'],'profile':self.rows('ms_meta')[0]['profile']}
+            source={'table':'ms_fixtures','id':f['key'],'edition':e['id'],'profile':ms_profile}
             resolution=None
             if execution and execution['result_sha256']:
                 import json
                 receipts[f['key']]=execution['result_sha256'];source['result_sha256']=execution['result_sha256']
-                resolution=json.loads(execution['result_json'])['resolution']
+                resolution=json.loads(execution['resolution_json'])
             knockout_entries=16 if e['format']=='sula_cross_playoffs' else entries[e['id']]//2 if e['format']=='groups_knockout' else entries[e['id']]
             numbered=re.fullmatch(r'S([1-9][0-9]*)',f['stage'])
             if f['stage'].startswith('GROUP:'):phase='GROUP'

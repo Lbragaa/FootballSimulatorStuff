@@ -3,7 +3,9 @@
 The current candidate adds [registered season continuation](docs/registered_season_integration.md)
 to the existing authority and phone bridge: separate exact policy/execution/
 acceptance decisions, season-aware episodes and deduplicated rolling checkpoints.
-The complete registered rehearsal is in validation. The live worker remains
+The [registered rehearsal passed](docs/final_multiseason_integration_report.md):
+all 1,341 fixtures in 2028, accepted 2029 continuation, representative phone
+episodes and independent full-history restoration. The live worker remains
 unchanged; nothing is merged, installed, approved or activated for production.
 
 Development now includes a [285-club autonomous offseason](docs/offseason_integration_report.md)

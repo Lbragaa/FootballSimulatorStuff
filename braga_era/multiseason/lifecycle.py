@@ -165,7 +165,9 @@ def setup_following(target,command,year):
         for country,n in ALLOCATIONS.items():
             if country=='BRA':continue
             clubs=[r[0] for r in c.execute('SELECT key FROM world_clubs ORDER BY strength DESC,key') if country_of(c,r[0])==country]
-            national[country]={**scenario('Forward country-entry ranking proposal from persistent club priors; no invented national league results'),'clubs':clubs[:n+SULA_SLOTS[country]]}
+            # Keep replacement depth when a titleholder also occupies a national
+            # route. Truncating to the slot count loses its legitimate replacement.
+            national[country]={**scenario('Forward country-entry ranking proposal from persistent club priors; no invented national league results'),'clubs':clubs[:40]}
         champions=[{'competition':comp,'club':c.execute('SELECT champion FROM ms_editions WHERE id=?',(f'{comp}:{year-1}',)).fetchone()[0],
                     'evidence':{'type':'edition_champion','edition':f'{comp}:{year-1}'}} for comp in ('LIB','SULA')]
         rio_order=final_order(c,c.execute('SELECT * FROM ms_editions WHERE id=?',(f'CARIOCA:{year-1}',)).fetchone())

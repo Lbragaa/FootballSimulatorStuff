@@ -29,6 +29,18 @@
   one materialized head. Full audit remains available. Preserve the shared object
   pool and ancestor descriptors; delete only authenticated owned scratch/cache
   trees. Backup restoration retains fencing and lost-authority acknowledgment.
+- The registered rehearsal passed 1,341 fixtures/14 editions in 2028 and 27
+  fixtures after separately accepted 2029 transition, with both 285-club
+  offseasons and independent full-history restoration. See the final integration
+  report and `docs/validation/registered_*`. It uses an authenticated released
+  root and completed TEST parent, not a copied private live production head.
+  The 98 MB private compressed evidence stays ignored; raw copies were removed.
+- Table fingerprint bytes remain frozen: sorted JSON STRING rows inside the
+  second canonical object. Bounded external sort/streaming fixes a real restore
+  MemoryError without changing any hash. Never replace this with raw row arrays
+  or SQLite value ordering. Temporary spill runs clean up on completion.
+  Replay can compare exact DB bytes after actual execution, with full logical
+  fallback for different layouts. No verification-success cache is permitted.
 - Missing champion country uses explicit forward `declare_club_country` evidence,
   never updates inherited identity. Repeat CDB entries use the separately proposed
   prior-cup policy, not invented state results. Neither policy is canonically

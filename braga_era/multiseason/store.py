@@ -43,7 +43,7 @@ def _configuration(policy):
 def create(source, destination, *, seed, policy, decision, signature, test_key):
     """A closed profile and exact migration decision bind all immutable inputs."""
     if not isinstance(source, AcceptedSource) or decision != statement(source,policy,seed) or not hmac.compare_digest(sign(test_key,decision), signature):
-        raise ValueError("Exact signed migration decision required")
+        raise ValueError("Exact signed TEST-only migration decision required" if policy==proposed_policy() else "Exact signed registered migration decision required")
     profile,ddl,version,test_only,eligible=_configuration(policy)
     if file_sha256(source.database) != source.database_sha256:
         raise ValueError("Parent bytes changed")
@@ -139,13 +139,17 @@ def run(directory, test_key, request_id, kind, args, *, crash=None):
 def validate(directory, test_key, *, replay=True):
     directory,marker=authenticated(directory,test_key)
     profile,ddl,version,test_only,eligible=_configuration(marker['policy'])
-    if source_manifest(directory/'parent.sqlite')!=marker['parent']:raise ValueError('Archived parent manifest changed')
+    verified_parent=source_manifest(directory/'parent.sqlite')
+    if verified_parent!=marker['parent']:raise ValueError('Archived parent manifest changed')
     with connect_read_only(directory/'database.sqlite') as c, connect_read_only(directory/'parent.sqlite') as parent:
         if c.execute('PRAGMA integrity_check').fetchone()[0]!='ok' or c.execute('PRAGMA foreign_key_check').fetchall():
             raise ValueError('Multi-season SQLite integrity failure')
         if c.execute("SELECT 1 FROM ms_fixtures WHERE status='claimed' LIMIT 1").fetchone():
             raise ValueError('Incomplete claimed group cannot be a validated checkpoint')
-        inherited=fingerprints(parent)
+        # Reuse this call's independently computed parent fingerprints, not a
+        # marker/cache verdict. Reading the same immutable parent twice adds no
+        # independent proof and doubles its serialization/sort work.
+        inherited=verified_parent['tables']
         expected=fingerprints(c)
         from . import offseason
         extension=offseason.installed(c)

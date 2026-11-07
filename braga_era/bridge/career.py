@@ -123,9 +123,13 @@ class Career:
                     if hidden:
                         for row in rows:row.pop('champion',None)
                     status=db.execute('SELECT state FROM ms_seasons WHERE season=?',(info['season'],)).fetchone()[0]
-                return {'season':info['season'],'next_season':info['season']+1,'phase':'transition_approval_required' if status=='archived' else 'season_preparation_required',
+                result={'season':info['season'],'next_season':info['season']+1,'phase':'transition_approval_required' if status=='archived' else 'season_preparation_required',
                         'competitions':rows,'automatic_transition_allowed':False,'production_transition_available':True,
                         'unrevealed_matches':len(hidden)}
+                if status=='archived' and not hidden:
+                    from ..season_gameplay import review
+                    result['season_review']=review(info)
+                return result
         from ..season_authority import inspect
         return inspect(self)
 

@@ -55,7 +55,7 @@ def test_registered_successor_episode_recovery_and_portability(career, completed
         registered.accept(career.registry,KEY,target,decision,'0'*64)
     with pytest.raises(RuntimeError,match='after commit'):
         registered.accept(career.registry,KEY,target,decision,lineage.sign(KEY,decision),crash='after_commit')
-    registered.accept(career.registry,KEY,target,decision,lineage.sign(KEY,decision))
+    assert lineage.recover_acceptance(career.registry,KEY,target)['acceptance_restored']
     assert career.identity()['checkpoint']==candidate['checkpoint_sha256']!=before
     assert not (target/'world').exists()
     gate=HumanGate(tmp_path/'human.sqlite',KEY,b'public TEST ONLY secret',

@@ -1,0 +1,11 @@
+{
+  "scope": "NONCANONICAL DEVELOPMENT TEST",
+  "world_sha256": "17d6875b7b34d82b73806204b53d560613bcd01874900c0e434bcc1475331c93",
+  "all_frozen_table_hashes_identical": true,
+  "wall_seconds": 8.432489999999234,
+  "cpu_seconds": 8.046875,
+  "fresh_process_peak_memory_bytes": 55246848,
+  "bounded_sort_chunk_bytes": 8388608,
+  "temporary_sort_dirs_remaining": 0,
+  "baseline_failure": "Unbounded full-object encoding raised MemoryError during final restoration; not deliberately reproduced."
+}

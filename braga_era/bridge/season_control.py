@@ -32,6 +32,14 @@ class SeasonControls:
         if value.get('profile')!=season_lineage.PROFILE:raise ValueError('Registered season preparation required')
         return value
 
+    def inspect(self,identifier):
+        m=self.manifest(identifier)
+        with lineage.access(self.career.registry,self.career.key) as (c,t):
+            row=c.execute('SELECT state,checkpoint,package_sha FROM batches WHERE id=?',('season3:'+identifier,)).fetchone()
+        return {**self.summary(m),'batch_state':row['state'] if row else 'prepared',
+                'candidate':{'checkpoint_sha256':row['checkpoint'],'package_sha256':row['package_sha'],
+                             'accepted':row['state']=='accepted'} if row and row['checkpoint'] else None}
+
     def summary(self,manifest):
         return {'control_profile':PROFILE,'preparation_id':manifest['request_id'],'manifest_sha256':digest(manifest),
                 'policy_sha256':digest(manifest['policy']),'career_seed_sha256':manifest['career_seed_sha256'],
