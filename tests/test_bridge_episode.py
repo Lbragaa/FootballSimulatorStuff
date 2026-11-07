@@ -64,6 +64,27 @@ def world(controls, tmp_path, monkeypatch):
 def request(world): return req(world.auto.career,'play_next_episode',2)
 
 
+def test_season_boundary_is_durable_and_never_advances(world, monkeypatch):
+    for fixture in world.fixtures:
+        fixture['status'] = 'final'
+        world.s['revealed'].append(fixture['key'])
+    boundary = {'phase': 'transition_approval_required', 'automatic_transition_allowed': False,
+                'production_transition_available': False}
+    monkeypatch.setattr(world.auto.career, 'season_boundary', lambda: boundary, raising=False)
+    r = request(world)
+    result = world.ep.run(r)
+    assert result['episode_type'] == 'season_boundary'
+    assert result['presentation'][0] == {'section': 'season_boundary', 'data': boundary}
+    assert result == world.ep.run(r)
+    assert not world.batches
+    # The legacy automatic entry point must stop at the same boundary too.
+    r = req(world.auto.career, 'continue_gameplay', 3)
+    result = Automatic.play(world.auto, r)
+    assert result['phase'] == 'season_boundary' and not result['simulation_advanced']
+    assert result == Automatic.play(world.auto, r)
+    assert not world.batches
+
+
 def test_one_request_multiple_dates_full_match_and_round(world):
     r=request(world); v=world.ep.run(r)
     assert len(world.batches)==4
@@ -112,7 +133,7 @@ def test_milestone_only_after_all_legs_and_not_repeated(world):
     assert report['ties'][0]['aggregate']==[4,0]
     assert len(report['ties'][0]['legs'])==4
     v2=world.ep.run(req(world.auto.career,'play_next_episode',3))
-    assert v2['episode_type']=='season_complete'
+    assert v2['episode_type']=='season_boundary'
     assert not any(s['section']=='milestone_report' for s in v2['presentation'])
 
 
@@ -238,5 +259,20 @@ def test_bounded_continuation_finishes_same_round_not_next_vasco(world,monkeypat
     monkeypatch.setattr('braga_era.bridge.episode.MAX_PAGES',256)
     result=world.ep.run(req(world.auto.career,'play_next_episode',3))
     assert result['episode_type']=='vasco_match'
+    assert any(s['section']=='league_table' for s in result['presentation'])
+    assert not any(s['section']=='vasco_timeline' for s in result['presentation'])
+
+
+@pytest.mark.parametrize('exit_type',['blocker','automatic_disabled'])
+def test_same_round_survives_other_resumable_exits(world,monkeypatch,exit_type):
+    monkeypatch.setattr('braga_era.bridge.episode.MAX_PAGES',7)
+    first_request=request(world)
+    first=world.ep.run(first_request)
+    assert any(s['section']=='fulltime' for s in first['presentation'])
+    # Disconnected signed-journal fixture for the equivalent interrupted state.
+    path=world.ep.path(first_request);op=world.auto._read(path)
+    op['response']['episode_type']=exit_type;world.auto._save(path,op)
+    monkeypatch.setattr('braga_era.bridge.episode.MAX_PAGES',256)
+    result=world.ep.run(req(world.auto.career,'play_next_episode',3))
     assert any(s['section']=='league_table' for s in result['presentation'])
     assert not any(s['section']=='vasco_timeline' for s in result['presentation'])

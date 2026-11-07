@@ -15,6 +15,7 @@ from .worker import Worker, safe_output
 CONTROL_ACTIONS = {"request_authorize_batch": "authorize_batch",
                    "request_execute_batch": "execute_batch",
                    "request_accept_candidate": "accept_candidate"}
+CONTROL_ACTIONS.update(request_authorize_season='authorize_batch',request_execute_season='execute_batch',request_accept_season='accept_candidate')
 
 
 def replace_signed(path, value, key):
@@ -92,6 +93,23 @@ class Worker2(Worker):
 
     def dispatch(self, c, row, request):
         name, args = request["command"], request["args"]
+        if name in {'prepare_season_transition','inspect_season_transition','request_authorize_season','request_execute_season','request_accept_season'}:
+            if self.controls is None or not self.capabilities()['execution_enabled']:raise ValueError('Season controls not configured')
+            actor=self.transport.issue(row['source'])['user']
+            if actor.get('id')!=self.controls.gate.context['human_id']:raise ValueError('Pinned commissioner required')
+            from .season_control import SeasonControls
+            controls=SeasonControls(self.controls)
+            if name=='prepare_season_transition':return controls.prepare(request['request_id'],args['policy'])
+            m=controls.manifest(args['preparation_id'])
+            if name=='inspect_season_transition':return controls.inspect(args['preparation_id'])
+            action=CONTROL_ACTIONS[name]
+            if action!='accept_candidate' and args['manifest_sha256']!=digest(m):raise ValueError('Wrong exact season manifest')
+            if action=='accept_candidate' and controls.statement(action,args['preparation_id'])['target_sha256']!=args['checkpoint_sha256']:
+                raise ValueError('Wrong exact season candidate')
+            return controls.request(action,args['preparation_id'],request['request_id'],row['source'])
+        if name == 'season_status':
+            return {'season_status': self.career.season_boundary(),
+                    'accepted_checkpoint': self.career.identity()['checkpoint']}
         if name == 'historical_results':
             from .historical import HistoricalResults
             return {'historical_results': HistoricalResults(self.career).query(args),

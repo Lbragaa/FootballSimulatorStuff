@@ -1,0 +1,25 @@
+{
+  "before": {
+    "scope": "read-only disconnected development workload",
+    "clubs": 20,
+    "repetitions": 30,
+    "wall_seconds": 3.6044477000032202,
+    "cpu_seconds": 3.578125,
+    "selects": 29280,
+    "teams_sha256": "0aee80a09bd5960fb3e579457ecd7a9e6d6c92d1063726a29517f64cdb3af8be",
+    "source_unchanged": true
+  },
+  "after": {
+    "scope": "read-only disconnected development workload",
+    "clubs": 20,
+    "repetitions": 30,
+    "wall_seconds": 2.9593448000014178,
+    "cpu_seconds": 2.96875,
+    "selects": 1800,
+    "teams_sha256": "0aee80a09bd5960fb3e579457ecd7a9e6d6c92d1063726a29517f64cdb3af8be",
+    "source_unchanged": true
+  },
+  "identical_teams": true,
+  "wall_reduction_percent": 17.89741324312255,
+  "limit": "single paired team-loading workload, not whole-episode latency"
+}

@@ -98,7 +98,8 @@ def staged_directory(destination):
                     stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0
                 ):
                     raise ValueError("Redirected unpublished checkpoint")
-                shutil.rmtree(path)
+                from .season_objects import remove_owned as remove_tree
+                remove_tree(path,destination.parent)
 
         lease.seek(1)
         previous = lease.read()
@@ -278,6 +279,14 @@ def verify_chain(nodes, trusted, key):
     for generation, node in enumerate(nodes, 1):
         meta = node["metadata"]
         checkpoint = digest(meta)
+        from .multiseason.registered import PROFILE as SEASON_PROFILE
+        if meta.get('profile') == SEASON_PROFILE:
+            if meta['generation']!=generation or meta['immediate_parent_sha256']!=previous or meta['root_sha256']!=ROOT:
+                raise ValueError('Broken season lineage ancestry')
+            from .season_lineage import verify_node
+            verify_node(node,trusted,key)
+            previous=checkpoint
+            continue
         if (
             meta["profile"] != PROFILE
             or meta["career"] != trusted["career"]
@@ -318,6 +327,10 @@ def verify_chain(nodes, trusted, key):
 
 def parent_info(c, trusted, key, parent, *, require_head=True):
     parent = Path(parent).resolve()
+    if parent.is_dir():
+        from . import season_lineage
+        if season_lineage.is_registered(parent):
+            return season_lineage.parent_info(c,trusted,key,parent,require_head=require_head)
     if parent.is_file():
         if file_sha256(parent) != ROOT:
             raise ValueError("Unrelated root database")
@@ -916,6 +929,9 @@ def build_payload(c, trusted, key, info, manifest, decision, signature, director
 
 
 def execute(registry, key, execution_id, directory, *, crash=None):
+    if execution_id.startswith('season3:'):
+        from .season_lineage import execute as season_execute
+        return season_execute(registry,key,execution_id.removeprefix('season3:'),directory,crash=crash)
     directory = Path(directory).resolve()
     with access(registry, key, True) as (c, trusted):
         check_cursors(c, trusted, key)
@@ -1032,6 +1048,8 @@ def extract(archive, destination):
 
 
 def acceptance_template(registry, key, directory):
+    from . import season_lineage
+    if season_lineage.is_registered(directory):return season_lineage.acceptance_template(registry,key,directory)
     with access(registry, key) as (c, trusted):
         directory = Path(directory)
         meta = read_json(directory / "payload/checkpoint.json")
@@ -1041,6 +1059,8 @@ def acceptance_template(registry, key, directory):
 
 
 def accept(registry, key, directory, decision, signature, *, crash=None):
+    from . import season_lineage
+    if season_lineage.is_registered(directory):return season_lineage.accept(registry,key,directory,decision,signature,crash=crash)
     directory = Path(directory).resolve()
     with access(registry, key, True) as (c, trusted):
         meta = read_json(directory / "payload/checkpoint.json")
@@ -1137,6 +1157,15 @@ def publish_json(path, document):
 
 
 def recover_acceptance(registry, key, directory):
+    from . import season_lineage
+    if season_lineage.is_registered(directory):
+        with access(registry,key) as (c,t):
+            meta=read_json(Path(directory)/'payload/checkpoint.json')
+            row=c.execute('SELECT proof FROM accepted WHERE checkpoint=?',(digest(meta),)).fetchone()
+            if not row:raise ValueError('Checkpoint has not been accepted')
+            receipt=json.loads(row[0])['acceptance'];test_only=bool(t['test_only'])
+        result=season_lineage.accept(registry,key,directory,receipt['document'],receipt['signature'])
+        return {**result,'ok':True,'acceptance_restored':True,'test_only':test_only}
     with access(registry, key, True) as (c, trusted):
         directory = Path(directory)
         meta = read_json(directory / "payload/checkpoint.json")
@@ -1187,6 +1216,10 @@ def inspect(registry, key):
             "SELECT * FROM accepted WHERE checkpoint=?", (trusted["head"],)
         ).fetchone()
         info = parent_info(c, trusted, key, row["path"])
+        if info.get('profile') == 'season-forward-lineage-3':
+            from .season_gameplay import next_events
+            return {**result,'generation':info['generation'],'accepted_clock':info['clock'],
+                    'season':info['season'],'next_due':next_events(c,info)}
         with connect_read_only(info["database"]) as db:
             due = agenda(db)
             result.update(
@@ -1211,6 +1244,12 @@ def gameplay(registry, key, command, fixture=None, count=1, *, page_id=None):
 
     with access(registry, key, True) as (c, trusted):
         check_cursors(c, trusted, key)
+        row=c.execute('SELECT path FROM accepted WHERE checkpoint=?',(trusted['head'],)).fetchone()
+        if row:
+            from . import season_lineage
+            if season_lineage.is_registered(row[0]):
+                from .season_gameplay import gameplay
+                return gameplay(c,trusted,key,row[0],command,fixture,count,page_id)
         if trusted["head"] == ROOT:
             raise ValueError(
                 "No accepted forward result yet; inspect/prepare the initial batch"
@@ -1353,10 +1392,12 @@ def import_cursor(registry, key, envelope):
         ).fetchone()
         if not row:
             raise ValueError("Cursor must refer to an accepted checkpoint")
-        with connect_read_only(Path(row[0]) / "payload/database.sqlite") as db:
+        info=parent_info(c,trusted,key,row[0])
+        with connect_read_only(info['database']) as db:
             for cursor in doc["cursors"]:
+                query='SELECT result_sha256,result_json FROM ms_executions WHERE fixture=?' if cursor['fixture'].startswith('ms:') else 'SELECT result_sha256,result_json FROM world_executions WHERE fixture_key=?'
                 result = db.execute(
-                    "SELECT result_sha256,result_json FROM world_executions WHERE fixture_key=?",
+                    query,
                     (cursor["fixture"],),
                 ).fetchone()
                 old = c.execute(
@@ -1396,6 +1437,10 @@ def import_cursor(registry, key, envelope):
 
 
 def restore(registry, key, archive, destination):
+    with zipfile.ZipFile(archive) as z:
+        if 'package.json' in z.namelist():
+            from .season_lineage import restore as season_restore
+            return season_restore(registry,key,archive,destination)
     destination = Path(destination)
     with access(registry, key) as (c, trusted):
         with staged_directory(destination) as stage:
@@ -1416,6 +1461,11 @@ def seal_authority(c, key):
 
 def backup(registry, key, destination, *, transfer=False):
     """Transfer the accepted head, signed lineage, claims and cursors, never the key."""
+    from . import season_lineage
+    with access(registry,key) as (c,t):
+        row=c.execute('SELECT path FROM accepted WHERE checkpoint=?',(t['head'],)).fetchone()
+        seasonal=bool(row and season_lineage.is_registered(row[0]))
+    if seasonal:return season_lineage.backup(registry,key,destination,transfer=transfer)
     destination = Path(destination).resolve()
     with access(registry, key, True, allow_fenced=transfer) as (c, trusted):
         check_cursors(c, trusted, key)
@@ -1510,6 +1560,9 @@ def restore_backup(
     if type(expected_test_only) is not bool:
         raise ValueError("Explicit authority mode required")
     doc = check_signed(read_json(source / "handoff.json"), key)
+    if doc.get('storage_profile')=='season-forward-lineage-3':
+        from .season_lineage import restore_backup as restore_season_backup
+        return restore_season_backup(source,key,destination,expected_test_only=expected_test_only,recover_lost_authority=recover_lost_authority)
     if not doc.get("transfer") and not recover_lost_authority:
         raise ValueError(
             "Backup activation requires explicit lost-authority recovery; never run two writable registries"

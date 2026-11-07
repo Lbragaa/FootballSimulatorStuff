@@ -1,0 +1,39 @@
+{
+  "scope": "NONCANONICAL DEVELOPMENT TEST",
+  "policy": "continental-entry-development-2",
+  "test_clubs": 91,
+  "qualification_sources": "explicit fictional administrative scenarios; no historical national results invented",
+  "fixture_counts": {
+    "LIB:2028": 125,
+    "LIB_PRE1:2028": 6,
+    "LIB_PRE2:2028": 16,
+    "LIB_PRE3:2028": 8,
+    "SULA:2028": 141,
+    "SULA_PRE:2028": 16
+  },
+  "fixture_total": 312,
+  "historical_counts": {
+    "SULA": 157,
+    "LIB": 155
+  },
+  "match_results_sha256": "1778c6cc0d63d3f98325007e52eefd7e995ed624b93941808f07b447d2bf57e3",
+  "verification": {
+    "acceptance_eligible": false,
+    "independent_replay": true,
+    "ok": true,
+    "operations": 219,
+    "profile": "DEV-MULTISEASON-2",
+    "test_only": true,
+    "world_sha256": "f4664a5c222af8576b8f582befc27269ab5e300f675a4efab94b35bb5eb72fef"
+  },
+  "crash_after_group_commit": true,
+  "same_request_resumption": true,
+  "recorded_group_winners_host_LIB_R16_returns": true,
+  "campaign_discipline_buckets": true,
+  "v1_world_replayed_unchanged": "e01c1b6c9923ffbfbb7732772bd6ff5df52a0fdc211008d0699101a719a711b8",
+  "calendar": "compressed January-April mechanism scenario, not approved 2028 calendar",
+  "database_bytes": 124071936,
+  "portable_directory_bytes": 207846353,
+  "production_modified": false,
+  "ready_for_2028": false
+}

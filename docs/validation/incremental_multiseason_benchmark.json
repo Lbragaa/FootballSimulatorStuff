@@ -1,0 +1,50 @@
+{
+  "scope": "NONCANONICAL DEVELOPMENT TEST",
+  "timings": {
+    "one_time_parent_seal": {
+      "wall_seconds": 137.69785430000047,
+      "cpu_seconds": 129.046875
+    },
+    "create_exact_parent_child": {
+      "wall_seconds": 18.129392799994093,
+      "cpu_seconds": 16.34375
+    },
+    "apply_original_committed_tail": {
+      "wall_seconds": 17.624597899994114,
+      "cpu_seconds": 16.421875
+    },
+    "full_history_validation": {
+      "wall_seconds": 171.98031349999656,
+      "cpu_seconds": 138.015625
+    },
+    "immediate_parent_validation": {
+      "wall_seconds": 85.65525190001063,
+      "cpu_seconds": 20.703125
+    },
+    "incremental_export": {
+      "wall_seconds": 40.8578325999988,
+      "cpu_seconds": 28.5
+    },
+    "incremental_independent_restoration": {
+      "wall_seconds": 42.84261829999741,
+      "cpu_seconds": 21.15625
+    }
+  },
+  "parent_operations": 527,
+  "suffix_operations": 22,
+  "identical_world_sha256": "b73395d6702474667ccd3ac106ca075a45d16d432a637f29684c0bd8cb9916dd",
+  "source_unchanged": true,
+  "exact_response_replay": true,
+  "independent_suffix_replay": true,
+  "independent_restoration": true,
+  "parent_full_replay_attested": true,
+  "verification_wall_reduction_percent": 50.19473441068454,
+  "verification_cpu_reduction_percent": 84.99943394090343,
+  "sizes_bytes": {
+    "sealed": 315997354,
+    "portable": 644750518
+  },
+  "process_peak_rss_bytes": 567762944,
+  "production_modified": false,
+  "limitations": "Single paired sample; source and child state identical. Initial full parent sealing cost is separate. New profile trusts a signed full-parent attestation, not fresh ancestor simulation on every restore. Not an episode latency benchmark or an official-capable profile."
+}

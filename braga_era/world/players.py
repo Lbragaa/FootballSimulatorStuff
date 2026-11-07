@@ -40,16 +40,14 @@ def team_at(c, key, competition, kickoff, policy):
         raise ValueError("Unknown club identity")
     players = []
     for row in c.execute(
-        "SELECT * FROM world_players WHERE club_key=? ORDER BY id", (key,)
+        "SELECT p.*,s.state_json,d.bans AS forward_bans FROM world_players p "
+        "LEFT JOIN world_player_state s ON s.player_id=p.id "
+        "LEFT JOIN world_discipline d ON d.player_id=p.id AND d.competition=? "
+        "WHERE p.club_key=? ORDER BY p.id", (competition,key)
     ):
         p = player(json.loads(row["attributes_json"]))
         s = projected(
-            json.loads(
-                c.execute(
-                    "SELECT state_json FROM world_player_state WHERE player_id=?",
-                    (p.id,),
-                ).fetchone()[0]
-            ),
+            json.loads(row['state_json']),
             kickoff,
             policy,
         )
@@ -64,11 +62,7 @@ def team_at(c, key, competition, kickoff, policy):
             reasons.append("contract not started")
         if s["contract_end"] and s["contract_end"] < kickoff[:10]:
             reasons.append("contract expired")
-        discipline = c.execute(
-            "SELECT bans FROM world_discipline WHERE player_id=? AND competition=?",
-            (p.id, competition),
-        ).fetchone()
-        if discipline and discipline[0]:
+        if row['forward_bans']:
             reasons.append("forward " + competition + " suspension")
         recent = tuple((x["rating"], x["minutes"]) for x in s["recent"][:4])
         players.append(

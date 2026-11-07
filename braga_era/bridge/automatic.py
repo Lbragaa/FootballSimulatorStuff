@@ -91,6 +91,10 @@ class Automatic:
         head = self.career.identity()["checkpoint"]
         if head == op["head_before"]:
             return True
+        if op.get('kind')=='registered_season':
+            with lineage.access(self.career.registry,self.career.key) as (c,t):
+                row=c.execute('SELECT state,checkpoint FROM batches WHERE id=?',('season3:'+request['request_id'],)).fetchone()
+                return bool(row and row['state']=='accepted' and row['checkpoint']==head)
         if op["kind"] != "advance":
             return False
         m = self.controls.manifest(op["preparation_id"])
@@ -114,6 +118,10 @@ class Automatic:
         return result
 
     def play(self, request, *, prepared=None):
+        if getattr(self.career,'registered_season',lambda:False)():
+            if prepared:raise ValueError('Legacy prepared batches cannot activate a season profile')
+            from .season_automatic import play
+            return play(self,request)
         self.controls.trusted()
         path = self._path(request)
         with process_lock(self.directory, name=".automatic.lock"):
@@ -127,6 +135,12 @@ class Automatic:
                 if self.career.identity()["checkpoint"] != request["expected_checkpoint"]:
                     raise ValueError("Stale gameplay parent")
                 events = self.career.play("next")["events"]
+                if not events and hasattr(self.career, 'season_boundary'):
+                    response = {"phase": "season_boundary", "simulation_advanced": False,
+                                "season_status": self.career.season_boundary()}
+                    self._save(path, {"request_id": request["request_id"], "request_sha256": digest(request),
+                                     "head_before": request["expected_checkpoint"], "kind": "season_boundary", "response": response})
+                    return response
                 narration = [e for e in events if e.get("kind") == "narration"]
                 op = {"request_id": request["request_id"], "request_sha256": digest(request),
                       "head_before": request["expected_checkpoint"], "response": None,
