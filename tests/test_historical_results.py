@@ -55,6 +55,27 @@ def projection(path,revealed=('league:290','league:310')):
     with connect_read_only(path) as c:return Projection(c,revealed=revealed)
 
 
+def test_multiseason_receipt_projection_preserves_results_without_full_match_decode(records):
+    with sqlite3.connect(records) as c:
+        c.executescript('''CREATE TABLE ms_meta(profile TEXT);
+CREATE TABLE ms_editions(id TEXT,competition TEXT,season INTEGER,format TEXT);
+CREATE TABLE ms_entries(edition TEXT,club TEXT);
+CREATE TABLE ms_executions(fixture TEXT,result_sha256 TEXT,result_json TEXT,input_json TEXT);
+CREATE TABLE ms_fixtures(key TEXT,edition TEXT,stage TEXT,round INTEGER,tie_key TEXT,home TEXT,away TEXT,kickoff TEXT,status TEXT,home_goals INTEGER,away_goals INTEGER);
+INSERT INTO ms_meta VALUES('season-forward-lineage-3');
+INSERT INTO ms_editions VALUES('LEAGUE:2028','LEAGUE',2028,'league');
+INSERT INTO ms_entries VALUES('LEAGUE:2028','club:2'),('LEAGUE:2028','club:3');
+INSERT INTO ms_fixtures VALUES('ms:unit:2028','LEAGUE:2028','LEAGUE',1,NULL,'club:2','club:3','2028-03-05 16:00','final',1,0);''')
+        result={'resolution':{'extra_time_played':False,'penalty_score':None},'events':['unused report data'*10000]}
+        c.execute('INSERT INTO ms_executions VALUES(?,?,?,?)',('ms:unit:2028',digest(result),json.dumps(result),'unused immutable input'))
+    before=file_sha256(records);p=projection(records)
+    row=p.records['ms:unit:2028']
+    assert row['score']==[1,0] and row['season']==2028
+    assert row['sources'][0]['result_sha256']==digest(result)
+    assert row['sources'][0]['profile']=='season-forward-lineage-3'
+    assert file_sha256(records)==before
+
+
 def test_entire_old_and_current_rodadas_no_mirror_duplicates(records):
     p=projection(records)
     for number in (28,29):

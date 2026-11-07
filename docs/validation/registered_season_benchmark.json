@@ -1,0 +1,28 @@
+{
+  "scope": "NONCANONICAL DEVELOPMENT TEST",
+  "identical_inputs_and_results": true,
+  "accepted_successors": [
+    {
+      "generation": 3,
+      "checkpoint": "f6a074ad33a09e7b9460fc95725050191c29ef61f248669b75884e1ef65ae0da",
+      "database_bytes": 145678336,
+      "logical_state_sha256": "9feb3aefb74e69bcab2a07af0d90b650ac9deb12d13ea693da9f2bb1c95d4709",
+      "measurements": {
+        "full": {
+          "wall_seconds": 221.28378780000094,
+          "cpu_seconds": 109.46875,
+          "process_peak_memory_bytes": 169795584
+        },
+        "rolling": {
+          "wall_seconds": 42.148188900000605,
+          "cpu_seconds": 36.5,
+          "process_peak_memory_bytes": 171819008
+        }
+      },
+      "wall_reduction_percent": 80.95287986569777
+    }
+  ],
+  "includes": "authentication, file reconstruction, structural/history checks, independent replay and all-table comparison",
+  "excludes": "execution, acceptance and real GitHub polling; those are separately measured by the integrated runner",
+  "memory_note": "cumulative process peak, not a per-phase isolated peak"
+}

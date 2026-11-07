@@ -50,6 +50,11 @@ class Episode:
 
     def state(self):
         parent = self.auto.controls._parent()
+        if getattr(self.career,'registered_season',lambda:False)():
+            from ..season_lineage import parent_info
+            from ..season_gameplay import state
+            with lineage.access(self.career.registry,self.career.key) as (c,t):
+                return state(c,parent_info(c,t,self.career.key,parent))
         if parent.is_file():
             return {"fixtures": [], "ties": [], "draws": [], "names": {}, "revealed": [], "league": [], "champions": []}
         cursors = {r["fixture"]: r["sequence"] for r in lineage.export_cursor(self.career.registry, self.career.key)["document"]["cursors"]}
@@ -78,11 +83,11 @@ class Episode:
             maximum = club["points"] + 3 * (38 - club["played"])
             others = [r for r in rows if r["id"] != club["id"]]
             if club["points"] > max(r["points"] + 3*(38-r["played"]) for r in others):
-                outcomes.add("title:club:" + str(club["id"]))
+                outcomes.add("title:" + ("club:"+str(club['id']) if type(club['id']) is int else club['id']))
             # Recorded season_rules: 17th-20th down, continental places remain
             # contingent. Strict inequality avoids inventing tiebreak decisions.
             if sum(r["points"] > maximum for r in others) >= 16:
-                outcomes.add("relegation:club:" + str(club["id"]))
+                outcomes.add("relegation:" + ("club:"+str(club['id']) if type(club['id']) is int else club['id']))
         for champion in state.get("champions", []):
             if champion["competition"] == "LEAGUE":
                 outcomes.add("title:" + champion["club_key"])
@@ -131,8 +136,11 @@ class Episode:
     def final_stats(self, fixture, summary):
         # Called only after the signed final page; never used in previews.
         parent = self.auto.controls._parent()
-        with connect_read_only(parent / "payload/database.sqlite") as db:
-            bundle = json.loads(db.execute("SELECT result_json FROM world_executions WHERE fixture_key=?", (fixture,)).fetchone()[0])
+        with lineage.access(self.career.registry,self.career.key) as (c,t):
+            info=lineage.parent_info(c,t,self.career.key,parent)
+        with connect_read_only(info['database']) as db:
+            query='SELECT result_json FROM ms_executions WHERE fixture=?' if self.career.registered_season() else 'SELECT result_json FROM world_executions WHERE fixture_key=?'
+            bundle = json.loads(db.execute(query, (fixture,)).fetchone()[0])
         stats = []
         for club in sorted({p["club_key"] for p in bundle["performances"]}):
             shots = [s for s in bundle["shots"] if s["club_key"] == club]
@@ -162,12 +170,17 @@ class Episode:
                 if self.career.identity()["checkpoint"] != request["expected_checkpoint"]:
                     raise ValueError("Stale episode parent")
                 state = self.state()
+                season_news=None
+                if getattr(self.career,'registered_season',lambda:False)():
+                    from ..season_gameplay import offseason_news
+                    season_news=offseason_news(self.career,request['request_id'])
                 op = {"profile": PROFILE, "request": request, "request_sha256": digest(request), "head": request["expected_checkpoint"],
                       "start": self.career.inspect()["accepted_clock"], "baseline": sorted(self.completed(state)),
                       "league_baseline": sorted(self.league_outcomes(state)),
                       "pending": None, "steps": 0, "batches": 0, "consumed": [], "pages": 0,
                       "target": None, "round": None, "target_done": False, "presentation": [],
                       "timings": {}, "response": None}
+                if season_news:op['presentation'].append(season_news)
                 retained, prior_deliveries = [], []
                 for prior_path in self.directory.glob("*.json"):
                     prior = self.auto._read(prior_path)
@@ -200,7 +213,7 @@ class Episode:
                 # Ordered sections survive canonical JSON sorting of object keys.
                 sections = list(op["presentation"])
                 if report:
-                    sections.append({"section": "milestone_report", "data": report})
+                    sections.append({"section": "season_boundary" if reason == "season_boundary" else "milestone_report", "data": report})
                 if op["target_done"] and op["round"]:
                     state = self.state()
                     round_rows = [f for f in state["fixtures"] if f["competition"] == "LEAGUE" and f["stage"] == op["round"]]
@@ -323,6 +336,18 @@ class Episode:
                 if any(VASCO in (e.get("home"), e.get("away")) and e["key"] != op["target"] for e in events):
                     return "vasco_match", None
             if not events:
+                if getattr(self.career,'registered_season',lambda:False)():
+                    boundary=self.career.season_boundary()
+                    editions=boundary.get('competitions',[])
+                    if boundary['phase']=='season_preparation_required' and editions and all(e['state']=='completed' for e in editions) and self.auto.mode()['enabled']:
+                        child={**request,'command':'advance_next_batch','args':{},
+                               'request_id':str(uuid5(UUID(request['request_id']),'archive-season')),
+                               'expected_checkpoint':self.career.identity()['checkpoint']}
+                        op['pending']={'kind':'batch','request':child,'agenda':[]}
+                        self.save(path,op)
+                        continue
+                if hasattr(self.career, 'season_boundary'):
+                    return "season_boundary", self.career.season_boundary()
                 return "season_complete", None
             span = (datetime.fromisoformat(events[0]["kickoff"]).date() - datetime.fromisoformat(op["start"]).date()).days
             if (span > MAX_DAYS or op["batches"] >= MAX_BATCHES or len(op["consumed"]) >= MAX_FIXTURES

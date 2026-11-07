@@ -1,0 +1,92 @@
+{
+  "scope": "NONCANONICAL DEVELOPMENT TEST",
+  "python": "3.12.14",
+  "platform": "Windows",
+  "baseline_commit": "5ad87c8",
+  "workload": "independent validation, portable export, independent restoration of the same 312-fixture world",
+  "baseline": {
+    "scope": "NONCANONICAL DEVELOPMENT TEST",
+    "label": "baseline",
+    "stages": {
+      "independent_validation": {
+        "wall_seconds": 42.58710649999557,
+        "cpu_seconds": 38.859375
+      },
+      "export": {
+        "wall_seconds": 90.2699350000039,
+        "cpu_seconds": 83.0625
+      },
+      "independent_restoration": {
+        "wall_seconds": 43.733623099993565,
+        "cpu_seconds": 40.328125
+      }
+    },
+    "total_wall_seconds": 176.75437920000695,
+    "total_cpu_seconds": 162.421875,
+    "source_files": {
+      "database.sqlite": "61a4254d5affe4d7964c9b12e2fd302c46394cb1cba41d91f4b739ed060094a6",
+      "parent.sqlite": "25133434e03969810946dc4b8eb17bc60f644436d9b247019bf6c7af3f9e1d49",
+      "development.json": "3cbaed717a931df1ec36b0741643827affd78d202d164305969cc235946d0c46"
+    },
+    "fixtures": 312,
+    "match_results_sha256": "0c08200f9f02eb15ff345fced7c9adbfa0334bb9c9bfe35f52c683c90927951e",
+    "world_sha256": "e01c1b6c9923ffbfbb7732772bd6ff5df52a0fdc211008d0699101a719a711b8",
+    "independent_replay": true,
+    "independent_restoration": true,
+    "database_bytes": 124461056,
+    "portable_directory_bytes": 208235473,
+    "portable_files": {
+      "database.sqlite": "61a4254d5affe4d7964c9b12e2fd302c46394cb1cba41d91f4b739ed060094a6",
+      "development.json": "3cbaed717a931df1ec36b0741643827affd78d202d164305969cc235946d0c46",
+      "manifest.json": "5ad7945267c1e12535782f4f992cf2e8b90c0981598f6b453fc471b8396a3798",
+      "parent.sqlite": "25133434e03969810946dc4b8eb17bc60f644436d9b247019bf6c7af3f9e1d49",
+      "verification.json": "406d0ab09198adca692cae7f8942d7be04ebda6346ebfd0d99d29000a7317516"
+    }
+  },
+  "optimized": {
+    "scope": "NONCANONICAL DEVELOPMENT TEST",
+    "label": "optimized",
+    "stages": {
+      "independent_validation": {
+        "wall_seconds": 48.94006109998736,
+        "cpu_seconds": 39.296875
+      },
+      "export": {
+        "wall_seconds": 47.967062600000645,
+        "cpu_seconds": 44.46875
+      },
+      "independent_restoration": {
+        "wall_seconds": 45.83964669999841,
+        "cpu_seconds": 41.65625
+      }
+    },
+    "total_wall_seconds": 142.9124723999994,
+    "total_cpu_seconds": 125.59375,
+    "source_files": {
+      "database.sqlite": "61a4254d5affe4d7964c9b12e2fd302c46394cb1cba41d91f4b739ed060094a6",
+      "parent.sqlite": "25133434e03969810946dc4b8eb17bc60f644436d9b247019bf6c7af3f9e1d49",
+      "development.json": "3cbaed717a931df1ec36b0741643827affd78d202d164305969cc235946d0c46"
+    },
+    "fixtures": 312,
+    "match_results_sha256": "0c08200f9f02eb15ff345fced7c9adbfa0334bb9c9bfe35f52c683c90927951e",
+    "world_sha256": "e01c1b6c9923ffbfbb7732772bd6ff5df52a0fdc211008d0699101a719a711b8",
+    "independent_replay": true,
+    "independent_restoration": true,
+    "database_bytes": 124461056,
+    "portable_directory_bytes": 208235473,
+    "portable_files": {
+      "database.sqlite": "61a4254d5affe4d7964c9b12e2fd302c46394cb1cba41d91f4b739ed060094a6",
+      "development.json": "3cbaed717a931df1ec36b0741643827affd78d202d164305969cc235946d0c46",
+      "manifest.json": "5ad7945267c1e12535782f4f992cf2e8b90c0981598f6b453fc471b8396a3798",
+      "parent.sqlite": "25133434e03969810946dc4b8eb17bc60f644436d9b247019bf6c7af3f9e1d49",
+      "verification.json": "406d0ab09198adca692cae7f8942d7be04ebda6346ebfd0d99d29000a7317516"
+    }
+  },
+  "portable_files_byte_identical": true,
+  "source_unchanged": true,
+  "match_results_identical": true,
+  "pipeline_wall_reduction_percent": 19.1462904360144,
+  "pipeline_cpu_reduction_percent": 22.67436267436267,
+  "export_wall_reduction_percent": 46.862637488330336,
+  "limitations": "Single paired sample; caching/background activity not controlled. Not an episode-latency or production benchmark."
+}

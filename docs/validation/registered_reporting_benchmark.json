@@ -1,0 +1,18 @@
+{
+  "scope": "NONCANONICAL DEVELOPMENT TEST",
+  "workload": "historical receipt loading only, not full episode timing",
+  "fixtures": 1341,
+  "identical_resolution_sha256": "00dcbdd7a0e2379b0f632afaa8aaf7356d0c06c22649ecd9e3889d5552fbdc3d",
+  "before": {
+    "wall_seconds": 1.2396724999998696,
+    "cpu_seconds": 1.234375,
+    "selected_text_bytes": 137437424
+  },
+  "after": {
+    "wall_seconds": 0.3747841999975208,
+    "cpu_seconds": 0.34375,
+    "selected_text_bytes": 845159
+  },
+  "wall_reduction_percent": 69.76748294428083,
+  "order_note": "old first, new second, filesystem cache may favor second run"
+}

@@ -80,6 +80,44 @@ def clone_registry(source, tmp_path):
     return reg
 
 
+def test_archive_only_history_and_exact_head_repair(candidate, tmp_path, monkeypatch):
+    from braga_era.bridge.career import Career
+    from braga_era.bridge.historical import HistoricalResults
+    from tools.repair_accepted_payload import publish
+
+    monkeypatch.setattr('tempfile.tempdir', str(tmp_path))
+    reg = clone_registry(candidate['registry'], tmp_path)
+    parent = tmp_path / 'accepted'
+    shutil.copytree(candidate['checkpoint'], parent)
+    decision = lineage.acceptance_template(reg, KEY, parent)
+    receipt = lineage.accept(reg, KEY, parent, decision, lineage.sign(KEY, decision))
+    checkpoint = receipt['checkpoint_sha256']
+    history = HistoricalResults(Career(reg, KEY, 'lineage-unit-v1', True))
+    filters = {'competition': 'LEAGUE', 'limit': 5}
+    original = history.query(filters)
+    archive_sha = file_sha256(parent / 'checkpoint.zip')
+    registry_sha = file_sha256(reg)
+    for name in lineage.LEGACY_DATABASE_MEMBERS:
+        (parent / 'payload' / name).unlink()
+    assert history.query(filters) == original
+    assert all(not (parent / 'payload' / name).exists() for name in lineage.LEGACY_DATABASE_MEMBERS)
+    with lineage.access(reg, KEY, lock=True) as (db, trusted):
+        with pytest.raises(ValueError, match='head changed'):
+            publish(db, trusted, KEY, '0' * 64)
+        assert set(publish(db, trusted, KEY, checkpoint)) == lineage.LEGACY_DATABASE_MEMBERS
+        assert publish(db, trusted, KEY, checkpoint) == []
+    assert file_sha256(reg) == registry_sha
+    assert file_sha256(parent / 'checkpoint.zip') == archive_sha
+    assert history.query(filters) == original
+    # The archive fallback may fill absent database members, never hide changed evidence.
+    (parent / 'payload' / 'database.sqlite').unlink()
+    (parent / 'payload' / 'world.json').write_text('{}')
+    with lineage.access(reg, KEY) as (db, trusted):
+        with pytest.raises(ValueError, match='changed bytes'):
+            publish(db, trusted, KEY, checkpoint)
+    assert not (parent / 'payload' / 'database.sqlite').exists()
+
+
 def test_three_accepted_generations_equal_one_continuous_world(chain):
     r = chain["report"]
     assert [x["receipts"] for x in r["batches"]] == [16, 26, 42]

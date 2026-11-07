@@ -1,0 +1,182 @@
+{
+  "scope": "NONCANONICAL DEVELOPMENT TEST",
+  "production_modified": false,
+  "source_unchanged": true,
+  "2028_fixture_counts": {
+    "ACCESS:2028": 8,
+    "CARIOCA:2028": 45,
+    "CDB:2028": 157,
+    "LEAGUE:2028": 380,
+    "LIB:2028": 125,
+    "LIB_PRE1:2028": 6,
+    "LIB_PRE2:2028": 16,
+    "LIB_PRE3:2028": 8,
+    "LOWER:2028": 56,
+    "RECOPA:2028": 2,
+    "SERIE_B:2028": 380,
+    "SULA:2028": 141,
+    "SULA_PRE:2028": 16,
+    "SUPERCOPA:2028": 1
+  },
+  "transitions": [
+    {
+      "season": 2028,
+      "wall_seconds": 0.15493920000153594,
+      "cpu_seconds": 0.15625,
+      "accepted": true,
+      "timing_scope": "remaining/resumed control workflow"
+    },
+    {
+      "season": 2029,
+      "wall_seconds": 0.15378580000106012,
+      "cpu_seconds": 0.15625,
+      "accepted": true,
+      "timing_scope": "remaining/resumed control workflow"
+    }
+  ],
+  "phone_episodes": [
+    {
+      "episode_type": "vasco_match",
+      "wall_seconds": 0.036956600000848994,
+      "timing_scope": "cached/resumed request delivery; not initial episode duration"
+    },
+    {
+      "episode_type": "competition_milestone",
+      "season": 2029,
+      "wall_seconds": 0.035330400001839735,
+      "timing_scope": "cached/resumed request delivery; not initial episode duration"
+    },
+    {
+      "episode_type": "vasco_match",
+      "season": 2029,
+      "wall_seconds": 0.03727939999953378,
+      "timing_scope": "cached/resumed request delivery; not initial episode duration"
+    }
+  ],
+  "rolling_successors": [
+    {
+      "request_id": "d7f46dd2-01f4-572c-b0d6-253a44a5bbf8",
+      "resumed": false,
+      "wall_seconds": 124.79465470000287,
+      "cpu_seconds": 69.671875,
+      "phases_seconds": {
+        "prepare_authorize": 2.139984099998401,
+        "execute": 58.34316310000213,
+        "acceptance": 58.17065480000019
+      },
+      "process_peak_memory_bytes": 588877824,
+      "execution_metrics": {
+        "cpu_seconds": 40.140625,
+        "resumed_working_copy": false,
+        "seconds": {
+          "chunk_export_and_publication": 10.785137799997756,
+          "independent_restoration_and_replay": 24.172751800000697,
+          "simulation_and_operations": 1.8635516999966057,
+          "structural_validation": 7.349598900000274
+        },
+        "wall_seconds": 58.34130670000013
+      },
+      "database_bytes": 328376320,
+      "object_pool_bytes": 91371396
+    },
+    {
+      "request_id": "be3202eb-3456-59ad-b739-abb8f819a32c",
+      "resumed": false,
+      "wall_seconds": 110.36792509999941,
+      "cpu_seconds": 70.171875,
+      "phases_seconds": {
+        "prepare_authorize": 2.1379049999995914,
+        "execute": 78.47129009999844,
+        "acceptance": 29.12114389999988
+      },
+      "process_peak_memory_bytes": 592089088,
+      "execution_metrics": {
+        "cpu_seconds": 40.015625,
+        "resumed_working_copy": false,
+        "seconds": {
+          "chunk_export_and_publication": 13.239867200001754,
+          "independent_restoration_and_replay": 54.36210530000244,
+          "simulation_and_operations": 2.0520609999985027,
+          "structural_validation": 7.450745900001493
+        },
+        "wall_seconds": 78.46917949999988
+      },
+      "database_bytes": 329228288,
+      "object_pool_bytes": 93537704
+    },
+    {
+      "request_id": "8facc61f-f4ac-5e93-8a7f-380946b8f095",
+      "resumed": false,
+      "wall_seconds": 423.6563965000023,
+      "cpu_seconds": 81.765625,
+      "phases_seconds": {
+        "prepare_authorize": 2.101166500000545,
+        "execute": 219.56138169999758,
+        "acceptance": 199.93289879999793
+      },
+      "process_peak_memory_bytes": 593305600,
+      "execution_metrics": {
+        "cpu_seconds": 45.453125,
+        "resumed_working_copy": false,
+        "seconds": {
+          "chunk_export_and_publication": 14.59934609999982,
+          "independent_restoration_and_replay": 190.1789824999978,
+          "simulation_and_operations": 6.0445051999995485,
+          "structural_validation": 7.198903299999074
+        },
+        "wall_seconds": 219.5315484999992
+      },
+      "database_bytes": 330018816,
+      "object_pool_bytes": 95854052
+    }
+  ],
+  "2029_completed_fixture_counts": {
+    "CARIOCA:2029": 24,
+    "RECOPA:2029": 2,
+    "SUPERCOPA:2029": 1
+  },
+  "offseasons": [
+    {
+      "canonical_approval": false,
+      "clubs_planned": 285,
+      "developed": 7221,
+      "policy": "autonomous-offseason-development-1",
+      "production_authorized": false,
+      "rejected": 55,
+      "retired": 120,
+      "season": 2028,
+      "signed": 79,
+      "youth": 570
+    },
+    {
+      "canonical_approval": false,
+      "clubs_planned": 285,
+      "developed": 7640,
+      "policy": "autonomous-offseason-development-1",
+      "production_authorized": false,
+      "rejected": 65,
+      "retired": 151,
+      "season": 2029,
+      "signed": 80,
+      "youth": 570
+    }
+  ],
+  "portable": {
+    "checkpoint": "cb19bf27f8e103676208704f1642593079f993147badf99a6eb7ecae46912eff",
+    "archive_bytes": 98054438,
+    "objects": 9703,
+    "resumed_original_export": true
+  },
+  "restoration": {
+    "checkpoint": "cb19bf27f8e103676208704f1642593079f993147badf99a6eb7ecae46912eff",
+    "independent_restore": true,
+    "full_history_audit": false
+  },
+  "retained_test_evidence_bytes": 98247067,
+  "elapsed_seconds": 88.2588969999997,
+  "export_wall_seconds": null,
+  "restoration_wall_seconds": 84.25266089999786,
+  "coverage": "Full supported 2028 ecosystem plus representative phone episodes; subsequent 2029 episode, not full 2029 season.",
+  "elapsed_scope": "final resumed invocation; earlier attempts excluded",
+  "full_2029_season_simulated": false
+}

@@ -202,6 +202,9 @@ class Controls:
             or document.get("statement_sha256") != digest(statement)
             or document.get("human_id") != self.gate.context["human_id"]):
             raise ValueError("Independent exact-action human proof required")
+        if statement.get('profile')=='bridge-season-control-3':
+            from .season_control import SeasonControls
+            return SeasonControls(self).perform(statement)
         return self._perform_validated(statement)
 
     def perform_delegated(self, statement, grant, operation):

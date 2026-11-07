@@ -1,8 +1,10 @@
 """Authenticated, cursor-free historical reads and bounded reporting pages."""
 
 import base64
+from contextlib import ExitStack
 import json
 from pathlib import Path
+import tempfile
 
 from .. import lineage
 from ..db import connect_read_only, file_sha256
@@ -17,6 +19,11 @@ class HistoricalResults:
         self.career = career
 
     def snapshot(self, checkpoint=None, visibility=None):
+        with ExitStack() as cleanup:
+            return self._snapshot(checkpoint,visibility,cleanup)
+
+    def _snapshot(self, checkpoint, visibility, cleanup):
+        pinned_visibility=visibility is not None
         self.career.identity()  # existing identity/mode/fencing checks; no control privilege needed.
         with lineage.access(self.career.registry, self.career.key) as (c, trusted):
             checkpoint = checkpoint or trusted['head']
@@ -29,7 +36,15 @@ class HistoricalResults:
                 if row is None:
                     raise ResultsError('UNREGISTERED_CHECKPOINT', 'The results page is not from this accepted career.')
                 parent = Path(row[0])
-            info = lineage.parent_info(c, trusted, self.career.key, parent, require_head=False)
+            from .. import season_lineage
+            if checkpoint!=trusted['head'] and season_lineage.is_registered(parent):
+                temporary=cleanup.enter_context(tempfile.TemporaryDirectory(prefix='.historical-read-',dir=Path(self.career.registry).parent))
+                info=season_lineage.parent_info(c,trusted,self.career.key,parent,require_head=False,cache_directory=Path(temporary)/'world')
+            elif parent.is_dir() and not season_lineage.is_registered(parent) and any(
+                    not (parent / 'payload' / name).is_file() for name in lineage.LEGACY_DATABASE_MEMBERS):
+                temporary = cleanup.enter_context(tempfile.TemporaryDirectory(prefix='.historical-legacy-'))
+                info, _ = lineage.stage_legacy_parent(c, trusted, self.career.key, parent, temporary, require_head=False)
+            else:info = lineage.parent_info(c, trusted, self.career.key, parent, require_head=False)
             cursors = {r['fixture']: r['sequence'] for r in c.execute('SELECT * FROM cursors')}
             lineage.check_cursors(c, trusted, self.career.key)
         with connect_read_only(info['database']) as db:
@@ -40,6 +55,13 @@ class HistoricalResults:
                     "WHERE f.home='club:15' OR f.away='club:15' GROUP BY e.fixture_key")
                     if cursors.get(r['fixture_key']) == r['n']] if 'world_events' in tables else []
             projection = Projection(db, revealed=visibility)
+            if 'ms_executions' in tables:
+                from ..season_gameplay import unrevealed
+                with lineage.access(self.career.registry,self.career.key) as (c,t):hidden=set(unrevealed(c,info['database']))
+                current_visibility=[r[0] for r in db.execute("SELECT key FROM ms_fixtures WHERE status='final' AND (home='club:15' OR away='club:15')") if r[0] not in hidden]
+                # A continuation token pins earlier visibility, never widens it.
+                if not pinned_visibility:visibility+=current_visibility
+                projection = Projection(db, revealed=visibility)
         metadata = {'profile': PROFILE, 'accepted_checkpoint': checkpoint, 'accepted_clock': info['clock'],
                     'database_sha256': file_sha256(info['database']), 'career': self.career.career,
                     'test_only': self.career.test_only, 'read_only': True}
