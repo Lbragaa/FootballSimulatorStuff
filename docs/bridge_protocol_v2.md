@@ -1,5 +1,57 @@
 # Private phone bridge protocol 2
 
+## Historical results and episode reporting (0.12.0)
+
+`historical_results` uses read scope and optional closed arguments documented in
+[the historical-results guide](historical_results.md). It is routed before
+control/automatic commands and remains available without control configuration
+or enabled gameplay. Existing envelope/identity/head/sequence validation and
+signed response format are unchanged. The response wraps `historical_results`
+(snapshot metadata, matches, ties, coverage, selection, pagination, limitations
+or a structured error) plus the current OUTER `accepted_checkpoint`.
+
+Opaque HMAC continuation tokens bind exact accepted snapshot, filters, offset,
+career/mode and reveal visibility. Registered old snapshots may be read after a
+newer acceptance. No narration API or cursor/session writer is called. Unknown
+scores remain null; no candidate/private diagnostic file is a reporting source.
+
+New episodes insert `episode_results` after narration/fulltime and before tables.
+It includes round matches (with complete/pending distinction), relevant other
+results and available tie decisions. `omitted`/`omitted_ties`/`exhaustive` and
+pinned `retrieve_all`/`retrieve_round` commands disclose transport truncation.
+`results_deferred` keeps ordinary other results after an unfinished Vasco
+narration; deferred IDs carry over a bounded continuation. Existing signed pages,
+old cached episode replies and legacy commands retain their bytes/behavior.
+
+## Career episodes (0.11.0)
+
+`play_next_episode` has exactly `{}` arguments and control scope. It needs no new
+opt-in or credential: existing revocable career delegation applies. The command
+returns `episode_type`, `presentation` (an ORDERED section array),
+`presentation_rule`, `world_progress`, `accepted_checkpoint`, `recovery` and
+`timings_seconds`. Vasco's score follows the final timeline/whistle in `fulltime`;
+version 0.12 adds other scores in the subsequent `episode_results` section.
+A prior concluded competition milestone may report its results. No score appears
+in the opening metadata. See [Play](play.md) for exact Hikari rendering rules.
+
+Signed local `career-episode-1` journals commit each internal UUID/page ID before
+effects. Child batch UUIDs derive from the episode UUID and batch index, never
+outcomes or clocks. Each child uses the unchanged automatic operation and lineage
+verification/acceptance. A page committed before a crash is retrieved by the same
+signed page ID. Acceptance committed before the episode journal update resumes
+that exact child and immediate parent. The original bridge inbox/outbox makes
+the final response immutable and retries idempotent, including uncertain POSTs.
+Known committed rule blockers retain the original child; a later continue adopts
+that commitment after correction rather than claiming a replacement seed.
+
+Already completed stages are the request's baseline, so a new conversation does
+not replay an old R16 milestone. Round tables require every recorded fixture of
+that round final AND fully revealed; a later second Vasco match is a stop fence.
+Mathematical title/relegation notices use recorded 38-round/17th-20th rules and
+strict point inequalities; contingent continental places are never invented.
+All old commands, signatures, stored issues, sequences and page receipts remain
+compatible. Episode bounds and recovery instructions are in [Play](play.md).
+
 ## Final streamlined gameplay commands (0.10.0)
 
 The user intentionally replaced per-batch independent approval with a revocable,

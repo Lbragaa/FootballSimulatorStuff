@@ -45,6 +45,8 @@ class Worker2(Worker):
         super().__init__(*args, **kwargs)
         self.controls = controls
         self.automatic = automatic
+        from .episode import Episode
+        self.episodes = Episode(automatic) if automatic else None
         self.roundups = roundups or Roundups(self.career, self.path.parent / "roundups")
 
     def capabilities(self):
@@ -62,17 +64,40 @@ class Worker2(Worker):
             auto = self.automatic.mode()["enabled"]
         return {"execution_enabled": enabled, "acceptance_enabled": enabled, "automatic_gameplay": auto}
 
+    def request_claimed(self, c, request):
+        if request["command"] == "play_next_episode" and hasattr(self.transport, "status"):
+            status = self.status_document(c)
+            self.transport.status({"status": status, "signature": lineage.sign(self.career.key, status)})
+
+    def deliver(self, c, number):
+        started = time.perf_counter()
+        before = dict(getattr(self.transport, "timings", {}))
+        super().deliver(c, number)
+        if before:
+            row = c.execute("SELECT request,done FROM deliveries WHERE issue=?", (number,)).fetchone()
+            path = self.path.parent / "performance" / (row["request"] + ".json")
+            if row["done"] == 1 and not path.exists():
+                replace_signed(path, {"issue": number, "request_id": row["request"],
+                    "delivery_wall_seconds": round(time.perf_counter()-started, 3),
+                    "github_seconds": {k: round(v-before.get(k,0),3) for k,v in self.transport.timings.items()}}, self.career.key)
+
     def valid_head(self, request):
         if super().valid_head(request):
             return True
+        if self.episodes and request["command"] == "play_next_episode":
+            return self.episodes.resumable(request)
         return bool(self.automatic and request["command"] in
                     {"continue_gameplay", "advance_next_batch", "play_prepared_batch"}
                     and self.automatic.resumable(request))
 
     def dispatch(self, c, row, request):
         name, args = request["command"], request["args"]
+        if name == 'historical_results':
+            from .historical import HistoricalResults
+            return {'historical_results': HistoricalResults(self.career).query(args),
+                    'accepted_checkpoint': self.career.identity()['checkpoint']}
         if name in {"enable_automatic_gameplay", "disable_automatic_gameplay", "automatic_status",
-                    "continue_gameplay", "advance_next_batch", "play_prepared_batch"}:
+                    "continue_gameplay", "advance_next_batch", "play_prepared_batch", "play_next_episode"}:
             if self.automatic is None or not self.capabilities()["execution_enabled"]:
                 raise ValueError("Automatic gameplay is not configured for this career")
             actor = self.transport.issue(row["source"])["user"]
@@ -82,6 +107,13 @@ class Worker2(Worker):
                 return {"automatic_gameplay": self.automatic.mode()["enabled"], "career": self.career.career}
             if name in {"enable_automatic_gameplay", "disable_automatic_gameplay"}:
                 return self.automatic.set_mode(name == "enable_automatic_gameplay", request, row["source"])
+            if name == "play_next_episode":
+                try:
+                    return self.episodes.run(request)
+                except ValueError:
+                    if self.episodes.path(request).exists():
+                        raise RuntimeError("Original episode retained for recovery") from None
+                    raise
             prepared = (args["preparation_id"], args["manifest_sha256"]) if name == "play_prepared_batch" else None
             try:
                 return self.automatic.play(request, prepared=prepared)

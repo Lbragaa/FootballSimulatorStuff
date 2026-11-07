@@ -20,8 +20,9 @@ issue comments directly; search-index freshness is not response availability.
 - “What is next?” → `next_event`; respect the earliest global agenda.
 - “Pregame/team news” → `prematch_preview` / `available_team_news`, only for the
   currently eligible group. Use its exact player ID/name mapping.
-- “Continue” → `narrate_next` or a requested bounded count. Reconstruct compact
-  on-field references if needed; narrate only returned chronological events.
+- “Continue” → `play_next_episode` with `{}`, one command/reply. Follow the
+  ordered sections and spoiler rules in [Play](play.md). Use `narrate_next` or
+  bounded counts only when the user explicitly wants individual delivery.
 - “To halftime/final” → the corresponding narration command. If a bounded
   delivery has `boundary_reached=false`, continue with the next sequence/new UUID
   until the requested boundary. Retries retain the original UUID.
@@ -30,6 +31,10 @@ issue comments directly; search-index freshness is not response availability.
   `detailed` list. Only narrate returned summaries. Never include Vasco or jump
   past earlier pending detail. A roundup cannot execute an unplayed batch.
 - “Table/finances” → reveal-horizon views, never private diagnostic packages.
+- “Show past scores / a rodada / cup legs / a club's recent games” →
+  `historical_results`; use human competition/club names, integer season/round,
+  stage/leg/date filters and paginate until has_more=false. No simulation or
+  narration command is needed. See [historical queries](historical_results.md).
 
 In a new conversation, read #1, retrieve recent delivery comments and previews,
 and continue from the same authority/cursor. Never initialize another career or

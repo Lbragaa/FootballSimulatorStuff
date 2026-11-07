@@ -10,6 +10,8 @@ COMMANDS = {
     "disable_automatic_gameplay": {},
     "automatic_status": {},
     "continue_gameplay": {},
+    "play_next_episode": {},
+    "historical_results": {},
     "advance_next_batch": {},
     "play_prepared_batch": {"preparation_id": "uuid", "manifest_sha256": "hash"},
     "prepare_control_batch": {"until": "boundary"},
@@ -21,7 +23,7 @@ COMMANDS = {
     "roundup": {"fixtures": "fixtures", "detailed": "fixtures"},
 }
 RESULT_KEYS = v1.RESULT_KEYS | set(
-    "control_profile policy_sha256 configurations_sha256 career_seed_sha256 seed_policy preparation_id batch_state review candidate confirmation summaries held_for_detail next_events on_field_states presentation source_page_sha256s automatic_gameplay phase simulation_advanced".split()
+    "control_profile policy_sha256 configurations_sha256 career_seed_sha256 seed_policy preparation_id batch_state review candidate confirmation summaries held_for_detail next_events on_field_states presentation source_page_sha256s automatic_gameplay phase simulation_advanced episode_type presentation_rule world_progress recovery timings_seconds historical_results".split()
 )
 
 
@@ -37,6 +39,14 @@ def parse(body):
     if request.get("protocol") != PROTOCOL:
         raise ValueError("Unsupported protocol")
     name = request.get("command")
+    if name == 'historical_results':
+        if not isinstance(request.get('args'), dict):
+            raise ValueError('Historical filter object required')
+        v1.parse(json.dumps({**request, "protocol": v1.PROTOCOL, "command": "inspect_career", "args": {}}))
+        # The same closed filter validator runs BEFORE any read in query().
+        # An authenticated recognized request gets a useful typed filter error
+        # instead of silently disappearing. Invalid headers stay unclaimable.
+        return request
     if isinstance(name, str) and name in v1.COMMANDS:
         v1.parse(json.dumps({**request, "protocol": v1.PROTOCOL}))
         return request
@@ -70,7 +80,7 @@ def parse(body):
 
 
 def role(command):
-    if command == "automatic_status":
+    if command in {"automatic_status", "historical_results"}:
         return "read"
     return "narration" if command == "roundup" else "control" if command in COMMANDS else v1.role(command)
 
@@ -95,8 +105,21 @@ def schema():
                                          "required": list(spec), "properties": {k: deepcopy(types[v]) for k, v in spec.items()}}
         if name == "roundup":
             branch["properties"]["args"]["properties"]["fixtures"]["minItems"] = 1
+        if name == 'historical_results':
+            branch['properties']['args'] = historical_schema()
         base["oneOf"].append(branch)
     return base
+
+
+def historical_schema():
+    properties = {k: {'type': 'string', 'minLength': 1, 'maxLength': 100} for k in ('competition', 'stage', 'club')}
+    for name, (low, high) in {'season': (1900, 2200), 'round': (1, 99), 'leg': (1, 2), 'recent': (1, 500), 'limit': (1, 50)}.items():
+        properties[name] = {'type': 'integer', 'minimum': low, 'maximum': high}
+    for name in ('date', 'date_from', 'date_to'):
+        properties[name] = {'type': 'string', 'format': 'date', 'pattern': '^\\d{4}-\\d{2}-\\d{2}$'}
+    properties['include_pending'] = {'type': 'boolean'}
+    properties['cursor'] = {'type': 'string', 'minLength': 1, 'maxLength': 4096}
+    return {'type': 'object', 'additionalProperties': False, 'properties': properties}
 
 
 def response_schema():
