@@ -292,6 +292,33 @@ def test_signed_cursors_reject_in_range_tampering(chain, tmp_path):
         lineage.export_cursor(reg, KEY)
 
 
+def test_partial_narration_cache_recovers_without_consuming_cursor(candidate, tmp_path):
+    reg = clone_registry(candidate["registry"], tmp_path)
+    parent = tmp_path / "accepted"
+    shutil.copytree(candidate["checkpoint"], parent)
+    decision = lineage.acceptance_template(reg, KEY, parent)
+    lineage.accept(reg, KEY, parent, decision, lineage.sign(KEY, decision))
+
+    expected = lineage.gameplay(reg, KEY, "next")
+    session, = (path for path in (reg.parent / "sessions").iterdir() if path.is_dir())
+    (session / "parent.sqlite").unlink()
+    cursors = lineage.export_cursor(reg, KEY)
+    assert lineage.gameplay(reg, KEY, "next") == expected
+    assert file_sha256(session / "parent.sqlite") == lineage.ROOT
+    assert lineage.export_cursor(reg, KEY) == cursors
+
+    (session / "database.sqlite").unlink()
+    (session / "initialization_commitment.json").unlink()
+    assert lineage.gameplay(reg, KEY, "next") == expected
+    assert lineage.export_cursor(reg, KEY) == cursors
+
+    (session / "parent.sqlite").unlink()
+    write_json(session / "world.json", {"changed": True})
+    with pytest.raises(ValueError, match="cache metadata differs"):
+        lineage.gameplay(reg, KEY, "next")
+    assert not (session / "parent.sqlite").exists()
+
+
 def test_cursor_handoff_cannot_rewind_or_change_result(chain, tmp_path):
     reg = clone_registry(chain["registry"], tmp_path)
     envelope = lineage.export_cursor(reg, KEY)

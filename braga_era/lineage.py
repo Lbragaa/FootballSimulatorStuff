@@ -543,6 +543,48 @@ def clone_parent(info, target, career_seed):
     authenticate(target)
 
 
+def narration_session(info, session, career_seed):
+    """Recover missing cache members without replacing or trusting altered files."""
+    if session.is_symlink() or (session.exists() and not session.is_dir()):
+        raise ValueError("Unexpected narration session path")
+    if not session.exists():
+        session.parent.mkdir(parents=True, exist_ok=True)
+        clone_parent(info, session, career_seed)
+
+    sources = {
+        "database.sqlite": info["database"],
+        "parent.sqlite": info["history_root"],
+        "world.json": info["payload"] / "world.json",
+        "initialization_commitment.json": info["payload"] / "initialization_commitment.json",
+    }
+    missing = []
+    for name in sources:
+        target = session / name
+        if target.is_symlink() or (target.exists() and not target.is_file()):
+            raise ValueError("Unexpected narration cache member")
+        if not target.exists():
+            missing.append(name)
+
+    # Cursor rows may legitimately differ. They are reapplied from the signed
+    # authority journal, so validate all other tables against the accepted head.
+    if "database.sqlite" not in missing:
+        with connect_read_only(session / "database.sqlite") as db:
+            if digest(fingerprints(db)) != info["world_sha256"]:
+                raise ValueError("Narration working world differs from accepted immutable state")
+    if missing:
+        for name, source in sources.items():
+            if name != "database.sqlite" and name not in missing:
+                if file_sha256(session / name) != file_sha256(source):
+                    raise ValueError("Narration cache metadata differs from accepted state")
+        with tempfile.TemporaryDirectory(dir=session, prefix=".repair-") as stage:
+            for name in missing:
+                copy = Path(stage) / name
+                shutil.copyfile(sources[name], copy)
+                if file_sha256(copy) != file_sha256(sources[name]):
+                    raise ValueError("Staged narration cache bytes differ from accepted state")
+                _publish_file(copy, session / name)
+
+
 def prefix_check(parent_db, child_db):
     from .migrations import rows_by_key
 
@@ -1327,14 +1369,7 @@ def gameplay(registry, key, command, fixture=None, count=1, *, page_id=None):
             / "sessions"
             / f"{info['generation']:04d}-{trusted['head'][:16]}"
         )
-        if not session.exists():
-            session.parent.mkdir(parents=True, exist_ok=True)
-            clone_parent(info, session, trusted["seed"])
-        with connect_read_only(session / "database.sqlite") as db:
-            if digest(fingerprints(db)) != info["world_sha256"]:
-                raise ValueError(
-                    "Narration working world differs from accepted immutable state"
-                )
+        narration_session(info, session, trusted["seed"])
         apply_cursors(c, session)
         c.execute("BEGIN IMMEDIATE")
         try:
