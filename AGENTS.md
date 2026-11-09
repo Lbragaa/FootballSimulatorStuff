@@ -18,6 +18,13 @@
 
 ## Multi-season execution prototype
 
+- Worker candidate 0.13.3 adds the default-off standing grant
+  `standing-season-transition-1` for `supported-ecosystem-rio-venues-2`.
+  The pinned commissioner opts in separately through the existing bridge.
+  Retain sealed manual challenge history, signed grant and per-request journals,
+  and the separate execution/acceptance audit records. Never reuse ordinary
+  automatic gameplay as consent for a season. See `docs/bridge_hikari_v2.md`.
+
 - The new candidate `season-forward-lineage-3` uses the existing signer, registry,
   parent claims and career seed. Read `docs/registered_season_integration.md`.
   It migrates a genuinely completed accepted 2027 parent under separate exact

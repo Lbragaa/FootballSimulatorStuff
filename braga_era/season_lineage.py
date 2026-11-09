@@ -210,12 +210,43 @@ def prepare(registry,key,request_id,operations,*,transition=False,automatic_game
                 'prior_review':prior,'operations':operations}
 
 
-def authorize(registry,key,manifest,approval):
+def _transition_audit(c, key, batch, manifest, phase, target, proof, *, retry=False):
+    if proof is None:
+        return
+    doc = lineage.check_signed(proof, key)
+    if (manifest['kind'] != 'transition' or doc.get('profile') != 'standing-season-transition-operation-1'
+            or doc.get('phase') != phase or doc.get('manifest_sha256') != digest(manifest)
+            or doc.get('target_sha256') != target or doc.get('preparation_id') != manifest['request_id']):
+        raise ValueError('Standing season transition audit binding differs')
+    kind = 'standing_season_' + phase
+    values = (encode(doc), proof['signature'])
+    if retry:
+        row = c.execute('SELECT document,signature FROM decisions WHERE batch=? AND kind=?',
+                        (batch, kind)).fetchone()
+        if not row or tuple(row) != values:
+            raise ValueError('Standing season transition retry differs from the original grant')
+    else:
+        if phase == 'acceptance':
+            execution = c.execute("SELECT document,signature FROM decisions WHERE batch=? AND kind='standing_season_execution'",
+                                  (batch,)).fetchone()
+            if not execution:
+                raise ValueError('Missing standing execution audit')
+            prior = lineage.check_signed({'document': json.loads(execution['document']),
+                                          'signature': execution['signature']}, key)
+            if prior != {**doc, 'phase': 'execution', 'target_sha256': digest(manifest)}:
+                raise ValueError('Standing acceptance differs from execution provenance')
+        c.execute('INSERT INTO decisions(batch,kind,document,signature) VALUES(?,?,?,?)',
+                  (batch, kind, *values))
+
+
+def authorize(registry,key,manifest,approval,*,transition_audit=None):
     with lineage.access(registry,key,True) as (c,t):
         row=c.execute('SELECT * FROM batches WHERE id=?',('season3:'+manifest['request_id'],)).fetchone()
         if row:
             if json.loads(row['manifest'])!=manifest or json.loads(row['decision'])!=lineage.check_signed(approval,key):
                 raise ValueError('Changed registered season request')
+            _transition_audit(c, key, row['id'], manifest, 'execution', digest(manifest),
+                              transition_audit, retry=True)
             return
         expected=prepare(registry,key,manifest['request_id'],manifest['operations'][1:] if manifest['kind']=='transition' else manifest['operations'],
                          transition=manifest['kind']=='transition',automatic_gameplay=manifest['automatic_gameplay'],delegated=manifest['delegated'])
@@ -233,6 +264,7 @@ def authorize(registry,key,manifest,approval):
                       (identifier,t['head'],encode(manifest),encode(approval['document']),approval['signature'],str(parent)))
             c.execute('INSERT INTO decisions(batch,kind,document,signature) VALUES(?,?,?,?)',
                       (identifier,'season_execution',encode(approval['document']),approval['signature']))
+            _transition_audit(c, key, identifier, manifest, 'execution', digest(manifest), transition_audit)
             c.commit()
         except BaseException:c.rollback();raise
 
@@ -375,7 +407,7 @@ def acceptance_template(registry,key,directory):
         return lineage.expected_acceptance(package['metadata'],digest(package),t)
 
 
-def accept(registry,key,directory,decision,signature,*,crash=None):
+def accept(registry,key,directory,decision,signature,*,crash=None,transition_audit=None):
     directory=Path(directory).resolve()
     with lineage.access(registry,key,True) as (c,t):
         package=read_package(directory);meta=package['metadata'];checkpoint=digest(meta)
@@ -384,6 +416,8 @@ def accept(registry,key,directory,decision,signature,*,crash=None):
         old=c.execute('SELECT * FROM accepted WHERE checkpoint=?',(checkpoint,)).fetchone()
         if old:
             if Path(old['path'])!=directory:raise ValueError('Accepted season location differs')
+            _transition_audit(c, key, 'season3:'+package['manifest']['request_id'], package['manifest'],
+                              'acceptance', checkpoint, transition_audit, retry=True)
             parent_info(c,t,key,directory,require_head=False)
             lineage.publish_json(directory/'acceptance.json',json.loads(old['proof'])['acceptance'])
             if t['head']==checkpoint:_compact(c,t,key,directory,package)
@@ -403,6 +437,7 @@ def accept(registry,key,directory,decision,signature,*,crash=None):
             if c.execute('UPDATE authority SET head=? WHERE head=?',(checkpoint,t['head'])).rowcount!=1:raise ValueError('Concurrent season acceptance')
             c.execute("UPDATE batches SET state='accepted' WHERE id=?",(row['id'],))
             c.execute('INSERT INTO decisions(batch,kind,document,signature) VALUES(?,?,?,?)',(row['id'],'season_acceptance',encode(decision),signature))
+            _transition_audit(c, key, row['id'], package['manifest'], 'acceptance', checkpoint, transition_audit)
             if crash=='before_commit':raise RuntimeError('Injected season acceptance crash before commit')
             c.commit()
         except BaseException:c.rollback();raise

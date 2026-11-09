@@ -10,12 +10,15 @@ from .. import lineage
 from ..history import canonical_json as encode, digest
 from . import protocol2
 from .roundup import Roundups, compact_events
+from .season_delegation import SeasonDelegation
 from .worker import Worker, safe_output
 
 CONTROL_ACTIONS = {"request_authorize_batch": "authorize_batch",
                    "request_execute_batch": "execute_batch",
                    "request_accept_candidate": "accept_candidate"}
 CONTROL_ACTIONS.update(request_authorize_season='authorize_batch',request_execute_season='execute_batch',request_accept_season='accept_candidate')
+SEASON_ADVANCE = {"advance_season", "advance_prepared_season"}
+SEASON_MODE = {"enable_automatic_seasons", "disable_automatic_seasons"}
 
 
 def replace_signed(path, value, key):
@@ -46,6 +49,7 @@ class Worker2(Worker):
         super().__init__(*args, **kwargs)
         self.controls = controls
         self.automatic = automatic
+        self.season_delegation = SeasonDelegation(automatic) if automatic else None
         from .episode import Episode
         self.episodes = Episode(automatic) if automatic else None
         self.roundups = roundups or Roundups(self.career, self.path.parent / "roundups")
@@ -66,9 +70,14 @@ class Worker2(Worker):
         return {"execution_enabled": enabled, "acceptance_enabled": enabled, "automatic_gameplay": auto}
 
     def request_claimed(self, c, request):
-        if request["command"] == "play_next_episode" and hasattr(self.transport, "status"):
+        if request["command"] in SEASON_ADVANCE | {"play_next_episode"} and hasattr(self.transport, "status"):
             status = self.status_document(c)
             self.transport.status({"status": status, "signature": lineage.sign(self.career.key, status)})
+
+    def status_document(self, c):
+        status = super().status_document(c)
+        status["season_delegation_available"] = self.season_delegation is not None and status["execution_enabled"]
+        return status
 
     def deliver(self, c, number):
         started = time.perf_counter()
@@ -85,6 +94,8 @@ class Worker2(Worker):
     def valid_head(self, request):
         if super().valid_head(request):
             return True
+        if self.season_delegation and request["command"] in SEASON_ADVANCE:
+            return self.season_delegation.resumable(request)
         if self.episodes and request["command"] == "play_next_episode":
             return self.episodes.resumable(request)
         return bool(self.automatic and request["command"] in
@@ -93,6 +104,24 @@ class Worker2(Worker):
 
     def dispatch(self, c, row, request):
         name, args = request["command"], request["args"]
+        if name == "automatic_seasons_status":
+            if self.season_delegation:
+                return self.season_delegation.status()
+            return {"automatic_seasons": False}
+        if name in SEASON_ADVANCE | SEASON_MODE:
+            if self.season_delegation is None or not self.capabilities()["execution_enabled"]:
+                raise ValueError("Standing season controls not configured")
+            actor = self.transport.issue(row["source"])["user"]
+            context = self.controls.gate.context
+            if actor.get("id") != context["human_id"] or actor.get("login") != context["human_login"]:
+                raise ValueError("Pinned commissioner identity required")
+            if name in SEASON_MODE:
+                from ..multiseason.lifecycle import RELEASE_PROPOSAL
+                enabled = name == "enable_automatic_seasons"
+                if enabled and args["policy"] != RELEASE_PROPOSAL:
+                    raise ValueError("Standing authorization requires the reviewed release policy")
+                return self.season_delegation.set_mode(enabled, request, row["source"])
+            return self.season_delegation.advance(request, row["source"], self.fault)
         if name in {'prepare_season_transition','inspect_season_transition','request_authorize_season','request_execute_season','request_accept_season'}:
             if self.controls is None or not self.capabilities()['execution_enabled']:raise ValueError('Season controls not configured')
             actor=self.transport.issue(row['source'])['user']

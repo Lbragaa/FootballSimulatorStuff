@@ -62,3 +62,26 @@ Regulatory references for comparison are the [CBF national calendar and competit
 `{"policy":"supported-ecosystem-rio-venues-2"}` once closure checks pass. The
 commissioner signs authorization, execution and exact successor acceptance
 through the existing human gate. Preparation grants no permission to play.
+
+## Standing authorization worker candidate
+
+0.13.3 retains the installed 0.13.2 cache fix and adds an independent,
+default-off standing season grant. For this update, the verified 0.13.2 wheel
+is the software rollback. Recheck the latest sequence and exact parent with
+the worker idle. Include the sealed human gate, reviewed preparation and bridge
+ledger in the new verified private backup. Publish a head repair only if the
+authenticated dry run finds missing members. Stop the task before installing the
+new wheel, verify its installed bytes, and restart the existing task. Use one
+`automatic_seasons_status` probe to check that the new capability is available,
+the grant remains off and the accepted checkpoint is unchanged.
+
+Keep `automatic/season-*.json` in private worker backups once in use. The
+authority backup preserves signed execution and acceptance provenance in its
+decision journal. A recovery that changes the authority epoch requires a new
+opt-in. Finish recovery of any outstanding 0.13.3 request before falling back
+to 0.13.2, which cannot process the new request commands. Roll back software
+with the current registry and ledger in place.
+
+Follow the [phone instructions](bridge_hikari_v2.md#season-boundary) for the
+separate one-time opt-in and the first transition. The opt-in and update each
+leave the accepted head unchanged.

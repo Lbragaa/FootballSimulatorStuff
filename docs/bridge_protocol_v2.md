@@ -1,6 +1,6 @@
 # Private phone bridge protocol 2
 
-## Season boundary (PR #11 development only)
+## Season boundary
 
 `season_status` has `{}` arguments and read scope. Its signed response contains
 `season_status` plus the current `accepted_checkpoint`, using the unchanged
@@ -12,12 +12,20 @@ scores or champion names. Missing history and unrevealed events remain blockers.
 With no pending agenda, `play_next_episode` returns `episode_type=season_boundary`
 and an ordered `season_boundary` section. The legacy `continue_gameplay` path
 returns `phase=season_boundary` instead of attempting an empty batch. Replies are
-durable and exact retries preserve them. Standing 2027 delegation never approves
-a new policy. The registered candidate adds five separately gated season-control
-commands documented in [registered season integration](registered_season_integration.md).
-These use the existing exact-action human proofs and separate successor acceptance;
-ordinary delegation cannot authorize a transition. The original DEV executor and
-TEST-review APIs remain nonpromotable. Nothing is installed in production.
+durable and exact retries preserve them. Ordinary gameplay delegation never
+approves a new season. The separate commands in
+[registered season integration](registered_season_integration.md) continue to
+use the exact-action human proofs and separate successor acceptance.
+
+0.13.3 advertises `season_delegation_available` in the signed status document.
+`automatic_seasons_status` is read scope. The new enable, revoke and advance
+commands are control scope and require the pinned commissioner. The signed
+standing opt-in is separate from ordinary gameplay, specific to the registered
+policy and authority epoch. The [phone procedure](bridge_hikari_v2.md#season-boundary)
+lists the exact arguments. Each delegated transition uses one exact parent
+claim, the existing deterministic execution, independent verification and
+atomic acceptance. Its signed decision audit binds the request, standing grant,
+manifest and accepted candidate. It never creates a human-gate proof.
 
 ## Historical results and episode reporting (0.12.0)
 

@@ -1,22 +1,12 @@
 # Play THE BRAGA ERA from ChatGPT
 
-The multi-season candidate is not installed or approved for official
-play. When the current production season ends, report the worker's actual pending
-review/blocker; do not invent 2028 fixtures or send an unsupported transition
-command. Existing continuation and historical retrieval remain available under
-the installed profile. See [development status](multiseason_execution_report.md).
-
-In the PR #11 development implementation, `season_status` is a protocol-2 read
-command with `{}` arguments. It reports authenticated closure counts, pending
-obligations, unrevealed narration and the separate transition-approval boundary.
-It works without automatic mode or control configuration. Ordinary continuation
-stops at `season_boundary` when the agenda ends; it cannot activate 2028. These
-changes are **not installed in the production worker**. The candidate now has
-registered continuation and separate exact policy/execution/acceptance commands;
-see [the candidate's operational guide](registered_season_integration.md).
-After approved transition and acceptance, the same `play_next_episode` command
-delivers offseason news and season-aware matches/results. A transition is never
-implied by “continue.” No TEST approval authorizes production migration.
+`season_status` reports authenticated closure, obligations, unrevealed narration
+and the season boundary. On workers that advertise `season_delegation_available`
+in status issue #1, the commissioner can opt in once to standing authorization
+for the reviewed season policy. Ordinary continuation still reports the boundary
+first. With both grants enabled, Hikari can submit one explicit season-advance
+request and resume `play_next_episode` from its verified successor. See the
+[season boundary phone procedure](bridge_hikari_v2.md#season-boundary).
 
 The PC must be online, and its Windows worker starts at login. Codex may be
 closed. Use normal iPhone ChatGPT with the GitHub connection enabled for private

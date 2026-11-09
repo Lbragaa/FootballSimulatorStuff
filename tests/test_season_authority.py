@@ -29,6 +29,119 @@ def test_policy_commits_migration_schema_and_disables_production():
     assert policy['test_only'] and not policy['production_acceptance_enabled']
 
 
+def test_standing_season_exact_preparation_crash_retry_and_revoke(career, completed, tmp_path):
+    from braga_era import season_lineage as registered
+    from braga_era.bridge.approval import HumanGate, PROFILE as HUMAN
+    from braga_era.bridge.automatic import Automatic
+    from braga_era.bridge.control import Controls, PROFILE as CONTROL, OPERATIONS
+    from braga_era.multiseason.lifecycle import RELEASE_PROPOSAL
+    from test_bridge_worker2 import req, users
+
+    clock = [1700000000]
+    gate = HumanGate(tmp_path / 'human.sqlite', KEY, b'standing season TEST secret',
+                     {'profile': HUMAN, 'career': career.career, 'test_only': True,
+                      'repository_id': 1436541980, 'human_id': 78325376, 'human_login': 'Lbragaa'},
+                     clock=lambda: clock[0])
+    gate.initialize()
+    with lineage.access(career.registry, KEY) as (_, trusted):
+        policy = {'profile': CONTROL, 'action': 'approve_remote_control_policies', 'career': career.career,
+                  'test_only': True, 'authority_key_sha256': trusted['key_hash'],
+                  'policy_sha256': digest(json.loads(trusted['policy_json'])), 'repository_id': 1436541980,
+                  'human_id': 78325376, 'human_login': 'Lbragaa', 'operations': OPERATIONS}
+    receipt = tmp_path / 'control-policy.json'
+    receipt.write_text(json.dumps(lineage.signed(policy, KEY)))
+    controls = Controls(career, tmp_path / 'controls.sqlite', tmp_path / 'executions', receipt, gate, enabled=True)
+    controls.initialize()
+    automatic = Automatic(controls, tmp_path / 'automatic')
+    automatic.initialize()
+    transport = Transport()
+    path = tmp_path / 'bridge.sqlite'
+
+    def worker(crash=None):
+        return Worker2(transport, career, path, users(), controls=controls, automatic=automatic, crash=crash)
+
+    w = worker()
+    sequence = 1
+
+    def request(command, **args):
+        nonlocal sequence
+        r = req(career, command, sequence, **args)
+        sequence += 1
+        return r
+
+    def deliver(r, status='completed'):
+        issue = transport.add(r)
+        w.poll()
+        result = transport.result(issue)
+        assert w.verify_response(result) and result['response']['status'] == status
+        return result['response']['result']
+
+    initial = career.identity()
+    deliver(request('enable_automatic_gameplay', confirmation='ENABLE_AUTOMATIC_GAMEPLAY'))
+    assert not deliver(request('automatic_seasons_status'))['automatic_seasons']
+    deliver(request('advance_season'), 'refused')
+    prep = deliver(request('prepare_season_transition', policy=RELEASE_PROPOSAL))
+    exact = {k: prep[k] for k in ('preparation_id', 'manifest_sha256')}
+    manual = deliver(request('request_authorize_season', **exact))['confirmation']
+    opt_in = {'policy': RELEASE_PROPOSAL, 'confirmation': 'ENABLE_AUTOMATIC_SEASON_TRANSITIONS'}
+    deliver(request('enable_automatic_seasons', **opt_in), 'refused')
+    clock[0] = manual['expires_at_unix'] + 1
+    enable = request('enable_automatic_seasons', **opt_in)
+    assert deliver(enable)['automatic_seasons']
+    with gate.access() as c:
+        assert tuple(c.execute('SELECT state,proof FROM challenges WHERE id=?',
+                               (manual['challenge_id'],)).fetchone()) == ('expired', None)
+    assert career.identity() == initial
+    deliver(request('advance_prepared_season', **{**exact, 'manifest_sha256': '0'*64}), 'refused')
+    transition = request('advance_prepared_season', **exact)
+    issue = transport.add(transition)
+    pid = exact['preparation_id']
+    destination = controls._destination(pid)
+    for phase in ('authorize', 'candidate', 'accept'):
+        with pytest.raises(RuntimeError, match='Injected bridge crash'):
+            worker('after_standing_season_' + phase).poll()
+        with lineage.access(career.registry, KEY) as (c, trusted):
+            rows = c.execute('SELECT id,state,manifest FROM batches WHERE parent=?', (initial['checkpoint'],)).fetchall()
+            assert len(rows) == 1 and rows[0]['id'] == 'season3:' + pid
+            assert digest(json.loads(rows[0]['manifest'])) == exact['manifest_sha256']
+            assert rows[0]['state'] == {'authorize': 'season_authorized_v3', 'candidate': 'season_candidate',
+                                        'accept': 'accepted'}[phase]
+            if phase != 'accept':
+                assert trusted['head'] == initial['checkpoint']
+    w = worker()
+    w.poll()
+    response = transport.result(issue)
+    assert w.verify_response(response)
+    result = response['response']['result']
+    assert result['phase'] == 'season_transition_accepted' and result['season'] == 2028
+    assert result['accepted_checkpoint'] == career.identity()['checkpoint'] != initial['checkpoint']
+    assert result['preparation_id'] == pid and result['manifest_sha256'] == exact['manifest_sha256']
+    assert result['candidate']['independent_delta_replay']
+    duplicate = transport.add(transition)
+    w.poll()
+    assert transport.result(duplicate) == response
+    assert not deliver(request('disable_automatic_seasons'))['automatic_seasons']
+    assert deliver(enable)['automatic_seasons']  # original reply, without restoring the revoked grant
+    assert not deliver(request('automatic_seasons_status'))['automatic_seasons']
+    deliver(request('advance_season'), 'refused')
+    archive = tmp_path / 'standing-season.zip'
+    registered.export(career.registry, KEY, destination, archive)
+    restored = registered.restore(career.registry, KEY, archive, tmp_path / 'standing-restored')
+    assert restored['independent_restore'] and restored['checkpoint'] == result['accepted_checkpoint']
+    backup = tmp_path / 'standing-backup'
+    lineage.backup(career.registry, KEY, backup)
+    with closing(lineage.connect(backup / 'authority.sqlite')) as c:
+        audits = [(r['kind'], lineage.check_signed({'document': json.loads(r['document']),
+                                                   'signature': r['signature']}, KEY))
+                  for r in c.execute("SELECT * FROM decisions WHERE batch=? AND kind LIKE 'standing_season_%' ORDER BY id",
+                                     ('season3:' + pid,))]
+    assert [kind for kind, _ in audits] == ['standing_season_execution', 'standing_season_acceptance']
+    assert all(doc['source_issue'] == issue and doc['grant']['scope']['policy'] == RELEASE_PROPOSAL
+               and doc['request_id'] == transition['request_id'] for _, doc in audits)
+    assert audits[1][1]['target_sha256'] == result['accepted_checkpoint']
+    assert file_sha256(completed.parent / 'payload/database.sqlite') == completed.parent_hash
+
+
 def test_registered_successor_episode_recovery_and_portability(career, completed, tmp_path):
     import time
     from braga_era import season_lineage as registered

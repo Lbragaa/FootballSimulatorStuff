@@ -125,9 +125,7 @@ class HumanGate:
                 # A TOTP is not a transaction-signing code. Allow ONE active
                 # challenge so a code visible in GitHub cannot be redirected to
                 # another pending action before the original comment is read.
-                c.execute("UPDATE challenges SET state='expired' WHERE state='awaiting_human' AND expires<?",
-                          (int(self.clock()),))
-                self._seal(c)
+                self.expire_unconfirmed(c)
                 if c.execute("SELECT 1 FROM challenges WHERE state IN ('awaiting_human','committed')").fetchone():
                     raise ValueError("Finish/resume the single active human action first")
                 expires = int(self.clock()) + 600
@@ -154,6 +152,8 @@ class HumanGate:
                 raise ValueError("Unknown exact-issue challenge")
             if row["state"] == "cancelled":
                 raise ValueError("Challenge explicitly cancelled; no approval exists")
+            if row["state"] == "expired":
+                raise ValueError("Challenge expired; no approval exists")
             statement = json.loads(row["statement"])
             if row["result"] is not None:
                 return json.loads(row["result"])
@@ -203,6 +203,14 @@ class HumanGate:
             c.execute("UPDATE challenges SET state='completed',result=? WHERE id=?", (encode(result), request_id))
             self._seal(c)
             return result
+
+    def expire_unconfirmed(self, connection):
+        """Expire only overdue, unproved challenges under the sealed gate lock."""
+        if connection.execute(
+            "UPDATE challenges SET state='expired' WHERE state='awaiting_human' AND proof IS NULL AND expires<?",
+            (int(self.clock()),),
+        ).rowcount:
+            self._seal(connection)
 
     def cancel_unconfirmed(self, request_id, instruction_sha256):
         """Explicit operator cancellation; retain original statement and no proof."""

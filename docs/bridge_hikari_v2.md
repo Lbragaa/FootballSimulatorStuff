@@ -1,11 +1,7 @@
 # Hikari phone procedure — protocol 2
 
-The uninstalled PR #11 candidate adds a [separate season-approval flow](registered_season_integration.md).
-On its explicit `season_boundary`, review the actual final season, prepare the
-versioned transition, then complete separate human authorization, execution and
-exact candidate acceptance. Do not treat “continue” as this approval. After
-acceptance, resume the same ordinary episode command; no new transport or career
-identity is created. Use only capabilities advertised by the running worker.
+Use the [season boundary procedure](#season-boundary) for the installed worker's
+advertised capabilities.
 
 **The FINAL TASK supersedes the per-batch confirmation procedure below for
 opted-in ordinary gameplay. Follow [Play](play.md).** The historical manual
@@ -46,6 +42,43 @@ issue comments directly; search-index freshness is not response availability.
 In a new conversation, read #1, retrieve recent delivery comments and previews,
 and continue from the same authority/cursor. Never initialize another career or
 infer an outcome because a match appears completed in an accepted private save.
+
+## Season boundary
+
+Worker 0.13.3 adds optional standing authority for
+`supported-ecosystem-rio-venues-2`. Confirm that status issue #1 advertises
+`season_delegation_available: true` before using these commands. Ordinary
+gameplay delegation alone cannot activate a season.
+
+1. Once, after the commissioner explicitly approves standing authority for this
+   policy, send `enable_automatic_seasons` with
+   `{"policy":"supported-ecosystem-rio-venues-2","confirmation":"ENABLE_AUTOMATIC_SEASON_TRANSITIONS"}`.
+   The worker signs and stores this opt-in without advancing the career. It uses
+   the existing pinned commissioner GitHub identity as the authorization boundary.
+2. After `play_next_episode` reports a closed-season boundary, use
+   `automatic_seasons_status` with `{}` if the grant's state is unknown. With
+   standing authority and ordinary automatic gameplay enabled, send
+   `advance_season` with `{}`. This submits one bounded transition. A single
+   compatible saved preparation is reused. For an already reviewed exact
+   preparation, `advance_prepared_season` takes
+   `{"preparation_id":"<UUID>","manifest_sha256":"<exact SHA256>"}`.
+3. Wait for the signed `season_transition_accepted` result. An interruption
+   resumes the same issue and UUID. After acceptance, use its returned
+   checkpoint and sequence for `play_next_episode`. The first 2028 transition
+   includes the opening agenda through the January 10 ACCESS boundary. Its reply
+   reports acceptance metadata without scores. Narration starts in the next
+   episode.
+4. `disable_automatic_seasons` with `{}` revokes future transitions when that
+   request is processed. Commands are serialized. Revocation cannot undo a
+   transition already committed for execution, which resumes against its original
+   parent and grant.
+
+The grant is tied to the career, repository, commissioner, authority epoch and
+versioned policy. Renew it explicitly after a policy change or authority recovery
+that changes the epoch. An unexpired or committed manual challenge blocks a
+delegated transition. Expiration leaves its original review and lack of proof
+intact. Manual confirmation remains available via the
+[separate season-approval flow](registered_season_integration.md).
 
 ## Exact human-controlled batch flow
 
