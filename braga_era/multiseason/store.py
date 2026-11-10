@@ -80,6 +80,9 @@ def create(source, destination, *, seed, policy, decision, signature, test_key):
 def authenticated(directory, test_key):
     directory=Path(directory).resolve()
     marker=read_json(directory/'development.json')
+    from . import fork
+    if marker['decision'].get('action')==fork.ACTION:
+        return fork.authenticate(directory,marker,test_key)
     profile,ddl,version,test_only,eligible=_configuration(marker['policy'])
     if (marker.get('profile')!=profile or marker.get('test_only') is not test_only or marker.get('acceptance_eligible') is not eligible
         or not hmac.compare_digest(marker['signature'],sign(test_key,marker['decision']))):
@@ -100,7 +103,7 @@ def connection(directory, test_key):
         c.execute('PRAGMA foreign_keys=ON');c.execute('PRAGMA synchronous=FULL')
         meta=c.execute('SELECT * FROM ms_meta').fetchone()
         if not meta or (meta['profile'],meta['parent_checkpoint'],meta['parent_sha256'],meta['policy_json'],meta['seed'],meta['test_only'])!=(
-            marker['profile'],marker['decision']['parent_checkpoint'],marker['parent']['database_sha256'],encode(marker['policy']),marker['seed'],int(marker['test_only'])):
+            marker['profile'],marker['decision']['parent_checkpoint'],marker['decision']['parent_sha256'],encode(marker['policy']),marker['seed'],int(marker['test_only'])):
             raise ValueError('Multi-season committed identity changed')
         yield c,marker
 
@@ -138,6 +141,9 @@ def run(directory, test_key, request_id, kind, args, *, crash=None):
 
 def validate(directory, test_key, *, replay=True):
     directory,marker=authenticated(directory,test_key)
+    from . import fork
+    if marker['decision'].get('action')==fork.ACTION:
+        return fork.validate(directory,marker,test_key,replay=replay)
     profile,ddl,version,test_only,eligible=_configuration(marker['policy'])
     verified_parent=source_manifest(directory/'parent.sqlite')
     if verified_parent!=marker['parent']:raise ValueError('Archived parent manifest changed')

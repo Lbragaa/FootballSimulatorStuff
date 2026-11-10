@@ -18,6 +18,7 @@ COMMANDS = {
     "play_next_episode": {},
     "historical_results": {},
     "season_status": {},
+    "fork_status": {},
     "automatic_seasons_status": {},
     "enable_automatic_seasons": {"confirmation": "season_consent", "policy": "season_policy"},
     "disable_automatic_seasons": {},
@@ -39,7 +40,7 @@ COMMANDS = {
     "roundup": {"fixtures": "fixtures", "detailed": "fixtures"},
 }
 RESULT_KEYS = v1.RESULT_KEYS | set(
-    "control_profile policy_sha256 configurations_sha256 career_seed_sha256 seed_policy preparation_id batch_state review candidate confirmation summaries held_for_detail next_events on_field_states presentation source_page_sha256s automatic_gameplay phase simulation_advanced episode_type presentation_rule world_progress recovery timings_seconds historical_results season_status automatic_seasons season_policy season".split()
+    "control_profile policy_sha256 configurations_sha256 career_seed_sha256 seed_policy preparation_id batch_state review candidate confirmation summaries held_for_detail next_events on_field_states presentation source_page_sha256s automatic_gameplay phase simulation_advanced episode_type presentation_rule world_progress recovery timings_seconds historical_results season_status automatic_seasons season_policy season fork_status".split()
 )
 
 
@@ -105,7 +106,7 @@ def parse(body):
 
 
 def role(command):
-    if command in {"automatic_status", "historical_results", "season_status", "automatic_seasons_status"}:
+    if command in {"automatic_status", "historical_results", "season_status", "automatic_seasons_status", "fork_status"}:
         return "read"
     return "narration" if command == "roundup" else "control" if command in COMMANDS else v1.role(command)
 

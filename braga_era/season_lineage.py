@@ -47,6 +47,10 @@ def authorization(manifest):
 
 
 def validation(meta):
+    if 'fork_import' in meta:
+        return {'profile':PROFILE,'action':'verified_episode81_fork_import',
+                'checkpoint_sha256':digest(meta),'world_sha256':meta['world_sha256'],
+                'fork_import_sha256':meta['fork_import']}
     return {'profile':PROFILE,'action':'independent_season_validation','checkpoint_sha256':digest(meta),
             'world_sha256':meta['world_sha256'],'independent_delta_replay':True}
 
@@ -64,6 +68,18 @@ def bind_manifest(m,a,trusted):
         or a['seed_policy']!=m['seed_policy'] or m['seed_policy']!=lineage.SEED_POLICY
         or digest(a)!=m['manifest_sha256']):
         raise ValueError('Season metadata differs from exact authorized manifest')
+    from .multiseason import fork
+    if a.get('kind')==fork.ACTION:
+        imported=a['fork']
+        if (m.get('fork_import')!=digest(imported) or m['generation']!=1
+                or m['immediate_parent_sha256']!=lineage.ROOT or m.get('parent_node_sha256') is not None
+                or imported['action']!=fork.ACTION or imported['career']!=trusted['career']
+                or imported['parent_checkpoint']!=fork.DETACHED or imported['source_checkpoint']!=fork.SOURCE
+                or imported['archive_sha256']!=fork.ARCHIVE or imported['seed_sha256']!=m['career_seed_sha256']
+                or imported['test_only'] is not m['test_only'] or a['operations']):
+            raise ValueError('Fork import manifest differs from the approved base')
+    elif 'fork_import' in m:
+        raise ValueError('Unexpected fork import marker')
 
 
 def verify_node(node, trusted, key):
@@ -83,6 +99,9 @@ def chain(c, package, trusted, key, proof):
         seen.add(previous);node=document(c,previous);nodes.append(node)
         previous=node['metadata'].get('parent_node_sha256')
     result=anchor['nodes']+list(reversed(nodes))+[proof]
+    if not anchor['nodes'] and (set(anchor)!={'nodes','fork_import'}
+                                or result[0]['metadata'].get('fork_import')!=anchor['fork_import']):
+        raise ValueError('Unrelated fork lineage anchor')
     if lineage.verify_chain(result,trusted,key)!=digest(meta):raise ValueError('Season ancestry differs')
     return anchor,result
 
@@ -131,10 +150,12 @@ def parent_info(c, trusted, key, parent, *, require_head=True,cache_directory=No
     if proof['metadata']!=meta or proof['package_sha256']!=digest(package):raise ValueError('Season package was tampered')
     if proof['authorization']!=package['authorization'] or proof['validation']!=package['validation']:
         raise ValueError('Season validation proof differs')
-    chain(c,package,trusted,key,proof)
+    anchor,_=chain(c,package,trusted,key,proof)
     if meta['state_sha256']!=digest(package['state']):raise ValueError('Season state descriptor changed')
     world=materialize(c,package,cache_directory or pool(c).parent/'season-cache'/checkpoint)
     _,marker=store.authenticated(world,key)
+    if 'fork_import' in anchor and digest(marker['decision'])!=anchor['fork_import']:
+        raise ValueError('Materialized fork origin differs from signed ancestry')
     if marker['profile']!=PROFILE or marker['seed']!=trusted['seed'] or marker['test_only']!=bool(trusted['test_only']):
         raise ValueError('Season career/seed/mode changed')
     if file_sha256(world/'database.sqlite')!=meta['database_sha256']:raise ValueError('Season database changed')
@@ -147,6 +168,96 @@ def current(c,trusted,key):
     row=c.execute('SELECT path FROM accepted WHERE checkpoint=?',(trusted['head'],)).fetchone()
     if not row:raise ValueError('An accepted completed forward parent is required')
     return lineage.parent_info(c,trusted,key,row[0]),Path(row[0])
+
+
+def stage_episode81_import(registry, key, world, destination, request_id):
+    """Build a genesis descriptor over a separately signed, exact fork base."""
+    from .multiseason import fork
+    world, marker = store.authenticated(world,key)
+    imported = marker['decision']
+    if imported['action']!=fork.ACTION or str(UUID(request_id))!=request_id:
+        raise ValueError('Exact episode #81 fork import required')
+    report=store.validate(world,key)
+    with lineage.access(registry,key,True) as (c,t):
+        if (t['head']!=lineage.ROOT or c.execute('SELECT 1 FROM batches').fetchone()
+                or imported['career']!=t['career'] or marker['seed']!=t['seed']
+                or marker['test_only']!=bool(t['test_only'])):
+            raise ValueError('Fork import requires a new, independently signed authority')
+        manifest={'profile':PROFILE,'kind':fork.ACTION,'career':t['career'],
+                  'test_only':bool(t['test_only']),'request_id':request_id,'operations':[],
+                  'automatic_gameplay':True,'policy':marker['policy'],'fork':imported,'season':2028,
+                  'generation':1,'immediate_parent_sha256':lineage.ROOT,
+                  'career_seed_sha256':digest(t['seed']),'seed_policy':lineage.SEED_POLICY}
+        state={name:objects.capture(pool(c),world/name) for name in sorted(FILES)}
+        state_hash=blob(c,state)
+        with connect_read_only(world/'database.sqlite') as db:
+            clock=db.execute('SELECT clock FROM ms_meta').fetchone()[0]
+        origin=digest(imported)
+        meta={k:manifest[k] for k in ('profile','career','test_only','automatic_gameplay','season',
+              'generation','immediate_parent_sha256','career_seed_sha256','seed_policy')}
+        meta.update(root_sha256=lineage.ROOT,clock=clock,manifest_sha256=digest(manifest),
+                    world_sha256=report['world_sha256'],database_sha256=state['database.sqlite']['sha256'],
+                    state_sha256=state_hash,anchor_sha256=blob(c,{'nodes':[],'fork_import':origin}),
+                    parent_node_sha256=None,fork_import=origin)
+        package={'metadata':meta,'state':state,'manifest':manifest,
+                 'authorization':lineage.signed(authorization(manifest),key),
+                 'validation':lineage.signed(validation(meta),key)}
+        bind_manifest(meta,manifest,t)
+        destination=Path(destination)
+        destination.mkdir()
+        with lineage.staged_directory(destination/'payload') as staged:
+            write_json(staged/'checkpoint.json',meta)
+            write_json(staged/'package.json',package)
+        return digest(meta)
+
+
+def accept_episode81_import(registry,key,directory,approval):
+    from .multiseason import fork
+    directory=Path(directory).resolve(strict=True)
+    with lineage.access(registry,key,True) as (c,t):
+        package=read_package(directory);meta=package['metadata'];manifest=package['manifest']
+        checkpoint=digest(meta)
+        if (manifest['kind']!=fork.ACTION
+                or lineage.check_signed(approval,key)!=lineage.expected_acceptance(meta,digest(package),t)):
+            raise ValueError('Separate exact episode #81 acceptance required')
+        proof={k:package[k] for k in ('metadata','manifest','authorization','validation')}
+        proof.update(package_sha256=digest(package),acceptance=approval)
+        anchor,_=chain(c,package,t,key,proof)
+        if t['head']==checkpoint:
+            parent_info(c,t,key,directory)
+            lineage.publish_json(directory/'acceptance.json',approval)
+            return checkpoint
+        if t['head']!=lineage.ROOT or c.execute('SELECT 1 FROM batches').fetchone():
+            raise ValueError('A fork import cannot replace an accepted career')
+        world=materialize(c,package,pool(c).parent/'season-cache'/checkpoint)
+        _,marker=store.authenticated(world,key)
+        if digest(marker['decision'])!=anchor['fork_import'] or store.validate(world,key)['world_sha256']!=meta['world_sha256']:
+            raise ValueError('Imported state differs from independently verified base')
+        with connect_read_only(world/'database.sqlite') as db:
+            cursors=[tuple(r) for r in db.execute(
+                "SELECT fixture,result_sha256,json_array_length(result_json,'$.events') FROM ms_executions WHERE result_json IS NOT NULL")]
+            cursors.extend(tuple(r) for r in db.execute(
+                'SELECT r.fixture_key,r.result_sha256,max(e.sequence) FROM world_receipts r '
+                'JOIN world_events e ON e.fixture_key=r.fixture_key GROUP BY r.fixture_key,r.result_sha256'))
+        batch='fork81:'+manifest['request_id']
+        c.execute('BEGIN IMMEDIATE')
+        try:
+            c.execute('INSERT INTO accepted VALUES(?,?,?,?,?)',(checkpoint,lineage.ROOT,1,encode(proof),str(directory)))
+            c.execute("INSERT INTO batches VALUES(?,?,?,?,?,'accepted',?,?,?,?)",
+                      (batch,lineage.ROOT,encode(manifest),encode(package['authorization']['document']),
+                       package['authorization']['signature'],str(directory),str(directory),checkpoint,digest(package)))
+            for kind,signed in (('fork_import',package['authorization']),('fork_acceptance',approval)):
+                c.execute('INSERT INTO decisions(batch,kind,document,signature) VALUES(?,?,?,?)',
+                          (batch,kind,encode(signed['document']),signed['signature']))
+            c.execute('UPDATE authority SET head=? WHERE head=?',(checkpoint,lineage.ROOT))
+            c.executemany('INSERT INTO cursors VALUES(?,?,?)',cursors)
+            lineage.seal_cursors(c,t,key)
+            c.commit()
+        except BaseException:
+            c.rollback()
+            raise
+        lineage.publish_json(directory/'acceptance.json',approval)
+        return checkpoint
 
 
 def prepare(registry,key,request_id,operations,*,transition=False,automatic_gameplay=False,delegated=False):
@@ -549,20 +660,24 @@ def restore(registry,key,archive,destination,*,full_audit=False):
                 raise ValueError('Season portable package differs')
             anchor,nodes=chain(c,package,t,key,proof)
             world=materialize(c,package,stage/'world')
-            report=store.validate(world,key,replay=full_audit)
+            if 'fork_import' in anchor and digest(read_json(world/'development.json')['decision'])!=anchor['fork_import']:
+                raise ValueError('Restored fork origin differs from signed ancestry')
+            report=store.validate(world,key,replay=full_audit or 'fork_import' in package['metadata'])
             if report['world_sha256']!=package['metadata']['world_sha256']:raise ValueError('Restored season state differs')
             # Independently replay the last successor against its signed parent.
             m=package['metadata'];a=package['manifest']
-            if m['parent_node_sha256']:
-                parent=document(c,m['parent_node_sha256']);state=document(c,parent['metadata']['state_sha256'])
-                parent_world=materialize(c,{'state':state},stage/'immediate-parent')
-                info={'profile':PROFILE,'world':parent_world}
-            else:
-                info={'database':world/'parent.sqlite','checkpoint':a['immediate_parent_sha256']}
-            target=stage/'independent';_start(info,target,key,a,t['seed']);apply(target,key,a)
-            if not replay_matches(target/'database.sqlite',report['world_sha256'],m['database_sha256']):
-                raise ValueError('Independent portable suffix replay differs')
-            if full_audit:
+            if 'fork_import' not in m:
+                if m['parent_node_sha256']:
+                    parent=document(c,m['parent_node_sha256']);state=document(c,parent['metadata']['state_sha256'])
+                    parent_world=materialize(c,{'state':state},stage/'immediate-parent')
+                    info={'profile':PROFILE,'world':parent_world}
+                else:
+                    info={'database':world/'parent.sqlite','checkpoint':a['immediate_parent_sha256']}
+                target=stage/'independent';_start(info,target,key,a,t['seed']);apply(target,key,a)
+                if not replay_matches(target/'database.sqlite',report['world_sha256'],m['database_sha256']):
+                    raise ValueError('Independent portable suffix replay differs')
+                objects.remove_owned(target,stage)
+            if full_audit and 'fork_import' not in anchor:
                 legacy=stage/'legacy';legacy.mkdir()
                 for name,descriptor in anchor['legacy_files'].items():
                     if name not in lineage.FILES|{'manifest.json'}:raise ValueError('Invalid legacy anchor inventory')
@@ -571,7 +686,6 @@ def restore(registry,key,archive,destination,*,full_audit=False):
                 if file_sha256(stage/'legacy.zip')!=anchor['nodes'][-1]['package_sha256']:raise ValueError('Legacy anchor archive differs')
                 lineage.verify_payload(legacy,t,key)
             # Only one restored DB retained; replay/parent duplicates are disposable.
-            objects.remove_owned(target,stage)
             if (stage/'immediate-parent').exists():objects.remove_owned(stage/'immediate-parent',stage)
             if (stage/'legacy').exists():objects.remove_owned(stage/'legacy',stage)
             (stage/'legacy.zip').unlink(missing_ok=True)

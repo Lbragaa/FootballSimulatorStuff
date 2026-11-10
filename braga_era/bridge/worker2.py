@@ -139,6 +139,9 @@ class Worker2(Worker):
         if name == 'season_status':
             return {'season_status': self.career.season_boundary(),
                     'accepted_checkpoint': self.career.identity()['checkpoint']}
+        if name == 'fork_status':
+            from ..multiseason.fork import status
+            return {'fork_status': status(self.career.registry,self.career.key)}
         if name == 'historical_results':
             from .historical import HistoricalResults
             return {'historical_results': HistoricalResults(self.career).query(args),
