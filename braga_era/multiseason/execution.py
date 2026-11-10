@@ -6,6 +6,7 @@ from ..engine.models import Snapshot,CompetitionRules,SeedCommitment
 from ..engine.randomness import commit_seeds
 from ..engine.coaches import prepare
 from ..engine.match import simulate_match
+from ..engine.substitutions import VERSION as STINT_AWARE_VERSION
 from ..history import canonical_json as encode,digest
 from ..world.players import team_at,apply_players
 from ..world.policy import ReadinessPolicy,Rules
@@ -13,6 +14,34 @@ from ..world.forward_config import configuration,load
 from ..world.codec import snapshot as decode_snapshot
 from ..world.knockout_v2 import resolve,validate_bundle
 from .competitions import required
+from .registered import PROFILE as REGISTERED_PROFILE
+
+
+ENGINE_ACTIVATION = 'activate_substitution_policy'
+
+
+def active_engine(c):
+    row = c.execute('SELECT args_json FROM ms_operations WHERE kind=? ORDER BY sequence DESC LIMIT 1',
+                    (ENGINE_ACTIVATION,)).fetchone()
+    return json.loads(row[0])['engine_version'] if row else None
+
+
+def validate_activation(c, args):
+    required(args, 'engine_version')
+    if (args['engine_version'] != STINT_AWARE_VERSION
+            or c.execute('SELECT profile FROM ms_meta').fetchone()[0] != REGISTERED_PROFILE):
+        raise ValueError('Unsupported substitution policy activation')
+    if active_engine(c) is not None:
+        raise ValueError('Substitution policy already activated')
+    if (c.execute("SELECT 1 FROM ms_fixtures WHERE status='claimed'").fetchone()
+            or c.execute('SELECT 1 FROM ms_runs WHERE response_json IS NULL').fetchone()):
+        raise ValueError('Finish the committed group or run before activating substitutions')
+
+
+def activate(c, args):
+    validate_activation(c, args)
+    return {'engine_version': STINT_AWARE_VERSION,
+            'effective_after': c.execute('SELECT clock FROM ms_meta').fetchone()[0]}
 
 
 def claim(c,a):
@@ -30,6 +59,7 @@ def claim(c,a):
     if first<=meta['clock']:raise ValueError('Kickoff predates committed completion state')
     if c.execute("SELECT 1 FROM ms_fixtures WHERE status='claimed' LIMIT 1").fetchone():raise ValueError('Resume the committed group first')
     policy=ReadinessPolicy()
+    engine_version=active_engine(c)
     common=digest({'players':[tuple(r) for r in c.execute('SELECT * FROM world_player_state ORDER BY player_id')],
                    'discipline':[tuple(r) for r in c.execute('SELECT * FROM world_discipline ORDER BY player_id,competition')],
                    'clock':meta['clock'],'parent':meta['parent_sha256']})
@@ -55,7 +85,7 @@ def claim(c,a):
         from .domestic import FORMATS,match_policy
         if e['format'] in FORMATS:
             match=match_policy(e,f,single,decisive);neutral=match['neutral'];extra_time=match['extra_time']
-        config=configuration(policy,final=neutral)
+        config=configuration(policy,final=neutral,engine_version=engine_version)
         snap=Snapshot(f['key'],f['kickoff'],meta['clock'],team_at(c,f['home'],discipline,first,policy),
             team_at(c,f['away'],discipline,first,policy),CompetitionRules(e['competition'],e['season'],
             aggregate_before=tuple(prior),progression='Regulation engine; separately validated edition ET/penalties'),

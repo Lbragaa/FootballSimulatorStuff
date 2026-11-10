@@ -2,6 +2,7 @@
 
 from .models import MatchPlan
 from .randomness import stream, verify_commitment
+from .substitutions import VERSION as STINT_AWARE_VERSION
 
 
 class SelectionError(ValueError):
@@ -86,9 +87,14 @@ def prepare(snapshot, config, seeds):
             player = max(candidates, key=lambda p: (score(p), -p.id))
             chosen.append(player.id)
             assignments.append((player.id, role))
-        bench = sorted(
+        ranked_reserves = sorted(
             (p for p in pool if p.id not in chosen), key=lambda p: (-scores[p.id], p.id)
-        )[:12]
+        )
+        bench = ranked_reserves[:12]
+        if config.version == STINT_AWARE_VERSION and not any(p.position == "GK" for p in bench):
+            reserve = next((p for p in ranked_reserves if p.position == "GK"), None)
+            if reserve is not None:
+                bench[-1] = reserve
         # Tactical choice is imperfect and reacts to relative quality, not club name.
         inclination = (
             team.coach.risk_preference

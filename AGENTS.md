@@ -18,6 +18,11 @@
 
 ## Multi-season execution prototype
 
+- Candidate 0.13.5 retains legacy match/extra-time replay. The forward
+  `braga-headless-1.2.0` substitution policy starts only after a separately
+  authorized and accepted activation-only registered successor. Never apply it
+  to previously committed fixture configurations. See `docs/substitution_policy.md`.
+
 - Worker candidate 0.13.3 adds the default-off standing grant
   `standing-season-transition-1` for `supported-ecosystem-rio-venues-2`.
   The pinned commissioner opts in separately through the existing bridge.

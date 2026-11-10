@@ -9,6 +9,7 @@ from ..engine.models import Event, Shot
 from ..engine.match import clamp, poisson, finishing_probability
 from ..engine.metrics import performance
 from ..engine.randomness import stream
+from ..engine.substitutions import VERSION as STINT_AWARE_VERSION, TACTICAL_REASON, choose_tactical, previous_refreshes
 from ..engine.validation import validate_match
 from ..history import digest
 from . import knockout
@@ -20,6 +21,12 @@ def extra_time(snapshot, result, config, *, version=VERSION):
     rng = stream(result.seeds, version + ":extra-time")
     keys = [snapshot.home.key, snapshot.away.key]
     players = {p.id: p for t in (snapshot.home, snapshot.away) for p in t.players}
+    stint_aware = config.version == STINT_AWARE_VERSION
+    coach_rng = stream(result.seeds, version + ":extra-time-coaches") if stint_aware else None
+    sub_limit = config.maximum_substitutions + 1 if stint_aware else 6
+    window_limit = config.maximum_substitution_windows + 1 if stint_aware else 4
+    refreshed = [previous_refreshes(result.events, key, players) for key in keys] if stint_aware else None
+    roles = [dict(plan.roles) for plan in result.plans]
     active = [
         set(result.events[-1].on_field_home),
         set(result.events[-1].on_field_away),
@@ -88,18 +95,19 @@ def extra_time(snapshot, result, config, *, version=VERSION):
         stats[pid]["seconds"] += time - entered.pop(pid)
         active[side].remove(pid)
 
-    def substitute(side, pid, time, interval=False):
-        if substitutions[side] >= 6 or (
-            not interval and len(windows[side]) >= 4 and time not in windows[side]
+    def substitute(side, pid, time, interval=False, *, incoming=None, reason="ET autonomous replacement"):
+        if substitutions[side] >= sub_limit or (
+            not interval and len(windows[side]) >= window_limit and time not in windows[side]
         ):
             return False
-        position = players[pid].position
-        candidates = [p for p in benches[side] if players[p].position == position]
-        if not candidates:
-            return False
-        incoming = max(
-            candidates, key=lambda p: (players[p].ovr + 0.12 * players[p].fitness, -p)
-        )
+        if incoming is None:
+            position = players[pid].position
+            candidates = [p for p in benches[side] if players[p].position == position]
+            if not candidates:
+                return False
+            incoming = max(
+                candidates, key=lambda p: (players[p].ovr + 0.12 * players[p].fitness, -p)
+            )
         leave(side, pid, time)
         benches[side].remove(incoming)
         active[side].add(incoming)
@@ -128,18 +136,24 @@ def extra_time(snapshot, result, config, *, version=VERSION):
             incoming,
             {
                 "outgoing_id": pid,
-                "reason": "ET autonomous replacement",
+                "reason": reason,
                 "interval": interval,
             },
         )
         return True
 
-    def ensure_keeper(side, time):
+    def ensure_keeper(side, time, *, interval=False):
         if any(players[p].position == "GK" for p in active[side]):
             return
         keepers = [p for p in benches[side] if players[p].position == "GK"]
+        if stint_aware and keepers and substitute(
+            side, min(active[side], key=lambda p: (players[p].ovr, p)), time, interval,
+            incoming=max(keepers, key=lambda p: (players[p].goalkeeping, -p)),
+            reason="emergency goalkeeper replacement",
+        ):
+            return
         if (
-            keepers
+            not stint_aware and keepers
             and substitutions[side] < 6
             and (len(windows[side]) < 4 or time in windows[side])
         ):
@@ -230,6 +244,21 @@ def extra_time(snapshot, result, config, *, version=VERSION):
             emit(time, kind)
             continue
         if kind == "COACH":
+            if stint_aware:
+                if not any(players[p].position == "GK" for p in active[side]):
+                    ensure_keeper(side, time, interval=True)
+                    continue
+                team = (snapshot.home, snapshot.away)[side]
+                pair = choose_tactical(
+                    players, benches[side], roles[side],
+                    {p: stats[p]["seconds"] + time - entered[p] for p in active[side]},
+                    stats, score[side] - score[1 - side], refreshed[side], coach_rng, team.coach.decision_noise,
+                )
+                if pair is not None:
+                    old, incoming = pair
+                    if substitute(side, old, time, interval=True, incoming=incoming, reason=TACTICAL_REASON):
+                        refreshed[side][players[old].position] += 1
+                continue
             ensure_keeper(side, time)
             candidates = [p for p in active[side] if players[p].position != "GK"]
             if candidates:
@@ -274,7 +303,7 @@ def extra_time(snapshot, result, config, *, version=VERSION):
             emit(
                 time, "INJURY", side, pid, {"absence_days": config.injury_absence_days}
             )
-            if not substitute(side, pid, time):
+            if not substitute(side, pid, time, reason="injury replacement" if stint_aware else "ET autonomous replacement"):
                 leave(side, pid, time)
                 emit(time, "PLAYER_OFF_INJURED", side, pid)
                 if len(active[side]) < 7:
@@ -459,6 +488,9 @@ def validate_bundle(
     score = [0, 0]
     last_time = -1
     keys = [snapshot.home.key, snapshot.away.key]
+    benches = [set(plan.bench) for plan in result.plans]
+    used_subs = [0, 0]
+    windows = [set(), set()]
     for i, e in enumerate(bundle["events"], 1):
         if (
             e["sequence"] != i
@@ -467,6 +499,25 @@ def validate_bundle(
         ):
             raise ValueError("Extension chronology/score mismatch")
         last_time = e["elapsed_seconds"]
+        if config.version == STINT_AWARE_VERSION and e["kind"] == "SUBSTITUTION":
+            side = keys.index(e["club_key"])
+            incoming, outgoing = e["player_id"], e["details"]["outgoing_id"]
+            field = "on_field_home" if side == 0 else "on_field_away"
+            if (outgoing not in active[side] or incoming not in benches[side]
+                    or set(e[field]) != ((active[side] - {outgoing}) | {incoming})):
+                raise ValueError("Illegal extension replacement or player reentry")
+            if e["details"]["reason"] == TACTICAL_REASON and (
+                outgoing not in result.plans[side].starters or players[outgoing].position != players[incoming].position
+                or players[incoming].position == "GK"
+            ):
+                raise ValueError("Illegal extension tactical substitution")
+            benches[side].remove(incoming)
+            used_subs[side] += 1
+            if e["details"].get("interval"):
+                if last_time not in (result.duration_seconds, result.duration_seconds + 900):
+                    raise ValueError("Substitution outside a free extra-time interval")
+            else:
+                windows[side].add(last_time)
         for side, field in enumerate(("on_field_home", "on_field_away")):
             current = set(e[field])
             if (
@@ -490,6 +541,11 @@ def validate_bundle(
     playing_end = result.duration_seconds + (
         1800 if bundle["resolution"]["extra_time_played"] else 0
     )
+    if config.version == STINT_AWARE_VERSION:
+        allowance = int(bundle["resolution"]["extra_time_played"])
+        if (max(used_subs) > config.maximum_substitutions + allowance
+                or max(map(len, windows)) > config.maximum_substitution_windows + allowance):
+            raise ValueError("Extension substitution allowance exceeded")
     for pid, at in entered.items():
         seconds[pid] = seconds.get(pid, 0) + playing_end - at
     if score != bundle["score"] or sum(int(s["goal"]) for s in bundle["shots"]) != sum(

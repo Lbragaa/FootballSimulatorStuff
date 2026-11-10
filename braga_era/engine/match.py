@@ -6,6 +6,7 @@ from .models import Event, Shot, Performance, Prematch, MatchResult, SCOPE
 from .randomness import stream, verify_commitment
 from .validation import validate_plans
 from .metrics import performance
+from .substitutions import VERSION as STINT_AWARE_VERSION, TACTICAL_REASON, choose_tactical
 
 
 def clamp(value, low, high):
@@ -98,6 +99,7 @@ def simulate_match(snapshot, plans, config, seeds):
             "Phase 2A simulates regulation only; competition resolution belongs to Task 03B"
         )
     teams = (snapshot.home, snapshot.away)
+    stint_aware = config.version == STINT_AWARE_VERSION
     players = {p.id: p for t in teams for p in t.players}
     keys = [t.key for t in teams]
     lookup_side = {key: i for i, key in enumerate(keys)}
@@ -106,6 +108,8 @@ def simulate_match(snapshot, plans, config, seeds):
     risk = [p.risk for p in plans]
     used_subs = [0, 0]
     sub_windows = [set(), set()]
+    refreshed = [{}, {}]
+    roles = [dict(plan.roles) for plan in plans]
     score = [0, 0]
     end = (90 + config.stoppage_minutes) * 60
     events = []
@@ -196,6 +200,22 @@ def simulate_match(snapshot, plans, config, seeds):
             ),
         ).id
 
+    def legal_replacement(side, time):
+        return used_subs[side] < config.maximum_substitutions and (
+            len(sub_windows[side]) < config.maximum_substitution_windows or time in sub_windows[side]
+        )
+
+    def emergency_keeper(side, time):
+        # The dismissed or injured player is already off. The keeper takes
+        # an outfielder's place and never restores the lost playing position.
+        new = incoming_for(side, "GK") if legal_replacement(side, time) else None
+        if new is not None:
+            old = min(active[side], key=lambda p: (players[p].ovr, p))
+            substitute(side, old, new, time, "emergency goalkeeper replacement")
+        else:
+            keeper = max(active[side], key=lambda p: (players[p].goalkeeping, -p))
+            emit(time, "EMERGENCY_GOALKEEPER", side, keeper, {"reason": "no legal goalkeeper replacement"})
+
     timeline = []
     serial = 0
 
@@ -284,12 +304,26 @@ def simulate_match(snapshot, plans, config, seeds):
             ):
                 continue
             if not any(players[p].position == "GK" for p in active[side]):
+                if stint_aware:
+                    continue
                 new = incoming_for(side, "GK")
                 old = min(
                     (p for p in active[side]), key=lambda p: (players[p].fitness, p)
                 )
                 if new is not None:
                     substitute(side, old, new, time, "replace dismissed goalkeeper")
+                continue
+            if stint_aware:
+                pair = choose_tactical(
+                    players, benches[side], roles[side], {p: time - entry[p] for p in active[side]},
+                    stats, score[side] - score[1 - side], refreshed[side], rng_coach,
+                    teams[side].coach.decision_noise,
+                )
+                if pair is not None:
+                    old, new = pair
+                    substitute(side, old, new, time, TACTICAL_REASON)
+                    position = players[old].position
+                    refreshed[side][position] = refreshed[side].get(position, 0) + 1
                 continue
             preferred = (
                 ("FW", "MF", "DF")
@@ -344,6 +378,8 @@ def simulate_match(snapshot, plans, config, seeds):
                 pid,
                 {"reason": "second yellow" if kind == "CARD" else "straight red"},
             )
+            if stint_aware and players[pid].position == "GK":
+                emergency_keeper(side, time)
         elif kind == "HURT":
             pid = rng_injury.choice(sorted(active[side]))
             stats[pid]["injured"] = True
@@ -378,6 +414,8 @@ def simulate_match(snapshot, plans, config, seeds):
                     pid,
                     {"reason": "injury; no legal replacement"},
                 )
+                if stint_aware and players[pid].position == "GK":
+                    emergency_keeper(side, time)
         elif kind == "CHANCE":
             ids = [p for p in sorted(active[side]) if players[p].position != "GK"]
             if not ids:

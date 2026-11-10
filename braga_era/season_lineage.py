@@ -157,6 +157,12 @@ def prepare(registry,key,request_id,operations,*,transition=False,automatic_game
         raise ValueError('Bounded explicit season operations required')
     with lineage.access(registry,key) as (c,t):
         info,parent=current(c,t,key);registered=info.get('profile')==PROFILE
+        from .multiseason.execution import ENGINE_ACTIVATION, validate_activation
+        if any(op['kind']==ENGINE_ACTIVATION for op in operations):
+            if not registered or transition or delegated or len(operations)!=1:
+                raise ValueError('Substitution policy needs a separate signed registered successor')
+            with connect_read_only(info['database']) as db:
+                validate_activation(db, operations[0]['args'])
         if transition:
             if registered:
                 with connect_read_only(info['database']) as db:

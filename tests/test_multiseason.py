@@ -108,6 +108,46 @@ def test_simultaneous_commitment_and_engine_replay(candidate):
     assert store.validate(candidate,KEY)['independent_replay']
 
 
+def test_signed_substitution_activation_replays_both_engine_versions(parent, tmp_path):
+    from braga_era.engine.substitutions import VERSION
+    from braga_era.multiseason.execution import ENGINE_ACTIVATION
+    from braga_era.multiseason.registered import policy as registered_policy
+
+    target = tmp_path / 'registered-test'
+    seed = 'mixed-substitution-replay'
+    policy = registered_policy(True)
+    decision = store.statement(parent, policy, seed)
+    store.create(parent, target, seed=seed, policy=policy, decision=decision,
+                 signature=sign(KEY, decision), test_key=KEY)
+    edition = setup_edition(target)
+    cmd(target, 'schedule', edition=edition, start='2028-01-06 16:00', deadline='2028-12-21 23:59')
+    group = next_event(target, KEY)
+    cmd(target, 'claim_group', kickoff=group['kickoff'])
+    with pytest.raises(ValueError, match='Resume the committed'):
+        cmd(target, ENGINE_ACTIVATION, engine_version=VERSION)
+    cmd(target, 'play_group', kickoff=group['kickoff'])
+    with connect_read_only(target/'database.sqlite') as c:
+        before = dict(c.execute('SELECT fixture,result_sha256 FROM ms_executions'))
+    request = str(uuid4())
+    args = {'engine_version': VERSION}
+    with pytest.raises(RuntimeError, match='after commit'):
+        store.run(target, KEY, request, ENGINE_ACTIVATION, args, crash='after_commit')
+    assert store.run(target, KEY, request, ENGINE_ACTIVATION, args)['engine_version'] == VERSION
+    with pytest.raises(ValueError, match='already activated'):
+        cmd(target, ENGINE_ACTIVATION, engine_version=VERSION)
+    assert advance(target, KEY, request_id=str(uuid4()), max_groups=1)['groups_completed'] == 1
+    with connect_read_only(target/'database.sqlite') as c:
+        rows = c.execute('SELECT fixture,config_json,result_sha256 FROM ms_executions').fetchall()
+        assert len(rows) == 4
+        for key, cfg, result in rows:
+            if key in before:
+                assert result == before[key] and json.loads(cfg)['version'] == 'braga-headless-1.1.0'
+            else:
+                assert json.loads(cfg)['version'] == VERSION and result
+    assert store.validate(target, KEY)['independent_replay']
+    assert file_sha256(target/'parent.sqlite') == parent.database_sha256
+
+
 def test_complete_small_state_league_and_payroll_closure_block(candidate):
     edition=setup_edition(candidate)
     cmd(candidate,'schedule',edition=edition,start='2028-01-06 16:00',deadline='2028-12-21 23:59')
