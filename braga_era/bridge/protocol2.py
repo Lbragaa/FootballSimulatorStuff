@@ -9,6 +9,7 @@ from ..multiseason.lifecycle import SEASON_POLICIES
 FIXTURE=re.compile(r'(?:league:[0-9]{1,6}|(?:lib|sula|cdb):[A-Za-z0-9:_-]{1,64}|ms:[A-Za-z0-9:_-]{1,128})\Z')
 
 PROTOCOL = "braga-bridge-2"
+SEASON_CONFIRMATIONS = ("ENABLE_AUTOMATIC_SEASON_TRANSITIONS", "ENABLE_AUTOMATIC_SEASONS")
 COMMANDS = {
     "enable_automatic_gameplay": {"confirmation": "auto_consent"},
     "disable_automatic_gameplay": {},
@@ -93,7 +94,7 @@ def parse(body):
                                  "command": "prepare_batch", "args": {"until": value}}))
         elif kind == "auto_consent" and value != "ENABLE_AUTOMATIC_GAMEPLAY":
             raise ValueError("Explicit career-specific automatic mode opt-in required")
-        elif kind == "season_consent" and value != "ENABLE_AUTOMATIC_SEASON_TRANSITIONS":
+        elif kind == "season_consent" and value not in SEASON_CONFIRMATIONS:
             raise ValueError("Explicit standing season opt-in required")
         elif kind == 'season_policy' and (not isinstance(value, str) or value not in SEASON_POLICIES):
             raise ValueError('Explicit registered season policy required')
@@ -119,7 +120,7 @@ def schema():
     types = {
         'season_policy':{'enum':list(SEASON_POLICIES)},
         "auto_consent": {"const": "ENABLE_AUTOMATIC_GAMEPLAY"},
-        "season_consent": {"const": "ENABLE_AUTOMATIC_SEASON_TRANSITIONS"},
+        "season_consent": {"enum": list(SEASON_CONFIRMATIONS)},
         "boundary": {"type": "string", "pattern": r"^2027-\d{2}-\d{2} 23:59$"},
         "uuid": {"type": "string", "format": "uuid"},
         "hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},

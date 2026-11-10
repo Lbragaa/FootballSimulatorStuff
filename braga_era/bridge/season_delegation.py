@@ -7,6 +7,7 @@ from .. import lineage, season_lineage
 from ..history import digest
 from ..multiseason.lifecycle import RELEASE_PROPOSAL, SEASON_POLICIES
 from ..world.storage import process_lock
+from .protocol2 import SEASON_CONFIRMATIONS
 from .season_control import SeasonControls
 
 PROFILE = "standing-season-transition-1"
@@ -59,9 +60,9 @@ class SeasonDelegation:
 
     def set_mode(self, enabled, request, source):
         scope = self._scope()
-        if enabled and request["args"] != {
-            "policy": scope["policy"], "confirmation": "ENABLE_AUTOMATIC_SEASON_TRANSITIONS",
-        }:
+        args = request["args"]
+        if enabled and (set(args) != {"policy", "confirmation"} or args["policy"] != scope["policy"]
+                        or args["confirmation"] not in SEASON_CONFIRMATIONS):
             raise ValueError("Explicit standing consent for the reviewed season policy required")
         with process_lock(self.auto.directory, name=".automatic.lock"):
             mode = self._mode()

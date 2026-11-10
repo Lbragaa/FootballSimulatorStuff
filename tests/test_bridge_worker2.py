@@ -34,6 +34,36 @@ def test_missing_controls_do_not_block_reading(tmp_path):
     assert not w.capabilities()["execution_enabled"]
 
 
+@pytest.mark.parametrize("confirmation", ["ENABLE_AUTOMATIC_SEASON_TRANSITIONS", "ENABLE_AUTOMATIC_SEASONS"])
+def test_explicit_season_opt_in_preserves_submitted_request(tmp_path, controls, confirmation):
+    from braga_era.bridge.automatic import Automatic
+    from braga_era.history import digest
+    from braga_era.multiseason.lifecycle import RELEASE_PROPOSAL
+
+    auto = Automatic(controls, tmp_path / "automatic")
+    auto.initialize()
+    career = controls.career
+    before = career.identity()
+    transport = Transport()
+    worker = Worker2(transport, career, tmp_path / "ledger.sqlite", users(), controls=controls, automatic=auto)
+    request = req(career, "enable_automatic_seasons", 1, confirmation=confirmation, policy=RELEASE_PROPOSAL)
+    invalid = deepcopy(request)
+    invalid["args"]["confirmation"] = "yes"
+    with pytest.raises(ValueError, match="Explicit standing season opt-in"):
+        worker.parse_request(json.dumps(invalid))
+    assert worker.parse_request(json.dumps(request)) == request
+    issue = transport.add(request)
+    assert worker.poll()["next_sequence"] == 2
+    response = transport.result(issue)
+    assert worker.verify_response(response)
+    assert response["response"]["request_sha256"] == digest(request)
+    assert response["response"]["status"] == "completed"
+    assert response["response"]["result"] == {"automatic_seasons": True, "season_policy": RELEASE_PROPOSAL}
+    assert career.identity() == before
+    with lineage.access(career.registry, career.key) as (db, _):
+        assert db.execute("SELECT count(*) FROM batches").fetchone()[0] == 0
+
+
 def test_compact_narration_reconstructs_original_pages_and_replays(tmp_path):
     transport, career = Transport(), Career()
     original_play = career.play

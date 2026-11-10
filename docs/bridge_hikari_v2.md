@@ -53,6 +53,7 @@ gameplay delegation alone cannot activate a season.
 1. Once, after the commissioner explicitly approves standing authority for this
    policy, send `enable_automatic_seasons` with
    `{"policy":"supported-ecosystem-rio-venues-2","confirmation":"ENABLE_AUTOMATIC_SEASON_TRANSITIONS"}`.
+   Starting with 0.13.4, `ENABLE_AUTOMATIC_SEASONS` is also accepted as explicit consent.
    The worker signs and stores this opt-in without advancing the career. It uses
    the existing pinned commissioner GitHub identity as the authorization boundary.
 2. After `play_next_episode` reports a closed-season boundary, use
