@@ -5,7 +5,7 @@ from math import isfinite
 
 from .models import SCOPE
 from .coaches import eligible
-from .substitutions import VERSION as STINT_AWARE_VERSION, TACTICAL_REASON
+from .substitutions import STINT_AWARE_VERSIONS, TACTICAL_REASON
 
 
 @dataclass(frozen=True)
@@ -200,7 +200,7 @@ def validate_match(snapshot, result, config=None):
                 ):
                     errors.append("Illegal substitution or player reentry")
                     continue
-                if cfg.version == STINT_AWARE_VERSION and e.details.get("reason") == TACTICAL_REASON:
+                if cfg.version in STINT_AWARE_VERSIONS and e.details.get("reason") == TACTICAL_REASON:
                     check(old in result.plans[side].starters and players[old].position == players[pid].position
                           and old not in injured and players[pid].position != "GK",
                           "Invalid tactical substitution")
@@ -329,7 +329,7 @@ def validate_match(snapshot, result, config=None):
                     saved.add(shot.id)
                     counts[pid]["saves"] += 1
             elif e.kind == "EMERGENCY_GOALKEEPER":
-                check(cfg.version == STINT_AWARE_VERSION and side is not None and pid in active[side]
+                check(cfg.version in STINT_AWARE_VERSIONS and side is not None and pid in active[side]
                       and not any(players[p].position == "GK" for p in active[side]),
                       "Invalid emergency goalkeeper assignment")
             elif e.kind not in (

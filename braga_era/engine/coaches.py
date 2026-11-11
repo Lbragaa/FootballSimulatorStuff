@@ -2,7 +2,7 @@
 
 from .models import MatchPlan
 from .randomness import stream, verify_commitment
-from .substitutions import VERSION as STINT_AWARE_VERSION
+from .substitutions import STINT_AWARE_VERSIONS
 
 
 class SelectionError(ValueError):
@@ -91,7 +91,7 @@ def prepare(snapshot, config, seeds):
             (p for p in pool if p.id not in chosen), key=lambda p: (-scores[p.id], p.id)
         )
         bench = ranked_reserves[:12]
-        if config.version == STINT_AWARE_VERSION and not any(p.position == "GK" for p in bench):
+        if config.version in STINT_AWARE_VERSIONS and not any(p.position == "GK" for p in bench):
             reserve = next((p for p in ranked_reserves if p.position == "GK"), None)
             if reserve is not None:
                 bench[-1] = reserve

@@ -202,6 +202,9 @@ def youth(c,key,year,index,position,dated,strength):
 
 
 def evolve(c,year,dated,clubs):
+    from . import development
+    policy = development.activation(c)
+    exposure = development.preseason(c, year, policy['effective_after']) if policy else None
     changed=retired=intakes=0
     for p in c.execute('SELECT * FROM world_players ORDER BY id').fetchall():
         if p['club_key'] not in clubs:continue
@@ -224,6 +227,14 @@ def evolve(c,year,dated,clubs):
             attrs['eligible']=False;attrs['exclusion_reasons']=['forward retirement '+dated]
             c.execute('UPDATE world_players SET attributes_json=? WHERE id=?',(encode(attrs),p['id']))
             c.execute("UPDATE ms_lifecycle SET status='retired' WHERE player=?",(p['id'],));note(c,year,p['club_key'],p['id'],'retirement',{'age':age,'dated':dated});retired+=1;continue
+        if policy:
+            age_basis = 'modeled offseason age prior'
+            if old:
+                provenance = json.loads(old['provenance_json'])
+                age_basis = provenance.get('age') or provenance.get('source') or 'registered lifecycle age, source unspecified'
+            development.apply(c, p, attrs, year, policy['effective_after'], exposure, age=age, age_basis=age_basis)
+            changed+=1
+            continue
         delta=round(max(-2.0,min(2.0,r.gauss(.7 if age<23 else -.7 if age>=31 else .1,.35))),3)
         after=dict(attrs)
         for name in ('ovr','attack','defense','passing','physical','composure','goalkeeping'):after[name]=round(max(15,min(95,attrs[name]+delta)),3)

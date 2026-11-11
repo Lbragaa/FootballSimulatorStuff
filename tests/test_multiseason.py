@@ -3,6 +3,7 @@ from concurrent.futures import ThreadPoolExecutor
 from contextlib import closing
 from pathlib import Path
 import json
+import os
 import shutil
 import sqlite3
 from uuid import uuid4
@@ -19,7 +20,9 @@ KEY=b'TEST ONLY MULTISEASON AUTHORITY!!'*2
 
 @pytest.fixture(scope='module')
 def parent(accepted_path,tmp_path_factory):
-    path=next((p for p in (Path('output/ci-season/database.sqlite'),Path('output/task03c-final-primary/database.sqlite')) if p.is_file()),None)
+    supplied=os.environ.get('BRAGA_ERA_COMPLETED_TEST_DB')
+    paths=(Path(supplied),) if supplied else (Path('output/ci-season/database.sqlite'),Path('output/task03c-final-primary/database.sqlite'))
+    path=next((p for p in paths if p.is_file()),None)
     if path is None:
         from tools.stress_season import run
         directory=tmp_path_factory.mktemp('completed-noncanonical-2027')/'world'
@@ -144,7 +147,24 @@ def test_signed_substitution_activation_replays_both_engine_versions(parent, tmp
                 assert result == before[key] and json.loads(cfg)['version'] == 'braga-headless-1.1.0'
             else:
                 assert json.loads(cfg)['version'] == VERSION and result
-    assert store.validate(target, KEY)['independent_replay']
+    from braga_era.engine.config import REALISM_VERSION
+    from braga_era.multiseason.development import POLICY as DEVELOPMENT
+    immutable = {row[0]: row[2] for row in rows}
+    realism = {'engine_version': REALISM_VERSION, 'development_policy': DEVELOPMENT}
+    cmd(target, 'activate_realism', **realism)
+    with pytest.raises(ValueError, match='exact realism policy'):
+        cmd(target, 'activate_realism', **realism)
+    assert advance(target, KEY, request_id=str(uuid4()), max_groups=1)['groups_completed'] == 1
+    with connect_read_only(target/'database.sqlite') as c:
+        for row in c.execute('SELECT fixture,config_json,result_sha256 FROM ms_executions'):
+            if row[0] in immutable:
+                assert row[2] == immutable[row[0]]
+            else:
+                assert json.loads(row[1])['version'] == REALISM_VERSION
+    package = tmp_path/'mixed-engine-portable'
+    exported = store.export(target, package, KEY)
+    assert exported['independent_replay']
+    assert store.restore(package, tmp_path/'mixed-engine-restored', KEY) == exported
     assert file_sha256(target/'parent.sqlite') == parent.database_sha256
 
 

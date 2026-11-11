@@ -15,6 +15,9 @@ def _apply(c,kind,a):
     if kind=='activate_substitution_policy':
         from .execution import activate
         return activate(c,a)
+    if kind=='activate_realism':
+        from .execution import activate_realism
+        return activate_realism(c,a)
     if kind=='declare_club_country':
         from .continental_entry import declare_country
         return declare_country(c,a)

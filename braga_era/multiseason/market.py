@@ -205,13 +205,20 @@ def apply(c,kind,a):
         c.execute('INSERT INTO ms_payroll VALUES(?,?)',(a['period'],encode(detail)))
         return {'period':a['period'],'paid':detail}
     if kind=='evolve':
+        from . import development
         required(a,'season')
         if not c.execute("SELECT 1 FROM ms_seasons WHERE season=? AND state='preparing'",(a['season'],)).fetchone():raise ValueError('No preparing season')
         seed=c.execute('SELECT seed FROM ms_meta').fetchone()[0];changed=0
+        policy=development.activation(c)
+        exposure=development.preseason(c,a['season'],policy['effective_after']) if policy else None
         for p in c.execute('SELECT * FROM world_players ORDER BY id').fetchall():
             attrs=json.loads(p['attributes_json'])
             if not attrs['eligible']:continue
             if c.execute('SELECT 1 FROM ms_attributes WHERE player=? AND season=?',(p['id'],a['season'])).fetchone():raise ValueError('Annual development already consumed')
+            if policy:
+                development.apply(c,p,attrs,a['season'],policy['effective_after'],exposure)
+                changed+=1
+                continue
             rng=random.Random(int(digest({'seed':seed,'player':p['id'],'season':a['season'],'purpose':'bounded-development-1'}),16))
             source=c.execute('SELECT career_phase,potential FROM players WHERE id=?',(p['source_id'],)).fetchone() if p['source_id'] else None
             phase=str(source[0]).lower() if source else 'unknown'

@@ -2,7 +2,7 @@
 
 from math import sqrt
 from .models import Performance
-from .substitutions import VERSION as STINT_AWARE_VERSION
+from .substitutions import STINT_AWARE_VERSIONS
 
 
 def performance(p, stat, score, rng, config):
@@ -35,7 +35,7 @@ def performance(p, stat, score, rng, config):
         fatigue += 5
     recent = [(rating, stat["seconds"] / 60)] + list(p.recent_ratings[:3])
     weights = [0.68**i * sqrt(min(1, m / 60)) for i, (_, m) in enumerate(recent)]
-    if config.version == STINT_AWARE_VERSION and stat["seconds"] == 0:
+    if config.version in STINT_AWARE_VERSIONS and stat["seconds"] == 0:
         # An injury or keeper emergency can reverse an entry at the same clock.
         newform = p.form
     else:

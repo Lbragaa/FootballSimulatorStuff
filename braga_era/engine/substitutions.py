@@ -1,9 +1,12 @@
 """Versioned tactical substitution estimates using only information at the window."""
 
 from collections import Counter
+from .config import REALISM_VERSION
 
 
 VERSION = "braga-headless-1.2.0"
+
+STINT_AWARE_VERSIONS = (VERSION, REALISM_VERSION)
 TACTICAL_REASON = "score-aware positional refresh"
 
 

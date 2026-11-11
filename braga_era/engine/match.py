@@ -6,7 +6,9 @@ from .models import Event, Shot, Performance, Prematch, MatchResult, SCOPE
 from .randomness import stream, verify_commitment
 from .validation import validate_plans
 from .metrics import performance
-from .substitutions import VERSION as STINT_AWARE_VERSION, TACTICAL_REASON, choose_tactical
+from .substitutions import STINT_AWARE_VERSIONS, TACTICAL_REASON, choose_tactical
+from .config import REALISM_VERSION
+from .discipline import recipient
 
 
 def clamp(value, low, high):
@@ -99,7 +101,7 @@ def simulate_match(snapshot, plans, config, seeds):
             "Phase 2A simulates regulation only; competition resolution belongs to Task 03B"
         )
     teams = (snapshot.home, snapshot.away)
-    stint_aware = config.version == STINT_AWARE_VERSION
+    stint_aware = config.version in STINT_AWARE_VERSIONS
     players = {p.id: p for t in teams for p in t.players}
     keys = [t.key for t in teams]
     lookup_side = {key: i for i, key in enumerate(keys)}
@@ -350,13 +352,16 @@ def simulate_match(snapshot, plans, config, seeds):
                     break
         elif kind in ("CARD", "STRAIGHT_RED"):
             ids = sorted(active[side])
-            pid = rng_cards.choices(
-                ids,
-                weights=[
-                    {"GK": 0.2, "DF": 2, "MF": 1.5, "FW": 0.6}[players[p].position]
-                    for p in ids
-                ],
-            )[0]
+            if config.version == REALISM_VERSION:
+                pid = recipient(rng_cards, ids, players, stats, caution=kind == "CARD")
+            else:
+                pid = rng_cards.choices(
+                    ids,
+                    weights=[
+                        {"GK": 0.2, "DF": 2, "MF": 1.5, "FW": 0.6}[players[p].position]
+                        for p in ids
+                    ],
+                )[0]
             if kind == "CARD":
                 stats[pid]["yellows"] += 1
                 emit(

@@ -9,7 +9,9 @@ from ..engine.models import Event, Shot
 from ..engine.match import clamp, poisson, finishing_probability
 from ..engine.metrics import performance
 from ..engine.randomness import stream
-from ..engine.substitutions import VERSION as STINT_AWARE_VERSION, TACTICAL_REASON, choose_tactical, previous_refreshes
+from ..engine.substitutions import STINT_AWARE_VERSIONS, TACTICAL_REASON, choose_tactical, previous_refreshes
+from ..engine.config import REALISM_VERSION
+from ..engine.discipline import recipient, short_handed_xg
 from ..engine.validation import validate_match
 from ..history import digest
 from . import knockout
@@ -21,7 +23,7 @@ def extra_time(snapshot, result, config, *, version=VERSION):
     rng = stream(result.seeds, version + ":extra-time")
     keys = [snapshot.home.key, snapshot.away.key]
     players = {p.id: p for t in (snapshot.home, snapshot.away) for p in t.players}
-    stint_aware = config.version == STINT_AWARE_VERSION
+    stint_aware = config.version in STINT_AWARE_VERSIONS
     coach_rng = stream(result.seeds, version + ":extra-time-coaches") if stint_aware else None
     sub_limit = config.maximum_substitutions + 1 if stint_aware else 6
     window_limit = config.maximum_substitution_windows + 1 if stint_aware else 4
@@ -273,7 +275,10 @@ def extra_time(snapshot, result, config, *, version=VERSION):
                 )
                 substitute(side, pid, time, interval=True)
             continue
-        pid = rng.choice(sorted(active[side]))
+        if config.version == REALISM_VERSION and kind in ("CARD", "RED"):
+            pid = recipient(rng, active[side], players, stats, caution=kind == "CARD")
+        else:
+            pid = rng.choice(sorted(active[side]))
         if kind in ("CARD", "RED"):
             if kind == "CARD":
                 stats[pid]["yellows"] += 1
@@ -323,6 +328,9 @@ def extra_time(snapshot, result, config, *, version=VERSION):
                 active[1 - side],
                 key=lambda p: (players[p].position == "GK", players[p].goalkeeping, -p),
             )
+            if config.version == REALISM_VERSION:
+                value = round(clamp(value * short_handed_xg(len(active[side]), len(active[1 - side]), config),
+                                    0.006, 0.80), 4)
             probability = round(
                 finishing_probability(value, players[pid], players[keeper], config), 8
             )
@@ -499,7 +507,7 @@ def validate_bundle(
         ):
             raise ValueError("Extension chronology/score mismatch")
         last_time = e["elapsed_seconds"]
-        if config.version == STINT_AWARE_VERSION and e["kind"] == "SUBSTITUTION":
+        if config.version in STINT_AWARE_VERSIONS and e["kind"] == "SUBSTITUTION":
             side = keys.index(e["club_key"])
             incoming, outgoing = e["player_id"], e["details"]["outgoing_id"]
             field = "on_field_home" if side == 0 else "on_field_away"
@@ -541,7 +549,7 @@ def validate_bundle(
     playing_end = result.duration_seconds + (
         1800 if bundle["resolution"]["extra_time_played"] else 0
     )
-    if config.version == STINT_AWARE_VERSION:
+    if config.version in STINT_AWARE_VERSIONS:
         allowance = int(bundle["resolution"]["extra_time_played"])
         if (max(used_subs) > config.maximum_substitutions + allowance
                 or max(map(len, windows)) > config.maximum_substitution_windows + allowance):

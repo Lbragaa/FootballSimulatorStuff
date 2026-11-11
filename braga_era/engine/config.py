@@ -5,6 +5,8 @@ from math import isfinite
 
 from ..history import digest
 
+REALISM_VERSION = "braga-headless-1.3.0"
+
 
 @dataclass(frozen=True)
 class EngineConfig:
@@ -62,7 +64,7 @@ class EngineConfig:
             or self.yellow_lambda > 100
             or self.maximum_substitutions not in range(0, 6)
             or self.maximum_substitution_windows not in range(0, 4)
-            or not 0 <= self.maximum_yellow_events_per_team <= 4
+            or not 0 <= self.maximum_yellow_events_per_team <= (8 if self.version == REALISM_VERSION else 4)
             or not 0 <= self.stoppage_minutes <= 10
             or self.chance_beta_a <= 0
             or self.chance_beta_b <= 0

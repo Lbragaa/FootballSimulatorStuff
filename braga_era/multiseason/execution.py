@@ -8,6 +8,7 @@ from ..engine.randomness import commit_seeds
 from ..engine.coaches import prepare
 from ..engine.match import simulate_match
 from ..engine.substitutions import VERSION as STINT_AWARE_VERSION
+from ..engine.config import REALISM_VERSION
 from ..history import canonical_json as encode,digest
 from ..world.players import team_at,apply_players
 from ..world.policy import ReadinessPolicy,Rules
@@ -16,6 +17,7 @@ from ..world.codec import snapshot as decode_snapshot
 from ..world.knockout_v2 import resolve,validate_bundle
 from .competitions import required
 from .registered import PROFILE as REGISTERED_PROFILE
+from . import development
 
 
 ENGINE_ACTIVATION = 'activate_substitution_policy'
@@ -23,8 +25,8 @@ timeline_entropy = ContextVar('timeline_entropy', default=None)
 
 
 def active_engine(c):
-    row = c.execute('SELECT args_json FROM ms_operations WHERE kind=? ORDER BY sequence DESC LIMIT 1',
-                    (ENGINE_ACTIVATION,)).fetchone()
+    row = c.execute('SELECT args_json FROM ms_operations WHERE kind IN (?,?) ORDER BY sequence DESC LIMIT 1',
+                    (ENGINE_ACTIVATION, development.ACTIVATION)).fetchone()
     return json.loads(row[0])['engine_version'] if row else None
 
 
@@ -44,6 +46,18 @@ def activate(c, args):
     validate_activation(c, args)
     return {'engine_version': STINT_AWARE_VERSION,
             'effective_after': c.execute('SELECT clock FROM ms_meta').fetchone()[0]}
+
+
+def activate_realism(c, args):
+    required(args, 'engine_version development_policy')
+    if (args != {'engine_version': REALISM_VERSION, 'development_policy': development.POLICY}
+            or c.execute('SELECT profile FROM ms_meta').fetchone()[0] != REGISTERED_PROFILE
+            or active_engine(c) != STINT_AWARE_VERSION):
+        raise ValueError('The exact realism policy requires the registered 1.2 engine')
+    if (c.execute("SELECT 1 FROM ms_fixtures WHERE status='claimed'").fetchone()
+            or c.execute('SELECT 1 FROM ms_runs WHERE response_json IS NULL').fetchone()):
+        raise ValueError('Finish the committed group or run before realism activation')
+    return {**args, 'effective_after': c.execute('SELECT clock FROM ms_meta').fetchone()[0]}
 
 
 def claim(c,a):
