@@ -142,7 +142,7 @@ def materialize(c, package, target):
     return target
 
 
-def parent_info(c, trusted, key, parent, *, require_head=True,cache_directory=None):
+def authenticated_package(c, trusted, key, parent, *, require_head=True):
     package=read_package(parent);meta=package['metadata'];checkpoint=digest(meta)
     row=c.execute('SELECT * FROM accepted WHERE checkpoint=?',(checkpoint,)).fetchone()
     if not row or require_head and checkpoint!=trusted['head']:raise ValueError('Unaccepted or stale season parent')
@@ -152,6 +152,12 @@ def parent_info(c, trusted, key, parent, *, require_head=True,cache_directory=No
         raise ValueError('Season validation proof differs')
     anchor,_=chain(c,package,trusted,key,proof)
     if meta['state_sha256']!=digest(package['state']):raise ValueError('Season state descriptor changed')
+    return package, anchor
+
+
+def parent_info(c, trusted, key, parent, *, require_head=True,cache_directory=None):
+    package,anchor=authenticated_package(c,trusted,key,parent,require_head=require_head)
+    meta=package['metadata'];checkpoint=digest(meta)
     world=materialize(c,package,cache_directory or pool(c).parent/'season-cache'/checkpoint)
     _,marker=store.authenticated(world,key)
     if 'fork_import' in anchor and digest(marker['decision'])!=anchor['fork_import']:

@@ -1087,6 +1087,420 @@
           "const": "braga-bridge-2"
         },
         "command": {
+          "const": "career_statistics"
+        },
+        "request_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "career": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,80}$"
+        },
+        "expected_checkpoint": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "args": {
+          "oneOf": [
+            {
+              "type": "object",
+              "required": [
+                "cursor"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "cursor": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4096
+                }
+              }
+            },
+            {
+              "type": "object",
+              "required": [
+                "dataset"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "dataset": {
+                  "const": "editions"
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 30
+                },
+                "season": {
+                  "type": "integer",
+                  "minimum": 2027,
+                  "maximum": 2200
+                }
+              }
+            },
+            {
+              "type": "object",
+              "required": [
+                "dataset"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "dataset": {
+                  "const": "standings"
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 30
+                },
+                "competition": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100
+                },
+                "group": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 99
+                },
+                "season": {
+                  "type": "integer",
+                  "minimum": 2027,
+                  "maximum": 2200
+                }
+              }
+            },
+            {
+              "type": "object",
+              "required": [
+                "dataset"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "dataset": {
+                  "const": "squad"
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 30
+                },
+                "club": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100
+                },
+                "player": {
+                  "oneOf": [
+                    {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 9223372036854775807
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 100
+                    }
+                  ]
+                },
+                "sort": {
+                  "enum": [
+                    "appearances",
+                    "assists",
+                    "goals",
+                    "injuries",
+                    "mean_rating",
+                    "name",
+                    "on_target",
+                    "ovr",
+                    "ovr_delta",
+                    "reds",
+                    "saves",
+                    "seconds_played",
+                    "shots",
+                    "starts",
+                    "xg",
+                    "xg_per_90",
+                    "yellows"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "object",
+              "required": [
+                "dataset"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "dataset": {
+                  "const": "player_stats"
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 30
+                },
+                "club": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100
+                },
+                "competition": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100
+                },
+                "date_from": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100
+                },
+                "date_to": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100
+                },
+                "min_minutes": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 1000000
+                },
+                "player": {
+                  "oneOf": [
+                    {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 9223372036854775807
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 100
+                    }
+                  ]
+                },
+                "season": {
+                  "type": "integer",
+                  "minimum": 2027,
+                  "maximum": 2200
+                },
+                "sort": {
+                  "enum": [
+                    "appearances",
+                    "assists",
+                    "goals",
+                    "injuries",
+                    "mean_rating",
+                    "name",
+                    "on_target",
+                    "ovr",
+                    "ovr_delta",
+                    "reds",
+                    "saves",
+                    "seconds_played",
+                    "shots",
+                    "starts",
+                    "xg",
+                    "xg_per_90",
+                    "yellows"
+                  ]
+                },
+                "stage": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100
+                }
+              }
+            },
+            {
+              "type": "object",
+              "required": [
+                "dataset"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "dataset": {
+                  "const": "team_record"
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 30
+                },
+                "club": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100
+                },
+                "competition": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100
+                },
+                "date_from": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100
+                },
+                "date_to": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100
+                },
+                "season": {
+                  "type": "integer",
+                  "minimum": 2027,
+                  "maximum": 2200
+                },
+                "stage": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100
+                }
+              }
+            },
+            {
+              "type": "object",
+              "required": [
+                "dataset"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "dataset": {
+                  "const": "development"
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 30
+                },
+                "club": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100
+                },
+                "player": {
+                  "oneOf": [
+                    {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 9223372036854775807
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 100
+                    }
+                  ]
+                },
+                "season": {
+                  "type": "integer",
+                  "minimum": 2027,
+                  "maximum": 2200
+                },
+                "sort": {
+                  "enum": [
+                    "appearances",
+                    "assists",
+                    "goals",
+                    "injuries",
+                    "mean_rating",
+                    "name",
+                    "on_target",
+                    "ovr",
+                    "ovr_delta",
+                    "reds",
+                    "saves",
+                    "seconds_played",
+                    "shots",
+                    "starts",
+                    "xg",
+                    "xg_per_90",
+                    "yellows"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "object",
+              "required": [
+                "dataset"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "dataset": {
+                  "const": "transfers"
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 30
+                },
+                "club": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100
+                },
+                "date_from": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100
+                },
+                "date_to": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100
+                },
+                "player": {
+                  "oneOf": [
+                    {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 9223372036854775807
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 100
+                    }
+                  ]
+                },
+                "season": {
+                  "type": "integer",
+                  "minimum": 2027,
+                  "maximum": 2200
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "request_id",
+        "sequence",
+        "career",
+        "expected_checkpoint",
+        "command",
+        "args"
+      ],
+      "properties": {
+        "protocol": {
+          "const": "braga-bridge-2"
+        },
+        "command": {
           "const": "season_status"
         },
         "request_id": {
@@ -1111,6 +1525,298 @@
           "additionalProperties": false,
           "required": [],
           "properties": {}
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "request_id",
+        "sequence",
+        "career",
+        "expected_checkpoint",
+        "command",
+        "args"
+      ],
+      "properties": {
+        "protocol": {
+          "const": "braga-bridge-2"
+        },
+        "command": {
+          "const": "fork_status"
+        },
+        "request_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "career": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,80}$"
+        },
+        "expected_checkpoint": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "args": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [],
+          "properties": {}
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "request_id",
+        "sequence",
+        "career",
+        "expected_checkpoint",
+        "command",
+        "args"
+      ],
+      "properties": {
+        "protocol": {
+          "const": "braga-bridge-2"
+        },
+        "command": {
+          "const": "automatic_seasons_status"
+        },
+        "request_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "career": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,80}$"
+        },
+        "expected_checkpoint": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "args": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [],
+          "properties": {}
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "request_id",
+        "sequence",
+        "career",
+        "expected_checkpoint",
+        "command",
+        "args"
+      ],
+      "properties": {
+        "protocol": {
+          "const": "braga-bridge-2"
+        },
+        "command": {
+          "const": "enable_automatic_seasons"
+        },
+        "request_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "career": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,80}$"
+        },
+        "expected_checkpoint": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "args": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "confirmation",
+            "policy"
+          ],
+          "properties": {
+            "confirmation": {
+              "enum": [
+                "ENABLE_AUTOMATIC_SEASON_TRANSITIONS",
+                "ENABLE_AUTOMATIC_SEASONS"
+              ]
+            },
+            "policy": {
+              "enum": [
+                "supported-ecosystem-proposal-1",
+                "supported-ecosystem-rio-venues-2"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "request_id",
+        "sequence",
+        "career",
+        "expected_checkpoint",
+        "command",
+        "args"
+      ],
+      "properties": {
+        "protocol": {
+          "const": "braga-bridge-2"
+        },
+        "command": {
+          "const": "disable_automatic_seasons"
+        },
+        "request_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "career": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,80}$"
+        },
+        "expected_checkpoint": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "args": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [],
+          "properties": {}
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "request_id",
+        "sequence",
+        "career",
+        "expected_checkpoint",
+        "command",
+        "args"
+      ],
+      "properties": {
+        "protocol": {
+          "const": "braga-bridge-2"
+        },
+        "command": {
+          "const": "advance_season"
+        },
+        "request_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "career": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,80}$"
+        },
+        "expected_checkpoint": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "args": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [],
+          "properties": {}
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "request_id",
+        "sequence",
+        "career",
+        "expected_checkpoint",
+        "command",
+        "args"
+      ],
+      "properties": {
+        "protocol": {
+          "const": "braga-bridge-2"
+        },
+        "command": {
+          "const": "advance_prepared_season"
+        },
+        "request_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "career": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,80}$"
+        },
+        "expected_checkpoint": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "args": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "preparation_id",
+            "manifest_sha256"
+          ],
+          "properties": {
+            "preparation_id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "manifest_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          }
         }
       }
     },

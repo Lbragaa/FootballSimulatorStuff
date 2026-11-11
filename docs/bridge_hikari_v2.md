@@ -38,6 +38,11 @@ issue comments directly; search-index freshness is not response availability.
   `historical_results`; use human competition/club names, integer season/round,
   stage/leg/date filters and paginate until has_more=false. No simulation or
   narration command is needed. See [historical queries](historical_results.md).
+- A worker with the career statistics feature can read registered group
+  standings, squad attributes, player totals and other analytics with
+  `career_statistics`. Use the live checkpoint in the standard request
+  envelope and follow the returned coverage and pagination fields.
+  See [career statistics](career_statistics.md).
 
 In a new conversation, read #1, retrieve recent delivery comments and previews,
 and continue from the same authority/cursor. Never initialize another career or
