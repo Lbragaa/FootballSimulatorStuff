@@ -240,14 +240,19 @@ class Episode:
                     round_rows = [f for f in state["fixtures"] if f["competition"] == "LEAGUE" and f["stage"] == op["round"]]
                     complete = bool(round_rows) and all(f["status"] == "final" for f in round_rows)
                     complete = complete and {f["key"] for f in round_rows} <= set(state["revealed"])
-                    if complete:
+                    league_finals = {f["key"] for f in state["fixtures"]
+                                     if f["competition"] == "LEAGUE" and f["status"] == "final"}
+                    if complete and league_finals <= set(state["revealed"]):
                         table = self.career.play("table")
                         rows = [{**r, "position": i, "gd": r["gf"] - r["ga"]} for i, r in enumerate(table["standings"], 1)]
                         sections.append({"section": "league_table", "round": op["round"], "complete": True, "data": rows})
                     else:
                         sections.append({"section": "round_pending", "round": op["round"], "complete": False})
-                next_vasco = next(({k: f[k] for k in ("key", "home", "away", "kickoff", "competition", "stage", "status")}
-                                   for f in state["fixtures"] if f["status"] != "final" and VASCO in (f["home"], f["away"])), None)
+                visible = set(state["revealed"])
+                next_vasco = next(({**{k: f[k] for k in ("key", "home", "away", "kickoff", "competition", "stage")},
+                                    "status": "awaiting_narration" if f["status"] == "final" else f["status"]}
+                                   for f in state["fixtures"] if VASCO in (f["home"], f["away"])
+                                   and (f["status"] != "final" or f["key"] not in visible)), None)
                 sections.append({"section": "next_agenda", "data": next_events, "next_vasco": next_vasco})
                 response = {"episode_type": reason, "presentation": sections,
                     "presentation_rule": "Render sections in array order. Narrate each goal before its score; scoreboard and statistics only after FINAL_WHISTLE. Luan Braga is autonomous, never the user avatar.",

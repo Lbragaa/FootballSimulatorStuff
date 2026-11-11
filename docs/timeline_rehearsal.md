@@ -41,18 +41,22 @@ mode. Keep private keys separate from portable archives and out of GitHub.
 
 ## Production integration boundary
 
-The installed registered import is pinned to the independently reviewed
-Episode #81 alternate archive. It cannot import arbitrary TEST branches.
-Production work needs a separate reviewed import profile that authenticates
-the source approval and commits a distinct branch authority, independently
-reproduces the selected TEST branch, and accepts the exact production
-successor. It must bind inherited narration cursors to the accepted source
-results and withhold branch results until their chronological presentation.
+The registered qualifying import is pinned to the exact independently replayed
+Libertadores archive. The production import verifies the source package,
+archive members, replay attestation, Group 8 result and original seed before
+creating a distinct signer and registry. It registers the saved June 28
+database as an immutable source and verifies that only authority metadata
+changes in the operational copy. It does not replay the matches again.
+The imported cursor seal covers results through the April 9 fork point.
+Replayed matches after that point remain available for chronological narration.
+Full league tables wait while any accepted league results remain unrevealed.
+The original Episode #81 import still accepts only its own reviewed archive.
 
 A live switch needs a sealed idle-state proof, a verified archive and rollback
 route, a new branch ledger and career identity, and a single worker binding.
 Test interrupted registration and switching, stale issues, restart and
 switch-back before replacing the scheduled worker. Archive, restore and
 timeline changes need explicit authorization outside ordinary gameplay.
-The read-only history and bookmarks are local APIs in this branch. Bridge
-commands for save discovery, naming and switching have yet to be integrated.
+The read-only history and bookmarks are local APIs in this branch. General
+bridge commands for save discovery, naming and arbitrary timeline switching
+remain separate from this exact one-time cutover.

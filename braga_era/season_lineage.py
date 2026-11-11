@@ -48,7 +48,7 @@ def authorization(manifest):
 
 def validation(meta):
     if 'fork_import' in meta:
-        return {'profile':PROFILE,'action':'verified_episode81_fork_import',
+        return {'profile':PROFILE,'action':meta.get('fork_type','verified_episode81_fork_import'),
                 'checkpoint_sha256':digest(meta),'world_sha256':meta['world_sha256'],
                 'fork_import_sha256':meta['fork_import']}
     return {'profile':PROFILE,'action':'independent_season_validation','checkpoint_sha256':digest(meta),
@@ -69,15 +69,21 @@ def bind_manifest(m,a,trusted):
         or digest(a)!=m['manifest_sha256']):
         raise ValueError('Season metadata differs from exact authorized manifest')
     from .multiseason import fork
-    if a.get('kind')==fork.ACTION:
+    if a.get('kind') in {fork.ACTION,fork.QUALIFIED}:
         imported=a['fork']
         if (m.get('fork_import')!=digest(imported) or m['generation']!=1
                 or m['immediate_parent_sha256']!=lineage.ROOT or m.get('parent_node_sha256') is not None
-                or imported['action']!=fork.ACTION or imported['career']!=trusted['career']
-                or imported['parent_checkpoint']!=fork.DETACHED or imported['source_checkpoint']!=fork.SOURCE
-                or imported['archive_sha256']!=fork.ARCHIVE or imported['seed_sha256']!=m['career_seed_sha256']
+                or imported['action']!=a['kind'] or imported['career']!=trusted['career']
+                or imported['seed_sha256']!=m['career_seed_sha256']
                 or imported['test_only'] is not m['test_only'] or a['operations']):
             raise ValueError('Fork import manifest differs from the approved base')
+        if a['kind']==fork.QUALIFIED:
+            fork.validate_qualified_origin(imported)
+            if m.get('fork_type')!=fork.QUALIFIED:
+                raise ValueError('Qualifying checkpoint type differs')
+        elif (imported['parent_checkpoint']!=fork.DETACHED or imported['source_checkpoint']!=fork.SOURCE
+              or imported['archive_sha256']!=fork.ARCHIVE or 'fork_type' in m):
+            raise ValueError('Episode #81 checkpoint type differs')
     elif 'fork_import' in m:
         raise ValueError('Unexpected fork import marker')
 
@@ -179,9 +185,19 @@ def current(c,trusted,key):
 def stage_episode81_import(registry, key, world, destination, request_id):
     """Build a genesis descriptor over a separately signed, exact fork base."""
     from .multiseason import fork
+    return _stage_fork_import(registry,key,world,destination,request_id,fork.ACTION)
+
+
+def stage_qualifying_import(registry,key,world,destination,request_id):
+    from .multiseason import fork
+    return _stage_fork_import(registry,key,world,destination,request_id,fork.QUALIFIED)
+
+
+def _stage_fork_import(registry,key,world,destination,request_id,kind):
+    from .multiseason import fork
     world, marker = store.authenticated(world,key)
     imported = marker['decision']
-    if imported['action']!=fork.ACTION or str(UUID(request_id))!=request_id:
+    if imported['action']!=kind or str(UUID(request_id))!=request_id:
         raise ValueError('Exact episode #81 fork import required')
     report=store.validate(world,key)
     with lineage.access(registry,key,True) as (c,t):
@@ -189,7 +205,7 @@ def stage_episode81_import(registry, key, world, destination, request_id):
                 or imported['career']!=t['career'] or marker['seed']!=t['seed']
                 or marker['test_only']!=bool(t['test_only'])):
             raise ValueError('Fork import requires a new, independently signed authority')
-        manifest={'profile':PROFILE,'kind':fork.ACTION,'career':t['career'],
+        manifest={'profile':PROFILE,'kind':kind,'career':t['career'],
                   'test_only':bool(t['test_only']),'request_id':request_id,'operations':[],
                   'automatic_gameplay':True,'policy':marker['policy'],'fork':imported,'season':2028,
                   'generation':1,'immediate_parent_sha256':lineage.ROOT,
@@ -205,6 +221,8 @@ def stage_episode81_import(registry, key, world, destination, request_id):
                     world_sha256=report['world_sha256'],database_sha256=state['database.sqlite']['sha256'],
                     state_sha256=state_hash,anchor_sha256=blob(c,{'nodes':[],'fork_import':origin}),
                     parent_node_sha256=None,fork_import=origin)
+        if kind==fork.QUALIFIED:
+            meta['fork_type']=kind
         package={'metadata':meta,'state':state,'manifest':manifest,
                  'authorization':lineage.signed(authorization(manifest),key),
                  'validation':lineage.signed(validation(meta),key)}
@@ -219,11 +237,21 @@ def stage_episode81_import(registry, key, world, destination, request_id):
 
 def accept_episode81_import(registry,key,directory,approval):
     from .multiseason import fork
+    return _accept_fork_import(registry,key,directory,approval,fork.ACTION)
+
+
+def accept_qualifying_import(registry,key,directory,approval):
+    from .multiseason import fork
+    return _accept_fork_import(registry,key,directory,approval,fork.QUALIFIED)
+
+
+def _accept_fork_import(registry,key,directory,approval,kind):
+    from .multiseason import fork
     directory=Path(directory).resolve(strict=True)
     with lineage.access(registry,key,True) as (c,t):
         package=read_package(directory);meta=package['metadata'];manifest=package['manifest']
         checkpoint=digest(meta)
-        if (manifest['kind']!=fork.ACTION
+        if (manifest['kind']!=kind
                 or lineage.check_signed(approval,key)!=lineage.expected_acceptance(meta,digest(package),t)):
             raise ValueError('Separate exact episode #81 acceptance required')
         proof={k:package[k] for k in ('metadata','manifest','authorization','validation')}
@@ -240,12 +268,15 @@ def accept_episode81_import(registry,key,directory,approval):
         if digest(marker['decision'])!=anchor['fork_import'] or store.validate(world,key)['world_sha256']!=meta['world_sha256']:
             raise ValueError('Imported state differs from independently verified base')
         with connect_read_only(world/'database.sqlite') as db:
-            cursors=[tuple(r) for r in db.execute(
-                "SELECT fixture,result_sha256,json_array_length(result_json,'$.events') FROM ms_executions WHERE result_json IS NOT NULL")]
+            cutoff = manifest['fork'].get('revealed_through') if kind == fork.QUALIFIED else None
+            cursors=[tuple(r) for r in db.execute("""SELECT x.fixture,x.result_sha256,
+                json_array_length(x.result_json,'$.events') FROM ms_executions x
+                JOIN ms_fixtures f ON f.key=x.fixture WHERE x.result_json IS NOT NULL
+                AND (? IS NULL OR f.kickoff<=?)""",(cutoff,cutoff))]
             cursors.extend(tuple(r) for r in db.execute(
                 'SELECT r.fixture_key,r.result_sha256,max(e.sequence) FROM world_receipts r '
                 'JOIN world_events e ON e.fixture_key=r.fixture_key GROUP BY r.fixture_key,r.result_sha256'))
-        batch='fork81:'+manifest['request_id']
+        batch=('fork81:' if kind==fork.ACTION else 'qualified:')+manifest['request_id']
         c.execute('BEGIN IMMEDIATE')
         try:
             c.execute('INSERT INTO accepted VALUES(?,?,?,?,?)',(checkpoint,lineage.ROOT,1,encode(proof),str(directory)))

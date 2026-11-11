@@ -16,7 +16,14 @@ from .registered import PROFILE, policy
 
 ACTION = "import_verified_episode81_fork"
 REHEARSAL = "rehearse_accepted_timeline"
-ACTIONS = {ACTION, REHEARSAL}
+QUALIFIED = "import_verified_libertadores_2028"
+ACTIONS = {ACTION, REHEARSAL, QUALIFIED}
+QUALIFIED_CAREER = "the-braga-era-libertadores-2028"
+QUALIFIED_SOURCE = "c090fe185089a5fc5a1cf0a748a532ac499dba5abe204fa5282988a54ab68136"
+QUALIFIED_ARCHIVE = "70d3e0f2ba8c0f7a1f5759aa1ed973fb80961009e4c336328cb4801db0397dc4"
+QUALIFIED_DATABASE = "fd31311d349722283ab550d5c2b9d50449d55835f700e5d1b382935811de629e"
+QUALIFIED_SEED = "df032276cfd217ba53484aa4db7890115988e67ff91d9fd1f76f8adb570200f1"
+QUALIFIED_CUTOFF = "2028-04-09 17:33:00"
 SOURCE = "2ca17c34c366558f854fd00eb3cba9077774de6287f01e377da3259f0a088498"
 DETACHED = "b314e9e158f5a1bcfcdc282fe5da5d32b49f1a0ce658a4477dcd856e854091fc"
 ARCHIVE = "c25602eeacf3dcf54be56c917b63f8398e077829c2bf979e6a18b98a9c8795b4"
@@ -42,12 +49,24 @@ def authenticate(directory, marker, key):
                 or d["parent_checkpoint"] != d["source_checkpoint"]
                 or d["seed_mode"] not in {"same", "alternate"}):
             raise ValueError("Timeline rehearsals are not acceptance eligible")
+    elif d["action"] == QUALIFIED:
+        validate_qualified_origin(d)
     elif (marker["acceptance_eligible"] is not True or d["source_checkpoint"] != SOURCE
           or d["parent_checkpoint"] != DETACHED or d["archive_sha256"] != ARCHIVE
           or d["parent_sha256"] != WORLD_BYTES or d["result_sha256"] != MATCH_RESULT
           or d["replay_seed_commitment_sha256"] != REPLAY_SEED):
         raise ValueError("Episode #81 origin differs")
     return directory, marker
+
+
+def validate_qualified_origin(decision):
+    if any(decision.get(k) != v for k, v in {
+        'action': QUALIFIED, 'career': QUALIFIED_CAREER, 'source_checkpoint': QUALIFIED_SOURCE,
+        'parent_checkpoint': QUALIFIED_SOURCE, 'archive_sha256': QUALIFIED_ARCHIVE,
+        'parent_sha256': QUALIFIED_DATABASE, 'seed_sha256': QUALIFIED_SEED,
+        'revealed_through': QUALIFIED_CUTOFF, 'source_entropy_parent': WORLD_BYTES,
+    }.items()):
+        raise ValueError('Qualifying import differs from the independently verified archive')
 
 
 def initialize(source, target, marker, key):

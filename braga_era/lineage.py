@@ -169,11 +169,15 @@ def authority(c, key):
     return row
 
 
-def provision(registry, key, *, test_only, commissioner, career_id, seed):
+def provision(registry, key, *, test_only, commissioner, career_id, seed, qualified_import=False):
     """Explicit trust bootstrap. Task 03D calls only test_only=True."""
     sign(key, {})
     if type(test_only) is not bool or not commissioner or not career_id or not seed:
         raise ValueError("Explicit authority, career and committed seed required")
+    if qualified_import:
+        from .multiseason.fork import QUALIFIED_CAREER, QUALIFIED_SEED
+        if career_id != QUALIFIED_CAREER or digest(seed) != QUALIFIED_SEED:
+            raise ValueError("Exact qualifying career and seed required")
     registry = _check_destination(Path(registry))
     registry.parent.mkdir(parents=True, exist_ok=True)
     with registry.open("xb"):
@@ -186,7 +190,7 @@ def provision(registry, key, *, test_only, commissioner, career_id, seed):
             "test_only": int(test_only),
             "commissioner": commissioner,
             "career": career_id,
-            "seed": "lineage-career-v1:" + career_id + ":" + str(seed),
+            "seed": seed if qualified_import else "lineage-career-v1:" + career_id + ":" + str(seed),
             "policy_json": encode(asdict(ReadinessPolicy())),
             "active": 1,
             "lease_epoch": 0,

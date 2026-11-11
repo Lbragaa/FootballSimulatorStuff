@@ -88,16 +88,16 @@ def verified_source(backup, original_config, output):
     return meta, seed, version, before
 
 
-def bridge(root, old, registry, key_path, key, test):
-    cfg = {**old, "career": CAREER, "test_only": test, "registry": str(registry), "key_file": str(key_path),
+def bridge(root, old, registry, key_path, key, test, *, career_id=CAREER):
+    cfg = {**old, "career": career_id, "test_only": test, "registry": str(registry), "key_file": str(key_path),
            "ledger": str(root / "bridge/ledger.sqlite"), "automatic_directory": str(root / "automatic")}
     local = dict(old["control"])
     # Read the existing authenticator locally. Keep the original files intact.
     local.update(store=str(root / "control/preparations.sqlite"), directory=str(root / "control/executions"),
                  policy_receipt=str(root / "control/policy.json"), human_gate=str(root / "control/gate.sqlite"))
     cfg["control"] = local
-    career = Career(registry, key, CAREER, test)
-    context = {"profile": HUMAN, "career": CAREER, "test_only": test, "repository_id": old["repository_id"],
+    career = Career(registry, key, career_id, test)
+    context = {"profile": HUMAN, "career": career_id, "test_only": test, "repository_id": old["repository_id"],
                "human_id": local["human_id"], "human_login": local["human_login"]}
     secret = secrets.token_bytes(32) if test else Path(local["authenticator_file"]).read_bytes()
     if test:
@@ -107,7 +107,7 @@ def bridge(root, old, registry, key_path, key, test):
     gate = HumanGate(local["human_gate"], key, secret, context)
     gate.initialize()
     with lineage.access(registry, key) as (_, t):
-        policy = {"profile": CONTROL, "action": "approve_remote_control_policies", "career": CAREER,
+        policy = {"profile": CONTROL, "action": "approve_remote_control_policies", "career": career_id,
                   "test_only": test, "authority_key_sha256": t["key_hash"],
                   "policy_sha256": digest(json.loads(t["policy_json"])), "repository_id": old["repository_id"],
                   "human_id": local["human_id"], "human_login": local["human_login"], "operations": OPERATIONS}

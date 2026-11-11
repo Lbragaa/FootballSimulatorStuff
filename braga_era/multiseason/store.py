@@ -126,7 +126,7 @@ def run(directory, test_key, request_id, kind, args, *, crash=None):
                 return json.loads(old['response_json'])
             if kind not in {'play_group','begin_run'} and c.execute("SELECT 1 FROM ms_fixtures WHERE status='claimed' LIMIT 1").fetchone():
                 raise ValueError('Resume the committed match group before changing the world')
-            if marker['decision'].get('action') == fork.REHEARSAL:
+            if marker['decision'].get('action') in {fork.REHEARSAL, fork.QUALIFIED}:
                 from .execution import timeline_entropy
                 handle = timeline_entropy.set(marker['decision']['source_entropy_parent'])
                 try:
