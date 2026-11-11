@@ -81,6 +81,7 @@ class Worker2(Worker):
         status["career_statistics_available"] = (
             "read" in self.scopes and "career_statistics" in protocol2.COMMANDS
         )
+        status["episode_performance_available"] = self.episodes is not None
         return status
 
     def deliver(self, c, number):
