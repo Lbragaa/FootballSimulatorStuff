@@ -15,6 +15,8 @@ from ..seasons import fingerprints
 from .registered import PROFILE, policy
 
 ACTION = "import_verified_episode81_fork"
+REHEARSAL = "rehearse_accepted_timeline"
+ACTIONS = {ACTION, REHEARSAL}
 SOURCE = "2ca17c34c366558f854fd00eb3cba9077774de6287f01e377da3259f0a088498"
 DETACHED = "b314e9e158f5a1bcfcdc282fe5da5d32b49f1a0ce658a4477dcd856e854091fc"
 ARCHIVE = "c25602eeacf3dcf54be56c917b63f8398e077829c2bf979e6a18b98a9c8795b4"
@@ -25,17 +27,26 @@ REPLAY_SEED = "d4853ec560bb64a182d9499af020776570905cca9af26251436339e5d38651d9"
 
 def authenticate(directory, marker, key):
     d = marker["decision"]
-    if (d["action"] != ACTION or d["profile"] != PROFILE or d["source_checkpoint"] != SOURCE
-            or d["parent_checkpoint"] != DETACHED or d["archive_sha256"] != ARCHIVE
-            or d["parent_sha256"] != WORLD_BYTES or d["result_sha256"] != MATCH_RESULT
-            or d["replay_seed_commitment_sha256"] != REPLAY_SEED
+    rehearsal = d["action"] == REHEARSAL
+    eligible = not rehearsal
+    if (d["action"] not in ACTIONS or d["profile"] != PROFILE
             or type(d["test_only"]) is not bool or marker["test_only"] is not d["test_only"]
-            or marker["profile"] != PROFILE or marker["acceptance_eligible"] is not True
+            or marker["profile"] != PROFILE or marker["acceptance_eligible"] is not eligible
             or marker["policy"] != policy(d["test_only"]) or d["policy_sha256"] != digest(marker["policy"])
             or d["seed_sha256"] != digest(marker["seed"])
             or not hmac.compare_digest(marker["signature"], sign(key, d))
             or file_sha256(directory / "parent.sqlite") != d["parent_sha256"]):
-        raise ValueError("Untrusted episode #81 fork base")
+        raise ValueError("Untrusted timeline base")
+    if rehearsal:
+        if (d["test_only"] is not True or marker["acceptance_eligible"] is not False
+                or d["parent_checkpoint"] != d["source_checkpoint"]
+                or d["seed_mode"] not in {"same", "alternate"}):
+            raise ValueError("Timeline rehearsals are not acceptance eligible")
+    elif (marker["acceptance_eligible"] is not True or d["source_checkpoint"] != SOURCE
+          or d["parent_checkpoint"] != DETACHED or d["archive_sha256"] != ARCHIVE
+          or d["parent_sha256"] != WORLD_BYTES or d["result_sha256"] != MATCH_RESULT
+          or d["replay_seed_commitment_sha256"] != REPLAY_SEED):
+        raise ValueError("Episode #81 origin differs")
     return directory, marker
 
 
@@ -59,6 +70,10 @@ def operations(db):
 def validate(directory, marker, key, *, replay):
     from .store import run
     with connect_read_only(directory / "parent.sqlite") as base, connect_read_only(directory / "database.sqlite") as db:
+        decision = marker["decision"]
+        if decision["action"] == REHEARSAL and decision["source_entropy_parent"] != base.execute(
+                "SELECT parent_sha256 FROM ms_meta").fetchone()[0]:
+            raise ValueError("Timeline entropy does not match the inherited database")
         if db.execute("PRAGMA integrity_check").fetchone()[0] != "ok" or db.execute("PRAGMA foreign_key_check").fetchall():
             raise ValueError("Fork database integrity failure")
         if db.execute("SELECT 1 FROM ms_fixtures WHERE status='claimed'").fetchone():
@@ -94,7 +109,8 @@ def validate(directory, marker, key, *, replay):
             with connect_read_only(target / "database.sqlite") as db:
                 if fingerprints(db) != expected:
                     raise ValueError("Fork independent replay differs")
-    return {"profile": PROFILE, "ok": True, "test_only": marker["test_only"], "acceptance_eligible": True,
+    return {"profile": PROFILE, "ok": True, "test_only": marker["test_only"],
+            "acceptance_eligible": marker["acceptance_eligible"],
             "operations": len(all_ops), "world_sha256": digest(expected), "independent_replay": replay}
 
 

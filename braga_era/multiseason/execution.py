@@ -1,5 +1,6 @@
 """Precommitted simultaneous groups using the unchanged engine and ET validator."""
 from dataclasses import asdict
+from contextvars import ContextVar
 from datetime import datetime,timedelta
 import json
 from ..engine.models import Snapshot,CompetitionRules,SeedCommitment
@@ -18,6 +19,7 @@ from .registered import PROFILE as REGISTERED_PROFILE
 
 
 ENGINE_ACTIVATION = 'activate_substitution_policy'
+timeline_entropy = ContextVar('timeline_entropy', default=None)
 
 
 def active_engine(c):
@@ -62,7 +64,7 @@ def claim(c,a):
     engine_version=active_engine(c)
     common=digest({'players':[tuple(r) for r in c.execute('SELECT * FROM world_player_state ORDER BY player_id')],
                    'discipline':[tuple(r) for r in c.execute('SELECT * FROM world_discipline ORDER BY player_id,competition')],
-                   'clock':meta['clock'],'parent':meta['parent_sha256']})
+                   'clock':meta['clock'],'parent':timeline_entropy.get() or meta['parent_sha256']})
     for f in rows:
         e=c.execute('SELECT * FROM ms_editions WHERE id=?',(f['edition'],)).fetchone()
         discipline=e['id']

@@ -81,7 +81,7 @@ def authenticated(directory, test_key):
     directory=Path(directory).resolve()
     marker=read_json(directory/'development.json')
     from . import fork
-    if marker['decision'].get('action')==fork.ACTION:
+    if marker['decision'].get('action') in fork.ACTIONS:
         return fork.authenticate(directory,marker,test_key)
     profile,ddl,version,test_only,eligible=_configuration(marker['policy'])
     if (marker.get('profile')!=profile or marker.get('test_only') is not test_only or marker.get('acceptance_eligible') is not eligible
@@ -109,6 +109,7 @@ def connection(directory, test_key):
 
 
 def run(directory, test_key, request_id, kind, args, *, crash=None):
+    from . import fork
     from .operations import apply
     if str(UUID(request_id))!=request_id:
         raise ValueError('Canonical request UUID required')
@@ -125,7 +126,15 @@ def run(directory, test_key, request_id, kind, args, *, crash=None):
                 return json.loads(old['response_json'])
             if kind not in {'play_group','begin_run'} and c.execute("SELECT 1 FROM ms_fixtures WHERE status='claimed' LIMIT 1").fetchone():
                 raise ValueError('Resume the committed match group before changing the world')
-            response=json.loads(encode(apply(c,kind,args)))
+            if marker['decision'].get('action') == fork.REHEARSAL:
+                from .execution import timeline_entropy
+                handle = timeline_entropy.set(marker['decision']['source_entropy_parent'])
+                try:
+                    response = json.loads(encode(apply(c, kind, args)))
+                finally:
+                    timeline_entropy.reset(handle)
+            else:
+                response = json.loads(encode(apply(c, kind, args)))
             previous=c.execute('SELECT sha256 FROM ms_operations ORDER BY sequence DESC LIMIT 1').fetchone()
             previous=previous[0] if previous else digest(marker['decision'])
             document={'request_id':request_id,'kind':kind,'args':args,'response':response,'previous':previous}
@@ -142,7 +151,7 @@ def run(directory, test_key, request_id, kind, args, *, crash=None):
 def validate(directory, test_key, *, replay=True):
     directory,marker=authenticated(directory,test_key)
     from . import fork
-    if marker['decision'].get('action')==fork.ACTION:
+    if marker['decision'].get('action') in fork.ACTIONS:
         return fork.validate(directory,marker,test_key,replay=replay)
     profile,ddl,version,test_only,eligible=_configuration(marker['policy'])
     verified_parent=source_manifest(directory/'parent.sqlite')
