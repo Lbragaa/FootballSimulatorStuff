@@ -227,6 +227,10 @@ def test_episode_reports_all_ten_after_whistle_and_compact_continuation(records,
     op['target_done']=True
     bounded,_=api.episode(op,1200)
     assert not bounded[0]['exhaustive'] and bounded[0]['retrieve_all']['command']=='historical_results'
+    op['reported_round_matches'] = [m['id'] for m in result['round_results']['matches']]
+    continued, _ = api.episode(op, 14000)
+    assert continued[0]['round_results'] is None
+    assert continued[0]['other_results'] == result['other_results']
 
 
 def test_source_conflicts_fail_closed(records):

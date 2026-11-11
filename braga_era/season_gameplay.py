@@ -18,13 +18,19 @@ def _event_counts(database,authenticated_file_sha256):
         return tuple((r['fixture'],r['n']) for r in db.execute("SELECT fixture,json_array_length(result_json,'$.events') AS n FROM ms_executions WHERE result_json IS NOT NULL"))
 
 
-def unrevealed(c, database):
+def unrevealed(c, database, authenticated_sha256=None):
     cursors={r['fixture']:r['sequence'] for r in c.execute('SELECT * FROM cursors')}
-    return [fixture for fixture,n in _event_counts(str(database),file_sha256(database)) if cursors.get(fixture,0)<n]
+    identity = authenticated_sha256 or file_sha256(database)
+    return [fixture for fixture,n in _event_counts(str(database),identity) if cursors.get(fixture,0)<n]
 
 
-def next_events(c,info):
-    pending=set(unrevealed(c,info['database']))
+def _unrevealed(c, info):
+    return set(unrevealed(c, info['database'], info.get('metadata', {}).get('database_sha256')))
+
+
+def next_events(c,info,*,pending=None):
+    if pending is None:
+        pending = _unrevealed(c, info)
     with connect_read_only(info['database']) as db:
         rows=[dict(r) for r in db.execute('SELECT f.*,e.competition,e.season FROM ms_fixtures f JOIN ms_editions e ON e.id=f.edition ORDER BY kickoff,key') if r['key'] in pending]
         if rows:
@@ -45,7 +51,7 @@ def table(c,info,edition=None):
         edition=edition or f'LEAGUE:{info["season"]}'
         e=db.execute('SELECT * FROM ms_editions WHERE id=?',(edition,)).fetchone()
         if not e:raise ValueError('Competition edition is not established')
-        waiting=set(unrevealed(c,info['database']))
+        waiting=_unrevealed(c,info)
         if any(r[0] in waiting for r in db.execute('SELECT key FROM ms_fixtures WHERE edition=?',(edition,))):
             raise ValueError('Reveal this competition round before its standings')
         names=dict(db.execute('SELECT key,name FROM world_clubs'))
@@ -137,21 +143,30 @@ def gameplay(c,t,key,parent,command,fixture,count,page_id):
         response={'fixture_key':fixture,'events':events,'postmatch_available':end==len(bundle['events']),
                   'accepted_checkpoint':info['checkpoint'],'test_only':bool(t['test_only'])}
         if response['postmatch_available']:response['postmatch_summary']={'score':bundle['score'],'resolution':bundle['resolution']}
-    c.execute('BEGIN IMMEDIATE')
-    try:
-        c.execute('INSERT OR REPLACE INTO cursors VALUES(?,?,?)',(fixture,row['result_sha256'],end))
-        c.execute('UPDATE cursor_revision SET revision=revision+1');lineage.seal_cursors(c,t,key)
-        c.execute('INSERT INTO narration_pages VALUES(?,?,?,?,?)',(page_id,info['checkpoint'],digest(request),encode(response),
-                  lineage.sign(key,lineage.page_statement(page_id,info['checkpoint'],digest(request),response,t))))
-        c.commit()
-    except BaseException:c.rollback();raise
+    _commit_page(c, t, key, fixture, row['result_sha256'], end, page_id, digest(request), response)
     return response
 
 
-def state(c,info):
+def _commit_page(c, t, key, fixture, result_sha, end, page_id, request_sha, response):
+    c.execute('BEGIN IMMEDIATE')
+    try:
+        c.execute('INSERT OR REPLACE INTO cursors VALUES(?,?,?)',(fixture,result_sha,end))
+        c.execute('UPDATE cursor_revision SET revision=revision+1');lineage.seal_cursors(c,t,key)
+        checkpoint = response['accepted_checkpoint']
+        c.execute('INSERT INTO narration_pages VALUES(?,?,?,?,?)',(page_id,checkpoint,request_sha,encode(response),
+                  lineage.sign(key,lineage.page_statement(page_id,checkpoint,request_sha,response,t))))
+        c.commit()
+    except BaseException:c.rollback();raise
+
+
+def state(c,info,*,hidden=None):
     with connect_read_only(info['database']) as db:
         names=dict(db.execute('SELECT key,name FROM world_clubs'))
-        rows=[dict(r) for r in db.execute("SELECT f.*,e.competition,e.season,e.format,json_extract(x.result_json,'$.resolution') AS resolution_json FROM ms_fixtures f JOIN ms_editions e ON e.id=f.edition LEFT JOIN ms_executions x ON x.fixture=f.key WHERE e.season=? ORDER BY kickoff,key",(info['season'],))]
+        rows=[dict(r) for r in db.execute("""SELECT f.*,e.competition,e.season,e.format,
+            json_extract(x.result_json,'$.resolution') AS resolution_json
+            FROM ms_fixtures f JOIN ms_editions e ON e.id=f.edition
+            LEFT JOIN ms_executions x ON x.fixture=f.key AND f.tie_key IS NOT NULL
+            WHERE e.season=? ORDER BY kickoff,key""",(info['season'],))]
         fixtures=[{**r,'stage':'R'+str(r['round']) if r['competition']=='LEAGUE' else r['stage']} for r in rows]
         ties=[]
         for t in db.execute('SELECT t.*,e.competition FROM ms_ties t JOIN ms_editions e ON e.id=t.edition WHERE e.season=?',(info['season'],)):
@@ -164,9 +179,62 @@ def state(c,info):
         league=[{**r,'id':r['club']} for r in standings(db,f'LEAGUE:{info["season"]}')]
         champions=[{'competition':r['competition'],'club_key':r['champion']} for r in db.execute(
             "SELECT * FROM ms_editions WHERE season=? AND state='completed' AND champion IS NOT NULL",(info['season'],))]
-    hidden=set(unrevealed(c,info['database']))
+    if hidden is None:
+        hidden = _unrevealed(c, info)
     return {'fixtures':fixtures,'ties':ties,'draws':[],'names':names,'league':league,'champions':champions,
             'revealed':[r['key'] for r in rows if r['status']=='final' and r['key'] not in hidden]}
+
+
+def episode_view(registry, key):
+    """Compute state and agenda under one authenticated, locked parent read."""
+    from .season_lineage import current
+    with lineage.access(registry, key, True) as (c, trusted):
+        lineage.check_cursors(c, trusted, key)
+        info, _ = current(c, trusted, key)
+        hidden = _unrevealed(c, info)
+        return state(c, info, hidden=hidden), next_events(c, info, pending=hidden)
+
+
+def finish_background(registry, key, checkpoint, fixture, page_id):
+    """Record one signed final cursor for an already accepted background match."""
+    from .season_lineage import current
+
+    request = {'command': 'finish_background', 'fixture': fixture, 'checkpoint': checkpoint}
+    request_sha = digest(request)
+    with lineage.access(registry, key, True) as (c, trusted):
+        lineage.check_cursors(c, trusted, key)
+        cached = c.execute('SELECT * FROM narration_pages WHERE id=?', (page_id,)).fetchone()
+        if cached:
+            response = json.loads(cached['response'])
+            statement = lineage.page_statement(page_id, cached['checkpoint'], request_sha, response, trusted)
+            if (cached['checkpoint'] != checkpoint or cached['request_sha'] != request_sha
+                    or cached['signature'] != lineage.sign(key, statement)):
+                raise ValueError('Background narration page binding changed')
+            return response
+        if trusted['head'] != checkpoint:
+            raise ValueError('Background narration parent changed')
+        info, _ = current(c, trusted, key)
+        eligible = next((r for r in next_events(c, info)
+                         if r['key'] == fixture and r['kind'] == 'narration'), None)
+        if eligible is None or 'club:15' in (eligible['home'], eligible['away']):
+            raise ValueError('Background narration requires an eligible non-Vasco result')
+        with connect_read_only(info['database']) as db:
+            row = db.execute('SELECT result_json,result_sha256 FROM ms_executions WHERE fixture=?', (fixture,)).fetchone()
+        bundle = json.loads(row['result_json'])
+        if digest(bundle) != row['result_sha256']:
+            raise ValueError('Accepted result differs')
+        end = len(bundle['events'])
+        cursor = c.execute('SELECT * FROM cursors WHERE fixture=?', (fixture,)).fetchone()
+        if cursor and (cursor['result_sha'] != row['result_sha256'] or not 0 <= cursor['sequence'] < end):
+            raise ValueError('Result-bound cursor differs')
+        if not end or bundle['events'][-1]['kind'] != 'FINAL_WHISTLE':
+            raise ValueError('Background result lacks a final whistle')
+        response = {'fixture_key': fixture, 'accepted_checkpoint': checkpoint, 'events': [],
+                    'postmatch_available': True, 'test_only': bool(trusted['test_only']),
+                    'consumed_from': cursor['sequence'] if cursor else 0, 'consumed_to': end,
+                    'result_sha256': row['result_sha256']}
+        _commit_page(c, trusted, key, fixture, row['result_sha256'], end, page_id, request_sha, response)
+        return response
 
 
 def offseason_news(career,request_id):

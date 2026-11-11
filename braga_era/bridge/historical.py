@@ -139,7 +139,8 @@ class HistoricalResults:
         """One compact section; omitted results always have a pinned retrieval page."""
         projection, meta, visibility = self.snapshot()
         keys = list(dict.fromkeys(op.get('report_pending', []) + op['consumed']))
-        relevant = [projection.records[k] for k in keys if k in projection.records]
+        reported_round_matches = set(op.get('reported_round_matches', []))
+        relevant = [projection.records[k] for k in keys if k in projection.records and k not in reported_round_matches]
         if not relevant:
             return [], []
         dates = [r['date'][:10] for r in relevant if r['date']]
@@ -163,6 +164,8 @@ class HistoricalResults:
                 'recorded_fixtures': len(rows),
                 'matches': [self.compact(r) for r in rows]}
             round_ids = {r['id'] for r in rows}
+            if round_ids and round_ids <= reported_round_matches:
+                result['round_results'] = None
         others = [r for r in relevant if r['id'] not in round_ids]
         others.sort(key=lambda r: (r['date'] or '', r['id']))
         for row in others:

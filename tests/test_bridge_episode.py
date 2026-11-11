@@ -163,6 +163,29 @@ def test_partial_round_never_claimed_final_or_cross_second_vasco(world):
     assert any(s['section']=='round_pending' for s in result['presentation'])
 
 
+@pytest.mark.parametrize('table_delivered', [True, False])
+def test_round_continuation_only_repeats_a_table_if_not_delivered(world, table_delivered):
+    for f in world.fixtures[:3]:
+        f['status'] = 'final'
+        world.s['revealed'].append(f['key'])
+    cup = dict(world.fixtures[-1], key='cdb:test:2', competition='CDB', stage='R32',
+               home='club:15', kickoff='2027-10-15 16:00')
+    world.fixtures.append(cup)
+    prior = request(world)
+    journal = {'request': prior, 'response': {'episode_type': 'progress_bound', 'presentation': [
+        {'section': 'league_table', 'complete': True, 'round': 'R27'}] if table_delivered else [
+        {'section': 'round_pending', 'complete': False, 'round': 'R27'}]},
+        'target': 'league:3', 'round': 'R27', 'target_done': True}
+    world.ep.directory.mkdir(parents=True, exist_ok=True)
+    world.ep.save(world.ep.path(prior), journal)
+    result = world.ep.run(req(world.auto.career, 'play_next_episode', 3))
+    assert len(world.batches) == (2 if table_delivered else 1)
+    sections = [s['section'] for s in result['presentation']]
+    assert ('vasco_timeline' in sections) == table_delivered
+    assert ('league_table' in sections) != table_delivered
+    assert len(set(world.s['revealed'])) == len(world.s['revealed'])
+
+
 def test_genuine_uncommitted_dependency_fails_closed(world):
     def blocked(r): raise ValueError('private diagnostic path must never leak')
     world.auto.play=blocked

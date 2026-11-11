@@ -68,6 +68,12 @@ class Episode:
                     "revealed": [r["fixture_key"] for r in db.execute("SELECT fixture_key,max(sequence) AS n FROM world_events GROUP BY fixture_key")
                                  if cursors.get(r["fixture_key"]) == r["n"]]}
 
+    def view(self):
+        if getattr(self.career, 'registered_season', lambda: False)():
+            from ..season_gameplay import episode_view
+            return episode_view(self.career.registry, self.career.key)
+        return self.state(), self.career.play("next")["events"]
+
     def completed(self, state):
         groups = {}
         for tie in state["ties"]:
@@ -154,6 +160,7 @@ class Episode:
         return HistoricalResults(self.career).episode(op, budget)
 
     def run(self, request):
+        entry_wall, entry_cpu = time.perf_counter(), time.process_time()
         self.auto.controls.trusted()
         path = self.path(request)
         self.directory.mkdir(parents=True, exist_ok=True)
@@ -191,9 +198,19 @@ class Episode:
                 if prior_deliveries:
                     _, prior_path, prior = max(prior_deliveries, key=lambda row: row[0])
                     if prior["response"]["episode_type"] in {"progress_bound", "blocker", "automatic_disabled"}:
-                        for field in ("baseline", "league_baseline", "target", "round", "target_done", "report_pending"):
+                        for field in ("baseline", "league_baseline", "target", "round", "target_done",
+                                      "report_pending", "reported_round_matches"):
                             if field in prior:
                                 op[field] = prior[field]
+                        delivered_round = any(s["section"] == "league_table" and s.get("complete")
+                                              and s.get("round") == op["round"]
+                                              for s in prior["response"]["presentation"])
+                        if op["target_done"] and delivered_round:
+                            op.update(target=None, round=None, target_done=False)
+                        for section in prior["response"]["presentation"]:
+                            results = section.get("round_results") if section["section"] == "episode_results" else None
+                            if results and results["complete"] and len(results["matches"]) == 10:
+                                op["reported_round_matches"] = [m["id"] for m in results["matches"]]
                         op["continuation_of"] = prior_path.stem
                 if len(retained) > 1:
                     raise ValueError("Multiple unresolved episode commitments; local review required")
@@ -206,16 +223,20 @@ class Episode:
             previous_metric = getattr(self.auto.controls, "metric", None)
             def metric(name, seconds):
                 op["timings"][name] = op["timings"].get(name, 0) + seconds
+            metric("episode_preparation", started - entry_wall)
             self.auto.controls.metric = metric
             try:
-                reason, report = self._loop(path, op, request, started + MAX_SECONDS)
-                metric("episode_processing", time.perf_counter() - started)
+                try:
+                    reason, report = self._loop(path, op, request, started + MAX_SECONDS)
+                finally:
+                    metric("episode_processing", time.perf_counter() - started)
+                presentation_started = time.perf_counter()
+                state, next_events = self.view()
                 # Ordered sections survive canonical JSON sorting of object keys.
                 sections = list(op["presentation"])
                 if report:
                     sections.append({"section": "season_boundary" if reason == "season_boundary" else "milestone_report", "data": report})
                 if op["target_done"] and op["round"]:
-                    state = self.state()
                     round_rows = [f for f in state["fixtures"] if f["competition"] == "LEAGUE" and f["stage"] == op["round"]]
                     complete = bool(round_rows) and all(f["status"] == "final" for f in round_rows)
                     complete = complete and {f["key"] for f in round_rows} <= set(state["revealed"])
@@ -225,10 +246,9 @@ class Episode:
                         sections.append({"section": "league_table", "round": op["round"], "complete": True, "data": rows})
                     else:
                         sections.append({"section": "round_pending", "round": op["round"], "complete": False})
-                state = self.state()
                 next_vasco = next(({k: f[k] for k in ("key", "home", "away", "kickoff", "competition", "stage", "status")}
                                    for f in state["fixtures"] if f["status"] != "final" and VASCO in (f["home"], f["away"])), None)
-                sections.append({"section": "next_agenda", "data": self.career.play("next")["events"], "next_vasco": next_vasco})
+                sections.append({"section": "next_agenda", "data": next_events, "next_vasco": next_vasco})
                 response = {"episode_type": reason, "presentation": sections,
                     "presentation_rule": "Render sections in array order. Narrate each goal before its score; scoreboard and statistics only after FINAL_WHISTLE. Luan Braga is autonomous, never the user avatar.",
                     "world_progress": {"from": op["start"], "to": self.career.inspect()["accepted_clock"],
@@ -238,6 +258,9 @@ class Episode:
                                  "retry": "Same issue/UUID returns this exact delivery; a new continue resumes durable world/cursors."},
                     "timings_seconds": {k: round(v, 3) for k, v in op["timings"].items()}}
                 additions, op['report_pending'] = self.results_sections(op, max(1000, min(14000, 53000-len(encode(response).encode()))))
+                metric("episode_presentation", time.perf_counter() - presentation_started)
+                metric("episode_cpu", time.process_time() - entry_cpu)
+                response["timings_seconds"] = {k: round(v, 3) for k, v in op["timings"].items()}
                 index = next((i for i,s in enumerate(sections) if s['section'] in {'league_table','round_pending','next_agenda'}), len(sections))
                 sections[index:index] = additions
                 if len(encode(response).encode()) > 55000:
@@ -287,7 +310,12 @@ class Episode:
                     op["pending"] = None
                 else:
                     page_started = time.perf_counter()
-                    page = self._page(pending["fixture"], pending["page_id"])
+                    if pending.get("background"):
+                        from ..season_gameplay import finish_background
+                        page = finish_background(self.career.registry, self.career.key, op["head"],
+                                                 pending["fixture"], pending["page_id"])
+                    else:
+                        page = self._page(pending["fixture"], pending["page_id"])
                     op["timings"]["narration"] = op["timings"].get("narration", 0) + time.perf_counter() - page_started
                     self.fault("after_page")
                     if not page["events"] and not page["postmatch_available"]:
@@ -309,8 +337,10 @@ class Episode:
                     op["pending"] = None
                 self.save(path, op)
                 self.fault("after_step")
-            state = self.state()
-            events = self.career.play("next")["events"]
+            view_started = time.perf_counter()
+            state, events = self.view()
+            op["timings"]["state_and_agenda"] = (op["timings"].get("state_and_agenda", 0)
+                                                  + time.perf_counter() - view_started)
             newly_done = self.completed(state) - set(op["baseline"])
             # All of a stage's narration must have been consumed, not merely its
             # final batch accepted. Earlier completed stages are baseline only.
@@ -377,6 +407,8 @@ class Episode:
                     op.setdefault("previews", []).append(marker)
                 op["pending"] = {"kind": "page", "fixture": chosen, "detailed": detailed,
                     "page_id": f"{PROFILE}:{request['request_id']}:{op['steps']}"}
+                if not detailed and getattr(self.career, 'registered_season', lambda: False)():
+                    op["pending"]["background"] = True
             else:
                 if not self.auto.mode()["enabled"]:
                     return "automatic_disabled", None

@@ -46,6 +46,10 @@ Hikari must use actual worker outputs only, with no invented outcomes.
    using additional issues. The worker resumes stored narration first, consumes
    unrelated fixtures internally, and uses individually verified next-day
    batches until Vasco's match/rodada, a major milestone, or a real blocker.
+   A resumed episode can finish previously accepted background narration
+   without accepting a new checkpoint. It keeps the first final round table
+   and can move on when the previous episode already delivered it.
+   See [episode latency and round continuation](episode_performance.md).
 5. Render `presentation` **in array order**, even if a JSON viewer alphabetizes
    object keys: prematch/recorded lineups → chronological timeline → final
    whistle → fulltime/statistics/brief assessment → round/other results → completed table → next
