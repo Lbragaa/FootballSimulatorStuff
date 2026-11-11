@@ -17,6 +17,7 @@ COMMANDS = {
     "continue_gameplay": {},
     "play_next_episode": {},
     "historical_results": {},
+    "career_statistics": {},
     "season_status": {},
     "fork_status": {},
     "automatic_seasons_status": {},
@@ -42,6 +43,7 @@ COMMANDS = {
 RESULT_KEYS = v1.RESULT_KEYS | set(
     "control_profile policy_sha256 configurations_sha256 career_seed_sha256 seed_policy preparation_id batch_state review candidate confirmation summaries held_for_detail next_events on_field_states presentation source_page_sha256s automatic_gameplay phase simulation_advanced episode_type presentation_rule world_progress recovery timings_seconds historical_results season_status automatic_seasons season_policy season fork_status".split()
 )
+RESULT_KEYS.update({'edition', 'account_unknown', 'career_statistics'})
 
 
 def parse(body):
@@ -56,9 +58,9 @@ def parse(body):
     if request.get("protocol") != PROTOCOL:
         raise ValueError("Unsupported protocol")
     name = request.get("command")
-    if name == 'historical_results':
+    if name in ('historical_results', 'career_statistics'):
         if not isinstance(request.get('args'), dict):
-            raise ValueError('Historical filter object required')
+            raise ValueError('Read filter object required')
         v1.parse(json.dumps({**request, "protocol": v1.PROTOCOL, "command": "inspect_career", "args": {}}))
         # The same closed filter validator runs BEFORE any read in query().
         # An authenticated recognized request gets a useful typed filter error
@@ -106,7 +108,7 @@ def parse(body):
 
 
 def role(command):
-    if command in {"automatic_status", "historical_results", "season_status", "automatic_seasons_status", "fork_status"}:
+    if command in {"automatic_status", "historical_results", "career_statistics", "season_status", "automatic_seasons_status", "fork_status"}:
         return "read"
     return "narration" if command == "roundup" else "control" if command in COMMANDS else v1.role(command)
 
@@ -137,8 +139,30 @@ def schema():
             branch["properties"]["args"]["properties"]["fixtures"]["minItems"] = 1
         if name == 'historical_results':
             branch['properties']['args'] = historical_schema()
+        if name == 'career_statistics':
+            branch['properties']['args'] = statistics_schema()
         base["oneOf"].append(branch)
     return base
+
+
+def statistics_schema():
+    from ..statistics import FILTERS, METRICS
+
+    properties = {k: {'type': 'string', 'minLength': 1, 'maxLength': 100}
+                  for k in ('club', 'competition', 'stage', 'date_from', 'date_to')}
+    properties.update({k: {'type': 'integer', 'minimum': low, 'maximum': high}
+                       for k, (low, high) in {'season': (2027, 2200), 'group': (1, 99),
+                                              'limit': (1, 30), 'min_minutes': (0, 1000000)}.items()})
+    properties['player'] = {'oneOf': [{'type': 'integer', 'minimum': 1, 'maximum': 2**63-1},
+                                     {'type': 'string', 'minLength': 1, 'maxLength': 100}]}
+    properties['sort'] = {'enum': sorted({*METRICS, 'name', 'ovr', 'ovr_delta'})}
+    return {'oneOf': [
+        {'type': 'object', 'required': ['cursor'], 'additionalProperties': False,
+         'properties': {'cursor': {'type': 'string', 'minLength': 1, 'maxLength': 4096}}},
+        *({'type': 'object', 'required': ['dataset'], 'additionalProperties': False,
+           'properties': {'dataset': {'const': dataset}, 'limit': properties['limit'],
+                          **{key: properties[key] for key in sorted(fields)}}} for dataset, fields in FILTERS.items()),
+    ]}
 
 
 def historical_schema():

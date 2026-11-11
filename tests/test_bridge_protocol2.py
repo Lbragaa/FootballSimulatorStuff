@@ -18,12 +18,13 @@ def test_closed_v2_and_legacy_compatibility():
     for command, spec in protocol2.COMMANDS.items():
         args = {k: "2027-09-30 23:59" if t == "boundary" else str(uuid4()) if t == "uuid"
                 else "a" * 64 if t == "hash" else "ENABLE_AUTOMATIC_GAMEPLAY" if t == "auto_consent"
+                else 'ENABLE_AUTOMATIC_SEASON_TRANSITIONS' if t=='season_consent'
                 else 'supported-ecosystem-proposal-1' if t=='season_policy'
                 else ["lib:LIB-R16-01:L1"] for k, t in spec.items()}
         if command == "roundup":
             args["detailed"] = []
         assert protocol2.parse(json.dumps(v2(command, **args)))["command"] == command
-    assert len(protocol2.schema()["oneOf"]) == 36
+    assert len(protocol2.schema()["oneOf"]) == 43
     assert not {"execute", "accept", "provision", "confirm", "sign"} & protocol2.COMMANDS.keys()
 
 

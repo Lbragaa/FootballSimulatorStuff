@@ -6,7 +6,7 @@ import os
 from pathlib import Path
 import time
 
-from .. import lineage
+from .. import __version__, lineage
 from ..history import canonical_json as encode, digest
 from . import protocol2
 from .roundup import Roundups, compact_events
@@ -77,6 +77,10 @@ class Worker2(Worker):
     def status_document(self, c):
         status = super().status_document(c)
         status["season_delegation_available"] = self.season_delegation is not None and status["execution_enabled"]
+        status["worker_version"] = __version__
+        status["career_statistics_available"] = (
+            "read" in self.scopes and "career_statistics" in protocol2.COMMANDS
+        )
         return status
 
     def deliver(self, c, number):
@@ -146,6 +150,9 @@ class Worker2(Worker):
             from .historical import HistoricalResults
             return {'historical_results': HistoricalResults(self.career).query(args),
                     'accepted_checkpoint': self.career.identity()['checkpoint']}
+        if name == 'career_statistics':
+            from .analytics import Analytics
+            return {'career_statistics': Analytics(self.career).query(args, request['expected_checkpoint'])}
         if name in {"enable_automatic_gameplay", "disable_automatic_gameplay", "automatic_status",
                     "continue_gameplay", "advance_next_batch", "play_prepared_batch", "play_next_episode"}:
             if self.automatic is None or not self.capabilities()["execution_enabled"]:
