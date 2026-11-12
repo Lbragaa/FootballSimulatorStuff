@@ -12,6 +12,9 @@ def apply(c,kind,a):
 
 
 def _apply(c,kind,a):
+    if kind=='record_authentic_transition_authorization':
+        from .authentic import record_authorization
+        return record_authorization(c,a)
     if kind=='commit_balanced_venues':
         from .authentic import commit_schedule
         return commit_schedule(c,a)

@@ -129,8 +129,19 @@ def commit(c,a):
     source_hash=digest(a)
     def add(comp,key,country,route,source):
         entries.append({'competition':comp,'club':key,'country':country,'route':route,'source':source})
+    from .authentic import catalogue
+    registered=catalogue(c,a['season']) if a['season']>2029 else {}
     for comp,key in sorted(holders.items()):
-        add('LIB',key,country_of(c,key),'defending_'+comp,next(t for t in titles if t['competition']==comp))
+        country=country_of(c,key)
+        source=next(t for t in titles if t['competition']==comp)
+        if registered and key not in registered:
+            replacement=next((club for club in orders[country] if club not in used),None)
+            if replacement is None:raise ValueError('No genuine replacement for expired titleholder exception')
+            add('LIB',replacement,country,'expired_legacy_titleholder_slot',
+                {'recorded_titleholder':source,'national_position':orders[country].index(replacement)+1})
+            used.add(replacement)
+        else:
+            add('LIB',key,country,'defending_'+comp,source)
     for country,count in ALLOCATIONS.items():
         available=[k for k in orders[country] if k not in used]
         if len(available)<count+SULA_SLOTS[country]:raise ValueError('Insufficient replacement/entry evidence for '+country)

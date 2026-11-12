@@ -196,14 +196,17 @@ def youth(c,key,year,index,position,dated,strength):
     p=Player(pid,key,f'Fictional academy {year} {key} {index}',position,ovr,ovr,ovr,ovr,ovr,ovr,ovr if position=='GK' else 20,100,65)
     provenance={'policy':POLICY,'source':'fictional forward youth intake','dated':dated,'canonical_approval':False}
     from .authentic import catalogue, display_names
-    host=catalogue(c,year).get(key)
-    if host:
+    registered=catalogue(c,year)
+    if registered:
         from ..world import player_names
+        from .continental_entry import country_of
         aliases=display_names(c,year)
         used={aliases.get(str(row[0]), {}).get('name') or json.loads(row[1])['name']
               for row in c.execute('SELECT id,attributes_json FROM world_players WHERE club_key=?',(key,))}
         seed=c.execute('SELECT seed FROM ms_meta').fetchone()[0]
-        name,country=player_names.generate(seed,pid,host['country'],used)
+        host=registered.get(key,{}).get('country') or country_of(c,key)
+        if host is None:raise ValueError('Forward youth intake requires documented host nationality')
+        name,country=player_names.generate(seed,pid,host,used)
         from dataclasses import replace
         p=replace(p,name=name)
         provenance.update(name_policy=player_names.POLICY,nationality=country,modeled=True)

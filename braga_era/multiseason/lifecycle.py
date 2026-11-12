@@ -173,14 +173,9 @@ def setup_following(target,command,year,*,rio_alternative=False,authentic=False)
     with connect_read_only(target/'database.sqlite') as c:
         originals=[json.loads(r[0]) for r in c.execute("SELECT args_json FROM ms_operations WHERE kind='configure_offseason'")]
         original=next((r for r in originals if r['season']==year),None)
-        economic_clubs=None
-        if authentic:
-            economic_clubs=set(catalogue(c,year))
-            # Defending titles retain their sporting rights during the transition.
-            economic_clubs.update(row[0] for row in c.execute("""SELECT champion FROM ms_editions
-                WHERE season=? AND competition IN ('LEAGUE','CDB','LIB','SULA') AND champion IS NOT NULL""",
-                (year-1,)))
-        economics=original['economics'] if original else development_economics(c,year,economic_clubs)
+        # Admission governs competition eligibility. Existing clubs still owe
+        # contractual wages, including after they leave the competitive pools.
+        economics=original['economics'] if original else development_economics(c,year)
     command('configure_offseason',season=year,dated=f'{year}-01-01',policy=OFFSEASON,economics=economics)
     command('settle_economics',dated=f'{year}-01-01 00:00:00')
     result=command('run_offseason',season=year,dated=f'{year}-01-01',policy=OFFSEASON)

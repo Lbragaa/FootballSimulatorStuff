@@ -127,6 +127,35 @@ def test_catalogue_refuses_production():
             authentic.install(c,{'season':2029,'policy':authentic.POLICY})
 
 
+def test_production_operation_rejects_unsigned_or_delegated_path(monkeypatch, tmp_path):
+    from contextlib import nullcontext
+    from uuid import uuid4
+    from braga_era import season_lineage
+    with closing(make_world(test_only=False)) as c:
+        c.execute("UPDATE ms_meta SET test_only=0")
+        monkeypatch.setattr(season_lineage.lineage, "access", lambda *a: nullcontext((c, {"test_only": False})))
+        monkeypatch.setattr(season_lineage, "current",
+                            lambda *a: ({"profile": season_lineage.PROFILE}, tmp_path))
+        command = {"kind": "lifecycle_following_authentic", "args": {"scenario": authentic.POLICY}}
+        for operations, kwargs in (([command], {}), ([command], {"transition": True,"delegated": True}),
+                                   ([{"kind": authentic.APPROVAL, "args": {}}], {"transition": True})):
+            with pytest.raises(ValueError, match="exact signed season transition"):
+                season_lineage.prepare(tmp_path, b"TEST", str(uuid4()), operations, **kwargs)
+
+
+def test_production_journal_gate_is_scoped_to_exact_season():
+    from braga_era.multiseason.registered import PROFILE
+    with closing(make_world(test_only=False)) as c:
+        c.execute("UPDATE ms_meta SET test_only=0,profile=?", (PROFILE,))
+        args = {"season":2029,"policy":authentic.POLICY}
+        assert not authentic.permitted(c,2029)
+        assert authentic.record_authorization(c,args) == args
+        assert authentic.permitted(c,2029)
+        assert not authentic.permitted(c,2030)
+        with pytest.raises(sqlite3.IntegrityError):
+            authentic.record_authorization(c,args)
+
+
 def test_schedule_has_independent_precommit_gate():
     with closing(make_world()) as c:
         args = {'season': 2029, 'policy': authentic.SCHEDULE}

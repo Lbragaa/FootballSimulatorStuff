@@ -16,7 +16,7 @@ def previous(c,competition,season):
 
 
 def register(c,a):
-    from .authentic import POLICY as AUTHENTIC, division_replacements
+    from .authentic import POLICY as AUTHENTIC, division_replacements, permitted
     required(a,'season policy initial_b initial_lower')
     if a['policy'] not in {POLICY,AUTHENTIC} or not c.execute("SELECT 1 FROM ms_seasons WHERE season=? AND state='preparing'",(a['season'],)).fetchone():raise ValueError('Preparing season and versioned division policy required')
     year=a['season'];routes={comp:[] for comp in ('LEAGUE','SERIE_B','LOWER')}
@@ -55,8 +55,8 @@ def register(c,a):
                 target=('LEAGUE' if pos<=16 else 'SERIE_B') if comp=='LEAGUE' else ('LEAGUE' if pos<=4 else 'SERIE_B' if pos<=16 else 'LOWER') if comp=='SERIE_B' else ('SERIE_B' if pos<=4 else 'LOWER')
                 add(target,key,{'type':'edition_position','edition':e['id'],'position':pos})
     if a['policy']==AUTHENTIC:
-        if year<2029 or not c.execute('SELECT test_only FROM ms_meta').fetchone()[0]:
-            raise ValueError('TEST-only transition admissions')
+        if year<2029 or not permitted(c,year):
+            raise ValueError('Transition admissions require exact authorization')
         division_replacements(c,year,routes)
     all_keys=[key for entries in routes.values() for key,_ in entries]
     if {comp:len(v) for comp,v in routes.items()}!={'LEAGUE':20,'SERIE_B':20,'LOWER':8} or len(set(all_keys))!=48:raise ValueError('Division entry collision or incomplete 20/20/8 inventory')

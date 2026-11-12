@@ -11,6 +11,28 @@ from .club_catalogue import ALIASES, entries
 
 POLICY = "authentic-clubs-development-1"
 SCHEDULE = "balanced-venues-2"
+APPROVAL = "record_authentic_transition_authorization"
+
+
+def permitted(c, year):
+    return bool(c.execute("SELECT test_only FROM ms_meta").fetchone()[0] or
+                c.execute("SELECT 1 FROM ms_pools WHERE id=? AND competition='TRANSITION_POLICY'",
+                          (f"authorized:{POLICY}:{year}",)).fetchone())
+
+
+def record_authorization(c, args):
+    from .competitions import required
+    from .registered import PROFILE
+    required(args, "season policy")
+    year = args["season"]
+    if (type(year) is not int or year < 2029 or args["policy"] != POLICY
+            or c.execute("SELECT profile FROM ms_meta").fetchone()[0] != PROFILE
+            or not c.execute("SELECT 1 FROM ms_seasons WHERE season=? AND state='preparing'", (year,)).fetchone()
+            or c.execute("SELECT 1 FROM ms_editions WHERE season=?", (year,)).fetchone()):
+        raise ValueError("Exact registered season policy authorization required")
+    c.execute("INSERT INTO ms_pools VALUES(?,?,?,?,?)",
+              (f"authorized:{POLICY}:{year}", year, "TRANSITION_POLICY", encode(args), POLICY))
+    return args
 
 
 def commit_schedule(c, args):
@@ -18,7 +40,7 @@ def commit_schedule(c, args):
     required(args, "season policy")
     year = args["season"]
     if (type(year) is not int or year < 2029 or args["policy"] != SCHEDULE
-            or not c.execute("SELECT test_only FROM ms_meta").fetchone()[0]
+            or not permitted(c, year)
             or not c.execute("SELECT 1 FROM ms_seasons WHERE season=? AND state='preparing'", (year,)).fetchone()
             or c.execute("""SELECT 1 FROM ms_fixtures f JOIN ms_editions e ON f.edition=e.id
                          WHERE e.season=? AND e.competition IN ('LEAGUE','SERIE_B','LOWER')""",(year,)).fetchone()
@@ -26,7 +48,7 @@ def commit_schedule(c, args):
         raise ValueError("New TEST scheduling policy requires an uncommitted future national calendar")
     c.execute("INSERT INTO ms_pools VALUES(?,?,?,?,?)",
               (f"{SCHEDULE}:{year}", year, "VENUE_POLICY", encode(args), SCHEDULE))
-    return {"season": year, "policy": SCHEDULE, "test_only": True}
+    return {"season": year, "policy": SCHEDULE, "test_only": bool(c.execute("SELECT test_only FROM ms_meta").fetchone()[0])}
 
 
 def catalogue(c, year):
@@ -50,7 +72,7 @@ def apply_names(team, names):
 def opening_liquidity_allowed(c, key, year):
     row = c.execute("SELECT provenance_json FROM world_clubs WHERE key=?", (key,)).fetchone()
     origin = json.loads(row[0]) if row else {}
-    return (key != "club:15" and c.execute("SELECT test_only FROM ms_meta").fetchone()[0] == 1
+    return (key != "club:15" and permitted(c, year)
             and origin.get("source") == POLICY and origin.get("effective") == f"{year}-01-01"
             and not c.execute("SELECT 1 FROM ms_accounts WHERE club=?", (key,)).fetchone())
 
@@ -61,7 +83,7 @@ def install(c, args):
     required(args, "season policy")
     year = args["season"]
     if (type(year) is not int or year < 2029 or args["policy"] != POLICY
-            or c.execute("SELECT test_only FROM ms_meta").fetchone()[0] != 1
+            or not permitted(c, year)
             or not c.execute("SELECT 1 FROM ms_seasons WHERE season=? AND state='preparing'", (year,)).fetchone()
             or c.execute("SELECT 1 FROM ms_editions WHERE season=?", (year,)).fetchone()
             or catalogue(c, year)):
@@ -118,7 +140,8 @@ def install(c, args):
     c.execute("INSERT INTO ms_pools VALUES(?,?,?,?,?)",
               (f"{player_names.POLICY}:{year}", year, "PLAYER_DISPLAY", encode(display), player_names.POLICY))
     return {"policy": POLICY, "season": year, "catalogue_sha256": digest(known),
-            "registered": len(known), "new_clubs": created, "forward_player_aliases": len(display), "test_only": True}
+            "registered": len(known), "new_clubs": created, "forward_player_aliases": len(display),
+            "test_only": bool(c.execute("SELECT test_only FROM ms_meta").fetchone()[0])}
 
 
 def order(c, country, year):

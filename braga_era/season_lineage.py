@@ -305,6 +305,14 @@ def prepare(registry,key,request_id,operations,*,transition=False,automatic_game
         raise ValueError('Bounded explicit season operations required')
     with lineage.access(registry,key) as (c,t):
         info,parent=current(c,t,key);registered=info.get('profile')==PROFILE
+        from .multiseason.authentic import APPROVAL, POLICY as AUTHENTIC, catalogue
+        authentic_operation = {'kind':'lifecycle_following_authentic','args':{'scenario':AUTHENTIC}}
+        authentic_transition = operations == [authentic_operation]
+        if any(op['kind']==APPROVAL for op in operations) or (
+            any(op['kind']==authentic_operation['kind'] for op in operations)
+            and not (registered and transition and not delegated and authentic_transition)
+        ):
+            raise ValueError('Authentic club policy requires one exact signed season transition')
         from .multiseason.development import ACTIVATION as REALISM_ACTIVATION
         from .multiseason.execution import ENGINE_ACTIVATION, activate_realism, validate_activation
         if any(op['kind'] in (ENGINE_ACTIVATION, REALISM_ACTIVATION) for op in operations):
@@ -321,6 +329,11 @@ def prepare(registry,key,request_id,operations,*,transition=False,automatic_game
                     previous=db.execute('SELECT season,state FROM ms_seasons ORDER BY season DESC LIMIT 1').fetchone()
                     if previous['state']!='archived':raise ValueError('Archive the completed season before transition')
                     year=previous['season']+1
+                    uses_authentic=bool(catalogue(db,previous['season']))
+                    if authentic_transition and (year<2029 or year>2029 and not uses_authentic):
+                        raise ValueError('Authentic transition must start in 2029 and continue from the adopted policy')
+                    if uses_authentic and not authentic_transition and not t['test_only']:
+                        raise ValueError('Legacy standing season policy cannot replace the adopted authentic policy')
                 from .season_gameplay import unrevealed
                 if unrevealed(c,info['database']):raise ValueError('Reveal earlier season narration first')
             else:
@@ -332,8 +345,10 @@ def prepare(registry,key,request_id,operations,*,transition=False,automatic_game
                 from .multiseason.lifecycle import RELEASE_PROPOSAL, SEASON_POLICIES
                 expected = {'kind': 'lifecycle_following' if registered else 'lifecycle_setup',
                             'args': {'scenario': SEASON_POLICIES[RELEASE_PROPOSAL][int(registered)]}}
-                if operations != [expected]:
+                if operations != [expected] and not authentic_transition:
                     raise ValueError('Production transition requires the explicit release policy proposal')
+            if authentic_transition:
+                automatic_gameplay=info['metadata']['automatic_gameplay']
             operations=[{'kind':'prepare_season','args':{'season':year}}]+operations
         else:
             if not registered:raise ValueError('Explicit season transition required')
@@ -441,11 +456,14 @@ def apply(world,key,manifest):
             setup_2028(world,command,lambda n:advance(world,key,
                 request_id=str(uuid5(UUID(request),'bootstrap:'+str(n))),max_groups=1),rio_alternative=rio_alternative)
         elif op['kind']=='lifecycle_following_authentic':
-            from .multiseason.authentic import POLICY
-            if not manifest['test_only'] or manifest['season']<2029 or op['args']!={'scenario':POLICY}:
-                raise ValueError('Exact TEST authentic-club season proposal required')
+            from .multiseason.authentic import APPROVAL, POLICY
+            if (manifest['kind']!='transition' or manifest['delegated'] or manifest['season']<2029
+                    or op['args']!={'scenario':POLICY} or len(manifest['operations'])!=2):
+                raise ValueError('Exact authentic-club season proposal required')
             def command(kind,**args):
                 return store.run(world,key,str(uuid5(UUID(request),'setup:'+kind+':'+digest(args))),kind,args)
+            if not manifest['test_only']:
+                command(APPROVAL,season=manifest['season'],policy=POLICY)
             setup_following(world,command,manifest['season'],rio_alternative=True,authentic=True)
         elif op['kind']=='lifecycle_following':
             rio_alternative = op['args'] == {'scenario': SEASON_POLICIES[RELEASE_PROPOSAL][1]}
