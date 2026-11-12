@@ -74,6 +74,10 @@ class Worker2(Worker):
             status = self.status_document(c)
             self.transport.status({"status": status, "signature": lineage.sign(self.career.key, status)})
 
+    def invalid_request(self, issue):
+        from .rejection import reject
+        reject(self.transport, self.career, issue, self.requesters)
+
     def status_document(self, c):
         status = super().status_document(c)
         status["season_delegation_available"] = self.season_delegation is not None and status["execution_enabled"]

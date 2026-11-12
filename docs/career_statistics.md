@@ -92,6 +92,55 @@ also depend on visibility, so squad, development and transfer views wait while
 accepted match narration is pending. A completed empty page with limited
 coverage cannot support a conclusion about missing seasons.
 
+### Vasco season totals through December 10
+
+Use the standard protocol-2 envelope. Put the same fresh, complete lowercase
+UUID in `request_id` and in the title `[BRAGA] <UUID>`. Copy the live career,
+checkpoint and next sequence from status issue #1. The issue body is plain JSON.
+
+```json
+{"dataset":"player_stats","club":"club:15","season":2028,"date_to":"2028-12-10","sort":"goals","limit":30}
+```
+
+`date_to` includes every recorded kickoff on that date and excludes later
+fixtures before checking visibility or loading their performance records.
+`date_from` can further narrow the range. Missing `dataset` and the unsupported
+`through_date` argument are validation errors. Preserve the cutoff in every
+new query. A bounded continuation token carries it automatically. Do not
+request a current table, season review or unbounded total to fill a gap.
+
+With no `competition`, rows combine all recorded editions in scope. For a
+breakdown repeat the query with `competition` set to `LEAGUE`, `CDB`, `CARIOCA`,
+`LIB`, `LIB_PRE2` or `LIB_PRE3`. The latter two are separate qualifying editions
+and can be added to the main Libertadores edition by stable player ID. The
+editions dataset discovers other competition codes. Each row includes goals,
+assists, appearances, starts, minutes and the other recorded metrics. Change
+`sort` to `assists` for the assist ranking, or sort the complete totals by
+assists and stable ID on the client. Use coverage counts to identify missing
+performance records.
+
+The signed result is under `response.result.career_statistics`. Success carries
+rows, filters, accepted checkpoint, database digest, coverage, offset, total rows
+and the next cursor. In the repair candidate, cutoff queries report the applied
+`through_date` in the **response** metadata in place of the current accepted
+clock. `error.code` and `error.message` in that result describe validation and
+snapshot errors. Those results are for valid, sequenced command envelopes.
+
+### Financial reporting
+
+`current_finances` takes `{}`. The registered-career response reads Vasco's
+recorded cash and annualizes active contract wages. The reserve floor, transfer
+fee authority and additional wage authority are separate account columns.
+Unknown accruals stay null. This command reads the accepted head and takes no
+historical date filter.
+
+The installed 2028 policy posts wages, transfer-related cash movements and
+explicitly modeled operating revenue and recurring costs. It has no payment
+rule for final league placement, including third through fifth, or for
+continental qualification. Broadcasting and sponsorship are not individually
+itemized. Modeled operating income is not evidence of a real contract. A new
+prize or qualification payment would be a separate financial policy.
+
 ## Integration
 
 Worker 0.13.7 uses the existing protocol-2 ledger and needs no save or schema

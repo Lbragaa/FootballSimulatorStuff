@@ -91,6 +91,9 @@ class Worker:
     def request_claimed(self, connection, request):
         """Optional progress publication, after the durable inbox claim."""
 
+    def invalid_request(self, issue):
+        """Optional rejection before a request can enter the ledger."""
+
     def status_document(self, c):
         return {"domain": "bridge-status-1", "protocol": self.public_protocol,
                 **self.career.identity(),
@@ -309,6 +312,9 @@ class Worker:
         try:
             request = self.parse_request(issue["body"])
         except (ValueError, TypeError, KeyError, RecursionError):
+            if (not c.execute("SELECT 1 FROM deliveries WHERE issue=?", (issue["number"],)).fetchone()
+                and not c.execute("SELECT 1 FROM requests WHERE source=?", (issue["number"],)).fetchone()):
+                self.invalid_request(issue)
             return
         if issue["title"] != "[BRAGA] " + request["request_id"]:
             return

@@ -32,6 +32,8 @@ def validate(args):
     if not isinstance(dataset, str) or dataset not in FILTERS:
         raise QueryError('UNKNOWN_DATASET', 'Choose editions, standings, squad, player_stats, team_record, development or transfers.')
     for field, value in args.items():
+        if field == 'through_date' and dataset in ('player_stats', 'team_record', 'transfers'):
+            raise QueryError('INVALID_FILTER', 'Use date_to for an inclusive YYYY-MM-DD cutoff.')
         if field not in FILTERS[dataset] | {'dataset', 'limit'}:
             raise QueryError('INVALID_FILTER', f'Unsupported filter for {dataset}.')
         if field in ('season', 'limit', 'group', 'min_minutes', 'player') and (field != 'player' or type(value) is not str):

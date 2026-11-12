@@ -149,7 +149,9 @@ def statistics_schema():
     from ..statistics import FILTERS, METRICS
 
     properties = {k: {'type': 'string', 'minLength': 1, 'maxLength': 100}
-                  for k in ('club', 'competition', 'stage', 'date_from', 'date_to')}
+                  for k in ('club', 'competition', 'stage')}
+    for field in ('date_from', 'date_to'):
+        properties[field] = {'type': 'string', 'format': 'date', 'pattern': r'^\d{4}-\d{2}-\d{2}$'}
     properties.update({k: {'type': 'integer', 'minimum': low, 'maximum': high}
                        for k, (low, high) in {'season': (2027, 2200), 'group': (1, 99),
                                               'limit': (1, 30), 'min_minutes': (0, 1000000)}.items()})

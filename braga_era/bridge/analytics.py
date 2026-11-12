@@ -109,8 +109,10 @@ class Analytics:
             end = offset + len(page)
             if not page and end < len(rows):
                 raise statistics.QueryError('RESULT_SIZE_LIMIT', 'The first row exceeds the reporting limit.')
+            time_scope = ({'through_date': args['date_to']} if 'date_to' in args
+                          else {'accepted_clock': metadata['clock']})
             return {'profile': PROFILE, 'read_only': True, 'accepted_checkpoint': checkpoint,
-                    'accepted_clock': metadata['clock'], 'database_sha256': metadata['database_sha256'],
+                    **time_scope, 'database_sha256': metadata['database_sha256'],
                     'filters': args, 'coverage': coverage, 'rows': page, 'offset': offset, 'total_rows': len(rows),
                     'next_cursor': self.cursor(binding, args, end) if end < len(rows) else None}
         except statistics.QueryError as error:

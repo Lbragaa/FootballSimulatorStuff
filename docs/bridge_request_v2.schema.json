@@ -1260,13 +1260,13 @@
                 },
                 "date_from": {
                   "type": "string",
-                  "minLength": 1,
-                  "maxLength": 100
+                  "format": "date",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
                 },
                 "date_to": {
                   "type": "string",
-                  "minLength": 1,
-                  "maxLength": 100
+                  "format": "date",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
                 },
                 "min_minutes": {
                   "type": "integer",
@@ -1347,13 +1347,13 @@
                 },
                 "date_from": {
                   "type": "string",
-                  "minLength": 1,
-                  "maxLength": 100
+                  "format": "date",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
                 },
                 "date_to": {
                   "type": "string",
-                  "minLength": 1,
-                  "maxLength": 100
+                  "format": "date",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
                 },
                 "season": {
                   "type": "integer",
@@ -1451,13 +1451,13 @@
                 },
                 "date_from": {
                   "type": "string",
-                  "minLength": 1,
-                  "maxLength": 100
+                  "format": "date",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
                 },
                 "date_to": {
                   "type": "string",
-                  "minLength": 1,
-                  "maxLength": 100
+                  "format": "date",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
                 },
                 "player": {
                   "oneOf": [

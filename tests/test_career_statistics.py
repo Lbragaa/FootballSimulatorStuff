@@ -6,7 +6,7 @@ from uuid import uuid4
 
 import pytest
 
-from braga_era import __version__, statistics
+from braga_era import __version__, lineage, statistics
 from braga_era.bridge.analytics import Analytics
 from braga_era.bridge import protocol2
 from braga_era.bridge.worker2 import Worker2
@@ -199,3 +199,95 @@ def test_storage_failure_is_safe_and_actionable(monkeypatch):
     result = Analytics(Career()).query({'dataset': 'editions'}, HEAD)
     assert result['error']['code'] == 'SNAPSHOT_UNAVAILABLE'
     assert 'private diagnostic path' not in json.dumps(result)
+
+
+def test_cutoff_excludes_later_accepted_match_before_reading_performances(group_world, monkeypatch):
+    from braga_era.db import connect_read_only, file_sha256
+
+    with sqlite3.connect(group_world) as writer:
+        for competition in ('LEAGUE', 'LIB_PRE2', 'CDB'):
+            if competition != 'LEAGUE':
+                writer.execute('INSERT INTO ms_editions VALUES(?,?,2028,?,?,?,NULL)',
+                               (f'{competition}:2028', competition, 'knockout', '{}', 'active'))
+            for day, goals in ((10, 2), (17, 99)):
+                key = f'ms:{competition}:{day}'
+                writer.execute("""INSERT INTO ms_fixtures VALUES(?,?,?,?,NULL,'club:1','club:2',
+                                  ?,'final',?,0,NULL)""",
+                               (key, f'{competition}:2028', 'R1', day, f'2028-12-{day} 16:00', goals))
+                result, = writer.execute("SELECT result_json FROM ms_executions WHERE fixture='ms:0'").fetchone()
+                match = json.loads(result)
+                match['performances'][0].update(goals=goals, assists=1)
+                writer.execute("INSERT INTO ms_executions VALUES(?,'{}','','{}','{}',?,'')",
+                               (key, json.dumps(match)))
+    writer.close()
+    before = file_sha256(group_world)
+    hidden = {f'ms:{c}:17' for c in ('LEAGUE', 'LIB_PRE2', 'CDB')}
+
+    @contextmanager
+    def snapshot(career, checkpoint):
+        with connect_read_only(group_world) as db:
+            yield db, {'season': 2028, 'clock': '2028-12-17 18:00', 'database_sha256': before}, hidden
+
+    monkeypatch.setattr('braga_era.bridge.analytics.accepted_snapshot', snapshot)
+    api = Analytics(Career())
+    args = dict(dataset='player_stats', club='club:1', season=2028, sort='assists')
+    assert api.query(args, HEAD)['error']['code'] == 'NARRATION_PENDING'
+    args['date_to'] = '2028-12-10'
+    report = api.query(args, HEAD)
+    assert report['through_date'] == args['date_to']
+    assert '2028-12-17' not in json.dumps(report)
+    p, = report['rows']
+    assert (p['goals'], p['assists'], p['appearances'], p['minutes']) == (7, 3, 4, 180)
+    for competition in ('LEAGUE', 'LIB_PRE2', 'CDB'):
+        p, = api.query({**args, 'competition': competition}, HEAD)['rows']
+        assert (p['goals'], p['assists'], p['appearances'], p['minutes']) == (2, 1, 1, 45)
+    assert 'date_to' in api.query({**args, 'through_date': '2028-12-10'}, HEAD)['error']['message']
+    assert file_sha256(group_world) == before
+
+
+def test_unclaimable_issue_rejected_without_consuming_sequence(tmp_path):
+    from braga_era.bridge.rejection import MARKER
+
+    career = Career()
+    transport = Transport()
+    worker = Worker2(transport, career, tmp_path / 'ledger.sqlite', REQUESTERS)
+    request = {'protocol': protocol2.PROTOCOL, 'career': career.career,
+               'expected_checkpoint': HEAD, 'request_id': '210a3707-8e90-42c6-b4ea',
+               'sequence': 1, 'command': 'career_statistics',
+               'args': {'season': 2028, 'through_date': '2028-12-10'}}
+    issue = transport.add(request)
+    outsider = transport.add(request, actor={'id': 1, 'login': 'other'})
+    transport.lost_post = True
+    with pytest.raises(RuntimeError, match='Network lost'):
+        worker.poll()
+    assert worker.poll() == {'next_sequence': 1, 'completed_requests': 0}
+    assert transport.rows[issue]['state'] == 'closed'
+    assert len(transport.comments(issue)) == 1 and not transport.comments(outsider)
+    assert transport.comments(issue)[0]['body'].startswith(MARKER)
+    rejection = lineage.check_signed(transport.result(issue), career.key)
+    assert rejection['error']['code'] == 'INVALID_REQUEST_ID'
+    assert rejection['source_issue'] == issue and rejection['sequence_consumed'] is False
+    replacement = transport.add({**request, 'request_id': str(uuid4()), 'command': 'inspect_career', 'args': {}})
+    assert worker.poll()['next_sequence'] == 2
+    assert worker.verify_response(transport.result(replacement))
+    assert career.position == 0
+
+
+def test_preclaim_rejection_preserves_a_claimed_issue(tmp_path):
+    career = Career()
+    transport = Transport()
+    worker = Worker2(transport, career, tmp_path / 'ledger.sqlite', REQUESTERS,
+                     crash='after_response_before_post')
+    issue = transport.add({'protocol': protocol2.PROTOCOL, 'career': career.career,
+                           'expected_checkpoint': HEAD, 'request_id': str(uuid4()),
+                           'sequence': 1, 'command': 'inspect_career', 'args': {}})
+    with pytest.raises(RuntimeError, match='Injected bridge crash'):
+        worker.poll()
+    saved_body = transport.rows[issue]['body']
+    transport.rows[issue]['body'] = 'invalid JSON'
+    worker.crash = None
+    assert worker.poll()['next_sequence'] == 2
+    assert transport.rows[issue]['state'] == 'open' and not transport.comments(issue)
+    transport.rows[issue]['body'] = saved_body
+    worker.poll()
+    assert worker.verify_response(transport.result(issue))

@@ -1,5 +1,21 @@
 # Private phone bridge protocol 2
 
+## Career statistics and pre-claim rejection
+
+`career_statistics` requires read scope. Its closed dataset filters and
+cutoff examples are in [career statistics](career_statistics.md) and
+[the request schema](bridge_request_v2.schema.json). A valid envelope with an
+invalid statistics filter gets a signed, sequenced delivery containing a typed
+query error. A request that fails envelope parsing never enters the ledger.
+
+The statistics repair adds a separate `BRAGA_BRIDGE_REJECTION_V1` comment for
+an unedited, unclaimable issue by a pinned requester. The locally signed
+`bridge-rejection-1` document binds the repository, worker, career, issue and
+issue content digest. It reports `sequence_consumed: false`. The worker
+reconciles an already posted identical comment before closing the issue.
+Clients must read status #1 and create a new issue with a fresh UUID and the
+advertised sequence. They must not treat a rejection as an accepted delivery.
+
 ## Season boundary
 
 `season_status` has `{}` arguments and read scope. Its signed response contains
