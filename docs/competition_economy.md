@@ -119,3 +119,50 @@ offers are historical terms, with no implication that they are still open.
 Any manual offer, sale or loan should require
 an explicit separate mode and exact signed terms bound to the accepted parent.
 Ordinary gameplay should never imply approval of a user-directed transfer.
+
+## Development evidence and limits
+
+The archived 2028 TEST parent yielded R$455.005 million in 583 settlement
+lines for 217 clubs. The 2029 opening produced 104 signings and 116 refused
+offers. Vasco submitted two bids and signed neither target. Other clubs
+completed purchases at R$1.720 million and R$2.181 million with monthly
+wages of about R$69,023 and R$72,151. Those are sample simulated terms.
+
+The full TEST 2029 season completed 1,333 fixtures in 87 groups. The
+year-end audit reconciled all 488 recorded accounts, all 12 payroll periods,
+and zero outstanding 2029 obligations. Among the TEST clubs, opening awards
+for the previous season ranged from R$30.94 million for Flamengo, which
+finished the TEST 2029 Série A first, to R$8.31 million for mid-table
+Atlético-MG and R$2.90 million for relegated Ceará. Remo finished last in
+the TEST Série B after opening the year without a prior-season award.
+These are descriptive outcomes from one world. They do not establish
+long-run causal balance. The base model's operating income still scales
+with modeled wages, so a longer stress run is needed to measure cash
+accumulation and competitive concentration over many years.
+
+The 2030 opening settled R$456.295 million in 584 lines for 208 clubs,
+recorded 106 signings and 156 refused offers, and generated 91 real-club
+continental entries. The test played 582 fixtures in 40 groups through
+May 19. The three national league schedules kept their maximum consecutive
+home or away run at three. In that opening Vasco bought a player for
+R$2,964,630 with a monthly wage of R$83,805.84. Another club borrowed a
+player for R$305,593.40 and took on R$43,497.09 per month. In the two opening
+snapshots, median club cash above reserve rose from R$5.44 million to
+R$9.12 million and the maximum rose from R$42.87 million to R$93.38 million.
+These are different season openings and include both prizes and the
+existing operating-income model. The growth warrants monitoring. This
+candidate does not change operating-income assumptions or add cash caps.
+
+The local Windows focused suite passed 80 tests and the separate offseason
+suite passed seven. The candidate wheel version is 0.13.12. The tested build
+from implementation commit `8a0d6cd` has SHA-256
+`aa3cc9d79bbfbb3e801c81dd7e0fa1c8e51222bb6e38d9b279e08d036aab4ed7`.
+[Cross-platform CI](https://github.com/Lbragaa/FootballSimulatorStuff/actions/runs/43324409265)
+
+The separate signed TEST run recovered from interrupted execution, pre-commit
+acceptance and post-commit acceptance, and rejected a duplicate transition.
+Its portable export independently restored the exact successor
+`acb20fb54e977c2f24fa05f107700158c9931ee43bd1d0c35c6f3dbcf5de4a96`
+by replaying the transition from the authenticated immediate parent. This
+restore used suffix replay. The full 2029–2030 rehearsal separately compared
+all inherited 2028 fixture, input, configuration, seed and result digests.
