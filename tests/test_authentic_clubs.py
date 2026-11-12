@@ -156,6 +156,31 @@ def test_production_journal_gate_is_scoped_to_exact_season():
             authentic.record_authorization(c,args)
 
 
+def test_legacy_titleholder_exception_expires_without_reassigning_title():
+    with closing(make_world()) as c:
+        c.execute("UPDATE ms_seasons SET state='archived' WHERE season=2029")
+        c.execute("INSERT INTO ms_seasons VALUES(2030,'preparing',NULL)")
+        authentic.install(c,{'season':2030,'policy':authentic.POLICY})
+        clubs = authentic.catalogue(c,2030)
+        c.execute("INSERT INTO world_clubs VALUES('legacy-ecu','Fictional Ecuador','fictional ecuador',NULL,'ECU',72,0,'{}')")
+        c.execute("INSERT INTO ms_editions VALUES('LIB:2029','LIB',2029,'groups_knockout','{}','completed','legacy-ecu')")
+        c.execute("INSERT INTO ms_editions VALUES('SULA:2029','SULA',2029,'groups_knockout','{}','completed','legacy-fic')")
+        evidence = {country: {"type":"development_administrative_scenario","id":"test-roster-2030",
+                    "reason":"Fixture for the expired historical admission policy",
+                    "clubs":[key for key,value in clubs.items() if value["country"]==country][:40]}
+                    for country in continental_entry.ALLOCATIONS}
+        titles = [{"competition":comp,"club":key,
+                   "evidence":{"type":"edition_champion","edition":f"{comp}:2029"}}
+                  for comp,key in [("LIB","legacy-ecu"),("SULA","legacy-fic")]]
+        result=continental_entry.commit(c,{"season":2030,"policy":continental_entry.POLICY,
+                                           "national_evidence":evidence,"champions":titles})
+        assert len(result["entries"])==91
+        assert all(row["club"] in clubs for row in result["entries"])
+        vacancies=[row for row in result["entries"] if row["route"]=="expired_legacy_titleholder_slot"]
+        assert {row["source"]["recorded_titleholder"]["club"] for row in vacancies}=={"legacy-ecu","legacy-fic"}
+        assert c.execute("SELECT champion FROM ms_editions WHERE id='LIB:2029'").fetchone()[0]=="legacy-ecu"
+
+
 def test_schedule_has_independent_precommit_gate():
     with closing(make_world()) as c:
         args = {'season': 2029, 'policy': authentic.SCHEDULE}
