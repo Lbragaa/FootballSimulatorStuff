@@ -344,6 +344,27 @@ def run(c,a):
     profiles={p['id']:json.loads(p['attributes_json']) for p in players}
     lives={r['player']:dict(r) for r in c.execute('SELECT * FROM ms_lifecycle')}
     contracts={r['player']:dict(r) for r in c.execute("SELECT * FROM ms_contracts WHERE status='active'")}
+    from . import valuation
+    pricing=valuation.inputs(c,year)
+    quotes={}
+    if pricing is not None:
+        states,strengths,cash_by_club,continental=pricing
+        ranks=valuation.roster_depth(players,profiles,lives)
+        opening=date.fromisoformat(dated)
+        for p in players:
+            pid=p['id'];seller=p['club_key'];con=contracts.get(pid)
+            life=lives.get(pid)
+            if not life or not profiles[pid]['eligible'] or life['status']=='retired':continue
+            if not con:
+                if life['status']=='free_agent':
+                    quotes[pid]=(0,wage(profiles[pid]),False)
+                continue
+            months=max(0, (date.fromisoformat(con['ends'])-opening).days//30)
+            s=states[pid]
+            fee,starter=valuation.quote(profiles[pid],life['age'],months,s['recent'],ranks.get(pid,999),
+                                        cash_by_club.get(seller,0),strengths[seller],seller in continental,
+                                        bool(s['injury_until'] and s['injury_until'][:10]>dated))
+            quotes[pid]=(fee,valuation.expectation(wage(profiles[pid]),con['wage_cents'],False),starter)
     plans={};bids=defaultdict(list)
     for key in sorted(clubs):
         acc=market.account(c,key)
@@ -364,10 +385,14 @@ def run(c,a):
             age=life['age'];r=rng(c,'bid',year,key,p['id'])
             fee=0 if life['status']=='free_agent' else max(100000,int((attrs['ovr']-45)**2*100000))
             amount=wage(attrs);loan=(age<=22 and r.random()<.25 and life['status']!='free_agent')
+            if pricing is not None:
+                if p['id'] not in quotes:continue
+                fee,amount,starter=quotes[p['id']]
+                if starter and loan:continue
             if loan:
                 fee//=5
                 con=contracts.get(p['id'])
-                if not con:continue
+                if not con or pricing is not None and (con['club']!=p['club_key'] or con['ends']<f'{year}-06-30'):continue
                 amount=con['wage_cents']
             if (fee>acc['fee_authority_cents'] or amount*12>acc['wage_authority_cents'] or
                 (base_wages+amount)*12>scenario['annual_wage_cap_cents'] or cash<fee+fee//25+amount+2*(base_wages+amount)):continue
@@ -375,19 +400,23 @@ def run(c,a):
             candidates.append((score,p['id'],fee,amount,loan))
         for score,pid,fee,amount,loan in sorted(candidates,reverse=True)[:2]:
             bids[pid].append((score,key,fee,amount,loan))
-            note(c,year,key,pid,'offer_submitted',{'fee_cents':fee,'wage_cents':amount,'kind':'loan' if loan else 'purchase','score':score})
+            detail={'fee_cents':fee,'wage_cents':amount,'kind':'loan' if loan else 'purchase','score':score}
+            if pricing is not None:
+                detail.update(valuation=valuation.VERSION,seller_ask_cents=quotes[pid][0])
+            note(c,year,key,pid,'offer_submitted',detail)
         note(c,year,key,None,'squad_plan',plans[key])
     signed=failed=0;acquisitions=Counter()
     for pid,offers in sorted(bids.items()):
         accepted=False
-        for score,key,fee,amount,loan in sorted(offers,reverse=True):
+        priority=(lambda bid:(not bid[4],bid[2],bid[3],bid[0],bid[1])) if pricing is not None else None
+        for score,key,fee,amount,loan in sorted(offers,key=priority,reverse=True):
             reason=None;p=c.execute('SELECT * FROM world_players WHERE id=?',(pid,)).fetchone()
             attrs=json.loads(p['attributes_json']);supply=[json.loads(r[0]) for r in c.execute('SELECT attributes_json FROM world_players WHERE club_key=?',(p['club_key'],)) if json.loads(r[0])['eligible']]
             free=c.execute('SELECT status FROM ms_lifecycle WHERE player=?',(pid,)).fetchone()[0]=='free_agent'
             if acquisitions[key]>=2:reason='plan_already_filled'
             elif not free and sum(x['position']==attrs['position'] for x in supply)<=TARGETS[attrs['position']]-1:reason='seller_depth_refusal'
-            elif rng(c,'agreement',year,key,pid).random()>.65:reason='player_or_seller_refused'
-            elif not affordable(c,key,year,dated,fee,amount,fee//25+amount):reason='funding_changed_after_competing_bids'
+            elif rng(c,'agreement',year,key,pid).random()>(.42 if pricing is not None and quotes[pid][2] else .65):reason='player_or_seller_refused'
+            elif not affordable(c,key,year,dated,fee,amount,fee//25+amount+(amount//2 if pricing is not None else 0)):reason='funding_changed_after_competing_bids'
             if reason:note(c,year,key,pid,'offer_rejected',{'reason':reason,'fee_cents':fee,'competing_offers':len(offers)});failed+=1;continue
             move(c,pid,key,dated,fee,amount,'loan' if loan else 'purchase',f'{year}-06-30' if loan else None)
             acquisitions[key]+=1;signed+=1;accepted=True;break

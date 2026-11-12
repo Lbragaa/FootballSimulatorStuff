@@ -43,7 +43,7 @@ COMMANDS = {
 RESULT_KEYS = v1.RESULT_KEYS | set(
     "control_profile policy_sha256 configurations_sha256 career_seed_sha256 seed_policy preparation_id batch_state review candidate confirmation summaries held_for_detail next_events on_field_states presentation source_page_sha256s automatic_gameplay phase simulation_advanced episode_type presentation_rule world_progress recovery timings_seconds historical_results season_status automatic_seasons season_policy season fork_status".split()
 )
-RESULT_KEYS.update({'edition', 'account_unknown', 'career_statistics'})
+RESULT_KEYS.update({'edition', 'account_unknown', 'career_statistics', 'financial_position'})
 
 
 def parse(body):

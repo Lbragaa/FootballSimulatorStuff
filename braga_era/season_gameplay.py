@@ -114,10 +114,13 @@ def gameplay(c,t,key,parent,command,fixture,count,page_id):
     if command=='table':return table(c,info)
     if command=='finances':
         with connect_read_only(info['database']) as db:
+            from .multiseason.prizes import financial_position
             row=db.execute("SELECT * FROM ms_accounts WHERE club='club:15'").fetchone()
             wages=db.execute("SELECT coalesce(sum(wage_cents),0)*12 FROM ms_contracts WHERE club='club:15' AND status='active'").fetchone()[0]
+            position=financial_position(db,'club:15',info['season'],info['clock'][:10])
             return {'restricted_cash_cents':row['cash_cents'] if row else None,'accrued_unpaid_cents':None,
-                    'annual_incremental_commitments_cents':wages,'account_unknown':row is None}
+                    'annual_incremental_commitments_cents':wages,'account_unknown':row is None,
+                    **({'financial_position':position} if position is not None else {})}
     request={'command':command,'fixture':fixture,'count':count}
     if page_id:
         old=c.execute('SELECT * FROM narration_pages WHERE id=?',(page_id,)).fetchone()

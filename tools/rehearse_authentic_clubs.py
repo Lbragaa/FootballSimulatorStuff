@@ -62,7 +62,31 @@ def signed_operation(world, kind, **args):
     return store.run(world, KEY, request, kind, args)
 
 
-def opening_2030(world):
+def verify_economy(db, year):
+    from braga_era.multiseason.prizes import CATEGORY, POLICY, awards
+
+    expected = list(awards(db, year - 1))
+    receipts = db.execute("SELECT club,amount_cents,evidence_json FROM ms_ledger WHERE dated=? AND category=?",
+                          (f"{year}-01-01", CATEGORY)).fetchall()
+    actual = [json.loads(row['evidence_json']) for row in receipts]
+    keys = ('edition', 'club', 'tier', 'amount_cents')
+    assert sorted(tuple(r[k] for k in keys) for r in expected) == sorted(tuple(r[k] for k in keys) for r in actual)
+    assert all(r['policy'] == POLICY and r['earned_season'] == year - 1 for r in actual)
+    summary = db.execute("SELECT summary_json FROM ms_offseasons WHERE season=?", (year,)).fetchone()
+    summary = json.loads(summary[0])
+    cash = sorted(row[0] for row in db.execute('SELECT cash_cents-reserve_cents FROM ms_accounts'))
+    examples = []
+    for row in db.execute("""SELECT kind,buyer,detail_json FROM ms_transfers
+                             WHERE dated=? ORDER BY buyer='club:15' DESC,id LIMIT 4""", (f"{year}-01-01",)):
+        details = json.loads(row['detail_json'])
+        examples.append((row['kind'], row['buyer'] == 'club:15', details.get('fee_cents'), details.get('wage_cents')))
+    print('ECONOMY', year, 'awards', len(receipts), 'award cents', sum(r['amount_cents'] for r in receipts),
+          'clubs', len({r['club'] for r in receipts}), 'signings', summary['signed'],
+          'rejections', summary['rejected'], 'cash above reserve cents min/median/max',
+          (cash[0], cash[len(cash) // 2], cash[-1]), 'example kind/Vasco/fee/wage cents', examples, flush=True)
+
+
+def opening_2030(world, prize_policy=None):
     db_path = world / "database.sqlite"
     with connect_read_only(db_path) as db:
         assert db.execute("SELECT state FROM ms_seasons WHERE season=2029").fetchone()[0]=="archived"
@@ -70,9 +94,11 @@ def opening_2030(world):
     def command(kind, **args):
         return signed_operation(world,kind,**args)
     command("prepare_season",season=2030)
-    setup_following(world,command,2030,rio_alternative=True,authentic=True)
+    setup_following(world,command,2030,rio_alternative=True,authentic=True,prize_policy=prize_policy)
     with connect_read_only(db_path) as db:
         verify_movements(db)
+        if prize_policy:
+            verify_economy(db, 2030)
     result = agenda.advance(world,KEY,request_id=str(uuid5(NAMESPACE_URL,"authentic-2030-opening")),max_groups=40)
     assert result["groups_completed"]==40
     print("2030 groups",result["groups_completed"],flush=True)
@@ -82,7 +108,7 @@ def opening_2030(world):
     print("2030 logical state",store.validate(world,KEY,replay=False)["world_sha256"],flush=True)
 
 
-def registered_recovery(root, registry, node, state):
+def registered_recovery(root, registry, node, state, prize_policy=None):
     """Rebind only the public-key TEST copy to its authenticated archived ancestor."""
     head = digest(node["metadata"])
     parent = root / "archived-parent"
@@ -108,8 +134,12 @@ def registered_recovery(root, registry, node, state):
         c.executemany("INSERT INTO cursors VALUES(?,?,?)", map(tuple, rows))
         lineage.seal_cursors(c, trusted, KEY)
     request = str(uuid5(NAMESPACE_URL, "authentic-registered-recovery-2029"))
+    args = {"scenario": POLICY}
+    if prize_policy:
+        from braga_era.multiseason.prizes import CONFIG_SHA256
+        args.update(prize_policy=prize_policy, prize_schedule_sha256=CONFIG_SHA256)
     manifest = sl.prepare(registry, KEY, request, [{"kind": "lifecycle_following_authentic",
-                          "args": {"scenario": POLICY}}], transition=True)
+                          "args": args}], transition=True)
     signature = lineage.signed(sl.authorization(manifest), KEY)
     sl.authorize(registry, KEY, manifest, signature)
     sl.authorize(registry, KEY, manifest, signature)
@@ -148,7 +178,7 @@ def registered_recovery(root, registry, node, state):
     print("Registered recovery, export and independent restore passed", restored, flush=True)
 
 
-def run(source, scratch, groups, full=False, recovery=False):
+def run(source, scratch, groups, full=False, recovery=False, prize_policy=None):
     with TemporaryDirectory(dir=scratch, prefix="authentic-rehearsal-") as directory:
         root = Path(directory)
         registry = root / "registry.sqlite"
@@ -180,7 +210,7 @@ def run(source, scratch, groups, full=False, recovery=False):
         assert file_sha256(db_path) == node["metadata"]["database_sha256"]
         print("Authenticated TEST parent", digest(node["metadata"]), flush=True)
         if recovery:
-            registered_recovery(root, registry, node, state)
+            registered_recovery(root, registry, node, state, prize_policy)
             return
         with connect_read_only(db_path) as db:
             history = inherited_history(db)
@@ -189,9 +219,11 @@ def run(source, scratch, groups, full=False, recovery=False):
             return signed_operation(world,kind,**args)
 
         command("prepare_season", season=2029)
-        setup_following(world, command, 2029, rio_alternative=True, authentic=True)
+        setup_following(world, command, 2029, rio_alternative=True, authentic=True, prize_policy=prize_policy)
         with connect_read_only(db_path) as db:
             registered = catalogue(db, 2029)
+            if prize_policy:
+                verify_economy(db, 2029)
             names = dict(db.execute("SELECT key,name FROM world_clubs"))
             for comp in ("LEAGUE", "SERIE_B", "CARIOCA", "CDB"):
                 clubs = [r[0] for r in db.execute("SELECT club FROM ms_entries WHERE edition=?", (comp+":2029",))]
@@ -240,11 +272,16 @@ def run(source, scratch, groups, full=False, recovery=False):
                     "SELECT competition FROM ms_editions WHERE season=2029 ORDER BY competition")]
             command("archive_season", season=2029, required_competitions=competitions)
             with connect_read_only(db_path) as db:
+                if prize_policy:
+                    from braga_era.multiseason.audit import season
+                    audit = season(db, 2029)
+                    print("2029 ledger accounts reconciled", len(audit["recorded_accounts"]),
+                          "payroll periods", len(audit["paid_periods"]), flush=True)
                 print("2029 finals", [tuple(r) for r in db.execute("""
                     SELECT e.competition,e.champion,count(f.key) FROM ms_editions e
                     LEFT JOIN ms_fixtures f ON f.edition=e.id WHERE e.season=2029
                     GROUP BY e.id ORDER BY e.competition""")], flush=True)
-            opening_2030(world)
+            opening_2030(world, prize_policy)
         with connect_read_only(db_path) as db:
             assert history == inherited_history(db)
             for comp in ("LEAGUE", "SERIE_B", "LOWER"):
@@ -265,14 +302,17 @@ if __name__ == "__main__":
     parser.add_argument("--groups", type=int, default=0)
     parser.add_argument("--full", action="store_true")
     parser.add_argument("--recovery", action="store_true")
+    parser.add_argument("--prizes", action="store_true")
     parser.add_argument("--resume-2030", type=Path,
                         help="Disposable signed TEST world at the archived 2029 boundary")
     options = parser.parse_args()
+    from braga_era.multiseason.prizes import POLICY as PRIZES
+    prize_policy = PRIZES if options.prizes else None
     if options.resume_2030:
         world = options.resume_2030.resolve(strict=True)
         _, marker = store.authenticated(world, KEY)
         assert marker["test_only"]
         store.validate(world,KEY,replay=False)
-        opening_2030(world)
+        opening_2030(world, prize_policy)
     else:
-        run(options.source, options.scratch.resolve(strict=True), options.groups, options.full, options.recovery)
+        run(options.source, options.scratch.resolve(strict=True), options.groups, options.full, options.recovery, prize_policy)

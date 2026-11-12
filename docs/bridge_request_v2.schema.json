@@ -1479,6 +1479,33 @@
                   "maximum": 2200
                 }
               }
+            },
+            {
+              "type": "object",
+              "required": [
+                "dataset"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "dataset": {
+                  "const": "transfer_market"
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 30
+                },
+                "club": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100
+                },
+                "season": {
+                  "type": "integer",
+                  "minimum": 2027,
+                  "maximum": 2200
+                }
+              }
             }
           ]
         }

@@ -13,6 +13,17 @@ The local 0.13.11 candidate installed and imported in isolation with engine `bra
 
 ## Exact transition
 
+For the proposed [competition economy](competition_economy.md), keep the same
+operation and add `"prize_policy":"competition-prizes-brl-1"` and
+`"prize_schedule_sha256":"f21bd9bbdcde09953e507a58a19b5c045a52282f8d8099239e6f046f44b6028b"`
+to its arguments. Review this schedule separately before signing. Use the
+exact schedule digest from the verified wheel. The manifest and execution
+signature cover both the authentic club policy and this addition. Require a
+January ledger settlement, reserve and spending-authority reconciliation, and
+an independent replay before separately signing successor acceptance. Confirm
+that the archived 2028 finance rows and all inherited sporting commitments
+remain identical. The existing standing grant does not authorize this variant.
+
 The candidate's registered authority prepares one transition operation `lifecycle_following_authentic` with arguments `{"scenario":"authentic-clubs-development-1"}`, using `transition=True` and `delegated=False`. The framework prepends the exact adjacent `prepare_season` operation and inherits the parent's gameplay setting. In production, the authorized execution writes a signed policy journal entry before any catalogue, venue or funding changes. The low-level operations cannot activate those changes without that entry. The registered preparation rejects standalone injection of the journal entry and rejects later attempts to revert the adopted career to the legacy transition policy. Further season transitions require the explicit policy until a separate standing authorization is implemented.
 
 - Create one fresh request UUID, and persist the exact manifest and its execution signature outside the candidate. Bind the manifest to the authenticated final 2028 parent. The registered parent claim fences competing requests.

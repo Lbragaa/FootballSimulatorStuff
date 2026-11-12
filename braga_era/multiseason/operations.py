@@ -12,6 +12,9 @@ def apply(c,kind,a):
 
 
 def _apply(c,kind,a):
+    if kind=='settle_competition_prizes':
+        from .prizes import settlement
+        return settlement(c,a)
     if kind=='record_authentic_transition_authorization':
         from .authentic import record_authorization
         return record_authorization(c,a)

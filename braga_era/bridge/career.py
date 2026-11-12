@@ -181,6 +181,8 @@ class Career:
     def finances(self):
         v = self.play("finances")
         if "restricted_cash_cents" in v:
+            if "financial_position" in v:
+                return v
             return {
                 k: v[k]
                 for k in (

@@ -18,6 +18,7 @@ FILTERS = {
     'team_record': {'season', 'competition', 'stage', 'club', 'date_from', 'date_to'},
     'development': {'season', 'club', 'player', 'sort'},
     'transfers': {'season', 'club', 'player', 'date_from', 'date_to'},
+    'transfer_market': {'season', 'club'},
 }
 
 
@@ -30,7 +31,7 @@ class QueryError(ValueError):
 def validate(args):
     dataset = args.get('dataset')
     if not isinstance(dataset, str) or dataset not in FILTERS:
-        raise QueryError('UNKNOWN_DATASET', 'Choose editions, standings, squad, player_stats, team_record, development or transfers.')
+        raise QueryError('UNKNOWN_DATASET', 'Choose editions, standings, squad, player_stats, team_record, development, transfers or transfer_market.')
     for field, value in args.items():
         if field == 'through_date' and dataset in ('player_stats', 'team_record', 'transfers'):
             raise QueryError('INVALID_FILTER', 'Use date_to for an inclusive YYYY-MM-DD cutoff.')
@@ -51,7 +52,7 @@ def validate(args):
                 raise QueryError('INVALID_FILTER', 'Dates must use YYYY-MM-DD.') from None
     if args.get('date_from', '') > args.get('date_to', '9999'):
         raise QueryError('INVALID_FILTER', 'date_from must be on or before date_to.')
-    if dataset in ('squad', 'team_record') and not (args.get('club') or args.get('player')):
+    if dataset in ('squad', 'team_record', 'transfer_market') and not (args.get('club') or args.get('player')):
         raise QueryError('INVALID_FILTER', 'Supply a club or player.')
     sort_fields = {'squad': {'name', 'ovr'}, 'development': {'ovr_delta'}, 'player_stats': set(METRICS)}
     if 'sort' in args and args['sort'] not in sort_fields[dataset]:
@@ -298,6 +299,29 @@ def select(db, args, hidden, season):
         raise QueryError('UNKNOWN_EDITION', 'Competition code is absent from the recorded fixtures and editions.')
     if dataset == 'team_record':
         return team_record(db, args, club, hidden)
+    if dataset == 'transfer_market':
+        if hidden:
+            raise QueryError('NARRATION_PENDING', 'Finish accepted match narration before reading these records.')
+        from .multiseason.offseason import installed
+        if not installed(db):
+            raise QueryError('NO_MARKET_RECORD', 'This checkpoint predates the recorded offseason market.')
+        year = args.get('season', season)
+        kinds = ('squad_plan', 'offer_submitted', 'offer_rejected', 'registration_offer_rejected', 'purchase', 'loan')
+        rows = []
+        for decision in db.execute("""SELECT d.player,d.kind,d.detail_json,p.attributes_json
+                                      FROM ms_market_decisions d LEFT JOIN world_players p ON p.id=d.player
+                                      WHERE d.club=? AND d.season=? ORDER BY d.kind,d.player,d.id""", (club, year)):
+            if decision['kind'] not in kinds:
+                continue
+            detail = json.loads(decision['detail_json'])
+            fields = {'need', 'depth', 'strategy', 'manager', 'fee_cents', 'wage_cents', 'kind',
+                      'valuation', 'seller_ask_cents', 'reason', 'competing_offers'}
+            rows.append({'kind': decision['kind'], 'player_id': decision['player'],
+                         'name': json.loads(decision['attributes_json'])['name'] if decision['attributes_json'] else None,
+                         **{k: v for k, v in detail.items() if k in fields and k != 'kind'},
+                         **({'transaction': detail['kind']} if 'kind' in detail else {})})
+        return rows, {'club': club, 'season': year, 'basis': 'recorded autonomous offseason decisions',
+                      'currency': 'BRL cents', 'current_offer': False}
     players = []
     for p in db.execute('SELECT id,club_key,modeled,attributes_json FROM world_players ORDER BY id'):
         attrs = json.loads(p['attributes_json'])

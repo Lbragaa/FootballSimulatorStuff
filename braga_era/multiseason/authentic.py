@@ -23,7 +23,11 @@ def permitted(c, year):
 def record_authorization(c, args):
     from .competitions import required
     from .registered import PROFILE
-    required(args, "season policy")
+    from .prizes import CONFIG_SHA256, POLICY as PRIZES
+    economy = 'prize_policy' in args
+    required(args, "season policy prize_policy prize_schedule_sha256" if economy else "season policy")
+    if economy and (args['prize_policy'], args['prize_schedule_sha256']) != (PRIZES, CONFIG_SHA256):
+        raise ValueError("Exact competition economy authorization required")
     year = args["season"]
     if (type(year) is not int or year < 2029 or args["policy"] != POLICY
             or c.execute("SELECT profile FROM ms_meta").fetchone()[0] != PROFILE

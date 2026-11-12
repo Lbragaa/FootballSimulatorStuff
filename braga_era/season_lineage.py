@@ -306,10 +306,14 @@ def prepare(registry,key,request_id,operations,*,transition=False,automatic_game
     with lineage.access(registry,key) as (c,t):
         info,parent=current(c,t,key);registered=info.get('profile')==PROFILE
         from .multiseason.authentic import APPROVAL, POLICY as AUTHENTIC, catalogue
-        authentic_operation = {'kind':'lifecycle_following_authentic','args':{'scenario':AUTHENTIC}}
-        authentic_transition = operations == [authentic_operation]
-        if any(op['kind']==APPROVAL for op in operations) or (
-            any(op['kind']==authentic_operation['kind'] for op in operations)
+        from .multiseason.prizes import CONFIG_SHA256, OPERATION, POLICY as PRIZES
+        authentic_kind = 'lifecycle_following_authentic'
+        authentic_args = {'scenario': AUTHENTIC}
+        economy_args = {**authentic_args, 'prize_policy': PRIZES, 'prize_schedule_sha256': CONFIG_SHA256}
+        economy_transition = operations == [{'kind': authentic_kind, 'args': economy_args}]
+        authentic_transition = economy_transition or operations == [{'kind': authentic_kind, 'args': authentic_args}]
+        if any(op['kind'] in {APPROVAL, OPERATION} for op in operations) or (
+            any(op['kind']==authentic_kind for op in operations)
             and not (registered and transition and not delegated and authentic_transition)
         ):
             raise ValueError('Authentic club policy requires one exact signed season transition')
@@ -330,6 +334,10 @@ def prepare(registry,key,request_id,operations,*,transition=False,automatic_game
                     if previous['state']!='archived':raise ValueError('Archive the completed season before transition')
                     year=previous['season']+1
                     uses_authentic=bool(catalogue(db,previous['season']))
+                    uses_prizes=db.execute("SELECT 1 FROM ms_pools WHERE season=? AND competition='PRIZE_SETTLEMENT'",
+                                           (previous['season'],)).fetchone()
+                    if uses_prizes and not economy_transition:
+                        raise ValueError('Repeat the adopted prize policy in the signed next-season manifest')
                     if authentic_transition and (year<2029 or year>2029 and not uses_authentic):
                         raise ValueError('Authentic transition must start in 2029 and continue from the adopted policy')
                     if uses_authentic and not authentic_transition and not t['test_only']:
@@ -457,14 +465,19 @@ def apply(world,key,manifest):
                 request_id=str(uuid5(UUID(request),'bootstrap:'+str(n))),max_groups=1),rio_alternative=rio_alternative)
         elif op['kind']=='lifecycle_following_authentic':
             from .multiseason.authentic import APPROVAL, POLICY
+            from .multiseason.prizes import CONFIG_SHA256, POLICY as PRIZES
+            legacy = {'scenario': POLICY}
+            economy = {**legacy, 'prize_policy': PRIZES, 'prize_schedule_sha256': CONFIG_SHA256}
             if (manifest['kind']!='transition' or manifest['delegated'] or manifest['season']<2029
-                    or op['args']!={'scenario':POLICY} or len(manifest['operations'])!=2):
+                    or op['args'] not in (legacy, economy) or len(manifest['operations'])!=2):
                 raise ValueError('Exact authentic-club season proposal required')
             def command(kind,**args):
                 return store.run(world,key,str(uuid5(UUID(request),'setup:'+kind+':'+digest(args))),kind,args)
             if not manifest['test_only']:
-                command(APPROVAL,season=manifest['season'],policy=POLICY)
-            setup_following(world,command,manifest['season'],rio_alternative=True,authentic=True)
+                command(APPROVAL,season=manifest['season'],policy=POLICY,
+                        **{k: v for k, v in op['args'].items() if k != 'scenario'})
+            setup_following(world,command,manifest['season'],rio_alternative=True,authentic=True,
+                            prize_policy=op['args'].get('prize_policy'))
         elif op['kind']=='lifecycle_following':
             rio_alternative = op['args'] == {'scenario': SEASON_POLICIES[RELEASE_PROPOSAL][1]}
             if manifest['season']<2029 or not (rio_alternative or op['args']=={'scenario':'repeat-season-proposal-1'}):

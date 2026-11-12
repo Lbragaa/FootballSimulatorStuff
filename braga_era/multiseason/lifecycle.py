@@ -196,7 +196,7 @@ def align_future_midweeks(calendar, year, windows):
             slots[leg][index] = when
 
 
-def setup_following(target,command,year,*,rio_alternative=False,authentic=False):
+def setup_following(target,command,year,*,rio_alternative=False,authentic=False,prize_policy=None):
     """Repeat the supported ecosystem from recorded prior-season outcomes.
 
     Foreign national order and missing federation inputs remain explicit forward
@@ -217,6 +217,9 @@ def setup_following(target,command,year,*,rio_alternative=False,authentic=False)
         # contractual wages, including after they leave the competitive pools.
         economics=original['economics'] if original else development_economics(c,year)
     command('configure_offseason',season=year,dated=f'{year}-01-01',policy=OFFSEASON,economics=economics)
+    if prize_policy is not None:
+        from .prizes import CONFIG_SHA256, OPERATION
+        command(OPERATION,season=year,policy=prize_policy,schedule_sha256=CONFIG_SHA256)
     command('settle_economics',dated=f'{year}-01-01 00:00:00')
     result=command('run_offseason',season=year,dated=f'{year}-01-01',policy=OFFSEASON)
     command('carry_discipline',season=year,policy='carry-unserved-bans-reset-yellows-1')
