@@ -201,17 +201,27 @@ def test_future_midweeks_use_72_hour_league_gap(year):
     from datetime import datetime
     from braga_era.multiseason.lifecycle import align_future_midweeks, plans
     calendar, windows = plans(year)
-    calendar[f'CDB:{year}']=[{'stage':'C3','slots':{'1':[f'{year}-03-15 16:00']}},
-                             {'stage':'C4','slots':{'1':[f'{year}-04-05 16:00']}}]
-    for comp in ('LIB','SULA'):
-        calendar[f'{comp}:{year}']=[{'stage':'GROUP','slots':{'1':[f'{year}-04-12 16:00'],
-                                    '2':[f'{year}-06-14 16:00']}}]
+    template,_ = plans(2028,True)
+    for comp in ('CDB','LIB','SULA'):
+        calendar[f'{comp}:{year}']=json.loads(json.dumps(template[f'{comp}:2028']).replace('2028-',f'{year}-'))
+    replica = json.loads(json.dumps(calendar))
     align_future_midweeks(calendar,year,windows)
+    align_future_midweeks(replica,year,windows)
+    assert replica==calendar
     league=[datetime.fromisoformat(values[0]) for values in calendar[f'LEAGUE:{year}'][0]['slots'].values()]
+    weeks = set()
     for comp,weekday in (('CDB',2),('LIB',3),('SULA',3)):
+        previous = None
         for stage in calendar[f'{comp}:{year}']:
+            if comp=='CDB' and stage['stage'] in ('C1','C2'):
+                continue
             for values in stage['slots'].values():
                 kickoff=datetime.fromisoformat(values[0])
+                assert previous is None or previous<kickoff
+                previous=kickoff
                 assert kickoff.weekday()==weekday
                 assert min(abs((kickoff-game).total_seconds()) for game in league)>=72*3600
                 assert not any(first<=values[0]<=last for first,last in windows)
+                weeks.add(kickoff)
+    ordered=sorted(weeks)
+    assert all((right-left).days>=6 for left,right in zip(ordered,ordered[1:]))

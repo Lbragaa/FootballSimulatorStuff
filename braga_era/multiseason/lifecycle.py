@@ -157,24 +157,43 @@ def setup_2028(target, command, advance_group, *, include_continental=True, with
 
 
 def align_future_midweeks(calendar, year, windows):
-    """Keep the early national cup and continental groups clear of league Sundays."""
-    def nearest(value, weekday):
-        kickoff = datetime.fromisoformat(value)
-        for delta in sorted(range(-14, 15), key=lambda days: (abs(days), days)):
-            shifted = kickoff + timedelta(days=delta)
-            candidate = shifted.isoformat(sep=' ',timespec='minutes')
-            if (shifted.weekday()==weekday and shifted.year==year
-                    and '01-05'<shifted.strftime('%m-%d')<'12-22'
-                    and not any(first<=candidate<=last for first,last in windows)):
-                return candidate
-        raise ValueError('No legal midweek reservation for '+value)
-
-    for competition, stages, weekday in (('CDB', {'C3','C4'}, 2),
-                                         ('LIB', {'GROUP'}, 3), ('SULA', {'GROUP'}, 3)):
+    """Assign competing late-season reservations to distinct legal league midweeks."""
+    anchors = {}
+    for competition in ('CDB','LIB','SULA'):
         for stage in calendar[f'{competition}:{year}']:
-            if stage['stage'] in stages:
-                stage['slots'] = {leg: sorted({nearest(value, weekday) for value in values})
-                                  for leg, values in stage['slots'].items()}
+            if competition=='CDB' and stage['stage'] in {'C1','C2'}:
+                continue
+            for leg, values in stage['slots'].items():
+                for index, value in enumerate(values):
+                    category = 'domestic' if competition=='CDB' else 'continental'
+                    anchors.setdefault((value,category), []).append((stage['slots'],leg,index))
+
+    # Continental editions can share a round date because entry is mutually
+    # exclusive at these stages. Domestic rounds need their own midweek.
+    ordered = sorted(anchors)
+    paths = {datetime(year,1,1): (0, ())}
+    for value, category in ordered:
+        nominal = datetime.fromisoformat(value)
+        weekday = 2 if category=='domestic' else 3
+        next_paths = {}
+        for delta in range(-21,22):
+            kickoff = nominal + timedelta(days=delta)
+            when = kickoff.isoformat(sep=' ',timespec='minutes')
+            if (kickoff.weekday()!=weekday or kickoff.year!=year
+                    or not '01-05'<kickoff.strftime('%m-%d')<'12-22'
+                    or any(first<=when<=last for first,last in windows)):
+                continue
+            choices = [(cost+abs(delta), path+(when,)) for previous,(cost,path) in paths.items()
+                       if kickoff-previous>=timedelta(days=6)]
+            if choices:
+                next_paths[kickoff] = min(choices)
+        if not next_paths:
+            raise ValueError('No legal midweek reservation for '+value)
+        paths = next_paths
+    _, choices = min(paths.values())
+    for anchor, when in zip(ordered,choices,strict=True):
+        for slots, leg, index in anchors[anchor]:
+            slots[leg][index] = when
 
 
 def setup_following(target,command,year,*,rio_alternative=False,authentic=False):
