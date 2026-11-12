@@ -102,8 +102,10 @@ def claim(c,a):
         if e['format'] in FORMATS:
             match=match_policy(e,f,single,decisive);neutral=match['neutral'];extra_time=match['extra_time']
         config=configuration(policy,final=neutral,engine_version=engine_version)
-        snap=Snapshot(f['key'],f['kickoff'],meta['clock'],team_at(c,f['home'],discipline,first,policy),
-            team_at(c,f['away'],discipline,first,policy),CompetitionRules(e['competition'],e['season'],
+        from .authentic import apply_names, display_names
+        names=display_names(c,e['season'])
+        snap=Snapshot(f['key'],f['kickoff'],meta['clock'],apply_names(team_at(c,f['home'],discipline,first,policy),names),
+            apply_names(team_at(c,f['away'],discipline,first,policy),names),CompetitionRules(e['competition'],e['season'],
             aggregate_before=tuple(prior),progression='Regulation engine; separately validated edition ET/penalties'),
             common,notes=('NONCANONICAL proposed multi-season edition',))
         seeds=commit_seeds(snap,config,digest({'seed':meta['seed'],'fixture':f['key'],'policy':'career-stable-per-fixture-1'}))

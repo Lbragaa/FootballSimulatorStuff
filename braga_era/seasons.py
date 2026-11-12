@@ -285,7 +285,7 @@ def double_round_robin(clubs, *, season, competition="LEAGUE", policy="berger-dr
     Fixed input identities, no random draws and no fixture execution. Circle method
     produces each ordered pair once. Dates are deliberately not guessed.
     """
-    if (policy != "berger-draft-1" or type(season) is not int or not 1900 <= season <= 2200
+    if (policy not in {"berger-draft-1", "balanced-venues-2"} or type(season) is not int or not 1900 <= season <= 2200
         or not isinstance(competition, str) or not competition.isalnum()
         or not isinstance(clubs, (list, tuple)) or not all(isinstance(k, str) and k for k in clubs)
         or len(clubs) < 4 or len(clubs) % 2 or len(set(clubs)) != len(clubs)):
@@ -294,7 +294,9 @@ def double_round_robin(clubs, *, season, competition="LEAGUE", policy="berger-dr
     for index in range(len(clubs) - 1):
         for j in range(len(clubs) // 2):
             home, away = rotation[j], rotation[-1-j]
-            if (index + j) % 2:
+            reverse = ((index + j) % 2 if policy == "berger-draft-1"
+                       else (index if j == 0 else j) % 2)
+            if reverse:
                 home, away = away, home
             first.append({"round": index + 1, "home": home, "away": away})
         rotation = [rotation[0], rotation[-1], *rotation[1:-1]]

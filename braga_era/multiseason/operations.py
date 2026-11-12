@@ -12,6 +12,12 @@ def apply(c,kind,a):
 
 
 def _apply(c,kind,a):
+    if kind=='commit_balanced_venues':
+        from .authentic import commit_schedule
+        return commit_schedule(c,a)
+    if kind=='install_authentic_catalogue':
+        from .authentic import install
+        return install(c,a)
     if kind=='activate_substitution_policy':
         from .execution import activate
         return activate(c,a)

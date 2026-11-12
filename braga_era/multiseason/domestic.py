@@ -29,9 +29,17 @@ def evidence(c,season,competition,key,source,policy=POLICY):
         required(source,'type id reason')
         if season!=2028 or not all(isinstance(source[x],str) and 3<=len(source[x])<=1000 for x in ('id','reason')):
             raise ValueError('Only the initial 2028 data gap accepts an explicit administrative scenario')
+    elif kind=='authentic_federation_admission':
+        from .authentic import POLICY as AUTHENTIC, catalogue
+        required(source,'type')
+        entry=catalogue(c,season).get(key)
+        if (policy!=AUTHENTIC or not entry or entry['country']!='BRA'
+                or competition not in {'CARIOCA','CDB'} or competition=='CARIOCA' and entry['state']!='RJ'):
+            raise ValueError('Invalid proposed real federation admission')
     elif kind=='prior_cup_repeat_berth':
+        from .authentic import POLICY as AUTHENTIC
         required(source,'type edition position')
-        if policy!=CONTINUITY_POLICY or competition!='CDB' or season<2029:
+        if policy not in {CONTINUITY_POLICY,AUTHENTIC} or competition!='CDB' or season<2029:
             raise ValueError('Explicit repeat cup entry policy required')
         row=c.execute('SELECT * FROM ms_editions WHERE id=?',(source['edition'],)).fetchone()
         if not row or row['season']!=season-1 or row['competition']!='CDB' or row['state']!='completed':
@@ -60,8 +68,9 @@ def evidence(c,season,competition,key,source,policy=POLICY):
 
 
 def create(c,a):
+    from .authentic import POLICY as AUTHENTIC, catalogue
     required(a,'season competition policy entrants')
-    if a['policy'] not in {POLICY,CONTINUITY_POLICY} or not c.execute("SELECT 1 FROM ms_seasons WHERE season=? AND state='preparing'",(a['season'],)).fetchone():raise ValueError('Preparing season and versioned domestic proposal required')
+    if a['policy'] not in {POLICY,CONTINUITY_POLICY,AUTHENTIC} or not c.execute("SELECT 1 FROM ms_seasons WHERE season=? AND state='preparing'",(a['season'],)).fetchone():raise ValueError('Preparing season and versioned domestic proposal required')
     comp=a['competition'];entrants=a['entrants']
     if comp=='CDB':format='cdb_128';n=128
     elif comp=='CARIOCA':format='carioca_12';n=12
@@ -70,9 +79,11 @@ def create(c,a):
     if not isinstance(entrants,list) or len(entrants)!=n or not 4<=n<=128:raise ValueError('Incorrect domestic participant inventory')
     if format=='state_knockout' and (n not in (8,16)):raise ValueError('Bounded state qualifier requires eight or sixteen clubs')
     keys=[]
+    allowed=catalogue(c,a['season']) if a['policy']==AUTHENTIC else None
     for entry in entrants:
         required(entry,'club phase source')
         if type(entry['phase']) is not int:raise ValueError('Integer entry phase required')
+        if allowed is not None and entry['club'] not in allowed:raise ValueError('Club is outside the committed real catalogue')
         evidence(c,a['season'],comp,entry['club'],entry['source'],a['policy']);keys.append(entry['club'])
     if len(set(keys))!=n:raise ValueError('Duplicate domestic club identity')
     if comp=='CARIOCA' or comp in STATE_COMPETITIONS:
@@ -91,7 +102,7 @@ def create(c,a):
                 if e['phase']==3 and (prior not in {'LOWER','NATIONAL_QUALIFIER','REGION_NE','REGION_N','REGION_CO','REGION_SS'} or e['source']['position']!=1):raise ValueError('CDB third-phase route requires an actual supported regional/access champion')
     elif any(e['phase']!=1 for e in entrants):raise ValueError('State entrants must begin in the group/first stage')
     edition=f'{comp}:{a["season"]}';rules={'legs':2,'final_legs':1,'neutral_final':True,'policy':POLICY}
-    if a['policy']==CONTINUITY_POLICY:rules['entry_policy']=CONTINUITY_POLICY
+    if a['policy'] in {CONTINUITY_POLICY,AUTHENTIC}:rules['entry_policy']=a['policy']
     c.execute('INSERT INTO ms_editions VALUES(?,?,?,?,?,?,NULL)',(edition,comp,a['season'],format,encode(rules),'planned'))
     groups=None
     if comp=='CARIOCA':

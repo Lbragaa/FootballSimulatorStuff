@@ -19,7 +19,9 @@ def country_of(c,key):
     known=row[0] or ('BRA' if brazilian(c,key) else None)
     if known:return known
     evidence=c.execute("SELECT clubs_json FROM ms_pools WHERE id=? AND competition='COUNTRY_EVIDENCE'",('country-evidence:'+key,)).fetchone()
-    return json.loads(evidence[0])['country'] if evidence else None
+    if evidence:return json.loads(evidence[0])['country']
+    row=c.execute("SELECT clubs_json FROM ms_pools WHERE competition='CLUB_CATALOGUE' ORDER BY season DESC LIMIT 1").fetchone()
+    return json.loads(row[0]).get(key,{}).get('country') if row else None
 
 
 def declare_country(c,a):
@@ -47,6 +49,17 @@ def ranking(c,country,season,evidence):
         required(evidence,'type id reason clubs')
         scenario({k:v for k,v in evidence.items() if k!='clubs'})
         clubs=evidence['clubs']
+    elif kind=='authentic_national_model':
+        required(evidence,'type')
+        from .authentic import catalogue, order
+        registered=catalogue(c,season)
+        if not registered:raise ValueError('Committed authentic club pool required')
+        if country!='BRA':
+            clubs=order(c,country,season)[:40]
+        else:
+            prior=ranking(c,country,season,{'type':'edition_league_and_cup',
+                            'edition':f'LEAGUE:{season-1}','cup_edition':f'CDB:{season-1}'})
+            clubs=[key for key in prior if key in registered]
     elif kind in {'edition_table','edition_league_and_cup'}:
         required(evidence,'type edition' if kind=='edition_table' else 'type edition cup_edition')
         e=c.execute('SELECT * FROM ms_editions WHERE id=?',(evidence['edition'],)).fetchone()

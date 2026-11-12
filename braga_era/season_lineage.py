@@ -440,6 +440,13 @@ def apply(world,key,manifest):
                 return store.run(world,key,str(uuid5(UUID(request),'setup:'+kind+':'+digest(args))),kind,args)
             setup_2028(world,command,lambda n:advance(world,key,
                 request_id=str(uuid5(UUID(request),'bootstrap:'+str(n))),max_groups=1),rio_alternative=rio_alternative)
+        elif op['kind']=='lifecycle_following_authentic':
+            from .multiseason.authentic import POLICY
+            if not manifest['test_only'] or manifest['season']<2029 or op['args']!={'scenario':POLICY}:
+                raise ValueError('Exact TEST authentic-club season proposal required')
+            def command(kind,**args):
+                return store.run(world,key,str(uuid5(UUID(request),'setup:'+kind+':'+digest(args))),kind,args)
+            setup_following(world,command,manifest['season'],rio_alternative=True,authentic=True)
         elif op['kind']=='lifecycle_following':
             rio_alternative = op['args'] == {'scenario': SEASON_POLICIES[RELEASE_PROPOSAL][1]}
             if manifest['season']<2029 or not (rio_alternative or op['args']=={'scenario':'repeat-season-proposal-1'}):

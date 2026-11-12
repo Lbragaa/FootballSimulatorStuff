@@ -155,6 +155,7 @@ def contract(c,pid,key,dated,ends,amount,source):
 
 
 def configure(c,a):
+    from .authentic import opening_liquidity_allowed
     required(a,'season policy dated economics')
     year=a['season'];dated=a['dated']
     if not installed(c) or a['policy']!=POLICY or dated!=f'{year}-01-01':raise ValueError('Explicit installed offseason and January opening required')
@@ -168,10 +169,11 @@ def configure(c,a):
         for name,value in s.items():
             if name!='reason':market.money(value)
         if key=='club:15' and s['opening_liquidity_cents']:raise ValueError('No hypothetical opening capital for Vasco')
+        if year>2028 and s['opening_liquidity_cents'] and not opening_liquidity_allowed(c,key,year):
+            raise ValueError('Initial modeled liquidity cannot replenish later seasons')
         if not c.execute('SELECT 1 FROM ms_accounts WHERE club=?',(key,)).fetchone():market.apply(c,'open_recorded_account',{'club':key})
         c.execute('INSERT INTO ms_economics VALUES(?,?,?)',(key,year,encode({**s,'canonical_approval':False,'policy':POLICY})))
         if key!='club:15':
-            if year>2028 and s['opening_liquidity_cents']:raise ValueError('Initial modeled liquidity cannot replenish later seasons')
             if s['opening_liquidity_cents']:
                 identity=f'TEST-opening:{key}:{year}'
                 c.execute('UPDATE ms_accounts SET cash_cents=cash_cents+? WHERE club=?',(s['opening_liquidity_cents'],key))
@@ -193,6 +195,18 @@ def youth(c,key,year,index,position,dated,strength):
     ovr=round(max(45,min(75,strength-17+r.gauss(0,4))),2)
     p=Player(pid,key,f'Fictional academy {year} {key} {index}',position,ovr,ovr,ovr,ovr,ovr,ovr,ovr if position=='GK' else 20,100,65)
     provenance={'policy':POLICY,'source':'fictional forward youth intake','dated':dated,'canonical_approval':False}
+    from .authentic import catalogue, display_names
+    host=catalogue(c,year).get(key)
+    if host:
+        from ..world import player_names
+        aliases=display_names(c,year)
+        used={aliases.get(str(row[0]), {}).get('name') or json.loads(row[1])['name']
+              for row in c.execute('SELECT id,attributes_json FROM world_players WHERE club_key=?',(key,))}
+        seed=c.execute('SELECT seed FROM ms_meta').fetchone()[0]
+        name,country=player_names.generate(seed,pid,host['country'],used)
+        from dataclasses import replace
+        p=replace(p,name=name)
+        provenance.update(name_policy=player_names.POLICY,nationality=country,modeled=True)
     c.execute('INSERT INTO world_players VALUES(?,?,?,?,?,?)',(pid,key,None,1,encode(asdict(p)),encode(provenance)))
     s={'fitness':100,'morale':65,'form':6.55,'observed_at':dated+' 00:00:00','last_played':None,'injury_until':None,'injury_unknown':False,'registered':False,'contract_start':None,'contract_end':None,'recent':[]}
     c.execute('INSERT INTO world_player_state VALUES(?,?)',(pid,encode(s)))
@@ -454,6 +468,7 @@ def development_economics(c,year,clubs=None):
     wealth/exchange rate is imported. Caller must commit these explicit inputs.
     Vasco receives no opening capital or renewed transfer/wage authority.
     """
+    from .authentic import opening_liquidity_allowed
     result={};dated=f'{year}-01-01'
     for row in c.execute('SELECT * FROM world_clubs ORDER BY key'):
         key=row['key']
@@ -470,7 +485,8 @@ def development_economics(c,year,clubs=None):
         cash=acc['cash_cents']-acc['reserve_cents'] if acc else 0
         costs=base//8
         result[key]={'reason':'NONCANONICAL hypothetical all-club BRL economics: unknown base wages/wealth modeled prospectively; no real sponsor or owner capital claim',
-            'opening_liquidity_cents':base*6 if year==2028 and key!='club:15' else 0,
+            'opening_liquidity_cents':(base*6 if year==2028 and key!='club:15'
+                                       else base*2 if opening_liquidity_allowed(c,key,year) else 0),
             'monthly_income_cents':base*14//10+costs,'monthly_cost_cents':costs,
             'annual_wage_cap_cents':base*12+additional,'fee_cap_cents':min(base*3,max(0,cash//2)) if year>2028 else base*3,
             'additional_wage_cents':additional}

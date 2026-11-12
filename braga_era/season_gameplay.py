@@ -255,6 +255,9 @@ def offseason_news(career,request_id):
             summary=json.loads(row['summary_json'])
             names=dict(db.execute('SELECT key,name FROM world_clubs'))
             players={r['id']:json.loads(r['attributes_json'])['name'] for r in db.execute('SELECT id,attributes_json FROM world_players')}
+            if year>=2029:
+                from .multiseason.authentic import display_names
+                players.update({int(pid): entry['name'] for pid,entry in display_names(db,year).items()})
             changes=[{'player':players[r['player']],'from':names.get(r['seller']),'to':names.get(r['buyer']),
                       'kind':r['kind'],'dated':r['dated'],'source_id':r['id']}
                      for r in db.execute("SELECT * FROM ms_transfers WHERE substr(dated,1,4)=? AND (seller='club:15' OR buyer='club:15') ORDER BY dated,id",(str(year),))]

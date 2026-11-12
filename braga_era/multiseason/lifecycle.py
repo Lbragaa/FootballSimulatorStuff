@@ -156,7 +156,7 @@ def setup_2028(target, command, advance_group, *, include_continental=True, with
     return {"calendar":calendar,"offseason":offseason}
 
 
-def setup_following(target,command,year,*,rio_alternative=False):
+def setup_following(target,command,year,*,rio_alternative=False,authentic=False):
     """Repeat the supported ecosystem from recorded prior-season outcomes.
 
     Foreign national order and missing federation inputs remain explicit forward
@@ -166,15 +166,26 @@ def setup_following(target,command,year,*,rio_alternative=False):
     from .continental_policy import ALLOCATIONS
     from .continental_entry import POLICY as ENTRY,SULA_SLOTS,country_of
     from .domestic import CONTINUITY_POLICY,final_order
+    from .authentic import POLICY as AUTHENTIC, SCHEDULE, catalogue, order
+    if authentic:
+        command('install_authentic_catalogue',season=year,policy=AUTHENTIC)
+        command('commit_balanced_venues',season=year,policy=SCHEDULE)
     with connect_read_only(target/'database.sqlite') as c:
         originals=[json.loads(r[0]) for r in c.execute("SELECT args_json FROM ms_operations WHERE kind='configure_offseason'")]
         original=next((r for r in originals if r['season']==year),None)
-        economics=original['economics'] if original else development_economics(c,year)
+        economic_clubs=None
+        if authentic:
+            economic_clubs=set(catalogue(c,year))
+            # Defending titles retain their sporting rights during the transition.
+            economic_clubs.update(row[0] for row in c.execute("""SELECT champion FROM ms_editions
+                WHERE season=? AND competition IN ('LEAGUE','CDB','LIB','SULA') AND champion IS NOT NULL""",
+                (year-1,)))
+        economics=original['economics'] if original else development_economics(c,year,economic_clubs)
     command('configure_offseason',season=year,dated=f'{year}-01-01',policy=OFFSEASON,economics=economics)
     command('settle_economics',dated=f'{year}-01-01 00:00:00')
     result=command('run_offseason',season=year,dated=f'{year}-01-01',policy=OFFSEASON)
     command('carry_discipline',season=year,policy='carry-unserved-bans-reset-yellows-1')
-    movement=command('register_divisions',season=year,policy=DIVISIONS,initial_b=[],initial_lower=[])
+    command('register_divisions',season=year,policy=AUTHENTIC if authentic else DIVISIONS,initial_b=[],initial_lower=[])
     command('carry_division_bans',season=year,policy='follow-national-division-bans-1')
     with connect_read_only(target/'database.sqlite') as c:
         national={'BRA':{'type':'edition_league_and_cup','edition':f'LEAGUE:{year-1}','cup_edition':f'CDB:{year-1}'}}
@@ -195,13 +206,30 @@ def setup_following(target,command,year,*,rio_alternative=False):
         # excluding the twenty new direct entrants. No invented state results.
         cup_order=final_order(c,prior_cup)
         early=[club for club in cup_order if club not in league][:108]
+        if authentic:
+            registered=catalogue(c,year)
+            national={country:{'type':'authentic_national_model'} for country in ALLOCATIONS}
+            ranking=order(c,'BRA',year)
+            rio=[club for club in rio_order if club in registered and registered[club]['state']=='RJ']
+            rio+=(list(key for key in ranking if registered[key]['state']=='RJ' and key not in rio))[:12-len(rio)]
+            early=[key for key in cup_order if key in registered and key not in league][:108]
+            represented={registered[key]['state'] for key in league+early}
+            for key in ranking:
+                state=registered[key]['state']
+                if len(early)<108 and state not in represented:
+                    early.append(key)
+                    represented.add(state)
+            early += [key for key in ranking if key not in league and key not in early][:108-len(early)]
+            if len(rio)!=12:raise ValueError('Insufficient eligible Rio clubs')
         if len(early)!=108:raise ValueError('Repeat CDB entry inventory needs an explicit federation decision')
         venues = venue_bindings(c, rio_alternative)
     command('commit_continental_entry',season=year,policy=ENTRY,national_evidence=national,champions=champions)
-    command('create_domestic_edition',season=year,competition='CARIOCA',policy=DOMESTIC,
-            entrants=[{'club':club,'phase':1,'source':{'type':'edition_finish','edition':f'CARIOCA:{year-1}','position':rio_order.index(club)+1}} for club in rio])
-    command('create_domestic_edition',season=year,competition='CDB',policy=CONTINUITY_POLICY,
-            entrants=[{'club':club,'phase':1 if i<36 else 2 if i<102 else 3,'source':{'type':'prior_cup_repeat_berth','edition':f'CDB:{year-1}','position':cup_order.index(club)+1}} for i,club in enumerate(early)]+
+    command('create_domestic_edition',season=year,competition='CARIOCA',policy=AUTHENTIC if authentic else DOMESTIC,
+            entrants=[{'club':club,'phase':1,'source':{'type':'edition_finish','edition':f'CARIOCA:{year-1}','position':rio_order.index(club)+1}
+                       if club in rio_order else {'type':'authentic_federation_admission'}} for club in rio])
+    command('create_domestic_edition',season=year,competition='CDB',policy=AUTHENTIC if authentic else CONTINUITY_POLICY,
+            entrants=[{'club':club,'phase':1 if i<36 else 2 if i<102 else 3,'source':{'type':'prior_cup_repeat_berth','edition':f'CDB:{year-1}','position':cup_order.index(club)+1}
+                       if club in cup_order else {'type':'authentic_federation_admission'}} for i,club in enumerate(early)]+
                      [{'club':club,'phase':5,'source':{'type':'current_serie_a','edition':f'LEAGUE:{year}'}} for club in league])
     for comp in ('SUPERCOPA','RECOPA'):command('create_supercup',season=year,competition=comp,policy=DOMESTIC)
     template,windows=plans(2028,True);calendar={}

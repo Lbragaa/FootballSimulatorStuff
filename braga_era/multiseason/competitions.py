@@ -149,6 +149,9 @@ def edition(c,a):
         c.execute('INSERT INTO ms_entries VALUES(?,?,?,?)',(key,k,json.loads(q['source_json'])['type'],q['source_json']))
         routes.append(json.loads(q['source_json']))
     if a['competition']=='LEAGUE':
+        routes=[r['sporting_source'] if r['type']=='division_entry'
+                and r['sporting_source']['type']=='authentic_transition_admission' else r for r in routes]
+        routes=[r['sporting_source'] if r['type']=='authentic_transition_admission' else r for r in routes]
         promotions=sum(r['type']=='edition_qualifier' or r['type']=='edition_position' and c.execute('SELECT competition FROM ms_editions WHERE id=?',(r['edition'],)).fetchone()[0]=='SERIE_B' for r in routes)
         if promotions!=4:raise ValueError('Série A requires exactly sixteen survivors and four recorded promoted clubs')
     return {'edition':key,'participants':len(clubs),'format':a['format'],'proposed':True}
@@ -204,7 +207,10 @@ def schedule(c,a):
         return {'edition':e['id'],'stage':'GROUP','scheduled':len(entries)*3}
     if e['format']=='league':
         if e['state']!='planned':raise ValueError('League already scheduled')
-        for f in double_round_robin(entries,season=e['season'],competition=e['competition'].replace('_','')):
+        from .authentic import SCHEDULE
+        enabled = c.execute("SELECT 1 FROM ms_pools WHERE id=?", (f"{SCHEDULE}:{e['season']}",)).fetchone()
+        policy = SCHEDULE if e['competition'] in {'LEAGUE','SERIE_B','LOWER'} and enabled else 'berger-draft-1'
+        for f in double_round_robin(entries,season=e['season'],competition=e['competition'].replace('_',''),policy=policy):
             when=(start+timedelta(days=7*(f['round']-1))).isoformat(sep=' ',timespec='minutes')
             insert_fixture(c,e['id'],'LEAGUE',f['round'],None,f['home'],f['away'],when,a['deadline'])
         stage=0
