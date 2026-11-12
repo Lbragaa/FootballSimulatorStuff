@@ -197,13 +197,21 @@ def test_schedule_has_independent_precommit_gate():
 
 
 @pytest.mark.parametrize('year',range(2030,2037))
-def test_march_cup_uses_72_hour_league_gap(year):
+def test_future_midweeks_use_72_hour_league_gap(year):
     from datetime import datetime
-    from braga_era.multiseason.lifecycle import align_march_cup, plans
-    calendar, _ = plans(year)
-    calendar[f'CDB:{year}']=[{'stage':'C3','slots':{}}]
-    align_march_cup(calendar,year)
-    cup=datetime.fromisoformat(calendar[f'CDB:{year}'][0]['slots']['1'][0])
+    from braga_era.multiseason.lifecycle import align_future_midweeks, plans
+    calendar, windows = plans(year)
+    calendar[f'CDB:{year}']=[{'stage':'C3','slots':{'1':[f'{year}-03-15 16:00']}},
+                             {'stage':'C4','slots':{'1':[f'{year}-04-05 16:00']}}]
+    for comp in ('LIB','SULA'):
+        calendar[f'{comp}:{year}']=[{'stage':'GROUP','slots':{'1':[f'{year}-04-12 16:00'],
+                                    '2':[f'{year}-06-14 16:00']}}]
+    align_future_midweeks(calendar,year,windows)
     league=[datetime.fromisoformat(values[0]) for values in calendar[f'LEAGUE:{year}'][0]['slots'].values()]
-    assert cup.weekday()==2 and cup.day<20
-    assert min(abs((cup-kickoff).total_seconds()) for kickoff in league)>=72*3600
+    for comp,weekday in (('CDB',2),('LIB',3),('SULA',3)):
+        for stage in calendar[f'{comp}:{year}']:
+            for values in stage['slots'].values():
+                kickoff=datetime.fromisoformat(values[0])
+                assert kickoff.weekday()==weekday
+                assert min(abs((kickoff-game).total_seconds()) for game in league)>=72*3600
+                assert not any(first<=values[0]<=last for first,last in windows)

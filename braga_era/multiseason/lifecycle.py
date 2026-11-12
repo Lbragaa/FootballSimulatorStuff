@@ -156,12 +156,25 @@ def setup_2028(target, command, advance_group, *, include_continental=True, with
     return {"calendar":calendar,"offseason":offseason}
 
 
-def align_march_cup(calendar, year):
-    """Reserve the third cup round in the midweek gap between league Sundays."""
-    middle = datetime(year, 3, 15, 16)
-    wednesday = middle + timedelta(days=(2 - middle.weekday() + 3) % 7 - 3)
-    stage = next(row for row in calendar[f'CDB:{year}'] if row['stage']=='C3')
-    stage['slots'] = {'1': [wednesday.isoformat(sep=' ',timespec='minutes')]}
+def align_future_midweeks(calendar, year, windows):
+    """Keep the early national cup and continental groups clear of league Sundays."""
+    def nearest(value, weekday):
+        kickoff = datetime.fromisoformat(value)
+        for delta in sorted(range(-14, 15), key=lambda days: (abs(days), days)):
+            shifted = kickoff + timedelta(days=delta)
+            candidate = shifted.isoformat(sep=' ',timespec='minutes')
+            if (shifted.weekday()==weekday and shifted.year==year
+                    and '01-05'<shifted.strftime('%m-%d')<'12-22'
+                    and not any(first<=candidate<=last for first,last in windows)):
+                return candidate
+        raise ValueError('No legal midweek reservation for '+value)
+
+    for competition, stages, weekday in (('CDB', {'C3','C4'}, 2),
+                                         ('LIB', {'GROUP'}, 3), ('SULA', {'GROUP'}, 3)):
+        for stage in calendar[f'{competition}:{year}']:
+            if stage['stage'] in stages:
+                stage['slots'] = {leg: sorted({nearest(value, weekday) for value in values})
+                                  for leg, values in stage['slots'].items()}
 
 
 def setup_following(target,command,year,*,rio_alternative=False,authentic=False):
@@ -246,7 +259,7 @@ def setup_following(target,command,year,*,rio_alternative=False,authentic=False)
     national_plans,windows=plans(year)
     calendar.update(national_plans)
     if authentic and year>=2030:
-        align_march_cup(calendar,year)
+        align_future_midweeks(calendar,year,windows)
     for edition in calendar:venues['neutral:'+edition]='TEST proposed neutral final: '+edition
     command('commit_season_calendar',season=year,policy=CALENDAR,plans=calendar,international_windows=windows,venues=venues)
     return {'calendar':calendar,'offseason':result}

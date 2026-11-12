@@ -46,6 +46,42 @@ def verify_movements(db):
     print("2030 all-real continental entries", len(rows), flush=True)
 
 
+def verify_venues(db, year):
+    for comp, expected in (("LEAGUE",380),("SERIE_B",380),("LOWER",56)):
+        fixtures=list(db.execute("SELECT home,away FROM ms_fixtures WHERE edition=? ORDER BY kickoff,round",
+                                (f"{comp}:{year}",)))
+        assert len(fixtures)==expected
+        runs=max(len(list(run)) for club in {row[0] for row in fixtures}
+                 for _,run in groupby(h==club for h,a in fixtures if club in (h,a)))
+        assert runs<=3
+        print("VENUES",year,comp,len(fixtures),"max run",runs,flush=True)
+
+
+def signed_operation(world, kind, **args):
+    request = str(uuid5(NAMESPACE_URL, "authentic-audit-1:" + kind + ":" + digest(args)))
+    return store.run(world, KEY, request, kind, args)
+
+
+def opening_2030(world):
+    db_path = world / "database.sqlite"
+    with connect_read_only(db_path) as db:
+        assert db.execute("SELECT state FROM ms_seasons WHERE season=2029").fetchone()[0]=="archived"
+        history = inherited_history(db)
+    def command(kind, **args):
+        return signed_operation(world,kind,**args)
+    command("prepare_season",season=2030)
+    setup_following(world,command,2030,rio_alternative=True,authentic=True)
+    with connect_read_only(db_path) as db:
+        verify_movements(db)
+    result = agenda.advance(world,KEY,request_id=str(uuid5(NAMESPACE_URL,"authentic-2030-opening")),max_groups=40)
+    assert result["groups_completed"]==40
+    print("2030 groups",result["groups_completed"],flush=True)
+    with connect_read_only(db_path) as db:
+        assert history==inherited_history(db)
+        verify_venues(db,2030)
+    print("2030 logical state",store.validate(world,KEY,replay=False)["world_sha256"],flush=True)
+
+
 def registered_recovery(root, registry, node, state):
     """Rebind only the public-key TEST copy to its authenticated archived ancestor."""
     head = digest(node["metadata"])
@@ -150,8 +186,7 @@ def run(source, scratch, groups, full=False, recovery=False):
             history = inherited_history(db)
 
         def command(kind, **args):
-            request = str(uuid5(NAMESPACE_URL, "authentic-audit-1:" + kind + ":" + digest(args)))
-            return store.run(world, KEY, request, kind, args)
+            return signed_operation(world,kind,**args)
 
         command("prepare_season", season=2029)
         setup_following(world, command, 2029, rio_alternative=True, authentic=True)
@@ -209,13 +244,7 @@ def run(source, scratch, groups, full=False, recovery=False):
                     SELECT e.competition,e.champion,count(f.key) FROM ms_editions e
                     LEFT JOIN ms_fixtures f ON f.edition=e.id WHERE e.season=2029
                     GROUP BY e.id ORDER BY e.competition""")], flush=True)
-            command("prepare_season", season=2030)
-            setup_following(world, command, 2030, rio_alternative=True, authentic=True)
-            with connect_read_only(db_path) as db:
-                verify_movements(db)
-            result = agenda.advance(world, KEY, request_id=str(uuid5(NAMESPACE_URL, "authentic-2030-opening")),
-                                    max_groups=40)
-            print("2030 groups", result["groups_completed"], flush=True)
+            opening_2030(world)
         with connect_read_only(db_path) as db:
             assert history == inherited_history(db)
             for comp in ("LEAGUE", "SERIE_B", "LOWER"):
@@ -236,5 +265,14 @@ if __name__ == "__main__":
     parser.add_argument("--groups", type=int, default=0)
     parser.add_argument("--full", action="store_true")
     parser.add_argument("--recovery", action="store_true")
+    parser.add_argument("--resume-2030", type=Path,
+                        help="Disposable signed TEST world at the archived 2029 boundary")
     options = parser.parse_args()
-    run(options.source, options.scratch.resolve(strict=True), options.groups, options.full, options.recovery)
+    if options.resume_2030:
+        world = options.resume_2030.resolve(strict=True)
+        _, marker = store.authenticated(world, KEY)
+        assert marker["test_only"]
+        store.validate(world,KEY,replay=False)
+        opening_2030(world)
+    else:
+        run(options.source, options.scratch.resolve(strict=True), options.groups, options.full, options.recovery)
