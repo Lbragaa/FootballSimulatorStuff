@@ -2,6 +2,8 @@
 
 The approved football choices are documented in [Real clubs and balanced venues](authentic_clubs_calendar.md). The existing worker's standing season policy is a different authorization. At the time of the preparation preflight, the live accepted head was `afb3bca80995d492f4f02144960fd49c60cc00fd099b8fe77ed2c34e43da1bf3` at December 3, 2028 at 17:33, and the bridge was at sequence 53. Those values identify the read-only observation. The required parent is the eventual accepted **archived 2028** head, discovered from the live registry at execution.
 
+The local 0.13.11 candidate installed and imported in isolation with engine `braga-headless-1.3.0` available. The wheel used for the check had SHA-256 `2f220e0ee1dc85abc06d8d3d945fd41edc820ea9a1153766710803d4daa5c941`. Production remains on the existing worker.
+
 ## Prerequisites
 
 1. Finish 2028 through the ordinary bridge. All mandatory editions must be complete, the calendar empty, all due payroll and loan obligations settled, and prior results revealed through the existing cursor rules.

@@ -194,3 +194,16 @@ def test_schedule_has_independent_precommit_gate():
             'legacy-est','legacy-fic','2030-02-01 16:00','scheduled',NULL,NULL,NULL)""")
         with pytest.raises(ValueError, match='uncommitted'):
             authentic.commit_schedule(c, {**args, 'season': 2030})
+
+
+@pytest.mark.parametrize('year',range(2030,2037))
+def test_march_cup_uses_72_hour_league_gap(year):
+    from datetime import datetime
+    from braga_era.multiseason.lifecycle import align_march_cup, plans
+    calendar, _ = plans(year)
+    calendar[f'CDB:{year}']=[{'stage':'C3','slots':{}}]
+    align_march_cup(calendar,year)
+    cup=datetime.fromisoformat(calendar[f'CDB:{year}'][0]['slots']['1'][0])
+    league=[datetime.fromisoformat(values[0]) for values in calendar[f'LEAGUE:{year}'][0]['slots'].values()]
+    assert cup.weekday()==2 and cup.day<20
+    assert min(abs((cup-kickoff).total_seconds()) for kickoff in league)>=72*3600

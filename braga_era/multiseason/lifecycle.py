@@ -156,6 +156,14 @@ def setup_2028(target, command, advance_group, *, include_continental=True, with
     return {"calendar":calendar,"offseason":offseason}
 
 
+def align_march_cup(calendar, year):
+    """Reserve the third cup round in the midweek gap between league Sundays."""
+    middle = datetime(year, 3, 15, 16)
+    wednesday = middle + timedelta(days=(2 - middle.weekday() + 3) % 7 - 3)
+    stage = next(row for row in calendar[f'CDB:{year}'] if row['stage']=='C3')
+    stage['slots'] = {'1': [wednesday.isoformat(sep=' ',timespec='minutes')]}
+
+
 def setup_following(target,command,year,*,rio_alternative=False,authentic=False):
     """Repeat the supported ecosystem from recorded prior-season outcomes.
 
@@ -237,6 +245,8 @@ def setup_following(target,command,year,*,rio_alternative=False,authentic=False)
         if not edition.startswith('ACCESS:'):calendar[edition.replace(':2028',':'+str(year))]=shift(entries)
     national_plans,windows=plans(year)
     calendar.update(national_plans)
+    if authentic and year>=2030:
+        align_march_cup(calendar,year)
     for edition in calendar:venues['neutral:'+edition]='TEST proposed neutral final: '+edition
     command('commit_season_calendar',season=year,policy=CALENDAR,plans=calendar,international_windows=windows,venues=venues)
     return {'calendar':calendar,'offseason':result}
